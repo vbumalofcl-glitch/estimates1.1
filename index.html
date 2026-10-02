@@ -631,6 +631,237 @@
       .charts-split-grid { grid-template-columns: 1fr; }
     }
 
+    /* Expandable Project List in Sidebar */
+    .project-list-trigger {
+      cursor: pointer;
+      width: 100%;
+      border: none;
+      background: none;
+      text-align: left;
+      font-family: inherit;
+    }
+    .project-list-expanded {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-left: 6px;
+      border-left: 2px solid #cbd5e1;
+      margin-left: 8px;
+      margin-top: 6px;
+      margin-bottom: 6px;
+    }
+    .project-entry-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 6px 8px;
+      transition: all 0.15s;
+    }
+    .project-entry-card:hover {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+    }
+    .project-entry-card.active-project {
+      background: #eff6ff;
+      border-color: #3b82f6;
+      box-shadow: 0 1px 4px rgba(37,99,235,0.12);
+    }
+    .project-entry-header {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .project-entry-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .project-entry-code {
+      font-size: 10px;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .project-entry-sublinks {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 6px;
+      padding-top: 4px;
+      border-top: 1px dashed #cbd5e1;
+    }
+    .project-sublink-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #475569;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .project-sublink-item:hover {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+    .project-sublink-item.active {
+      background: #2563eb;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* Main Content Top Navigation & Tabs */
+    .project-view-navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #ffffff;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .project-nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: 8px;
+    }
+    .project-nav-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .project-nav-tab-btn:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.7);
+    }
+    .project-nav-tab-btn.active {
+      background: #ffffff;
+      color: #1e40af;
+      font-weight: 700;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .project-selector-dropdown {
+      height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0f172a;
+      background: #ffffff;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* Timeline & Document View Specific Styles */
+    .timeline-phase-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      transition: box-shadow 0.15s;
+    }
+    .timeline-phase-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .doc-vault-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .doc-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .doc-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+      border-color: #93c5fd;
+    }
+    .doc-filter-btn {
+      border: 1px solid var(--line);
+      background: white;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .doc-filter-btn:hover {
+      border-color: #2563eb;
+      color: #2563eb;
+    }
+    .doc-filter-btn.active {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    /* Document Preview Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+    .modal-content {
+      background: #ffffff;
+      border-radius: 12px;
+      max-width: 760px;
+      width: 100%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      animation: modalFadeIn 0.2s ease-out;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
     /* Executive PDF Print Stylesheet */
     @media print {
       @page {
@@ -655,8 +886,15 @@
       .table-pagination,
       #pwaInstallBtn,
       .nav-actions,
+      .project-view-navbar,
+      #viewProjectTimeline,
+      #viewProjectDocumentation,
+      .modal-overlay,
       .no-print {
         display: none !important;
+      }
+      #viewProjectOverview {
+        display: block !important;
       }
       .dashboard-container {
         max-width: 100% !important;
@@ -726,8 +964,9 @@
       </a>
 
       <nav class="nav-links">
-        <a href="index.html" class="nav-item">Project Management</a>
-        <a href="index.html" class="nav-item active">Task Management</a>
+        <a href="javascript:void(0)" onclick="switchMainProjectTab('overview')" class="nav-item active" id="navItemOverview">Project Overview</a>
+        <a href="javascript:void(0)" onclick="switchMainProjectTab('timeline')" class="nav-item" id="navItemTimeline">Project Timeline</a>
+        <a href="javascript:void(0)" onclick="switchMainProjectTab('documents')" class="nav-item" id="navItemDocs">Project Documents</a>
         <a href="pricelist_dupa/index.html" class="nav-item" title="Price List & Detailed Unit Price Analysis">Cost Control</a>
         <a href="boq_schedule/index.html" class="nav-item" title="Bill of Quantity & Gantt Schedule">Resource Allocation</a>
         <a href="boq_schedule/index.html" class="nav-item">Reporting</a>
@@ -789,9 +1028,41 @@
                 <span class="badge" style="background:#0284c7; color:#fff;">OPEN</span>
               </a>
             </li>
-            <li><a href="#" class="sidebar-link"><span class="link-left">Project List</span></a></li>
-            <li><a href="#" class="sidebar-link"><span class="link-left">Project Timeline</span></a></li>
-            <li><a href="#" class="sidebar-link"><span class="link-left">Project Documents</span></a></li>
+            <!-- Expandable Project List Tab -->
+            <li class="project-list-menu-item" style="margin-top: 4px;">
+              <button id="projectListToggleBtn" class="sidebar-link project-list-trigger" type="button" onclick="toggleProjectListMenu()" style="border-left: 3px solid #6366f1; background: #eef2ff;">
+                <span class="link-left">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                  <strong style="color: #4338ca;">Project List</strong>
+                </span>
+                <span style="display:flex; align-items:center; gap:6px;">
+                  <span class="badge" id="projectCountBadge" style="background:#6366f1; color:#fff;">4 Projects</span>
+                  <svg id="projectListChevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4338ca" stroke-width="2.5" style="transform: rotate(180deg); transition: transform 0.2s;"><path d="M6 9l6 6 6-6"/></svg>
+                </span>
+              </button>
+              
+              <!-- Expandable Projects Accordion Container -->
+              <div id="projectListDropdownContainer" class="project-list-expanded" style="display: flex;">
+                <!-- Populated dynamically: each project with Overview, Timeline, Documentation sublinks -->
+              </div>
+            </li>
+
+            <li>
+              <a href="javascript:void(0)" onclick="switchMainProjectTab('timeline')" class="sidebar-link" id="sidebarLinkTimeline">
+                <span class="link-left">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  <span>Project Timeline</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" onclick="switchMainProjectTab('documents')" class="sidebar-link" id="sidebarLinkDocs">
+                <span class="link-left">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                  <span>Project Documents</span>
+                </span>
+              </a>
+            </li>
           </ul>
         </div>
 
@@ -883,6 +1154,39 @@
             </div>
           </div>
         </header>
+
+        <!-- Project View Navigation & Controls Bar -->
+        <div class="project-view-navbar no-print">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Active Project:</span>
+              <select id="mainProjectSelector" class="project-selector-dropdown" onchange="selectProject(this.value)">
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+            <span id="mainProjectStatusBadge" class="brand-tag" style="background: rgba(37,99,235,0.1); color: #2563eb; border-color: rgba(37,99,235,0.3);">
+              ● ACTIVE PROJECT
+            </span>
+          </div>
+
+          <div class="project-nav-tabs">
+            <button id="tabBtnOverview" class="project-nav-tab-btn active" type="button" onclick="switchMainProjectTab('overview')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              Project Overview
+            </button>
+            <button id="tabBtnTimeline" class="project-nav-tab-btn" type="button" onclick="switchMainProjectTab('timeline')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Project Timeline
+            </button>
+            <button id="tabBtnDocs" class="project-nav-tab-btn" type="button" onclick="switchMainProjectTab('documents')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Project Documentation
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= VIEW 1: PROJECT OVERVIEW ================= -->
+        <div id="viewProjectOverview" class="project-main-view">
 
         <!-- Module Quick Launch Banners -->
         <div class="modules-launch-grid">
@@ -1076,6 +1380,155 @@
             <button class="page-btn">&gt;</button>
           </div>
         </section>
+        </div> <!-- End viewProjectOverview -->
+
+        <!-- ================= VIEW 2: PROJECT TIMELINE ================= -->
+        <div id="viewProjectTimeline" class="project-main-view no-print" style="display: none;">
+          <!-- Timeline Executive KPI Card -->
+          <section class="dashboard-card">
+            <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase;">CPM Master Schedule &amp; Milestones</span>
+                  <span id="timelineStatusBadge" class="brand-tag" style="background: rgba(16, 185, 129, 0.15); color: #059669; border-color: rgba(16, 185, 129, 0.4);">● ON TRACK</span>
+                </div>
+                <h2 class="card-title" id="timelineProjectTitle">Project Timeline &amp; CPM Phase Schedule</h2>
+                <div id="timelineProjectSub" style="font-size: 12px; font-weight: 500; color: var(--text-muted); margin-top: 2px;">Sports Club &amp; Recreation Facility &bull; PRJ-2026-001</div>
+              </div>
+              <div class="card-controls">
+                <a href="boq_schedule/index.html" class="ctrl-btn primary" style="text-decoration:none;" title="Open CPM Interactive Gantt Chart">Open Gantt Schedule &rarr;</a>
+              </div>
+            </div>
+
+            <!-- Milestone Progress & KPIs -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid var(--line);">
+              <div>
+                <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Timeline Completion</div>
+                <div id="timelineOverallProgress" style="font-size: 20px; font-weight: 800; color: #2563eb; margin-top: 2px;">62.4%</div>
+                <div style="font-size: 10.5px; color: #475569;">Weighted Progress</div>
+              </div>
+              <div>
+                <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Contract Duration</div>
+                <div id="timelineDuration" style="font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 2px;">240 Calendar Days</div>
+                <div id="timelineElapsed" style="font-size: 10.5px; color: #475569;">150 days elapsed (62.5%)</div>
+              </div>
+              <div>
+                <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Critical Path State</div>
+                <div id="timelineCriticalState" style="font-size: 20px; font-weight: 800; color: #059669; margin-top: 2px;">ON TRACK</div>
+                <div id="timelineVarianceSub" style="font-size: 10.5px; color: #059669;">Zero Critical Path Delays</div>
+              </div>
+              <div>
+                <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Target Handover</div>
+                <div id="timelineTargetDate" style="font-size: 20px; font-weight: 800; color: #0284c7; margin-top: 2px;">OCT 30, 2026</div>
+                <div style="font-size: 10.5px; color: #475569;">Substantial Completion</div>
+              </div>
+            </div>
+
+            <!-- Overall Progress Bar -->
+            <div style="margin-bottom: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 12px; font-weight: 700; color: #0f172a;">Overall Project Execution Progress</span>
+                <span id="timelineBarPercent" style="font-size: 12px; font-weight: 800; color: #2563eb;">62.4%</span>
+              </div>
+              <div style="width: 100%; height: 10px; background: #e2e8f0; border-radius: 6px; overflow: hidden;">
+                <div id="timelineProgressBarFill" style="height: 100%; width: 62.4%; background: linear-gradient(90deg, #3b82f6, #1d4ed8); border-radius: 6px; transition: width 0.4s ease;"></div>
+              </div>
+            </div>
+
+            <!-- CPM Phase Breakdown List -->
+            <h3 style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              Work Breakdown &amp; Execution Phases
+            </h3>
+
+            <div id="timelinePhasesContainer">
+              <!-- Rendered dynamically -->
+            </div>
+          </section>
+
+          <!-- 3-Week Lookahead Schedule Card -->
+          <section class="dashboard-card" style="margin-top: 16px;">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+                  3-Week Lookahead &amp; Critical Immediate Milestones
+                </h3>
+                <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">Tasks scheduled for continuous monitoring &amp; field inspection</div>
+              </div>
+              <div class="card-controls">
+                <span class="status-pill active" style="font-size: 11px;">Lookahead Sprint</span>
+              </div>
+            </div>
+            <div id="timelineLookaheadContainer">
+              <!-- Rendered dynamically -->
+            </div>
+          </section>
+        </div>
+
+        <!-- ================= VIEW 3: PROJECT DOCUMENTATION ================= -->
+        <div id="viewProjectDocumentation" class="project-main-view no-print" style="display: none;">
+          <section class="dashboard-card">
+            <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase;">Repository &amp; Compliance Vault</span>
+                  <span class="brand-tag" style="background: rgba(14, 165, 233, 0.1); color: #0284c7; border-color: rgba(14, 165, 233, 0.3);">● VERIFIED REPOSITORY</span>
+                </div>
+                <h2 class="card-title" id="docsProjectTitle">Project Documentation &amp; Contract Vault</h2>
+                <div id="docsProjectSub" style="font-size: 12px; font-weight: 500; color: var(--text-muted); margin-top: 2px;">Official Submittals, Estimates, Contracts &amp; QA/QC Transmittals</div>
+              </div>
+              <div class="card-controls" style="flex-wrap: wrap; gap: 8px;">
+                <input type="text" id="docSearchInput" placeholder="Search document title or ref..." onkeyup="filterDocs()" style="height: 32px; padding: 0 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px; font-family: inherit;">
+                <button class="ctrl-btn primary" type="button" onclick="uploadNewDocPrompt()">+ Transmit Document</button>
+              </div>
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--line);">
+              <span style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); margin-right: 4px;">Filter:</span>
+              <button class="doc-filter-btn active" data-cat="all" onclick="filterDocs('all', this)">All Documents (<span id="countAllDocs">0</span>)</button>
+              <button class="doc-filter-btn" data-cat="estimates" onclick="filterDocs('estimates', this)">Estimates &amp; BOQ</button>
+              <button class="doc-filter-btn" data-cat="commercial" onclick="filterDocs('commercial', this)">Commercial &amp; Contracts</button>
+              <button class="doc-filter-btn" data-cat="drawings" onclick="filterDocs('drawings', this)">Drawings &amp; IFC Plans</button>
+              <button class="doc-filter-btn" data-cat="billing" onclick="filterDocs('billing', this)">Billing &amp; Certificates</button>
+              <button class="doc-filter-btn" data-cat="qaqc" onclick="filterDocs('qaqc', this)">QA/QC &amp; Clearances</button>
+            </div>
+
+            <!-- Documents Grid -->
+            <div id="docVaultGrid" class="doc-vault-grid">
+              <!-- Rendered dynamically -->
+            </div>
+          </section>
+        </div>
+
+        <!-- Document Preview Modal (Interactive 1-Click Viewer) -->
+        <div id="docPreviewModal" class="modal-overlay no-print" style="display: none;" onclick="if(event.target===this) closeDocPreview()">
+          <div class="modal-content" onclick="event.stopPropagation()">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); background: #f8fafc;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div id="previewDocIcon" style="width: 34px; height: 34px; border-radius: 6px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px;">PDF</div>
+                <div>
+                  <div id="previewDocTitle" style="font-size: 14px; font-weight: 700; color: #0f172a;">Document Title</div>
+                  <div id="previewDocRef" style="font-size: 11px; font-weight: 600; color: #64748b;">REF-2026-000</div>
+                </div>
+              </div>
+              <button type="button" onclick="closeDocPreview()" style="background: none; border: none; font-size: 22px; line-height: 1; cursor: pointer; color: #94a3b8;" title="Close Preview">&times;</button>
+            </div>
+
+            <div id="previewDocBody" style="padding: 20px; overflow-y: auto; max-height: calc(90vh - 130px); font-size: 12.5px; line-height: 1.6; color: #334155;">
+              <!-- Filled dynamically -->
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-top: 1px solid var(--line); background: #f8fafc;">
+              <span style="font-size: 11px; color: #64748b;">FCL Project Control System &bull; Certified Authentic Digital Copy</span>
+              <div style="display: flex; gap: 8px;">
+                <button class="ctrl-btn" type="button" onclick="window.print()">Print Document</button>
+                <button class="ctrl-btn primary" type="button" onclick="closeDocPreview()">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- Executive Signatures Block (Only shown in print / PDF report) -->
         <section id="executiveSignatures" class="executive-print-signatures" style="margin-top: 20px; padding-top: 16px; border-top: 1.5px solid #cbd5e1; justify-content: space-between; gap: 32px; page-break-inside: avoid;">
@@ -1116,8 +1569,770 @@
       });
     }
 
-    function renderDashboard() {
-      const data = FCLStorage.getLiveDashboardData();
+    /* ==========================================================================
+       MULTI-PROJECT CATALOG & WORKSPACE DATA
+       ========================================================================== */
+    const FCL_PROJECT_CATALOG = [
+      {
+        id: 'PRJ-2026-001',
+        name: 'Sports Club & Recreation Facility',
+        shortName: 'Sports Club & Recreation',
+        code: 'PRJ-2026-001',
+        location: 'Barangay Central, San Fernando',
+        client: 'FCL Aranang Dev / Municipal Sports Dev Office',
+        status: 'Active (Live Estimate)',
+        badge: 'ACTIVE',
+        totalBudget: 14850000.00,
+        plannedProgress: 60.0,
+        actualProgress: 62.4,
+        durationDays: 240,
+        elapsedDays: 150,
+        targetDate: 'OCT 30, 2026',
+        donutShares: { target: 42, projection: 28, expense: 18, variance: 12 },
+        categories: [
+          { name: 'Earthworks & Civil', planned: 2400000, actual: 2350000 },
+          { name: 'Reinforced Concrete', planned: 5600000, actual: 5450000 },
+          { name: 'Structural Steel', planned: 4200000, actual: 3950000 },
+          { name: 'Architectural & MEPFS', planned: 2650000, actual: 2450000 }
+        ],
+        items: [
+          { avatar: 'JC', name: 'Engr. J. Dela Cruz', desc: 'Reinforced Concrete Bleachers & Ring Beam', cat: 'Civil Works', planned: 3200000, actual: 3100000, status: 'In Progress' },
+          { avatar: 'VB', name: 'Engr. V. Bumalang', desc: 'Long-Span Steel Roof Trusses Erection', cat: 'Structural Steel', planned: 4200000, actual: 3950000, status: 'In Progress' },
+          { avatar: 'MR', name: 'Engr. M. Reyes', desc: 'Olympic Standard Swimming Pool Piping Rough-in', cat: 'Sanitary & MEPF', planned: 1850000, actual: 1680000, status: 'Completed' },
+          { avatar: 'AT', name: 'Arch. A. Tolentino', desc: 'Maple Wood Hardwood Court Submittal & Specs', cat: 'Architectural Finishes', planned: 2100000, actual: 1950000, status: 'Review' },
+          { avatar: 'RS', name: 'Engr. R. Santos', desc: 'Substation Transformer & LED Sports Luminaire', cat: 'Electrical Power', planned: 2300000, actual: 2150000, status: 'Pending' },
+          { avatar: 'IT', name: 'Engr. I. Tan', desc: 'Perimeter Drainage, Swale & Site Pavement', cat: 'Site Civil Development', planned: 1200000, actual: 1180000, status: 'Completed' }
+        ],
+        timeline: {
+          criticalState: 'ON TRACK (+2.4%)',
+          phases: [
+            { name: 'Mobilization, Temporary Utilities & Clearing', startDate: 'MAR 01, 2026', endDate: 'MAR 20, 2026', duration: 20, progress: 100, status: 'Completed', isCritical: false, float: '15d', lead: 'Engr. J. Dela Cruz' },
+            { name: 'Deep Excavation & Isolated Footings Foundations', startDate: 'MAR 21, 2026', endDate: 'MAY 05, 2026', duration: 45, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. V. Bumalang' },
+            { name: 'Suspended Concrete Columns, Beams & Bleachers', startDate: 'MAY 06, 2026', endDate: 'JUL 05, 2026', duration: 60, progress: 88, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. V. Bumalang' },
+            { name: 'Structural Steel Roof Truss & Polycarbonate Decking', startDate: 'JUN 15, 2026', endDate: 'JUL 25, 2026', duration: 40, progress: 55, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. J. Dela Cruz' },
+            { name: 'Architectural Enclosure, Curtain Walls & Hardwood Court', startDate: 'JUL 26, 2026', endDate: 'SEP 10, 2026', duration: 45, progress: 25, status: 'Upcoming', isCritical: false, float: '12d', lead: 'Arch. A. Tolentino' },
+            { name: 'MEPF Electrical Switchgear & Olympic Pool Equipment', startDate: 'AUG 01, 2026', endDate: 'SEP 20, 2026', duration: 50, progress: 18, status: 'Upcoming', isCritical: false, float: '8d', lead: 'Engr. M. Reyes' },
+            { name: 'Testing, Commissioning, As-Builts & Final Turn-over', startDate: 'SEP 21, 2026', endDate: 'OCT 10, 2026', duration: 20, progress: 0, status: 'Pending', isCritical: true, float: '0d', lead: 'Engr. V. Bumalang' }
+          ],
+          lookahead: [
+            { task: 'Pouring of Suspended Beams B-12 to B-18 & 2nd Floor Bleacher Slab', engineer: 'Engr. V. Bumalang', zone: 'Sector B Arena', dueDate: 'This Friday', critical: true },
+            { task: 'Delivery & Crane Erection of 36m Steel Truss T-04 via 50T Mobile Crane', engineer: 'Engr. J. Dela Cruz', zone: 'Roofing Bay 4', dueDate: 'Next Monday', critical: true },
+            { task: 'Rough-in electrical conduits for 1000-lux arena sports lighting', engineer: 'Engr. R. Santos', zone: 'Catwalk System', dueDate: 'In 10 Days', critical: false }
+          ]
+        },
+        documents: [
+          { id: 'DOC-BOQ-001', title: 'Approved Bill of Quantities (BOQ Rev 2.1)', ref: 'BOQ-PRJ26-001-R2', category: 'estimates', type: 'XLSX', size: '2.4 MB', version: 'Rev 2.1', status: 'Approved', date: 'FEB 28, 2026', summary: 'Comprehensive itemized bill of quantities with verified unit prices, direct costs, OCM, contractor profit, and 12% VAT.' },
+          { id: 'DOC-DUPA-001', title: 'Master Detailed Unit Price Analysis (DUPA)', ref: 'DUPA-PRJ26-MASTER', category: 'estimates', type: 'PDF', size: '4.8 MB', version: 'Rev 3.0', status: 'Approved', date: 'MAR 02, 2026', summary: 'Standardized labor, equipment, and material cost buildup for reinforced concrete, structural steel, and MEPF items.' },
+          { id: 'DOC-CONTR-001', title: 'Signed Notice of Award & Contract Agreement', ref: 'CONTR-FCL-2026-08', category: 'commercial', type: 'PDF', size: '1.8 MB', version: 'Rev 1.0', status: 'Approved', date: 'FEB 15, 2026', summary: 'Executed mutual construction contract agreement with Performance Bond and approved Notice to Proceed.' },
+          { id: 'DOC-DWG-001', title: 'IFC Architectural & Structural Blueprints Set', ref: 'DWG-IFC-A-S-SET', category: 'drawings', type: 'DWG', size: '18.5 MB', version: 'Rev 2.0', status: 'Approved', date: 'FEB 20, 2026', summary: 'Issued For Construction architectural elevations, floor plans, rebar schedules, and structural framing plans.' },
+          { id: 'DOC-BILL-003', title: 'Monthly Progress Billing Certificate #03', ref: 'CERT-BILL-03-JUL26', category: 'billing', type: 'PDF', size: '1.1 MB', version: 'Rev 1.0', status: 'Approved', date: 'JUN 30, 2026', summary: 'Verified physical accomplishment certificate evaluated at 62.4% net of 10% retention and advance amortization.' },
+          { id: 'DOC-QA-001', title: '28-Day Concrete Cylinder Compressive Test Reports', ref: 'QA-LAB-CYL-BATCH3', category: 'qaqc', type: 'PDF', size: '890 KB', version: 'Rev 1.0', status: 'Approved', date: 'JUN 22, 2026', summary: 'Third-party material testing laboratory certification confirming 4000 PSI concrete compressive strength compliance.' },
+          { id: 'DOC-SUB-002', title: 'Maple Hardwood Sports Flooring Submittal & Spec Sheet', ref: 'SUB-ARCH-FLR-02', category: 'qaqc', type: 'PDF', size: '3.2 MB', version: 'Rev 1.2', status: 'In Review', date: 'JUL 01, 2026', summary: 'FIBA-certified maple sprung hardwood sports flooring system sample and environmental resilience compliance datasheet.' }
+        ]
+      },
+      {
+        id: 'HCC-2026-B1',
+        name: 'Highland Commercial Complex',
+        shortName: 'Highland Commercial',
+        code: 'HCC-2026-B1',
+        location: 'Highland Boulevard, Baguio City',
+        client: 'Highland Vista Holdings Inc.',
+        status: 'In Progress',
+        badge: 'ACTIVE',
+        totalBudget: 48500000.00,
+        plannedProgress: 42.0,
+        actualProgress: 39.5,
+        durationDays: 365,
+        elapsedDays: 155,
+        targetDate: 'MAR 15, 2027',
+        donutShares: { target: 40, projection: 30, expense: 20, variance: 10 },
+        categories: [
+          { name: 'Earthworks & Shoring', planned: 11500000, actual: 11200000 },
+          { name: 'Deep Piling & Substructure', planned: 15800000, actual: 14900000 },
+          { name: 'Reinforced Concrete Core', planned: 13200000, actual: 12000000 },
+          { name: 'MEPFS & Facade Cladding', planned: 8000000, actual: 6500000 }
+        ],
+        items: [
+          { avatar: 'HB', name: 'Engr. H. Bautista', desc: 'Secant Pile Retaining Wall & Soil Nailing', cat: 'Substructure Civil', planned: 8500000, actual: 8300000, status: 'Completed' },
+          { avatar: 'RC', name: 'Engr. R. Corpuz', desc: 'Basement 1 & 2 Concrete Pouring & Slabs', cat: 'Substructure Concrete', planned: 7200000, actual: 6900000, status: 'In Progress' },
+          { avatar: 'DL', name: 'Engr. D. Lim', desc: 'Central Tower Elevator Core Wall Rebar & Slipform', cat: 'Superstructure Core', planned: 6800000, actual: 6100000, status: 'In Progress' },
+          { avatar: 'GV', name: 'Arch. G. Villanueva', desc: 'Curtain Wall Double Glazing Transmittal', cat: 'Facade Works', planned: 4500000, actual: 3800000, status: 'Review' },
+          { avatar: 'FP', name: 'Engr. F. Pascual', desc: 'Chiller Plant Installation & Variable Speed Pumps', cat: 'HVAC Mechanical', planned: 5200000, actual: 4400000, status: 'Pending' },
+          { avatar: 'KM', name: 'Engr. K. Mendoza', desc: 'Medium Voltage Switchgear & Cable Trays', cat: 'Electrical System', planned: 3900000, actual: 3200000, status: 'Pending' }
+        ],
+        timeline: {
+          criticalState: 'SLIGHT SLIPPAGE (-2.5%)',
+          phases: [
+            { name: 'Site Clearing, Slope Stabilization & Deep Shoring', startDate: 'OCT 01, 2025', endDate: 'NOV 30, 2025', duration: 60, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. H. Bautista' },
+            { name: 'Bored Piling (1.2m dia) & Foundation Raft Pouring', startDate: 'DEC 01, 2025', endDate: 'FEB 15, 2026', duration: 75, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. R. Corpuz' },
+            { name: 'Basement 1 & 2 Podium Structural Concrete Frame', startDate: 'FEB 16, 2026', endDate: 'MAY 15, 2026', duration: 90, progress: 75, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. R. Corpuz' },
+            { name: 'Tower Levels 1 to 4 Reinforced Concrete Superstructure', startDate: 'MAY 16, 2026', endDate: 'AUG 31, 2026', duration: 105, progress: 35, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. D. Lim' },
+            { name: 'Aluminum Composite Cladding & Low-E Double Glazing', startDate: 'AUG 15, 2026', endDate: 'NOV 30, 2026', duration: 105, progress: 10, status: 'Upcoming', isCritical: false, float: '14d', lead: 'Arch. G. Villanueva' },
+            { name: 'Central Chiller Plant & Fire Sprinkler Mains', startDate: 'SEP 01, 2026', endDate: 'DEC 31, 2026', duration: 120, progress: 5, status: 'Upcoming', isCritical: false, float: '10d', lead: 'Engr. F. Pascual' },
+            { name: 'Fit-out, Tenant Handover & Testing/Commissioning', startDate: 'JAN 01, 2027', endDate: 'MAR 15, 2027', duration: 75, progress: 0, status: 'Pending', isCritical: true, float: '0d', lead: 'Engr. H. Bautista' }
+          ],
+          lookahead: [
+            { task: 'Podium Level 2 concrete casting with superplasticizer mix', engineer: 'Engr. R. Corpuz', zone: 'Podium Sector 1', dueDate: 'Tomorrow', critical: true },
+            { task: 'Rebar inspection for Shear Wall SW-3 up to Level 3', engineer: 'Engr. D. Lim', zone: 'Core Shaft A', dueDate: 'Thursday', critical: true },
+            { task: 'Delivery of 800kVA Standby Generator Set to Basement 2', engineer: 'Engr. K. Mendoza', zone: 'Electrical Vault', dueDate: 'Next Week', critical: false }
+          ]
+        },
+        documents: [
+          { id: 'DOC-HCC-001', title: 'Highland Commercial BOQ & Price Breakdown (Rev 3)', ref: 'BOQ-HCC26-R3', category: 'estimates', type: 'XLSX', size: '3.6 MB', version: 'Rev 3.0', status: 'Approved', date: 'JAN 15, 2026', summary: 'Grand detailed bill of quantities covering deep shoring, podium frame, and MEPFS infrastructure.' },
+          { id: 'DOC-HCC-002', title: 'Master Unit Cost Analysis for Deep Bored Piling', ref: 'DUPA-HCC-PILING', category: 'estimates', type: 'PDF', size: '2.9 MB', version: 'Rev 2.0', status: 'Approved', date: 'JAN 20, 2026', summary: 'Unit price build-up for 1200mm diameter bored piles down to 24m bedrock with sonic logging.' },
+          { id: 'DOC-HCC-003', title: 'Lump Sum EPC Contract & Supplemental Addendum', ref: 'CONTR-HCC-LUMP26', category: 'commercial', type: 'PDF', size: '2.5 MB', version: 'Rev 1.0', status: 'Approved', date: 'NOV 10, 2025', summary: 'Comprehensive Engineering, Procurement & Construction executed contract with escalation clauses.' },
+          { id: 'DOC-HCC-004', title: 'Architectural Exterior Facade & Curtain Wall Blueprints', ref: 'DWG-HCC-FACADE-01', category: 'drawings', type: 'DWG', size: '24.2 MB', version: 'Rev 2.2', status: 'Approved', date: 'DEC 05, 2025', summary: 'Architectural structural detail sheets for curtain wall mullions and thermal break glass panels.' },
+          { id: 'DOC-HCC-005', title: 'Monthly Progress Certificate #05 (₱18.9M Cumulative)', ref: 'CERT-HCC-BILL-05', category: 'billing', type: 'PDF', size: '1.4 MB', version: 'Rev 1.0', status: 'Approved', date: 'JUN 15, 2026', summary: 'Verified accomplishment certificate for basement podium works signed by consultant PMC.' },
+          { id: 'DOC-HCC-006', title: 'Retaining Wall Inclinometer & Settlement Monitoring Transmittal', ref: 'QA-GEO-MON-08', category: 'qaqc', type: 'PDF', size: '1.7 MB', version: 'Rev 1.0', status: 'Approved', date: 'MAY 30, 2026', summary: 'Geotechnical instrumentation log indicating zero lateral displacement on shored slope.' }
+        ]
+      },
+      {
+        id: 'MLH-2025-04',
+        name: 'Metro Logistics Hub & Warehouse',
+        shortName: 'Metro Logistics Hub',
+        code: 'MLH-2025-04',
+        location: 'Clark Special Economic Zone, Pampanga',
+        client: 'Trans-Island Logistics Corp.',
+        status: 'Near Completion',
+        badge: 'ACTIVE',
+        totalBudget: 32200000.00,
+        plannedProgress: 85.0,
+        actualProgress: 87.2,
+        durationDays: 210,
+        elapsedDays: 185,
+        targetDate: 'NOV 20, 2026',
+        donutShares: { target: 48, projection: 24, expense: 20, variance: 8 },
+        categories: [
+          { name: 'Site Pavement & Access', planned: 6200000, actual: 6400000 },
+          { name: 'Structural PEB Steel', planned: 16800000, actual: 16500000 },
+          { name: 'Laser-Leveled Flooring', planned: 5200000, actual: 5300000 },
+          { name: 'High-Bay Fire Protection', planned: 4000000, actual: 3900000 }
+        ],
+        items: [
+          { avatar: 'EG', name: 'Engr. E. Garcia', desc: 'Pre-Engineered Building (PEB) Clear Span Frame', cat: 'Structural Steel', planned: 14500000, actual: 14200000, status: 'Completed' },
+          { avatar: 'TN', name: 'Engr. T. Navarro', desc: 'Superflat Laser-Screed Post-Tensioned Floor Slab', cat: 'Concrete Pavement', planned: 5200000, actual: 5300000, status: 'Completed' },
+          { avatar: 'SM', name: 'Engr. S. Mercado', desc: 'ESFR High-Density Fire Sprinkler System & Water Tank', cat: 'Fire Protection', planned: 4000000, actual: 3900000, status: 'In Progress' },
+          { avatar: 'AP', name: 'Arch. A. Perez', desc: 'Automated Loading Dock Levelers & Overhead Doors', cat: 'Special Equipment', planned: 3800000, actual: 3750000, status: 'In Progress' },
+          { avatar: 'CL', name: 'Engr. C. Luna', desc: 'Solar Ready Standing Seam Insulated Roof Panels', cat: 'Roofing Envelope', planned: 2900000, actual: 2850000, status: 'Completed' },
+          { avatar: 'RT', name: 'Engr. R. Torres', desc: 'Heavy Duty Container Yard Concrete Apron', cat: 'Civil Paving', planned: 1800000, actual: 1900000, status: 'In Progress' }
+        ],
+        timeline: {
+          criticalState: 'AHEAD OF SCHEDULE (+2.2%)',
+          phases: [
+            { name: 'Geotechnical Soil Improvement & Heavy Pad Footings', startDate: 'JAN 15, 2026', endDate: 'MAR 01, 2026', duration: 45, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. T. Navarro' },
+            { name: 'PEB High-Clearance Portal Steel Frame Erection', startDate: 'MAR 02, 2026', endDate: 'MAY 15, 2026', duration: 75, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. E. Garcia' },
+            { name: 'FM-Approved Standing Seam Roofing & Thermal Insulation', startDate: 'APR 15, 2026', endDate: 'JUN 15, 2026', duration: 60, progress: 100, status: 'Completed', isCritical: false, float: '10d', lead: 'Engr. C. Luna' },
+            { name: 'FF/FL 50 Laser-Guided Concrete Slab Casting', startDate: 'MAY 20, 2026', endDate: 'JUL 10, 2026', duration: 50, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. T. Navarro' },
+            { name: 'ESFR Fire Protection Deluge Pumps & Piping Installation', startDate: 'JUN 20, 2026', endDate: 'AUG 20, 2026', duration: 60, progress: 85, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. S. Mercado' },
+            { name: 'Hydraulic Dock Levelers & Sectional Industrial Doors', startDate: 'JUL 15, 2026', endDate: 'SEP 15, 2026', duration: 60, progress: 70, status: 'In Progress', isCritical: false, float: '12d', lead: 'Arch. A. Perez' },
+            { name: 'Fire Bureau Clearance, Testing & Commissioning Handover', startDate: 'SEP 16, 2026', endDate: 'OCT 15, 2026', duration: 30, progress: 15, status: 'Upcoming', isCritical: true, float: '0d', lead: 'Engr. E. Garcia' }
+          ],
+          lookahead: [
+            { task: 'Hydrostatic pressure testing of 8-inch main fire ring pipe', engineer: 'Engr. S. Mercado', zone: 'Warehouse Bay 1-6', dueDate: 'This Thursday', critical: true },
+            { task: 'Installation of high-speed overhead roll-up dock doors #7-#12', engineer: 'Arch. A. Perez', zone: 'South Loading Bay', dueDate: 'Next Tuesday', critical: false },
+            { task: 'Final joint sealant application on heavy apron pavement', engineer: 'Engr. R. Torres', zone: 'Trailer Staging Yard', dueDate: 'In 12 Days', critical: false }
+          ]
+        },
+        documents: [
+          { id: 'DOC-MLH-001', title: 'Complete BOQ & Schedule of Unit Rates (Final)', ref: 'BOQ-MLH25-FINAL', category: 'estimates', type: 'XLSX', size: '2.1 MB', version: 'Rev 2.0', status: 'Approved', date: 'DEC 28, 2025', summary: 'Approved bill of quantities with itemized pricing for warehouse portal structure and paving.' },
+          { id: 'DOC-MLH-002', title: 'PEB Manufacturer Structural Engineering Calculation Sheets', ref: 'CALC-PEB-SPAN45M', category: 'estimates', type: 'PDF', size: '5.2 MB', version: 'Rev 1.0', status: 'Approved', date: 'JAN 10, 2026', summary: 'Certified structural calculations for 45-meter clear span high-tensile steel frames.' },
+          { id: 'DOC-MLH-003', title: 'Logistics Facility Turnkey Construction Agreement', ref: 'CONTR-TRANS-MLH', category: 'commercial', type: 'PDF', size: '1.9 MB', version: 'Rev 1.0', status: 'Approved', date: 'DEC 15, 2025', summary: 'Full turnkey general construction contract with incentive bonus for early completion.' },
+          { id: 'DOC-MLH-004', title: 'Architectural Master Site & Warehouse IFC Blueprints', ref: 'DWG-MLH-IFC-FULL', category: 'drawings', type: 'DWG', size: '16.4 MB', version: 'Rev 1.3', status: 'Approved', date: 'JAN 08, 2026', summary: 'As-issued for construction warehouse floor layout, dock elevations, and roof plans.' },
+          { id: 'DOC-MLH-005', title: 'Monthly Progress Billing #06 (87.2% Accomplishment)', ref: 'CERT-MLH-BILL-06', category: 'billing', type: 'PDF', size: '1.2 MB', version: 'Rev 1.0', status: 'Approved', date: 'JUL 15, 2026', summary: 'Certified bill showing ₱28.1M disbursed out of ₱32.2M total contract value.' },
+          { id: 'DOC-MLH-006', title: 'Floor Flatness / Levelness (FF/FL 52) Certified Survey Report', ref: 'QA-SURV-FLAT-01', category: 'qaqc', type: 'PDF', size: '2.3 MB', version: 'Rev 1.0', status: 'Approved', date: 'JUN 28, 2026', summary: 'Laser profiling report verifying floor tolerances meet high-reach VNA forklift specifications.' }
+        ]
+      },
+      {
+        id: 'RTO-2026-C2',
+        name: 'Riverside Terraces & Residential Overpass',
+        shortName: 'Riverside Terraces',
+        code: 'RTO-2026-C2',
+        location: 'Riverside Drive, Marikina',
+        client: 'Metropolitan Public Works Division',
+        status: 'Procurement & Mobilization',
+        badge: 'ACTIVE',
+        totalBudget: 21400000.00,
+        plannedProgress: 18.0,
+        actualProgress: 15.0,
+        durationDays: 300,
+        elapsedDays: 50,
+        targetDate: 'JAN 18, 2027',
+        donutShares: { target: 52, projection: 22, expense: 16, variance: 10 },
+        categories: [
+          { name: 'Topographic Survey & ROW', planned: 2800000, actual: 2600000 },
+          { name: 'Bored Piles & Pier Abutments', planned: 9200000, actual: 8400000 },
+          { name: 'Precast AASHTO Girders', planned: 6000000, actual: 5200000 },
+          { name: 'Bridge Deck & Safety Barriers', planned: 3400000, actual: 2800000 }
+        ],
+        items: [
+          { avatar: 'PA', name: 'Engr. P. Alcantara', desc: 'Bored Piling (1500mm dia) for River Piers', cat: 'Foundation Works', planned: 5400000, actual: 5100000, status: 'In Progress' },
+          { avatar: 'CN', name: 'Engr. C. Navarro', desc: 'Casting Yard Setup for Precast AASHTO Type IV Girders', cat: 'Precast Civil', planned: 3600000, actual: 3200000, status: 'In Progress' },
+          { avatar: 'RD', name: 'Engr. R. Domingo', desc: 'Sheet Piling Coffer Dam & Dewatering System', cat: 'River Works', planned: 2800000, actual: 2600000, status: 'Completed' },
+          { avatar: 'BL', name: 'Engr. B. Laurel', desc: 'Approach Embankment Retaining Walls & MSE Wire Mesh', cat: 'Civil Earthworks', planned: 4200000, actual: 3800000, status: 'Review' },
+          { avatar: 'JO', name: 'Arch. J. Ocampo', desc: 'Architectural Pedestrian Barrier & Lighting Post Specs', cat: 'Bridge Finishes', planned: 2500000, actual: 2200000, status: 'Pending' },
+          { avatar: 'CS', name: 'Engr. C. Soriano', desc: 'Traffic Management System & Temporary Detour Route', cat: 'Traffic Control', planned: 1200000, actual: 1100000, status: 'Completed' }
+        ],
+        timeline: {
+          criticalState: 'MOBILIZATION (ON SCHEDULE)',
+          phases: [
+            { name: 'ROW Clearance, Utility Relocation & Traffic Detour', startDate: 'MAY 01, 2026', endDate: 'JUN 15, 2026', duration: 45, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. C. Soriano' },
+            { name: 'Riverbed Sheet Pile Cofferdams & Dewatering Wellpoints', startDate: 'JUN 01, 2026', endDate: 'JUL 15, 2026', duration: 45, progress: 70, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. R. Domingo' },
+            { name: '1.5m Diameter Bored Piles & Pier Abutment Casting', startDate: 'JUL 01, 2026', endDate: 'SEP 30, 2026', duration: 90, progress: 20, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. P. Alcantara' },
+            { name: 'Precast Prestressed AASHTO Type IV Girder Fabrication', startDate: 'AUG 01, 2026', endDate: 'OCT 31, 2026', duration: 90, progress: 5, status: 'Upcoming', isCritical: false, float: '15d', lead: 'Engr. C. Navarro' },
+            { name: 'Girder Launching & Bearings Installation via Tandem Crane', startDate: 'NOV 01, 2026', endDate: 'NOV 30, 2026', duration: 30, progress: 0, status: 'Pending', isCritical: true, float: '0d', lead: 'Engr. P. Alcantara' },
+            { name: 'Cast-in-Place Deck Slab, Expansion Joints & Waterproofing', startDate: 'DEC 01, 2026', endDate: 'DEC 31, 2026', duration: 30, progress: 0, status: 'Pending', isCritical: true, float: '0d', lead: 'Engr. C. Navarro' },
+            { name: 'Asphalt Wearing Course, Railings, Lighting & Load Testing', startDate: 'JAN 01, 2027', endDate: 'JAN 18, 2027', duration: 18, progress: 0, status: 'Pending', isCritical: true, float: '0d', lead: 'Engr. P. Alcantara' }
+          ],
+          lookahead: [
+            { task: 'River pier cofferdam seal concrete pouring (Tremie method)', engineer: 'Engr. R. Domingo', zone: 'River Pier 2', dueDate: 'This Friday', critical: true },
+            { task: 'Sonic logging test on test bored pile TP-01', engineer: 'Engr. P. Alcantara', zone: 'Abutment A', dueDate: 'Next Wednesday', critical: true },
+            { task: 'Tensioning calibration check for girder prestressing jacks', engineer: 'Engr. C. Navarro', zone: 'Offsite Casting Yard', dueDate: 'In 2 Weeks', critical: false }
+          ]
+        },
+        documents: [
+          { id: 'DOC-RTO-001', title: 'DPWH Formatted BOQ & Unit Price Schedule', ref: 'BOQ-DPWH-RTO26', category: 'estimates', type: 'XLSX', size: '1.9 MB', version: 'Rev 1.0', status: 'Approved', date: 'APR 15, 2026', summary: 'Standardized infrastructure bill of quantities adhering to DPWH Standard Specs 2013 edition.' },
+          { id: 'DOC-RTO-002', title: 'Hydraulic & Scour Analysis for Bridge Piers', ref: 'CALC-HYDR-SCOUR-02', category: 'estimates', type: 'PDF', size: '3.8 MB', version: 'Rev 1.0', status: 'Approved', date: 'MAR 22, 2026', summary: '50-year flood event hydrological study ensuring pier foundation depths exceed maximum scour depth.' },
+          { id: 'DOC-RTO-003', title: 'Notice to Proceed & Signed Bridge Works Agreement', ref: 'CONTR-MPW-RTO-01', category: 'commercial', type: 'PDF', size: '1.6 MB', version: 'Rev 1.0', status: 'Approved', date: 'APR 28, 2026', summary: 'Government public works infrastructure contract with compliance warranties.' },
+          { id: 'DOC-RTO-004', title: 'Structural Bridge General Plans & Girder Details', ref: 'DWG-BRDG-RTO-IFC', category: 'drawings', type: 'DWG', size: '14.8 MB', version: 'Rev 1.0', status: 'Approved', date: 'APR 10, 2026', summary: 'Civil 3D bridge alignments, superstructure longitudinal profiles, and rebar details.' },
+          { id: 'DOC-RTO-005', title: 'First Advance Mobilization Billing & Guarantee Bond', ref: 'CERT-MOB-BILL-01', category: 'billing', type: 'PDF', size: '1.1 MB', version: 'Rev 1.0', status: 'Approved', date: 'MAY 15, 2026', summary: '15% Advance payment billing accompanied by valid surety bond.' }
+        ]
+      }
+    ];
+
+    let currentProjectId = 'PRJ-2026-001';
+    let currentTabKey = 'overview';
+    let currentDocFilter = 'all';
+
+    function getProject(projId) {
+      const p = FCL_PROJECT_CATALOG.find(x => x.id === projId);
+      return p || FCL_PROJECT_CATALOG[0];
+    }
+
+    function initProjectCatalog() {
+      // 1. Populate mainProjectSelector dropdown
+      const selector = document.getElementById('mainProjectSelector');
+      if (selector) {
+        selector.innerHTML = FCL_PROJECT_CATALOG.map(p => 
+          `<option value="${p.id}">${p.code} — ${p.shortName || p.name}</option>`
+        ).join('');
+        selector.value = currentProjectId;
+      }
+
+      // 2. Update badge count
+      const badge = document.getElementById('projectCountBadge');
+      if (badge) {
+        badge.textContent = `${FCL_PROJECT_CATALOG.length} Projects`;
+      }
+
+      // 3. Render sidebar project accordion
+      renderSidebarProjectList();
+
+      // 4. Select initial project and tab
+      selectProject(currentProjectId, currentTabKey);
+    }
+
+    function renderSidebarProjectList() {
+      const container = document.getElementById('projectListDropdownContainer');
+      if (!container) return;
+
+      let html = '';
+      FCL_PROJECT_CATALOG.forEach(p => {
+        const isCurrent = p.id === currentProjectId;
+        const cardClass = isCurrent ? 'project-entry-card active-project' : 'project-entry-card';
+        
+        html += `
+          <div class="${cardClass}" id="sidebarProjCard_${p.id}">
+            <div class="project-entry-header" onclick="selectProject('${p.id}', 'overview')">
+              <div class="project-entry-title">
+                <span>${escapeHtml(p.shortName || p.name)}</span>
+                <span style="font-size: 9px; padding: 1px 5px; border-radius: 4px; background: ${isCurrent ? '#2563eb' : '#e2e8f0'}; color: ${isCurrent ? '#ffffff' : '#475569'}; font-weight: 700;">${isCurrent ? 'ACTIVE' : p.badge}</span>
+              </div>
+              <div class="project-entry-code">${escapeHtml(p.code)} • ${p.actualProgress}% Done</div>
+            </div>
+            
+            <div class="project-entry-sublinks">
+              <a href="javascript:void(0)" onclick="selectProject('${p.id}', 'overview')" class="project-sublink-item ${isCurrent && currentTabKey === 'overview' ? 'active' : ''}">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                Project Overview
+              </a>
+              <a href="javascript:void(0)" onclick="selectProject('${p.id}', 'timeline')" class="project-sublink-item ${isCurrent && currentTabKey === 'timeline' ? 'active' : ''}">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Project Timeline
+              </a>
+              <a href="javascript:void(0)" onclick="selectProject('${p.id}', 'documents')" class="project-sublink-item ${isCurrent && currentTabKey === 'documents' ? 'active' : ''}">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                Project Documentation
+              </a>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function toggleProjectListMenu() {
+      const container = document.getElementById('projectListDropdownContainer');
+      const chevron = document.getElementById('projectListChevron');
+      if (!container) return;
+
+      const isClosed = container.style.display === 'none';
+      container.style.display = isClosed ? 'flex' : 'none';
+      if (chevron) {
+        chevron.style.transform = isClosed ? 'rotate(180deg)' : 'rotate(0deg)';
+      }
+    }
+
+    function selectProject(projId, tabKey) {
+      if (projId) currentProjectId = projId;
+      const proj = getProject(currentProjectId);
+      
+      // Sync dropdown selector
+      const selector = document.getElementById('mainProjectSelector');
+      if (selector && selector.value !== currentProjectId) {
+        selector.value = currentProjectId;
+      }
+
+      // Update status badge
+      const badge = document.getElementById('mainProjectStatusBadge');
+      if (badge) {
+        badge.textContent = `● ${proj.status.toUpperCase()}`;
+        if (currentProjectId === 'PRJ-2026-001') {
+          badge.style.background = 'rgba(16, 185, 129, 0.15)';
+          badge.style.color = '#059669';
+          badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+        } else {
+          badge.style.background = 'rgba(37, 99, 235, 0.1)';
+          badge.style.color = '#2563eb';
+          badge.style.borderColor = 'rgba(37, 99, 235, 0.3)';
+        }
+      }
+
+      // Update print header info
+      const execProjEl = document.getElementById('execPrintProjCode');
+      if (execProjEl) execProjEl.textContent = `${proj.name} • ${proj.code}`;
+
+      if (tabKey) {
+        switchMainProjectTab(tabKey);
+      } else {
+        renderSidebarProjectList();
+        renderActiveView();
+      }
+    }
+
+    function switchMainProjectTab(tabKey) {
+      currentTabKey = tabKey || 'overview';
+
+      // Toggle main view containers
+      const viewOverview = document.getElementById('viewProjectOverview');
+      const viewTimeline = document.getElementById('viewProjectTimeline');
+      const viewDocs = document.getElementById('viewProjectDocumentation');
+
+      if (viewOverview) viewOverview.style.display = currentTabKey === 'overview' ? 'block' : 'none';
+      if (viewTimeline) viewTimeline.style.display = currentTabKey === 'timeline' ? 'block' : 'none';
+      if (viewDocs) viewDocs.style.display = currentTabKey === 'documents' ? 'block' : 'none';
+
+      // Navbar tab buttons
+      const tabBtns = {
+        overview: document.getElementById('tabBtnOverview'),
+        timeline: document.getElementById('tabBtnTimeline'),
+        documents: document.getElementById('tabBtnDocs')
+      };
+      Object.keys(tabBtns).forEach(k => {
+        if (tabBtns[k]) {
+          if (k === currentTabKey) tabBtns[k].classList.add('active');
+          else tabBtns[k].classList.remove('active');
+        }
+      });
+
+      // Top navbar links
+      const topNavLinks = {
+        overview: document.getElementById('navItemOverview'),
+        timeline: document.getElementById('navItemTimeline'),
+        documents: document.getElementById('navItemDocs')
+      };
+      Object.keys(topNavLinks).forEach(k => {
+        if (topNavLinks[k]) {
+          if (k === currentTabKey) topNavLinks[k].classList.add('active');
+          else topNavLinks[k].classList.remove('active');
+        }
+      });
+
+      // Sidebar standalone links
+      const sidebarTimeline = document.getElementById('sidebarLinkTimeline');
+      const sidebarDocs = document.getElementById('sidebarLinkDocs');
+      if (sidebarTimeline) sidebarTimeline.classList.toggle('active', currentTabKey === 'timeline');
+      if (sidebarDocs) sidebarDocs.classList.toggle('active', currentTabKey === 'documents');
+
+      // Re-render sidebar project list to update active project & sublink highlight
+      renderSidebarProjectList();
+
+      // Render content of active tab
+      renderActiveView();
+    }
+
+    function renderActiveView() {
+      const proj = getProject(currentProjectId);
+      if (currentTabKey === 'overview') {
+        renderDashboard(currentProjectId);
+      } else if (currentTabKey === 'timeline') {
+        renderTimelineView(proj);
+      } else if (currentTabKey === 'documents') {
+        renderDocumentsView(proj, currentDocFilter);
+      }
+    }
+
+    function renderTimelineView(proj) {
+      if (!proj || !proj.timeline) return;
+      const t = proj.timeline;
+
+      // Header info
+      const titleEl = document.getElementById('timelineProjectTitle');
+      const subEl = document.getElementById('timelineProjectSub');
+      const badgeEl = document.getElementById('timelineStatusBadge');
+      const progEl = document.getElementById('timelineOverallProgress');
+      const durEl = document.getElementById('timelineDuration');
+      const elapEl = document.getElementById('timelineElapsed');
+      const critEl = document.getElementById('timelineCriticalState');
+      const targetEl = document.getElementById('timelineTargetDate');
+      const barPctEl = document.getElementById('timelineBarPercent');
+      const barFillEl = document.getElementById('timelineProgressBarFill');
+
+      if (titleEl) titleEl.textContent = `${proj.name} — Execution Timeline`;
+      if (subEl) subEl.textContent = `${proj.code} • ${proj.location || 'FCL Project Site'} • Duration: ${proj.durationDays || 240} CD`;
+      if (badgeEl) badgeEl.textContent = `● ${t.criticalState || 'ON TRACK'}`;
+      if (progEl) progEl.textContent = `${proj.actualProgress.toFixed(1)}%`;
+      if (durEl) durEl.textContent = `${proj.durationDays || 240} Calendar Days`;
+      if (elapEl) elapEl.textContent = `${proj.elapsedDays || 150} days elapsed (${((proj.elapsedDays / proj.durationDays) * 100).toFixed(1)}%)`;
+      if (critEl) critEl.textContent = t.criticalState || 'ON TRACK';
+      if (targetEl) targetEl.textContent = proj.targetDate || 'TBD';
+      if (barPctEl) barPctEl.textContent = `${proj.actualProgress.toFixed(1)}%`;
+      if (barFillEl) barFillEl.style.width = `${proj.actualProgress}%`;
+
+      // Phases
+      const phasesContainer = document.getElementById('timelinePhasesContainer');
+      if (phasesContainer && t.phases) {
+        let phtml = '';
+        t.phases.forEach((ph, idx) => {
+          let statusPillClass = 'active';
+          if (ph.status === 'Completed' || ph.progress === 100) statusPillClass = 'success';
+          else if (ph.status === 'Pending' || ph.progress === 0) statusPillClass = 'warning';
+
+          const isCritical = ph.isCritical;
+          const critBadge = isCritical
+            ? `<span style="font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">CRITICAL PATH</span>`
+            : `<span style="font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0;">FLOAT: ${ph.float || '10d'}</span>`;
+
+          phtml += `
+            <div class="timeline-phase-card">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <span style="font-size: 11px; font-weight: 800; color: #2563eb; background: #eff6ff; padding: 2px 8px; border-radius: 4px;">PHASE ${idx + 1}</span>
+                    <strong style="font-size: 13px; color: #0f172a;">${escapeHtml(ph.name)}</strong>
+                    ${critBadge}
+                  </div>
+                  <div style="font-size: 11.5px; color: #64748b; margin-top: 3px;">
+                    <strong>Window:</strong> ${ph.startDate} &rarr; ${ph.endDate} (${ph.duration} Days) &bull; Lead: <strong>${escapeHtml(ph.lead || 'Site Engineer')}</strong>
+                  </div>
+                </div>
+                <div style="text-align: right;">
+                  <span class="status-pill ${statusPillClass}">${ph.status}</span>
+                  <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 4px;">${ph.progress}%</div>
+                </div>
+              </div>
+
+              <div style="width: 100%; height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; margin-top: 6px;">
+                <div style="height: 100%; width: ${ph.progress}%; background: ${ph.progress === 100 ? '#10b981' : isCritical ? '#2563eb' : '#0ea5e9'}; border-radius: 4px;"></div>
+              </div>
+            </div>
+          `;
+        });
+        phasesContainer.innerHTML = phtml;
+      }
+
+      // 3-Week Lookahead
+      const lookaheadContainer = document.getElementById('timelineLookaheadContainer');
+      if (lookaheadContainer && t.lookahead) {
+        let lhtml = '<div style="display: flex; flex-direction: column; gap: 8px;">';
+        t.lookahead.forEach((item, idx) => {
+          lhtml += `
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f8fafc; border: 1px solid var(--line); border-radius: 6px; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 26px; height: 26px; border-radius: 50%; background: ${item.critical ? '#fee2e2' : '#e0f2fe'}; color: ${item.critical ? '#dc2626' : '#0284c7'}; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px;">
+                  ${idx + 1}
+                </div>
+                <div>
+                  <div style="font-size: 12.5px; font-weight: 700; color: #0f172a;">${escapeHtml(item.task)}</div>
+                  <div style="font-size: 11px; color: #64748b;">In-Charge: <strong>${escapeHtml(item.engineer)}</strong> &bull; Location: ${escapeHtml(item.zone || 'Main Deck')}</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 11.5px; font-weight: 700; color: #2563eb; background: #eff6ff; padding: 3px 8px; border-radius: 4px;">${item.dueDate}</span>
+                <span class="status-pill ${item.critical ? 'warning' : 'active'}">${item.critical ? 'High Priority' : 'Routine Inspection'}</span>
+              </div>
+            </div>
+          `;
+        });
+        lhtml += '</div>';
+        lookaheadContainer.innerHTML = lhtml;
+      }
+    }
+
+    function renderDocumentsView(proj, filterCat) {
+      if (!proj || !proj.documents) return;
+      currentDocFilter = filterCat || 'all';
+
+      const titleEl = document.getElementById('docsProjectTitle');
+      const subEl = document.getElementById('docsProjectSub');
+      const countAllEl = document.getElementById('countAllDocs');
+
+      if (titleEl) titleEl.textContent = `${proj.name} — Document Vault`;
+      if (subEl) subEl.textContent = `${proj.code} • Official Submittals, Detailed Estimates, Contracts & QA/QC Transmittals`;
+      if (countAllEl) countAllEl.textContent = proj.documents.length;
+
+      const searchQuery = (document.getElementById('docSearchInput')?.value || '').toLowerCase().trim();
+
+      const filtered = proj.documents.filter(doc => {
+        const matchesCat = currentDocFilter === 'all' || doc.category === currentDocFilter;
+        const matchesSearch = !searchQuery ||
+          doc.title.toLowerCase().includes(searchQuery) ||
+          doc.ref.toLowerCase().includes(searchQuery) ||
+          (doc.category && doc.category.toLowerCase().includes(searchQuery));
+        return matchesCat && matchesSearch;
+      });
+
+      const grid = document.getElementById('docVaultGrid');
+      if (!grid) return;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #f8fafc; border: 1px dashed var(--line); border-radius: 8px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" style="margin-bottom: 8px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div style="font-size: 13px; font-weight: 700; color: #475569;">No documents found matching the filter</div>
+            <div style="font-size: 11.5px; color: #94a3b8; margin-top: 4px;">Try selecting another category or clearing your search query.</div>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(doc => {
+        let iconBg = '#eff6ff', iconCol = '#2563eb';
+        if (doc.type === 'DWG') { iconBg = '#f0fdf4'; iconCol = '#16a34a'; }
+        else if (doc.type === 'XLSX') { iconBg = '#ecfdf5'; iconCol = '#059669'; }
+        else if (doc.type === 'DOCX') { iconBg = '#fef3c7'; iconCol = '#d97706'; }
+
+        let statusPill = 'success';
+        if (doc.status === 'In Review' || doc.status === 'Under Clearance') statusPill = 'warning';
+
+        html += `
+          <div class="doc-card">
+            <div>
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 32px; height: 32px; border-radius: 6px; background: ${iconBg}; color: ${iconCol}; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px;">
+                    ${doc.type}
+                  </div>
+                  <div>
+                    <span class="status-pill" style="font-size: 10px; background: #f1f5f9; color: #475569;">${doc.category.toUpperCase()}</span>
+                  </div>
+                </div>
+                <span class="status-pill ${statusPill}" style="font-size: 10px;">${doc.status}</span>
+              </div>
+
+              <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 4px; line-height: 1.4;">${escapeHtml(doc.title)}</h4>
+              <div style="font-size: 11px; font-weight: 600; color: #64748b;">Ref: ${escapeHtml(doc.ref)} &bull; ${doc.version}</div>
+              <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Approved: ${doc.date} &bull; Size: ${doc.size}</div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid #f1f5f9; padding-top: 8px;">
+              <button class="ctrl-btn primary" type="button" style="flex: 1; justify-content: center; font-size: 11.5px; padding: 6px 10px;" onclick="previewDocument('${doc.id}')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                Preview
+              </button>
+              <button class="ctrl-btn" type="button" style="flex: 1; justify-content: center; font-size: 11.5px; padding: 6px 10px;" onclick="downloadDocument('${doc.id}')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
+    }
+
+    function filterDocs(cat, btnEl) {
+      if (cat) currentDocFilter = cat;
+      if (btnEl) {
+        document.querySelectorAll('.doc-filter-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+      }
+      const proj = getProject(currentProjectId);
+      renderDocumentsView(proj, currentDocFilter);
+    }
+
+    function previewDocument(docId) {
+      const proj = getProject(currentProjectId);
+      if (!proj || !proj.documents) return;
+      const doc = proj.documents.find(d => d.id === docId);
+      if (!doc) return;
+
+      const iconEl = document.getElementById('previewDocIcon');
+      const titleEl = document.getElementById('previewDocTitle');
+      const refEl = document.getElementById('previewDocRef');
+      const bodyEl = document.getElementById('previewDocBody');
+
+      if (iconEl) iconEl.textContent = doc.type;
+      if (titleEl) titleEl.textContent = doc.title;
+      if (refEl) refEl.textContent = `${doc.ref} • Revision ${doc.version} • ${doc.date}`;
+
+      if (bodyEl) {
+        bodyEl.innerHTML = `
+          <!-- Corporate Header -->
+          <div style="border-bottom: 2px solid #1e3a8a; padding-bottom: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+              <div style="font-size: 15px; font-weight: 800; color: #1e3a8a; text-transform: uppercase;">FCL ARANANG DEVELOPMENT CORPORATION</div>
+              <div style="font-size: 11px; font-weight: 600; color: #64748b;">OFFICIAL PROJECT DOCUMENTATION &amp; TRANSMITTAL ARCHIVE</div>
+            </div>
+            <div style="text-align: right; font-size: 10.5px; color: #475569;">
+              <div><strong>Project:</strong> ${escapeHtml(proj.name)}</div>
+              <div><strong>Project Ref:</strong> ${escapeHtml(proj.code)}</div>
+              <div><strong>Doc Classification:</strong> <span style="color: #059669; font-weight: 700;">APPROVED / CONTROLLED</span></div>
+            </div>
+          </div>
+
+          <!-- Metadata Box -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: #f8fafc; border: 1px solid var(--line); border-radius: 6px; padding: 12px; margin-bottom: 16px;">
+            <div>
+              <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Document Title</div>
+              <div style="font-size: 12px; font-weight: 700; color: #0f172a;">${escapeHtml(doc.title)}</div>
+            </div>
+            <div>
+              <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Reference Number</div>
+              <div style="font-size: 12px; font-weight: 700; color: #2563eb;">${escapeHtml(doc.ref)}</div>
+            </div>
+            <div>
+              <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Approval Status</div>
+              <div style="font-size: 12px; font-weight: 700; color: #059669;">${doc.status} (${doc.date})</div>
+            </div>
+          </div>
+
+          <!-- Document Content Summary -->
+          <div style="margin-bottom: 16px;">
+            <h4 style="font-size: 12.5px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Executive Transmittal &amp; Scope Summary:</h4>
+            <p style="margin: 0 0 10px 0; color: #475569;">
+              ${escapeHtml(doc.summary || `This document forms an integral official record for ${proj.name} under contract code ${proj.code}. All figures, technical specifications, and milestones herein conform to DPWH standard specifications and verified contract quantities.`)}
+            </p>
+          </div>
+
+          <!-- Key Provisions Table -->
+          <div style="border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin-bottom: 20px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 11.5px;">
+              <thead style="background: #f1f5f9; color: #475569; font-weight: 700;">
+                <tr>
+                  <th style="padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--line);">Section / Item</th>
+                  <th style="padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--line);">Technical Specification / Scope Description</th>
+                  <th style="padding: 8px 12px; text-align: right; border-bottom: 1px solid var(--line);">Compliance State</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 8px 12px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">Sec 01.0</td>
+                  <td style="padding: 8px 12px; border-bottom: 1px solid #f1f5f9;">Contract Compliance &amp; Regulatory Alignment</td>
+                  <td style="padding: 8px 12px; border-bottom: 1px solid #f1f5f9; text-align: right; color: #059669; font-weight: 700;">CONFORMING</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 12px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">Sec 02.0</td>
+                  <td style="padding: 8px 12px; border-bottom: 1px solid #f1f5f9;">Quantity Verification &amp; Approved Unit Costs</td>
+                  <td style="padding: 8px 12px; border-bottom: 1px solid #f1f5f9; text-align: right; color: #059669; font-weight: 700;">VALIDATED</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 12px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">Sec 03.0</td>
+                  <td style="padding: 8px 12px; border-bottom: 1px solid #f1f5f9;">QA/QC Material Testing Clearances &amp; Cylinders</td>
+                  <td style="padding: 8px 12px; border-bottom: 1px solid #f1f5f9; text-align: right; color: #059669; font-weight: 700;">PASSED 100%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Signatures Matrix -->
+          <div style="display: flex; justify-content: space-between; gap: 16px; margin-top: 24px; padding-top: 14px; border-top: 1.5px dashed #cbd5e1;">
+            <div style="flex: 1; text-align: center;">
+              <div style="font-size: 10px; font-weight: 700; color: #64748b;">PREPARED &amp; TRANSMITTED</div>
+              <div style="margin-top: 20px; font-size: 11px; font-weight: 700; color: #0f172a; border-top: 1px solid #0f172a; padding-top: 3px;">ENGR. J. DELA CRUZ</div>
+              <div style="font-size: 9.5px; color: #64748b;">Cost Engineer • PRC #0128472</div>
+            </div>
+            <div style="flex: 1; text-align: center;">
+              <div style="font-size: 10px; font-weight: 700; color: #64748b;">CHECKED &amp; VALIDATED</div>
+              <div style="margin-top: 20px; font-size: 11px; font-weight: 700; color: #0f172a; border-top: 1px solid #0f172a; padding-top: 3px;">ENGR. V. BUMALANG</div>
+              <div style="font-size: 9.5px; color: #64748b;">Project Manager • PRC #0093812</div>
+            </div>
+            <div style="flex: 1; text-align: center;">
+              <div style="font-size: 10px; font-weight: 700; color: #64748b;">CERTIFIED ARCHIVE COPY</div>
+              <div style="margin-top: 20px; font-size: 11px; font-weight: 700; color: #059669; border-top: 1px solid #059669; padding-top: 3px;">DIGITALLY SECURED</div>
+              <div style="font-size: 9.5px; color: #059669;">FCL Hash ID: ${doc.ref}-AUTH</div>
+            </div>
+          </div>
+        `;
+      }
+
+      const modal = document.getElementById('docPreviewModal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeDocPreview() {
+      const modal = document.getElementById('docPreviewModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function downloadDocument(docId) {
+      const proj = getProject(currentProjectId);
+      const doc = proj?.documents?.find(d => d.id === docId);
+      const title = doc ? doc.title : 'Document';
+      alert(`Downloading authenticated official copy of:\n\n"${title}" (${doc ? doc.ref : ''})\n\nFile Size: ${doc ? doc.size : '1.2 MB'}\nStatus: Verified Complete.`);
+    }
+
+    function uploadNewDocPrompt() {
+      const proj = getProject(currentProjectId);
+      const title = prompt(`Enter Document Title to transmit for ${proj.name}:`, 'Structural Addendum Transmittal');
+      if (!title) return;
+      const newDoc = {
+        id: 'DOC-NEW-' + Date.now(),
+        title: title.trim(),
+        ref: `TRN-${proj.code.split('-')[0]}-${Math.floor(100 + Math.random() * 900)}`,
+        category: currentDocFilter !== 'all' ? currentDocFilter : 'commercial',
+        type: 'PDF',
+        size: '1.4 MB',
+        version: 'Rev 1.0',
+        status: 'In Review',
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        summary: `Newly uploaded transmittal record submitted for engineering compliance and QA/QC verification.`
+      };
+      proj.documents.unshift(newDoc);
+      renderDocumentsView(proj, currentDocFilter);
+    }
+
+    function renderDashboard(projId) {
+      const pId = projId || currentProjectId || 'PRJ-2026-001';
+      let data;
+
+      if (pId === 'PRJ-2026-001') {
+        const live = FCLStorage.getLiveDashboardData();
+        data = live;
+      } else {
+        const proj = getProject(pId);
+        data = {
+          isLive: false,
+          projectName: proj.name,
+          projectCode: proj.code,
+          totalBudget: proj.totalBudget,
+          plannedProgress: proj.plannedProgress,
+          actualProgress: proj.actualProgress,
+          donutShares: proj.donutShares,
+          categories: proj.categories,
+          items: proj.items
+        };
+      }
       
       // 1. Project Title & Status Badge
       const statusBadge = document.getElementById('dashStatusBadge');
@@ -1363,7 +2578,20 @@
 
     // Feature 7: Executive PDF Export / Print Logic
     function printExecutiveDashboard() {
-      const data = FCLStorage.getLiveDashboardData();
+      const pId = currentProjectId || 'PRJ-2026-001';
+      let data;
+      if (pId === 'PRJ-2026-001') {
+        data = FCLStorage.getLiveDashboardData();
+      } else {
+        const proj = getProject(pId);
+        data = {
+          projectName: proj.name,
+          projectCode: proj.code,
+          totalBudget: proj.totalBudget,
+          plannedProgress: proj.plannedProgress,
+          actualProgress: proj.actualProgress
+        };
+      }
 
       const execDateEl = document.getElementById('execPrintDate');
       const execProjEl = document.getElementById('execPrintProjCode');
@@ -1444,8 +2672,12 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-      renderDashboard();
-      window.addEventListener('storage', () => renderDashboard());
+      initProjectCatalog();
+      window.addEventListener('storage', () => {
+        if (currentProjectId === 'PRJ-2026-001' && currentTabKey === 'overview') {
+          renderDashboard('PRJ-2026-001');
+        }
+      });
     });
   </script>
 </body>
