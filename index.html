@@ -1002,15 +1002,15 @@
 
     <div class="dashboard-body">
       
-      <!-- Left Sidebar: Project List Directory -->
+      <!-- Left Sidebar: Project Controls Directory -->
       <aside class="sidebar">
         <div>
           <div class="sidebar-group-title">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-            Project Modules
+            Project Controls
           </div>
           <ul class="sidebar-menu">
-            <!-- Expandable Project List Tab -->
+            <!-- 1. Expandable Project List Tab -->
             <li class="project-list-menu-item">
               <button id="projectListToggleBtn" class="sidebar-link project-list-trigger" type="button" onclick="toggleProjectListMenu()" style="border-left: 3px solid #2563eb; background: #eff6ff;">
                 <span class="link-left">
@@ -1026,6 +1026,89 @@
               <!-- Expandable Projects Accordion Container -->
               <div id="projectListDropdownContainer" class="project-list-expanded" style="display: flex;">
                 <!-- Populated dynamically: each project with Overview, Timeline, Documentation sublinks -->
+              </div>
+            </li>
+
+            <!-- 2. Milestones Tab -->
+            <li style="margin-top: 6px;">
+              <button id="sidebarBtnMilestones" class="sidebar-link" type="button" onclick="openSidebarSubcategory('milestones', this)" style="width: 100%; border: none; background: #f8fafc; cursor: pointer; text-align: left; font-family: inherit; border-left: 3px solid #059669;">
+                <span class="link-left">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  <strong style="color: #065f46;">Milestones</strong>
+                </span>
+                <span class="badge" style="background:#059669; color:#fff;">TRACK</span>
+              </button>
+            </li>
+
+            <!-- 3. Timeline Tab (with Sub-categories) -->
+            <li style="margin-top: 6px;">
+              <button id="sidebarBtnTimeline" class="sidebar-link project-list-trigger" type="button" onclick="toggleSidebarAccordion('timelineMenuContainer', 'timelineMenuChevron')" style="border-left: 3px solid #0284c7; background: #f0f9ff;">
+                <span class="link-left">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  <strong style="color: #0369a1;">Timeline</strong>
+                </span>
+                <span style="display:flex; align-items:center; gap:6px;">
+                  <span class="badge" style="background:#0284c7; color:#fff;">4 Items</span>
+                  <svg id="timelineMenuChevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0369a1" stroke-width="2.5" style="transform: rotate(180deg); transition: transform 0.2s;"><path d="M6 9l6 6 6-6"/></svg>
+                </span>
+              </button>
+
+              <!-- Timeline Sub-categories Container -->
+              <div id="timelineMenuContainer" class="project-list-expanded" style="display: flex;">
+                <a href="javascript:void(0)" onclick="openSidebarSubcategory('dependencies', this)" class="project-sublink-item" id="sublink_dependencies">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+                  Dependencies
+                </a>
+                <a href="javascript:void(0)" onclick="openSidebarSubcategory('todolist', this)" class="project-sublink-item" id="sublink_todolist">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                  To-Do List
+                </a>
+                <a href="javascript:void(0)" onclick="openSidebarSubcategory('progresstracking', this)" class="project-sublink-item" id="sublink_progresstracking">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  Progress Tracking
+                </a>
+                <a href="javascript:void(0)" onclick="openSidebarSubcategory('collaboration', this)" class="project-sublink-item" id="sublink_collaboration">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  Team Collaboration
+                </a>
+              </div>
+            </li>
+
+            <!-- 4. Budget Allocation Tab (with Sub-categories) -->
+            <li style="margin-top: 6px;">
+              <button id="sidebarBtnBudget" class="sidebar-link project-list-trigger" type="button" onclick="toggleSidebarAccordion('budgetMenuContainer', 'budgetMenuChevron')" style="border-left: 3px solid #d97706; background: #fffbeb;">
+                <span class="link-left">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                  <strong style="color: #92400e;">Budget Allocation</strong>
+                </span>
+                <span style="display:flex; align-items:center; gap:6px;">
+                  <span class="badge" style="background:#d97706; color:#fff;">5 Items</span>
+                  <svg id="budgetMenuChevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2.5" style="transform: rotate(180deg); transition: transform 0.2s;"><path d="M6 9l6 6 6-6"/></svg>
+                </span>
+              </button>
+
+              <!-- Budget Allocation Sub-categories Container -->
+              <div id="budgetMenuContainer" class="project-list-expanded" style="display: flex;">
+                <a href="javascript:void(0)" onclick="openSidebarSubcategory('expensetracking', this)" class="project-sublink-item" id="sublink_expensetracking">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  Expense Tracking
+                </a>
+                <a href="javascript:void(0)" onclick="openSidebarSubcategory('varianceanalysis', this)" class="project-sublink-item" id="sublink_varianceanalysis">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4"/></svg>
+                  Variance Analysis
+                </a>
+                <a href="javascript:void(0)" onclick="openSidebarSubcategory('manpower', this)" class="project-sublink-item" id="sublink_manpower">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  Manpower Utilization
+                </a>
+                <a href="javascript:void(0)" onclick="openSidebarSubcategory('equipment', this)" class="project-sublink-item" id="sublink_equipment">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                  Equipment Utilization
+                </a>
+                <a href="javascript:void(0)" onclick="openSidebarSubcategory('materials', this)" class="project-sublink-item" id="sublink_materials">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                  Material Management
+                </a>
               </div>
             </li>
           </ul>
@@ -1452,6 +1535,34 @@
           </div>
         </div>
 
+        <!-- Sidebar Feature Interactive Modal -->
+        <div id="sidebarFeatureModal" class="modal-overlay no-print" style="display: none;" onclick="if(event.target===this) closeSidebarFeatureModal()">
+          <div class="modal-content" onclick="event.stopPropagation()">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); background: #f8fafc;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div id="sidebarModalIcon" style="width: 34px; height: 34px; border-radius: 6px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">📊</div>
+                <div>
+                  <div id="sidebarModalTitle" style="font-size: 14px; font-weight: 700; color: #0f172a;">Feature Title</div>
+                  <div id="sidebarModalSub" style="font-size: 11px; font-weight: 600; color: #64748b;">Sub Title &bull; Project Ref</div>
+                </div>
+              </div>
+              <button type="button" onclick="closeSidebarFeatureModal()" style="background: none; border: none; font-size: 22px; line-height: 1; cursor: pointer; color: #94a3b8;" title="Close Modal">&times;</button>
+            </div>
+
+            <div id="sidebarModalBody" style="padding: 20px; overflow-y: auto; max-height: calc(90vh - 130px); font-size: 12.5px; line-height: 1.6; color: #334155;">
+              <!-- Filled dynamically by openSidebarSubcategory -->
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-top: 1px solid var(--line); background: #f8fafc;">
+              <span style="font-size: 11px; color: #64748b;">FCL Project Control System &bull; Active Project Controls</span>
+              <div style="display: flex; gap: 8px;">
+                <button class="ctrl-btn" type="button" onclick="window.print()">Print Report</button>
+                <button class="ctrl-btn primary" type="button" onclick="closeSidebarFeatureModal()">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Executive Signatures Block (Only shown in print / PDF report) -->
         <section id="executiveSignatures" class="executive-print-signatures" style="margin-top: 20px; padding-top: 16px; border-top: 1.5px solid #cbd5e1; justify-content: space-between; gap: 32px; page-break-inside: avoid;">
           <div style="flex: 1; text-align: center;">
@@ -1801,6 +1912,489 @@
       container.style.display = isClosed ? 'flex' : 'none';
       if (chevron) {
         chevron.style.transform = isClosed ? 'rotate(180deg)' : 'rotate(0deg)';
+      }
+    }
+
+    function toggleSidebarAccordion(containerId, chevronId) {
+      const container = document.getElementById(containerId);
+      const chevron = document.getElementById(chevronId);
+      if (!container) return;
+
+      const isClosed = container.style.display === 'none';
+      container.style.display = isClosed ? 'flex' : 'none';
+      if (chevron) {
+        chevron.style.transform = isClosed ? 'rotate(180deg)' : 'rotate(0deg)';
+      }
+    }
+
+    function closeSidebarFeatureModal() {
+      const modal = document.getElementById('sidebarFeatureModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function openSidebarSubcategory(actionKey, el) {
+      // Highlight active sublink if provided
+      document.querySelectorAll('.project-sublink-item').forEach(item => item.classList.remove('active'));
+      if (el && el.classList) el.classList.add('active');
+
+      const proj = getProject(currentProjectId);
+      const modal = document.getElementById('sidebarFeatureModal');
+      const iconEl = document.getElementById('sidebarModalIcon');
+      const titleEl = document.getElementById('sidebarModalTitle');
+      const subEl = document.getElementById('sidebarModalSub');
+      const bodyEl = document.getElementById('sidebarModalBody');
+
+      if (actionKey === 'milestones') {
+        switchMainProjectTab('timeline');
+        if (iconEl) iconEl.textContent = '🏁';
+        if (titleEl) titleEl.textContent = 'Project Milestone Target Tracking';
+        if (subEl) subEl.textContent = `${proj.name} • ${proj.code} • Substantial Completion: ${proj.targetDate}`;
+        if (bodyEl) {
+          let rowsHtml = '';
+          proj.timeline.phases.forEach((ph, i) => {
+            const isDone = ph.progress === 100;
+            rowsHtml += `
+              <tr>
+                <td style="padding:10px 12px; border-bottom:1px solid #f1f5f9; font-weight:700; color:#1e40af;">M-${i+1}</td>
+                <td style="padding:10px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">${escapeHtml(ph.name)}</td>
+                <td style="padding:10px 12px; border-bottom:1px solid #f1f5f9; color:#475569;">${ph.endDate}</td>
+                <td style="padding:10px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">
+                  <span class="status-pill ${isDone ? 'success' : ph.progress > 0 ? 'active' : 'warning'}">${isDone ? 'ACHIEVED' : ph.progress > 0 ? 'IN PROGRESS (' + ph.progress + '%)' : 'UPCOMING'}</span>
+                </td>
+                <td style="padding:10px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700; color:${ph.isCritical ? '#dc2626' : '#16a34a'};">
+                  ${ph.isCritical ? 'CRITICAL PATH' : 'FLOAT: ' + (ph.float || '10d')}
+                </td>
+              </tr>
+            `;
+          });
+          bodyEl.innerHTML = `
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:12px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong style="color:#166534; font-size:13px;">Contract Milestone Health: ${proj.timeline.criticalState}</strong>
+                <div style="font-size:11.5px; color:#15803d; margin-top:2px;">Contract duration: ${proj.durationDays} Calendar Days &bull; ${proj.elapsedDays} Days Elapsed (${((proj.elapsedDays/proj.durationDays)*100).toFixed(1)}%)</div>
+              </div>
+              <span class="status-pill success" style="font-size:11px;">ON TRACK</span>
+            </div>
+            <table style="width:100%; border-collapse:collapse; font-size:12px; background:white; border:1px solid var(--line); border-radius:6px; overflow:hidden;">
+              <thead style="background:#f8fafc; color:#475569; font-weight:700;">
+                <tr>
+                  <th style="padding:8px 12px; text-align:left; border-bottom:1px solid var(--line);">ID</th>
+                  <th style="padding:8px 12px; text-align:left; border-bottom:1px solid var(--line);">Key Milestone Scope</th>
+                  <th style="padding:8px 12px; text-align:left; border-bottom:1px solid var(--line);">Milestone Date</th>
+                  <th style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--line);">Status</th>
+                  <th style="padding:8px 12px; text-align:right; border-bottom:1px solid var(--line);">Critical Path Impact</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml}</tbody>
+            </table>
+          `;
+        }
+        if (modal) modal.style.display = 'flex';
+      }
+      else if (actionKey === 'dependencies') {
+        switchMainProjectTab('timeline');
+        if (iconEl) iconEl.textContent = '🔗';
+        if (titleEl) titleEl.textContent = 'CPM Precedence & Schedule Dependencies';
+        if (subEl) subEl.textContent = `${proj.name} • Critical Path Method Network Logic`;
+        if (bodyEl) {
+          bodyEl.innerHTML = `
+            <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:12px 16px; margin-bottom:16px;">
+              <strong style="color:#1e40af; font-size:13px;">Critical Path Analysis (CPM) Precedence Matrix</strong>
+              <div style="font-size:11.5px; color:#1d4ed8; margin-top:2px;">Activities on the critical path have zero total float. Delays immediately impact project handover.</div>
+            </div>
+            <table style="width:100%; border-collapse:collapse; font-size:12px; background:white; border:1px solid var(--line); border-radius:6px; overflow:hidden;">
+              <thead style="background:#f8fafc; color:#475569; font-weight:700;">
+                <tr>
+                  <th style="padding:8px 12px; text-align:left; border-bottom:1px solid var(--line);">Phase Activity</th>
+                  <th style="padding:8px 12px; text-align:left; border-bottom:1px solid var(--line);">Predecessors</th>
+                  <th style="padding:8px 12px; text-align:left; border-bottom:1px solid var(--line);">Successors</th>
+                  <th style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--line);">Relation Type</th>
+                  <th style="padding:8px 12px; text-align:right; border-bottom:1px solid var(--line);">Total Float</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Phase 1: Mobilization &amp; Site Setup</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; color:#64748b;">None (Project Start)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Phase 2</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">Finish-to-Start (FS)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right; color:#16a34a; font-weight:700;">15 Days</td>
+                </tr>
+                <tr style="background:#fff7ed;">
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:700; color:#c2410c;">Phase 2: Substructure &amp; Deep Piles</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Phase 1 (FS)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Phase 3</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">Finish-to-Start (FS)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right; color:#dc2626; font-weight:700;">0 Days (CRITICAL)</td>
+                </tr>
+                <tr style="background:#fff7ed;">
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:700; color:#c2410c;">Phase 3: Concrete Superstructure Frame</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Phase 2 (FS)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Phase 4, Phase 5</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">FS + SS Lag</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right; color:#dc2626; font-weight:700;">0 Days (CRITICAL)</td>
+                </tr>
+                <tr style="background:#fff7ed;">
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:700; color:#c2410c;">Phase 4: Structural Steel Roof Trusses</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Phase 3 (FS+10d)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Phase 6</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">Finish-to-Start (FS)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right; color:#dc2626; font-weight:700;">0 Days (CRITICAL)</td>
+                </tr>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Phase 5: Architectural Enclosure &amp; Floors</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Phase 3, Phase 4</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Phase 7</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">Start-to-Start (SS)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right; color:#16a34a; font-weight:700;">12 Days</td>
+                </tr>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Phase 6: MEPFS Heavy Equipment &amp; Pumps</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Phase 4</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Phase 7</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">FS + FF</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right; color:#16a34a; font-weight:700;">8 Days</td>
+                </tr>
+                <tr style="background:#fff7ed;">
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:700; color:#c2410c;">Phase 7: Testing, Commissioning &amp; Turn-over</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Phase 5, Phase 6 (FS)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9;">Handover to Client</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">Finish-to-Finish</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right; color:#dc2626; font-weight:700;">0 Days (CRITICAL)</td>
+                </tr>
+              </tbody>
+            </table>
+          `;
+        }
+        if (modal) modal.style.display = 'flex';
+      }
+      else if (actionKey === 'todolist') {
+        switchMainProjectTab('timeline');
+        if (iconEl) iconEl.textContent = '✅';
+        if (titleEl) titleEl.textContent = 'Active Field To-Do List & Lookahead Tasks';
+        if (subEl) subEl.textContent = `${proj.name} • Immediate Site Inspection & Execution Sprint`;
+        if (bodyEl) {
+          let listHtml = '';
+          (proj.timeline.lookahead || []).forEach((t, idx) => {
+            listHtml += `
+              <div style="display:flex; align-items:flex-start; gap:12px; padding:12px; background:#f8fafc; border:1px solid var(--line); border-radius:6px; margin-bottom:8px;">
+                <input type="checkbox" style="margin-top:3px; cursor:pointer;" id="todo_chk_${idx}">
+                <label for="todo_chk_${idx}" style="flex:1; cursor:pointer;">
+                  <div style="font-size:13px; font-weight:700; color:#0f172a;">${escapeHtml(t.task)}</div>
+                  <div style="font-size:11.5px; color:#64748b; margin-top:2px;">
+                    Assigned: <strong>${escapeHtml(t.engineer)}</strong> &bull; Zone: <strong>${escapeHtml(t.zone || 'Site')}</strong> &bull; Due: <span style="color:#2563eb; font-weight:700;">${t.dueDate}</span>
+                  </div>
+                </label>
+                <span class="status-pill ${t.critical ? 'warning' : 'active'}" style="font-size:10px;">${t.critical ? 'HIGH PRIORITY' : 'ROUTINE'}</span>
+              </div>
+            `;
+          });
+          bodyEl.innerHTML = `
+            <div style="margin-bottom:14px; font-size:12px; color:#475569;">Check off completed engineering inspections and daily task assignments:</div>
+            ${listHtml}
+            <button class="ctrl-btn primary" type="button" style="margin-top:10px;" onclick="alert('To-do checklist state updated and synced with site log.'); closeSidebarFeatureModal();">Save Task Progress</button>
+          `;
+        }
+        if (modal) modal.style.display = 'flex';
+      }
+      else if (actionKey === 'progresstracking') {
+        switchMainProjectTab('overview');
+        const scurveEl = document.getElementById('scurveSvg');
+        if (scurveEl) {
+          scurveEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+      else if (actionKey === 'collaboration') {
+        if (iconEl) iconEl.textContent = '👥';
+        if (titleEl) titleEl.textContent = 'Project Engineering & Team Collaboration';
+        if (subEl) subEl.textContent = `${proj.name} • Key Personnel & Professional Credentials`;
+        if (bodyEl) {
+          bodyEl.innerHTML = `
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;">
+              <div style="background:#f8fafc; border:1px solid var(--line); border-radius:8px; padding:14px;">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+                  <div class="user-avatar-sm" style="background:#bfdbfe; color:#1e40af; width:36px; height:36px; font-size:13px; font-weight:800;">VB</div>
+                  <div>
+                    <strong style="color:#0f172a; font-size:13px;">Engr. V. Bumalang</strong>
+                    <div style="font-size:11px; color:#64748b;">Project Manager / QA-QC In-Charge</div>
+                  </div>
+                </div>
+                <div style="font-size:11px; color:#475569; line-height:1.5;">PRC License: #0093812 &bull; Active Overall Site Supervision & Submittal Verification.</div>
+              </div>
+              <div style="background:#f8fafc; border:1px solid var(--line); border-radius:8px; padding:14px;">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+                  <div class="user-avatar-sm" style="background:#bbf7d0; color:#166534; width:36px; height:36px; font-size:13px; font-weight:800;">JC</div>
+                  <div>
+                    <strong style="color:#0f172a; font-size:13px;">Engr. J. Dela Cruz</strong>
+                    <div style="font-size:11px; color:#64748b;">Project Planning &amp; Cost Engineer</div>
+                  </div>
+                </div>
+                <div style="font-size:11px; color:#475569; line-height:1.5;">PRC License: #0128472 &bull; DUPA Analysis, CPM Gantt Baseline & Progress Certification.</div>
+              </div>
+              <div style="background:#f8fafc; border:1px solid var(--line); border-radius:8px; padding:14px;">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+                  <div class="user-avatar-sm" style="background:#fef08a; color:#854d0e; width:36px; height:36px; font-size:13px; font-weight:800;">AT</div>
+                  <div>
+                    <strong style="color:#0f172a; font-size:13px;">Arch. A. Tolentino</strong>
+                    <div style="font-size:11px; color:#64748b;">Lead Architect / Interior Finishes</div>
+                  </div>
+                </div>
+                <div style="font-size:11px; color:#475569; line-height:1.5;">UAP Member &bull; Architectural Specifications, IFC Plans & Aesthetics Quality Assurance.</div>
+              </div>
+              <div style="background:#f8fafc; border:1px solid var(--line); border-radius:8px; padding:14px;">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+                  <div class="user-avatar-sm" style="background:#e9d5ff; color:#6b21a8; width:36px; height:36px; font-size:13px; font-weight:800;">RS</div>
+                  <div>
+                    <strong style="color:#0f172a; font-size:13px;">Engr. R. Santos</strong>
+                    <div style="font-size:11px; color:#64748b;">Electrical &amp; Electronics Engineer</div>
+                  </div>
+                </div>
+                <div style="font-size:11px; color:#475569; line-height:1.5;">PEE Licensed &bull; Substation Design, High-Bay Sports Lighting & Fire Alarm Systems.</div>
+              </div>
+            </div>
+          `;
+        }
+        if (modal) modal.style.display = 'flex';
+      }
+      else if (actionKey === 'expensetracking') {
+        switchMainProjectTab('overview');
+        const tableEl = document.getElementById('dashExpenseTableBody');
+        if (tableEl) {
+          tableEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+      else if (actionKey === 'varianceanalysis') {
+        switchMainProjectTab('overview');
+        if (iconEl) iconEl.textContent = '📉';
+        if (titleEl) titleEl.textContent = 'Budget Variance & Cost Deviation Analysis';
+        if (subEl) subEl.textContent = `${proj.name} • Total Contract Budget: ₱${formatPeso(proj.totalBudget)}`;
+        if (bodyEl) {
+          const varDiff = proj.actualProgress - proj.plannedProgress;
+          bodyEl.innerHTML = `
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-bottom:16px;">
+              <div style="background:#f8fafc; padding:12px; border-radius:6px; border:1px solid var(--line);">
+                <div style="font-size:10px; font-weight:700; color:#64748b; text-transform:uppercase;">Planned Budget Value</div>
+                <div style="font-size:16px; font-weight:800; color:#2563eb; margin-top:2px;">₱ ${formatPeso((proj.totalBudget * proj.plannedProgress) / 100)}</div>
+                <div style="font-size:10.5px; color:#64748b;">${proj.plannedProgress}% Scheduled</div>
+              </div>
+              <div style="background:#f8fafc; padding:12px; border-radius:6px; border:1px solid var(--line);">
+                <div style="font-size:10px; font-weight:700; color:#64748b; text-transform:uppercase;">Earned Value Accomplished</div>
+                <div style="font-size:16px; font-weight:800; color:#059669; margin-top:2px;">₱ ${formatPeso((proj.totalBudget * proj.actualProgress) / 100)}</div>
+                <div style="font-size:10.5px; color:#64748b;">${proj.actualProgress}% Physical Done</div>
+              </div>
+              <div style="background:#f8fafc; padding:12px; border-radius:6px; border:1px solid var(--line);">
+                <div style="font-size:10px; font-weight:700; color:#64748b; text-transform:uppercase;">Variance Deviation</div>
+                <div style="font-size:16px; font-weight:800; color:${varDiff >= 0 ? '#059669' : '#dc2626'}; margin-top:2px;">
+                  ${varDiff >= 0 ? '+' : ''}${varDiff.toFixed(2)}%
+                </div>
+                <div style="font-size:10.5px; color:#64748b;">${varDiff >= 0 ? 'Favorable / Ahead' : 'Unfavorable / Slippage'}</div>
+              </div>
+            </div>
+            <h4 style="font-size:13px; font-weight:700; margin-bottom:8px; color:#0f172a;">Major Division Budget Performance:</h4>
+            <table style="width:100%; border-collapse:collapse; font-size:12px; border:1px solid var(--line); border-radius:6px; overflow:hidden;">
+              <thead style="background:#f8fafc; color:#475569; font-weight:700;">
+                <tr>
+                  <th style="padding:8px 12px; text-align:left; border-bottom:1px solid var(--line);">Category</th>
+                  <th style="padding:8px 12px; text-align:right; border-bottom:1px solid var(--line);">Planned (₱)</th>
+                  <th style="padding:8px 12px; text-align:right; border-bottom:1px solid var(--line);">Actual (₱)</th>
+                  <th style="padding:8px 12px; text-align:right; border-bottom:1px solid var(--line);">Variance (₱)</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${proj.categories.map(c => `
+                  <tr>
+                    <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">${c.name}</td>
+                    <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ ${formatPeso(c.planned)}</td>
+                    <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ ${formatPeso(c.actual)}</td>
+                    <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700; color:${(c.planned - c.actual) >= 0 ? '#059669' : '#dc2626'};">
+                      ${(c.planned - c.actual) >= 0 ? '+₱ ' : '-₱ '}${formatPeso(Math.abs(c.planned - c.actual))}
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
+        }
+        if (modal) modal.style.display = 'flex';
+      }
+      else if (actionKey === 'manpower') {
+        if (iconEl) iconEl.textContent = '👷';
+        if (titleEl) titleEl.textContent = 'Manpower Deployment & Labor Utilization';
+        if (subEl) subEl.textContent = `${proj.name} • Active Field Crews & Daily Force Account Log`;
+        if (bodyEl) {
+          bodyEl.innerHTML = `
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-bottom:16px;">
+              <div style="background:#eff6ff; padding:12px; border-radius:6px; border:1px solid #bfdbfe;">
+                <div style="font-size:10px; font-weight:700; color:#1e40af; text-transform:uppercase;">Active Labor Force</div>
+                <div style="font-size:18px; font-weight:800; color:#1d4ed8; margin-top:2px;">48 Workers</div>
+                <div style="font-size:10.5px; color:#2563eb;">On-site Today</div>
+              </div>
+              <div style="background:#f0fdf4; padding:12px; border-radius:6px; border:1px solid #bbf7d0;">
+                <div style="font-size:10px; font-weight:700; color:#166534; text-transform:uppercase;">Total Man-Hours</div>
+                <div style="font-size:18px; font-weight:800; color:#15803d; margin-top:2px;">18,450 Hrs</div>
+                <div style="font-size:10.5px; color:#16a34a;">Cumulative to date</div>
+              </div>
+              <div style="background:#fefce8; padding:12px; border-radius:6px; border:1px solid #fef08a;">
+                <div style="font-size:10px; font-weight:700; color:#854d0e; text-transform:uppercase;">Safety Record</div>
+                <div style="font-size:18px; font-weight:800; color:#a16207; margin-top:2px;">180 Days</div>
+                <div style="font-size:10.5px; color:#ca8a04;">Zero Lost-Time Injury</div>
+              </div>
+            </div>
+            <table style="width:100%; border-collapse:collapse; font-size:12px; border:1px solid var(--line); border-radius:6px; overflow:hidden;">
+              <thead style="background:#f8fafc; color:#475569; font-weight:700;">
+                <tr>
+                  <th style="padding:8px 12px; text-align:left; border-bottom:1px solid var(--line);">Trade Classification</th>
+                  <th style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--line);">Headcount</th>
+                  <th style="padding:8px 12px; text-align:right; border-bottom:1px solid var(--line);">Daily Wage Rate</th>
+                  <th style="padding:8px 12px; text-align:right; border-bottom:1px solid var(--line);">Daily Total (₱)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">General Foremen / In-Charge</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">4 Pax</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ 1,100.00</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700;">₱ 4,400.00</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Skilled Carpenters &amp; Formwork</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">12 Pax</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ 850.00</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700;">₱ 10,200.00</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Rebar Steelmen &amp; Cut/Bend Crew</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">10 Pax</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ 850.00</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700;">₱ 8,500.00</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Masons &amp; Concrete Finishers</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">8 Pax</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ 800.00</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700;">₱ 6,400.00</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">MEPFS Electricians &amp; Plumbers</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">6 Pax</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ 850.00</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700;">₱ 5,100.00</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">General Civil Helpers &amp; Laborers</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">8 Pax</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ 610.00</td>
+                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700;">₱ 4,880.00</td>
+                </tr>
+              </tbody>
+            </table>
+          `;
+        }
+        if (modal) modal.style.display = 'flex';
+      }
+      else if (actionKey === 'equipment') {
+        if (iconEl) iconEl.textContent = '🚜';
+        if (titleEl) titleEl.textContent = 'Equipment Utilization & Fleet Management';
+        if (subEl) subEl.textContent = `${proj.name} • Heavy Machinery Deployment Status`;
+        if (bodyEl) {
+          bodyEl.innerHTML = `
+            <table style="width:100%; border-collapse:collapse; font-size:12px; border:1px solid var(--line); border-radius:6px; overflow:hidden;">
+              <thead style="background:#f8fafc; color:#475569; font-weight:700;">
+                <tr>
+                  <th style="padding:8px 12px; text-align:left; border-bottom:1px solid var(--line);">Equipment Asset Description</th>
+                  <th style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--line);">Capacity</th>
+                  <th style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--line);">Utilization</th>
+                  <th style="padding:8px 12px; text-align:right; border-bottom:1px solid var(--line);">Deployment Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">50-Ton Mobile All-Terrain Crane (Kato)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">50T / 42m</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center; font-weight:700; color:#2563eb;">92%</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right;"><span class="status-pill active">ROOF TRUSS ERECTION</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Concrete Boom Pump Truck</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">36m Vertical</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center; font-weight:700; color:#2563eb;">85%</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right;"><span class="status-pill active">DECK CASTING</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Hydraulic Crawler Excavator (Komatsu)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">0.8 m³ Bucket</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center; font-weight:700; color:#2563eb;">70%</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right;"><span class="status-pill success">STANDBY / CIVIL</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Transit Concrete Mixers (Fleet of 4)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">9.0 m³ each</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center; font-weight:700; color:#2563eb;">95%</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right;"><span class="status-pill active">IN TRANSIT &amp; DISCHARGE</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">150 kVA Standby Soundproof Generator</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">150 kVA</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center; font-weight:700; color:#2563eb;">100%</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right;"><span class="status-pill success">CONTINUOUS POWER</span></td>
+                </tr>
+              </tbody>
+            </table>
+          `;
+        }
+        if (modal) modal.style.display = 'flex';
+      }
+      else if (actionKey === 'materials') {
+        if (iconEl) iconEl.textContent = '📦';
+        if (titleEl) titleEl.textContent = 'Material Inventory & Warehouse Reserves';
+        if (subEl) subEl.textContent = `${proj.name} • On-Site Quality Approved Stock`;
+        if (bodyEl) {
+          bodyEl.innerHTML = `
+            <table style="width:100%; border-collapse:collapse; font-size:12px; border:1px solid var(--line); border-radius:6px; overflow:hidden;">
+              <thead style="background:#f8fafc; color:#475569; font-weight:700;">
+                <tr>
+                  <th style="padding:8px 12px; text-align:left; border-bottom:1px solid var(--line);">Key Material Commodity</th>
+                  <th style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--line);">Stock Level</th>
+                  <th style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--line);">Test Report</th>
+                  <th style="padding:8px 12px; text-align:right; border-bottom:1px solid var(--line);">Compliance State</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Portland Cement Type 1P (40kg)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">850 Bags</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">PNS 07:2018</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right; color:#059669; font-weight:700;">VERIFIED PASS</td>
+                </tr>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Deformed Steel Bars Grade 60 (16-25mm)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">42.5 Metric Tons</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">Mill Cert #2026-9</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right; color:#059669; font-weight:700;">VERIFIED PASS</td>
+                </tr>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Ready-Mix Concrete 4000 PSI</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">480 m³ Poured</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">28-Day Cylinders</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right; color:#059669; font-weight:700;">4120 PSI AVG</td>
+                </tr>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Structural Wide-Flange Beams (A36/A572)</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">68 Tons on Site</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">UT Weld Testing</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right; color:#059669; font-weight:700;">100% NDT CLEAR</td>
+                </tr>
+                <tr>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">FIBA Maple Sports Hardwood Panels</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">1,400 m² Crates</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">Spec #MAPLE-02</td>
+                  <td style="padding:9px 12px; border-bottom:1px solid #f1f5f9; text-align:right; color:#d97706; font-weight:700;">IN AIR CONDITIONED STORAGE</td>
+                </tr>
+              </tbody>
+            </table>
+          `;
+        }
+        if (modal) modal.style.display = 'flex';
       }
     }
 
