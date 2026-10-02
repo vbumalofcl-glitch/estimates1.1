@@ -421,6 +421,56 @@
       background: #0369a1;
     }
 
+    /* Fillable Project Information Controls */
+    .info-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .info-field-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .info-field-input {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 12.5px;
+      color: #0f172a;
+      background: #ffffff;
+      font-family: inherit;
+      box-sizing: border-box;
+      transition: all 0.15s ease-in-out;
+    }
+    .info-field-input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      background: #ffffff;
+    }
+    .info-field-input:hover:not(:focus) {
+      border-color: #94a3b8;
+    }
+    .ctrl-btn.danger {
+      background: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fca5a5;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1;
+    }
+    .ctrl-btn.danger:hover {
+      background: #dc2626;
+      color: #ffffff;
+    }
+
     /* Dashboard Widgets Layout */
     .dashboard-card {
       background: #ffffff;
@@ -1207,69 +1257,83 @@
           </div>
         </div>
 
-        <!-- ================= VIEW 0: PROJECT INFORMATION ================= -->
+        <!-- ================= VIEW 0: PROJECT INFORMATION (FILLABLE & EDITABLE) ================= -->
         <div id="viewProjectInformation" class="project-main-view no-print" style="display: none;">
           <!-- Project Info Executive Profile Header Card -->
-          <section class="dashboard-card">
+          <section class="dashboard-card" style="border-top: 4px solid #2563eb;">
             <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
               <div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                  <span style="font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase;">Official Construction Project Record</span>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <span style="font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase;">Official Construction Project Record</span>
                   <span id="infoStatusBadge" class="brand-tag" style="background: rgba(16, 185, 129, 0.15); color: #059669; border-color: rgba(16, 185, 129, 0.4);">● ACTIVE PROJECT</span>
                   <span id="infoTypeBadge" class="brand-tag" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; border-color: rgba(37, 99, 235, 0.3);">INSTITUTIONAL &amp; SPORTS</span>
+                  <span class="brand-tag" style="background:#fef3c7; color:#b45309; border-color:#fde68a; font-weight:700;">✏️ FILLABLE &amp; EDITABLE</span>
                 </div>
-                <h2 class="card-title" id="infoProjectTitle" style="margin-top: 4px;">Sports Club &amp; Recreation Facility</h2>
+                <h2 class="card-title" id="infoProjectTitle" style="margin-top: 6px; font-size: 18px;">Sports Club &amp; Recreation Facility</h2>
                 <div id="infoProjectSub" style="font-size: 12.5px; font-weight: 500; color: var(--text-muted); margin-top: 2px;">
                   San Fernando • Municipal Sports Dev Office • Ref: PRJ-2026-001
                 </div>
               </div>
-              <div class="card-controls" style="display:flex; gap:8px;">
+              <div class="card-controls" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <button id="btnSaveProjectInfo" class="ctrl-btn primary" type="button" onclick="saveCurrentProjectInfo()" style="background:#059669; border-color:#059669; font-weight:700; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(5,150,105,0.25);" title="Save all changes to this project">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  Save Project Information
+                </button>
+                <button id="btnResetProjectInfo" class="ctrl-btn" type="button" onclick="resetProjectInfoForm()" style="display:inline-flex; align-items:center; gap:6px;" title="Discard unsaved edits">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                  Reset
+                </button>
                 <button class="ctrl-btn" type="button" onclick="switchMainProjectTab('overview')" style="display:inline-flex; align-items:center; gap:6px;">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                   Overview &amp; S-Curve
                 </button>
-                <button class="ctrl-btn" type="button" onclick="switchMainProjectTab('timeline')" style="display:inline-flex; align-items:center; gap:6px;">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                  Timeline &amp; CPM
-                </button>
-                <button class="ctrl-btn primary" type="button" onclick="switchMainProjectTab('documents')" style="display:inline-flex; align-items:center; gap:6px;">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                  Document Vault
+                <button class="ctrl-btn" type="button" onclick="window.print()" style="display:inline-flex; align-items:center; gap:6px;" title="Print Project Sheet">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                  Print Sheet
                 </button>
               </div>
             </div>
 
-            <!-- 6 Key Parameter Blocks -->
+            <!-- Live Save Notification Toast -->
+            <div id="infoSaveNotification" style="display:none; background:#ecfdf5; border:1px solid #a7f3d0; border-radius:6px; padding:10px 14px; margin-top:12px; font-size:12px; color:#065f46; align-items:center; justify-content:space-between; animation:modalFadeIn 0.2s ease;">
+              <span style="display:inline-flex; align-items:center; gap:6px; font-weight:700;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Project Information successfully saved and updated across all modules &amp; baselines!
+              </span>
+              <span style="font-size:11px; color:#047857;">Auto-synced with master storage</span>
+            </div>
+
+            <!-- 6 Key Parameter Blocks (Fillable Inputs) -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 14px; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid var(--line);">
               <div>
-                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Total Contract Value</div>
-                <div id="infoTotalBudget" style="font-size: 18px; font-weight: 800; color: #0f172a; margin-top: 2px;">₱ 14,850,000.00</div>
-                <div style="font-size: 10.5px; color: #059669; font-weight:600;">Approved Budget (ABC)</div>
+                <label class="info-field-label" for="editInfo_totalBudget">Total Contract Sum (₱)</label>
+                <input type="number" step="0.01" min="0" id="editInfo_totalBudget" class="info-field-input" style="font-size:15px; font-weight:800; color:#0f172a; margin-top:3px;" oninput="updateInfoCalculations()">
+                <div style="font-size: 10.5px; color: #059669; font-weight:600; margin-top:3px;">Approved Budget: <span id="infoTotalBudget">₱ 0.00</span></div>
               </div>
               <div>
-                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Contract Duration</div>
-                <div id="infoDuration" style="font-size: 18px; font-weight: 800; color: #2563eb; margin-top: 2px;">240 Calendar Days</div>
-                <div id="infoElapsed" style="font-size: 10.5px; color: #475569;">150 Days Elapsed</div>
+                <label class="info-field-label" for="editInfo_durationDays">Contract Duration (Days)</label>
+                <input type="number" min="1" id="editInfo_durationDays" class="info-field-input" style="font-size:15px; font-weight:800; color:#2563eb; margin-top:3px;" oninput="updateInfoCalculations()">
+                <div style="font-size: 10.5px; color: #475569; margin-top:3px;">Baseline: <span id="infoDuration">0 Calendar Days</span></div>
               </div>
               <div>
-                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Target Handover</div>
-                <div id="infoTargetDate" style="font-size: 18px; font-weight: 800; color: #0f172a; margin-top: 2px;">OCT 30, 2026</div>
-                <div style="font-size: 10.5px; color: #475569;">Substantial Completion</div>
+                <label class="info-field-label" for="editInfo_elapsedDays">Elapsed Days</label>
+                <input type="number" min="0" id="editInfo_elapsedDays" class="info-field-input" style="font-size:15px; font-weight:800; color:#0f172a; margin-top:3px;" oninput="updateInfoCalculations()">
+                <div style="font-size: 10.5px; color: #475569; margin-top:3px;"><span id="infoElapsed">0 Days Elapsed</span></div>
               </div>
               <div>
-                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Physical Progress</div>
-                <div id="infoProgress" style="font-size: 18px; font-weight: 800; color: #059669; margin-top: 2px;">62.4%</div>
-                <div id="infoPlannedProgress" style="font-size: 10.5px; color: #475569;">60.0% Planned</div>
+                <label class="info-field-label" for="editInfo_targetDate">Target Handover Date</label>
+                <input type="text" id="editInfo_targetDate" class="info-field-input" style="font-size:13px; font-weight:700; color:#0f172a; margin-top:3px;">
+                <div style="font-size: 10.5px; color: #475569; margin-top:3px;">Target: <span id="infoTargetDate">-</span></div>
               </div>
               <div>
-                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Schedule Health</div>
-                <div id="infoCriticalState" style="font-size: 16px; font-weight: 800; color: #16a34a; margin-top: 4px;">ON TRACK</div>
-                <div style="font-size: 10.5px; color: #475569;">Critical Path Safe</div>
+                <label class="info-field-label" for="editInfo_actualProgress">Actual Progress (%)</label>
+                <input type="number" step="0.1" min="0" max="100" id="editInfo_actualProgress" class="info-field-input" style="font-size:15px; font-weight:800; color:#059669; margin-top:3px;" oninput="updateInfoCalculations()">
+                <div style="font-size: 10.5px; color: #475569; margin-top:3px;"><span id="infoProgress">0.0%</span> &bull; <span id="infoPlannedProgress">0.0% Planned</span></div>
               </div>
               <div>
-                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">General Contractor</div>
-                <div style="font-size: 14px; font-weight: 800; color: #1e3a8a; margin-top: 4px;">FCL Aranang Dev</div>
-                <div style="font-size: 10.5px; color: #64748b;">PCAB 'AAA' License</div>
+                <label class="info-field-label" for="editInfo_plannedProgress">Planned Progress (%)</label>
+                <input type="number" step="0.1" min="0" max="100" id="editInfo_plannedProgress" class="info-field-input" style="font-size:15px; font-weight:800; color:#2563eb; margin-top:3px;" oninput="updateInfoCalculations()">
+                <div style="font-size: 10.5px; margin-top:3px;">Health: <span id="infoCriticalState" style="font-weight:700; color:#16a34a;">ON TRACK</span></div>
               </div>
             </div>
           </section>
@@ -1284,38 +1348,88 @@
                   Contract &amp; Administrative Parameters
                 </h3>
               </div>
-              <div style="display:flex; flex-direction:column; gap:10px; font-size:12.5px;">
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Project Reference ID</span>
-                  <strong id="infoCode" style="color:#0f172a;">PRJ-2026-001</strong>
+              <div style="display:flex; flex-direction:column; gap:12px;">
+                <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
+                  <div class="info-field-group">
+                    <label class="info-field-label" for="editInfo_name">Project Full Title *</label>
+                    <input type="text" id="editInfo_name" class="info-field-input" required placeholder="Project Name">
+                  </div>
+                  <div class="info-field-group">
+                    <label class="info-field-label" for="editInfo_code">Project Code / Ref ID *</label>
+                    <input type="text" id="editInfo_code" class="info-field-input" required placeholder="e.g. PRJ-2026-001" style="font-weight:700; color:#2563eb;">
+                    <span id="infoCode" style="display:none;"></span>
+                  </div>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Client / Project Owner</span>
-                  <strong id="infoClient" style="color:#0f172a; text-align:right;">FCL Aranang Dev / Municipal Sports Dev Office</strong>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                  <div class="info-field-group">
+                    <label class="info-field-label" for="editInfo_shortName">Short Name / Alias</label>
+                    <input type="text" id="editInfo_shortName" class="info-field-input" placeholder="e.g. Sports Club">
+                  </div>
+                  <div class="info-field-group">
+                    <label class="info-field-label" for="editInfo_projectType">Project Classification</label>
+                    <select id="editInfo_projectType" class="info-field-input">
+                      <option value="Commercial &amp; Mixed-Use High-Rise">Commercial &amp; Mixed-Use High-Rise</option>
+                      <option value="Institutional &amp; Sports Facility">Institutional &amp; Sports Facility</option>
+                      <option value="Industrial &amp; Logistics Warehouse">Industrial &amp; Logistics Warehouse</option>
+                      <option value="Civil Infrastructure &amp; Bridge Engineering">Civil Infrastructure &amp; Bridge Engineering</option>
+                      <option value="Residential Development">Residential Development</option>
+                      <option value="General Construction">General Construction</option>
+                    </select>
+                  </div>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Site Location</span>
-                  <strong id="infoLocation" style="color:#0f172a; text-align:right;">Barangay Central, San Fernando</strong>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                  <div class="info-field-group">
+                    <label class="info-field-label" for="editInfo_client">Client / Project Owner *</label>
+                    <input type="text" id="editInfo_client" class="info-field-input" required placeholder="Client name">
+                    <span id="infoClient" style="display:none;"></span>
+                  </div>
+                  <div class="info-field-group">
+                    <label class="info-field-label" for="editInfo_status">Project Operational Status</label>
+                    <select id="editInfo_status" class="info-field-input">
+                      <option value="Active (Live Estimate)">Active (Live Estimate)</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Mobilization &amp; Setup">Mobilization &amp; Setup</option>
+                      <option value="Procurement &amp; Mobilization">Procurement &amp; Mobilization</option>
+                      <option value="Near Completion">Near Completion</option>
+                      <option value="Completed &amp; Handed Over">Completed &amp; Handed Over</option>
+                    </select>
+                  </div>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Contract Classification</span>
-                  <strong id="infoContractType" style="color:#0f172a; text-align:right;">Itemized Unit Price Contract</strong>
+
+                <div class="info-field-group">
+                  <label class="info-field-label" for="editInfo_location">Project Location &amp; Site Address *</label>
+                  <input type="text" id="editInfo_location" class="info-field-input" required placeholder="Site address">
+                  <span id="infoLocation" style="display:none;"></span>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Retention Money Clause</span>
-                  <strong style="color:#0f172a; text-align:right;">10% on Progress Billings (Released at Final Turn-over)</strong>
+
+                <div class="info-field-group">
+                  <label class="info-field-label" for="editInfo_contractType">Contract Classification / Model</label>
+                  <input type="text" id="editInfo_contractType" class="info-field-input" placeholder="e.g. Itemized Unit Price Contract with Milestone Billing">
+                  <span id="infoContractType" style="display:none;"></span>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Performance Security</span>
-                  <strong style="color:#059669; text-align:right;">30% Surety Bond (Active &amp; Compliant)</strong>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                  <div class="info-field-group">
+                    <label class="info-field-label" for="editInfo_retentionTerms">Retention Terms</label>
+                    <input type="text" id="editInfo_retentionTerms" class="info-field-input" placeholder="e.g. 10% on Progress Billings">
+                  </div>
+                  <div class="info-field-group">
+                    <label class="info-field-label" for="editInfo_suretyBond">Performance Security</label>
+                    <input type="text" id="editInfo_suretyBond" class="info-field-input" placeholder="e.g. 30% Surety Bond (Active &amp; Compliant)">
+                  </div>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Liquidated Damages</span>
-                  <strong style="color:#0f172a; text-align:right;">1/10 of 1% of uncompleted works per calendar day</strong>
-                </div>
-                <div style="display:flex; justify-content:space-between;">
-                  <span style="color:#64748b; font-weight:600;">Comprehensive All-Risk (CAR)</span>
-                  <strong style="color:#059669; text-align:right;">Policy #CAR-2026-FCL901 (Active)</strong>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                  <div class="info-field-group">
+                    <label class="info-field-label" for="editInfo_carPolicy">Comprehensive All-Risk (CAR)</label>
+                    <input type="text" id="editInfo_carPolicy" class="info-field-input" placeholder="e.g. Policy #CAR-2026-FCL901 (Active)">
+                  </div>
+                  <div class="info-field-group">
+                    <label class="info-field-label" for="editInfo_contractor">General Contractor</label>
+                    <input type="text" id="editInfo_contractor" class="info-field-input" value="FCL Aranang Development Corporation" placeholder="Contractor name">
+                  </div>
                 </div>
               </div>
             </section>
@@ -1325,37 +1439,44 @@
               <div class="card-header">
                 <h3 class="card-title" style="font-size:14px; display:flex; align-items:center; gap:8px;">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                  Project Management &amp; Site Supervision
+                  Project Management &amp; Site Supervision Matrix
                 </h3>
               </div>
-              <div style="display:flex; flex-direction:column; gap:10px; font-size:12.5px;">
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Project Manager / In-Charge</span>
-                  <strong id="infoProjectManager" style="color:#0f172a; text-align:right;">Engr. V. Bumalang, PE (PRC #0093812)</strong>
+              <div style="display:flex; flex-direction:column; gap:12px;">
+                <div class="info-field-group">
+                  <label class="info-field-label" for="editInfo_projectManager">Project Manager / In-Charge *</label>
+                  <input type="text" id="editInfo_projectManager" class="info-field-input" required placeholder="e.g. Engr. V. Bumalang, PE (PRC #0093812)">
+                  <span id="infoProjectManager" style="display:none;"></span>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Planning &amp; Cost Engineer</span>
-                  <strong style="color:#0f172a; text-align:right;">Engr. J. Dela Cruz, CE (PRC #0128472)</strong>
+
+                <div class="info-field-group">
+                  <label class="info-field-label" for="editInfo_costEngineer">Planning &amp; Cost Engineer</label>
+                  <input type="text" id="editInfo_costEngineer" class="info-field-input" placeholder="e.g. Engr. J. Dela Cruz, CE (PRC #0128472)">
                 </div>
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Lead Architect / Interior Finishes</span>
-                  <strong style="color:#0f172a; text-align:right;">Arch. A. Tolentino, UAP</strong>
+
+                <div class="info-field-group">
+                  <label class="info-field-label" for="editInfo_architect">Lead Architect / Interior Finishes</label>
+                  <input type="text" id="editInfo_architect" class="info-field-input" placeholder="e.g. Arch. A. Tolentino, UAP">
                 </div>
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Electro-Mechanical Lead</span>
-                  <strong style="color:#0f172a; text-align:right;">Engr. R. Santos, PEE</strong>
+
+                <div class="info-field-group">
+                  <label class="info-field-label" for="editInfo_electEngineer">Electro-Mechanical Lead (PEE)</label>
+                  <input type="text" id="editInfo_electEngineer" class="info-field-input" placeholder="e.g. Engr. R. Santos, PEE">
                 </div>
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Sanitary &amp; Plumbing Engineer</span>
-                  <strong style="color:#0f172a; text-align:right;">Engr. M. Reyes, RMP</strong>
+
+                <div class="info-field-group">
+                  <label class="info-field-label" for="editInfo_sanitaryEngineer">Sanitary &amp; Plumbing Engineer</label>
+                  <input type="text" id="editInfo_sanitaryEngineer" class="info-field-input" placeholder="e.g. Engr. M. Reyes, RMP">
                 </div>
-                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-                  <span style="color:#64748b; font-weight:600;">Materials QA/QC Lead</span>
-                  <strong style="color:#0f172a; text-align:right;">Engr. I. Tan (DPWH Accredited)</strong>
+
+                <div class="info-field-group">
+                  <label class="info-field-label" for="editInfo_qaqcLead">Materials QA/QC Testing Lead</label>
+                  <input type="text" id="editInfo_qaqcLead" class="info-field-input" placeholder="e.g. Engr. I. Tan (DPWH Accredited Testing Lab)">
                 </div>
-                <div style="display:flex; justify-content:space-between;">
-                  <span style="color:#64748b; font-weight:600;">DOLE Safety Officer (SO3)</span>
-                  <strong style="color:#0f172a; text-align:right;">Engr. F. Alcantara (DOLE OSH Certified)</strong>
+
+                <div class="info-field-group">
+                  <label class="info-field-label" for="editInfo_safetyOfficer">DOLE Safety Officer (SO3)</label>
+                  <input type="text" id="editInfo_safetyOfficer" class="info-field-input" placeholder="e.g. Engr. F. Alcantara (DOLE OSH Certified)">
                 </div>
               </div>
             </section>
@@ -1369,35 +1490,65 @@
                 Project Scope of Works &amp; Technical Summary
               </h3>
             </div>
-            <div id="infoScopeSummary" style="font-size:12.5px; line-height:1.6; color:#334155; background:#f8fafc; padding:14px 16px; border-radius:6px; border:1px solid var(--line);">
-              Comprehensive construction and engineering management for the specified facility, strictly executed under DPWH standard specifications and national building code requirements.
+            <div class="info-field-group">
+              <label class="info-field-label" for="editInfo_scopeSummary">Detailed Engineering Scope Description</label>
+              <textarea id="editInfo_scopeSummary" class="info-field-input" rows="4" placeholder="Enter comprehensive narrative describing architectural, civil, structural, mechanical, electrical, and plumbing scopes..."></textarea>
+              <div id="infoScopeSummary" style="display:none;"></div>
             </div>
           </section>
 
-          <!-- Cost Division Allocation Table -->
+          <!-- Cost Division Allocation Table (Editable) -->
           <section class="dashboard-card">
-            <div class="card-header">
-              <h3 class="card-title" style="font-size:14px; display:flex; align-items:center; gap:8px;">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                Major Cost Division Budget Allocation &amp; Baseline Breakdown
-              </h3>
+            <div class="card-header" style="flex-wrap:wrap; gap:10px;">
+              <div>
+                <h3 class="card-title" style="font-size:14px; display:flex; align-items:center; gap:8px;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                  Major Cost Division Budget Allocation &amp; Baseline Breakdown
+                </h3>
+                <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Edit work division titles, planned allocations, and actual incurred amounts directly in the table.</div>
+              </div>
+              <div class="card-controls">
+                <button class="ctrl-btn" type="button" onclick="addInfoCategoryRow()" style="display:inline-flex; align-items:center; gap:6px; font-weight:600;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Add Work Division
+                </button>
+              </div>
             </div>
             <div class="data-table-container">
               <table class="data-table">
                 <thead>
                   <tr>
-                    <th>Cost Division &amp; Scope Classification</th>
-                    <th style="text-align:right;">Planned Budget (₱)</th>
-                    <th style="text-align:right;">Actual Disbursed (₱)</th>
-                    <th style="text-align:center;">Budget Share (%)</th>
-                    <th style="text-align:right;">Variance (₱)</th>
-                    <th style="text-align:center;">Status</th>
+                    <th style="min-width: 240px;">Cost Division &amp; Scope Classification</th>
+                    <th style="text-align:right; width: 170px;">Planned Budget (₱)</th>
+                    <th style="text-align:right; width: 170px;">Actual Disbursed (₱)</th>
+                    <th style="text-align:center; width: 120px;">Budget Share (%)</th>
+                    <th style="text-align:right; width: 150px;">Variance (₱)</th>
+                    <th style="text-align:center; width: 100px;">Status</th>
+                    <th style="text-align:center; width: 60px;">Action</th>
                   </tr>
                 </thead>
                 <tbody id="infoCategoriesTableBody">
-                  <!-- Rendered dynamically -->
+                  <!-- Rendered dynamically as fillable rows -->
                 </tbody>
+                <tfoot id="infoCategoriesTableFoot" style="background:#f8fafc; font-weight:700;">
+                  <!-- Dynamic Totals -->
+                </tfoot>
               </table>
+            </div>
+
+            <!-- Bottom Sticky Save Bar within Card -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; padding-top:14px; border-top:1px solid var(--line); flex-wrap:wrap; gap:10px;">
+              <div style="font-size:11.5px; color:#64748b; display:flex; align-items:center; gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Saving synchronizes data with DUPA estimates, BOQ summary, Gantt timeline, and Executive PDF report.
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button class="ctrl-btn" type="button" onclick="resetProjectInfoForm()">Revert Changes</button>
+                <button class="ctrl-btn primary" type="button" onclick="saveCurrentProjectInfo()" style="background:#059669; border-color:#059669; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  Save Project Information
+                </button>
+              </div>
             </div>
           </section>
         </div>
@@ -2180,21 +2331,36 @@
     }
 
     function initProjectCatalog() {
-      // 0. Load any saved custom projects from localStorage
+      // 0. Load any saved catalog data / edits from localStorage
       try {
-        const stored = localStorage.getItem('FCL_CUSTOM_PROJECTS');
-        if (stored) {
-          const list = JSON.parse(stored);
-          if (Array.isArray(list)) {
-            list.forEach(p => {
-              if (!FCL_PROJECT_CATALOG.some(ex => ex.id === p.id)) {
-                FCL_PROJECT_CATALOG.push(p);
+        const savedCatalog = localStorage.getItem('FCL_PROJECT_CATALOG_DATA');
+        if (savedCatalog) {
+          const list = JSON.parse(savedCatalog);
+          if (Array.isArray(list) && list.length > 0) {
+            list.forEach(savedProj => {
+              const idx = FCL_PROJECT_CATALOG.findIndex(p => p.id === savedProj.id);
+              if (idx !== -1) {
+                FCL_PROJECT_CATALOG[idx] = Object.assign({}, FCL_PROJECT_CATALOG[idx], savedProj);
+              } else {
+                FCL_PROJECT_CATALOG.push(savedProj);
               }
             });
           }
+        } else {
+          const stored = localStorage.getItem('FCL_CUSTOM_PROJECTS');
+          if (stored) {
+            const list = JSON.parse(stored);
+            if (Array.isArray(list)) {
+              list.forEach(p => {
+                if (!FCL_PROJECT_CATALOG.some(ex => ex.id === p.id)) {
+                  FCL_PROJECT_CATALOG.push(p);
+                }
+              });
+            }
+          }
         }
       } catch (e) {
-        console.warn('Could not load custom projects from storage', e);
+        console.warn('Could not load projects from storage', e);
       }
 
       // 1. Populate mainProjectSelector dropdown
@@ -2328,6 +2494,7 @@
       FCL_PROJECT_CATALOG.push(newProj);
 
       try {
+        localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
         const customProjects = FCL_PROJECT_CATALOG.filter(p => !['PRJ-2026-001', 'HCC-2026-B1', 'MLH-2025-04', 'RTO-2026-C2'].includes(p.id));
         localStorage.setItem('FCL_CUSTOM_PROJECTS', JSON.stringify(customProjects));
       } catch (err) {
@@ -2982,6 +3149,7 @@
     function renderProjectInfoView(proj) {
       if (!proj) return;
 
+      // Summary label elements (kept for display & backwards compatibility)
       const titleEl = document.getElementById('infoProjectTitle');
       const subEl = document.getElementById('infoProjectSub');
       const statusEl = document.getElementById('infoStatusBadge');
@@ -2999,47 +3167,419 @@
       const contractTypeEl = document.getElementById('infoContractType');
       const managerEl = document.getElementById('infoProjectManager');
       const scopeEl = document.getElementById('infoScopeSummary');
-      const tableBody = document.getElementById('infoCategoriesTableBody');
 
       if (titleEl) titleEl.textContent = proj.name;
-      if (subEl) subEl.textContent = `${proj.location} • ${proj.client} • Ref: ${proj.code}`;
-      if (statusEl) statusEl.textContent = `● ${proj.status.toUpperCase()}`;
+      if (subEl) subEl.textContent = `${proj.location || 'Site Area'} • ${proj.client || 'Client'} • Ref: ${proj.code}`;
+      if (statusEl) statusEl.textContent = `● ${(proj.status || 'ACTIVE').toUpperCase()}`;
       if (typeEl) typeEl.textContent = (proj.projectType || 'GENERAL CONSTRUCTION').toUpperCase();
       if (budgetEl) budgetEl.textContent = `₱ ${formatPeso(proj.totalBudget)}`;
-      if (durEl) durEl.textContent = `${proj.durationDays} Calendar Days`;
-      if (elapEl) elapEl.textContent = `${proj.elapsedDays} Days Elapsed (${((proj.elapsedDays / Math.max(1, proj.durationDays)) * 100).toFixed(1)}%)`;
-      if (targetEl) targetEl.textContent = proj.targetDate;
-      if (progEl) progEl.textContent = `${proj.actualProgress}%`;
-      if (planProgEl) planProgEl.textContent = `${proj.plannedProgress}% Planned`;
+      if (durEl) durEl.textContent = `${proj.durationDays || 0} Calendar Days`;
+      const durVal = Math.max(1, proj.durationDays || 1);
+      const elapVal = proj.elapsedDays || 0;
+      if (elapEl) elapEl.textContent = `${elapVal} Days Elapsed (${((elapVal / durVal) * 100).toFixed(1)}%)`;
+      if (targetEl) targetEl.textContent = proj.targetDate || '-';
+      if (progEl) progEl.textContent = `${proj.actualProgress !== undefined ? proj.actualProgress : 0}%`;
+      if (planProgEl) planProgEl.textContent = `${proj.plannedProgress !== undefined ? proj.plannedProgress : 0}% Planned`;
       if (critEl) {
-        critEl.textContent = proj.timeline ? proj.timeline.criticalState : 'ACTIVE';
+        critEl.textContent = (proj.actualProgress >= proj.plannedProgress) ? 'ON TRACK' : 'DELAYED';
         critEl.style.color = (proj.actualProgress >= proj.plannedProgress) ? '#16a34a' : '#dc2626';
       }
-      if (codeEl) codeEl.textContent = proj.code;
-      if (clientEl) clientEl.textContent = proj.client;
-      if (locEl) locEl.textContent = proj.location;
+      if (codeEl) codeEl.textContent = proj.code || '';
+      if (clientEl) clientEl.textContent = proj.client || '';
+      if (locEl) locEl.textContent = proj.location || '';
       if (contractTypeEl) contractTypeEl.textContent = proj.contractType || 'Itemized Unit Price / Turnkey EPC Contract';
       if (managerEl) managerEl.textContent = proj.projectManager || 'Engr. V. Bumalang, PE (PRC #0093812)';
       if (scopeEl) scopeEl.textContent = proj.scopeSummary || `${proj.name} execution under FCL Aranang Development Corporation.`;
 
-      if (tableBody && proj.categories) {
-        let thtml = '';
-        proj.categories.forEach(cat => {
-          const share = proj.totalBudget > 0 ? ((cat.planned / proj.totalBudget) * 100).toFixed(1) : '0.0';
-          const variance = cat.planned - cat.actual;
-          const isFavorable = variance >= 0;
-          thtml += `
-            <tr>
-              <td style="font-weight:600;">${escapeHtml(cat.name)}</td>
-              <td style="text-align:right; font-weight:700;">₱ ${formatPeso(cat.planned)}</td>
-              <td style="text-align:right; color:#2563eb; font-weight:700;">₱ ${formatPeso(cat.actual)}</td>
-              <td style="text-align:center;"><span style="background:#eff6ff; color:#1d4ed8; padding:2px 8px; border-radius:10px; font-weight:700; font-size:11px;">${share}%</span></td>
-              <td style="text-align:right; font-weight:700; color:${isFavorable ? '#059669' : '#dc2626'};">${isFavorable ? '+₱ ' : '-₱ '}${formatPeso(Math.abs(variance))}</td>
-              <td style="text-align:center;"><span class="status-pill ${cat.actual > 0 ? 'active' : 'warning'}">${cat.actual >= cat.planned ? 'COMPLETED' : cat.actual > 0 ? 'ACTIVE' : 'PLANNED'}</span></td>
-            </tr>
-          `;
+      // Fill in all editable form inputs
+      const editBudget = document.getElementById('editInfo_totalBudget');
+      const editDuration = document.getElementById('editInfo_durationDays');
+      const editElapsed = document.getElementById('editInfo_elapsedDays');
+      const editTarget = document.getElementById('editInfo_targetDate');
+      const editActualProg = document.getElementById('editInfo_actualProgress');
+      const editPlannedProg = document.getElementById('editInfo_plannedProgress');
+      const editName = document.getElementById('editInfo_name');
+      const editCode = document.getElementById('editInfo_code');
+      const editShortName = document.getElementById('editInfo_shortName');
+      const editType = document.getElementById('editInfo_projectType');
+      const editClient = document.getElementById('editInfo_client');
+      const editStatus = document.getElementById('editInfo_status');
+      const editLocation = document.getElementById('editInfo_location');
+      const editContractType = document.getElementById('editInfo_contractType');
+      const editRetention = document.getElementById('editInfo_retentionTerms');
+      const editSurety = document.getElementById('editInfo_suretyBond');
+      const editCar = document.getElementById('editInfo_carPolicy');
+      const editContractor = document.getElementById('editInfo_contractor');
+      const editManager = document.getElementById('editInfo_projectManager');
+      const editCostEng = document.getElementById('editInfo_costEngineer');
+      const editArch = document.getElementById('editInfo_architect');
+      const editElect = document.getElementById('editInfo_electEngineer');
+      const editSanitary = document.getElementById('editInfo_sanitaryEngineer');
+      const editQaqc = document.getElementById('editInfo_qaqcLead');
+      const editSafety = document.getElementById('editInfo_safetyOfficer');
+      const editScope = document.getElementById('editInfo_scopeSummary');
+
+      if (editBudget) editBudget.value = proj.totalBudget || 0;
+      if (editDuration) editDuration.value = proj.durationDays || 0;
+      if (editElapsed) editElapsed.value = proj.elapsedDays || 0;
+      if (editTarget) editTarget.value = proj.targetDate || '';
+      if (editActualProg) editActualProg.value = proj.actualProgress !== undefined ? proj.actualProgress : 0;
+      if (editPlannedProg) editPlannedProg.value = proj.plannedProgress !== undefined ? proj.plannedProgress : 0;
+      if (editName) editName.value = proj.name || '';
+      if (editCode) editCode.value = proj.code || '';
+      if (editShortName) editShortName.value = proj.shortName || proj.name || '';
+      if (editType) {
+        if (proj.projectType) {
+          let found = false;
+          for (let opt of editType.options) {
+            if (opt.value === proj.projectType) {
+              editType.value = proj.projectType;
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            const newOpt = new Option(proj.projectType, proj.projectType, true, true);
+            editType.add(newOpt);
+          }
+        }
+      }
+      if (editClient) editClient.value = proj.client || '';
+      if (editStatus) {
+        if (proj.status) {
+          let found = false;
+          for (let opt of editStatus.options) {
+            if (opt.value === proj.status) {
+              editStatus.value = proj.status;
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            const newOpt = new Option(proj.status, proj.status, true, true);
+            editStatus.add(newOpt);
+          }
+        }
+      }
+      if (editLocation) editLocation.value = proj.location || '';
+      if (editContractType) editContractType.value = proj.contractType || 'Itemized Unit Price Contract with Milestone Billing';
+      if (editRetention) editRetention.value = proj.retentionTerms || '10% on Progress Billings';
+      if (editSurety) editSurety.value = proj.suretyBond || '30% Surety Bond (Active & Compliant)';
+      if (editCar) editCar.value = proj.carPolicy || 'Policy #CAR-2026-FCL901 (Active)';
+      if (editContractor) editContractor.value = proj.contractor || 'FCL Aranang Development Corporation';
+      if (editManager) editManager.value = proj.projectManager || 'Engr. V. Bumalang, PE (PRC #0093812)';
+      if (editCostEng) editCostEng.value = proj.costEngineer || 'Engr. J. Dela Cruz, CE (PRC #0128472)';
+      if (editArch) editArch.value = proj.architect || 'Arch. A. Tolentino, UAP';
+      if (editElect) editElect.value = proj.electEngineer || 'Engr. R. Santos, PEE';
+      if (editSanitary) editSanitary.value = proj.sanitaryEngineer || 'Engr. M. Reyes, RMP';
+      if (editQaqc) editQaqc.value = proj.qaqcLead || 'Engr. I. Tan (DPWH Accredited Testing Lab)';
+      if (editSafety) editSafety.value = proj.safetyOfficer || 'Engr. F. Alcantara (DOLE OSH Certified)';
+      if (editScope) editScope.value = proj.scopeSummary || '';
+
+      // Populate dynamic category table rows
+      const tableBody = document.getElementById('infoCategoriesTableBody');
+      if (tableBody) {
+        tableBody.innerHTML = '';
+        const cats = proj.categories && proj.categories.length > 0 ? proj.categories : [
+          { name: 'General Requirements & Mobilization', planned: Math.round((proj.totalBudget || 10000000) * 0.15), actual: 0 }
+        ];
+        cats.forEach(cat => {
+          renderInfoCategoryRowHtml(cat.name, cat.planned, cat.actual);
         });
-        tableBody.innerHTML = thtml;
+      }
+
+      updateInfoCalculations();
+    }
+
+    function renderInfoCategoryRowHtml(name, planned, actual) {
+      const tableBody = document.getElementById('infoCategoriesTableBody');
+      if (!tableBody) return;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <input type="text" class="info-field-input cat-name-input" value="${escapeHtml(name)}" placeholder="Division name" oninput="updateInfoCalculations()" style="font-weight:600;">
+        </td>
+        <td style="text-align:right;">
+          <input type="number" step="0.01" min="0" class="info-field-input cat-planned-input" value="${planned}" oninput="updateInfoCalculations()" style="text-align:right; font-weight:700;">
+        </td>
+        <td style="text-align:right;">
+          <input type="number" step="0.01" min="0" class="info-field-input cat-actual-input" value="${actual}" oninput="updateInfoCalculations()" style="text-align:right; font-weight:700; color:#2563eb;">
+        </td>
+        <td style="text-align:center;">
+          <span class="cat-share-cell" style="background:#eff6ff; color:#1d4ed8; padding:3px 9px; border-radius:12px; font-weight:700; font-size:11px;">0.0%</span>
+        </td>
+        <td style="text-align:right;">
+          <span class="cat-variance-cell" style="font-weight:700; font-size:12px;">₱ 0.00</span>
+        </td>
+        <td style="text-align:center;">
+          <span class="cat-status-cell status-pill active">ACTIVE</span>
+        </td>
+        <td style="text-align:center;">
+          <button type="button" class="ctrl-btn danger" onclick="removeInfoCategoryRow(this)" title="Remove this work division" style="padding:4px 8px; font-size:12px; line-height:1; border-radius:4px; font-weight:bold;">&times;</button>
+        </td>
+      `;
+      tableBody.appendChild(tr);
+    }
+
+    function addInfoCategoryRow(name, planned, actual) {
+      const defName = name || 'New Work Division';
+      const defPlanned = planned !== undefined ? planned : 500000;
+      const defActual = actual !== undefined ? actual : 0;
+      renderInfoCategoryRowHtml(defName, defPlanned, defActual);
+      updateInfoCalculations();
+    }
+
+    function removeInfoCategoryRow(btn) {
+      const row = btn?.closest('tr');
+      if (row) {
+        row.remove();
+        updateInfoCalculations();
+      }
+    }
+
+    function resetProjectInfoForm() {
+      const proj = getProject(currentProjectId);
+      if (proj) {
+        renderProjectInfoView(proj);
+      }
+    }
+
+    function updateInfoCalculations() {
+      const budgetInp = document.getElementById('editInfo_totalBudget');
+      const totalBudget = parseFloat(budgetInp?.value) || 0;
+      const budgetEl = document.getElementById('infoTotalBudget');
+      if (budgetEl) budgetEl.textContent = `₱ ${formatPeso(totalBudget)}`;
+
+      const durInp = document.getElementById('editInfo_durationDays');
+      const elapInp = document.getElementById('editInfo_elapsedDays');
+      const dur = parseInt(durInp?.value, 10) || 0;
+      const elap = parseInt(elapInp?.value, 10) || 0;
+      const durEl = document.getElementById('infoDuration');
+      const elapEl = document.getElementById('infoElapsed');
+      if (durEl) durEl.textContent = `${dur} Calendar Days`;
+      if (elapEl) elapEl.textContent = `${elap} Days Elapsed (${((elap / Math.max(1, dur)) * 100).toFixed(1)}%)`;
+
+      const targetInp = document.getElementById('editInfo_targetDate');
+      const targetEl = document.getElementById('infoTargetDate');
+      if (targetEl && targetInp) targetEl.textContent = targetInp.value || '-';
+
+      const actProgInp = document.getElementById('editInfo_actualProgress');
+      const planProgInp = document.getElementById('editInfo_plannedProgress');
+      const actProg = parseFloat(actProgInp?.value) || 0;
+      const planProg = parseFloat(planProgInp?.value) || 0;
+      const progEl = document.getElementById('infoProgress');
+      const planProgEl = document.getElementById('infoPlannedProgress');
+      const critEl = document.getElementById('infoCriticalState');
+      if (progEl) progEl.textContent = `${actProg}%`;
+      if (planProgEl) planProgEl.textContent = `${planProg}% Planned`;
+      if (critEl) {
+        critEl.textContent = (actProg >= planProg) ? 'ON TRACK' : 'DELAYED';
+        critEl.style.color = (actProg >= planProg) ? '#16a34a' : '#dc2626';
+      }
+
+      // Calculate table rows
+      const rows = document.querySelectorAll('#infoCategoriesTableBody tr');
+      let sumPlanned = 0;
+      let sumActual = 0;
+
+      rows.forEach(row => {
+        const plannedInp = row.querySelector('.cat-planned-input');
+        const actualInp = row.querySelector('.cat-actual-input');
+        const shareCell = row.querySelector('.cat-share-cell');
+        const varianceCell = row.querySelector('.cat-variance-cell');
+        const statusCell = row.querySelector('.cat-status-cell');
+
+        const pVal = parseFloat(plannedInp?.value) || 0;
+        const aVal = parseFloat(actualInp?.value) || 0;
+        sumPlanned += pVal;
+        sumActual += aVal;
+
+        const share = totalBudget > 0 ? ((pVal / totalBudget) * 100).toFixed(1) : '0.0';
+        const variance = pVal - aVal;
+        const isFavorable = variance >= 0;
+
+        if (shareCell) shareCell.textContent = `${share}%`;
+        if (varianceCell) {
+          varianceCell.textContent = `${isFavorable ? '+₱ ' : '-₱ '}${formatPeso(Math.abs(variance))}`;
+          varianceCell.style.color = isFavorable ? '#059669' : '#dc2626';
+        }
+        if (statusCell) {
+          if (aVal >= pVal && pVal > 0) {
+            statusCell.textContent = 'COMPLETED';
+            statusCell.className = 'cat-status-cell status-pill success';
+          } else if (aVal > 0) {
+            statusCell.textContent = 'ACTIVE';
+            statusCell.className = 'cat-status-cell status-pill active';
+          } else {
+            statusCell.textContent = 'PLANNED';
+            statusCell.className = 'cat-status-cell status-pill warning';
+          }
+        }
+      });
+
+      // Update footer totals
+      const foot = document.getElementById('infoCategoriesTableFoot');
+      if (foot) {
+        const totalVariance = sumPlanned - sumActual;
+        const isTotalFavorable = totalVariance >= 0;
+        const totalShare = totalBudget > 0 ? ((sumPlanned / totalBudget) * 100).toFixed(1) : '0.0';
+        foot.innerHTML = `
+          <tr>
+            <td style="font-weight:800; color:#0f172a;">TOTAL WORK DIVISIONS (${rows.length})</td>
+            <td style="text-align:right; font-weight:800; color:#0f172a;">₱ ${formatPeso(sumPlanned)}</td>
+            <td style="text-align:right; font-weight:800; color:#2563eb;">₱ ${formatPeso(sumActual)}</td>
+            <td style="text-align:center;">
+              <span style="background:${parseFloat(totalShare) > 100 ? '#fef2f2' : '#f0fdf4'}; color:${parseFloat(totalShare) > 100 ? '#dc2626' : '#15803d'}; padding:2px 8px; border-radius:10px; font-weight:800; font-size:11px;">
+                ${totalShare}%
+              </span>
+            </td>
+            <td style="text-align:right; font-weight:800; color:${isTotalFavorable ? '#059669' : '#dc2626'};">
+              ${isTotalFavorable ? '+₱ ' : '-₱ '}${formatPeso(Math.abs(totalVariance))}
+            </td>
+            <td colspan="2" style="text-align:center; font-size:11px; color:#64748b;">
+              ${rows.length} Divisions Active
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function saveCurrentProjectInfo() {
+      const proj = getProject(currentProjectId);
+      if (!proj) return;
+
+      const name = document.getElementById('editInfo_name')?.value.trim();
+      const code = document.getElementById('editInfo_code')?.value.trim();
+      const shortName = document.getElementById('editInfo_shortName')?.value.trim() || name;
+      const projectType = document.getElementById('editInfo_projectType')?.value;
+      const client = document.getElementById('editInfo_client')?.value.trim();
+      const status = document.getElementById('editInfo_status')?.value;
+      const location = document.getElementById('editInfo_location')?.value.trim();
+      const contractType = document.getElementById('editInfo_contractType')?.value.trim();
+      const retentionTerms = document.getElementById('editInfo_retentionTerms')?.value.trim();
+      const suretyBond = document.getElementById('editInfo_suretyBond')?.value.trim();
+      const carPolicy = document.getElementById('editInfo_carPolicy')?.value.trim();
+      const contractor = document.getElementById('editInfo_contractor')?.value.trim();
+      const projectManager = document.getElementById('editInfo_projectManager')?.value.trim();
+      const costEngineer = document.getElementById('editInfo_costEngineer')?.value.trim();
+      const architect = document.getElementById('editInfo_architect')?.value.trim();
+      const electEngineer = document.getElementById('editInfo_electEngineer')?.value.trim();
+      const sanitaryEngineer = document.getElementById('editInfo_sanitaryEngineer')?.value.trim();
+      const qaqcLead = document.getElementById('editInfo_qaqcLead')?.value.trim();
+      const safetyOfficer = document.getElementById('editInfo_safetyOfficer')?.value.trim();
+      const scopeSummary = document.getElementById('editInfo_scopeSummary')?.value.trim();
+      const totalBudget = parseFloat(document.getElementById('editInfo_totalBudget')?.value) || 0;
+      const durationDays = parseInt(document.getElementById('editInfo_durationDays')?.value, 10) || 0;
+      const elapsedDays = parseInt(document.getElementById('editInfo_elapsedDays')?.value, 10) || 0;
+      const targetDate = document.getElementById('editInfo_targetDate')?.value.trim() || '';
+      const actualProgress = parseFloat(document.getElementById('editInfo_actualProgress')?.value) || 0;
+      const plannedProgress = parseFloat(document.getElementById('editInfo_plannedProgress')?.value) || 0;
+
+      if (!name || !code) {
+        alert('Please provide at least a Project Title and Code / ID.');
+        return;
+      }
+
+      // Read categories from table rows
+      const categoryRows = document.querySelectorAll('#infoCategoriesTableBody tr');
+      const updatedCategories = [];
+      categoryRows.forEach(row => {
+        const nameInp = row.querySelector('.cat-name-input');
+        const plannedInp = row.querySelector('.cat-planned-input');
+        const actualInp = row.querySelector('.cat-actual-input');
+        if (nameInp) {
+          const catName = nameInp.value.trim() || 'Work Division';
+          const catPlanned = parseFloat(plannedInp?.value) || 0;
+          const catActual = parseFloat(actualInp?.value) || 0;
+          updatedCategories.push({
+            name: catName,
+            planned: catPlanned,
+            actual: catActual
+          });
+        }
+      });
+
+      // Update project model
+      proj.name = name;
+      proj.code = code;
+      proj.shortName = shortName;
+      if (projectType) proj.projectType = projectType;
+      if (client) proj.client = client;
+      if (status) proj.status = status;
+      if (location) proj.location = location;
+      if (contractType) proj.contractType = contractType;
+      proj.retentionTerms = retentionTerms;
+      proj.suretyBond = suretyBond;
+      proj.carPolicy = carPolicy;
+      proj.contractor = contractor;
+      if (projectManager) proj.projectManager = projectManager;
+      proj.costEngineer = costEngineer;
+      proj.architect = architect;
+      proj.electEngineer = electEngineer;
+      proj.sanitaryEngineer = sanitaryEngineer;
+      proj.qaqcLead = qaqcLead;
+      proj.safetyOfficer = safetyOfficer;
+      proj.scopeSummary = scopeSummary;
+      proj.totalBudget = totalBudget;
+      proj.durationDays = durationDays;
+      proj.elapsedDays = elapsedDays;
+      proj.targetDate = targetDate;
+      proj.actualProgress = actualProgress;
+      proj.plannedProgress = plannedProgress;
+      if (updatedCategories.length > 0) {
+        proj.categories = updatedCategories;
+      }
+      if (proj.timeline) {
+        proj.timeline.criticalState = (actualProgress >= plannedProgress) ? 'ON TRACK' : 'DELAYED';
+      }
+
+      // Persist to localStorage
+      try {
+        localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
+        const customProjects = FCL_PROJECT_CATALOG.filter(p => !['PRJ-2026-001', 'HCC-2026-B1', 'MLH-2025-04', 'RTO-2026-C2'].includes(p.id));
+        localStorage.setItem('FCL_CUSTOM_PROJECTS', JSON.stringify(customProjects));
+      } catch (err) {
+        console.warn('Could not persist project catalog', err);
+      }
+
+      // Synchronize UI
+      populateProjectSelector();
+      renderSidebarProjectList();
+
+      const titleEl = document.getElementById('infoProjectTitle');
+      const subEl = document.getElementById('infoProjectSub');
+      const statusEl = document.getElementById('infoStatusBadge');
+      const typeEl = document.getElementById('infoTypeBadge');
+      const codeEl = document.getElementById('infoCode');
+      const clientEl = document.getElementById('infoClient');
+      const locEl = document.getElementById('infoLocation');
+      const contractTypeEl = document.getElementById('infoContractType');
+      const managerEl = document.getElementById('infoProjectManager');
+      const scopeEl = document.getElementById('infoScopeSummary');
+      const execProjEl = document.getElementById('execPrintProjCode');
+
+      if (titleEl) titleEl.textContent = proj.name;
+      if (subEl) subEl.textContent = `${proj.location || 'Site Area'} • ${proj.client || 'Client'} • Ref: ${proj.code}`;
+      if (statusEl) statusEl.textContent = `● ${(proj.status || 'ACTIVE').toUpperCase()}`;
+      if (typeEl) typeEl.textContent = (proj.projectType || 'GENERAL CONSTRUCTION').toUpperCase();
+      if (codeEl) codeEl.textContent = proj.code;
+      if (clientEl) clientEl.textContent = proj.client;
+      if (locEl) locEl.textContent = proj.location;
+      if (contractTypeEl) contractTypeEl.textContent = proj.contractType || '';
+      if (managerEl) managerEl.textContent = proj.projectManager || '';
+      if (scopeEl) scopeEl.textContent = proj.scopeSummary || '';
+      if (execProjEl) execProjEl.textContent = `${proj.name} • ${proj.code}`;
+
+      updateInfoCalculations();
+
+      // Show live confirmation toast
+      const toast = document.getElementById('infoSaveNotification');
+      if (toast) {
+        toast.style.display = 'flex';
+        clearTimeout(window._infoSaveToastTimer);
+        window._infoSaveToastTimer = setTimeout(() => {
+          if (toast) toast.style.display = 'none';
+        }, 4000);
       }
     }
 
@@ -3380,7 +3920,22 @@
 
       if (pId === 'PRJ-2026-001') {
         const live = FCLStorage.getLiveDashboardData();
-        data = live;
+        if (live && live.isLive) {
+          data = live;
+        } else {
+          const proj = getProject(pId);
+          data = {
+            isLive: false,
+            projectName: proj.name,
+            projectCode: proj.code,
+            totalBudget: proj.totalBudget,
+            plannedProgress: proj.plannedProgress,
+            actualProgress: proj.actualProgress,
+            donutShares: proj.donutShares || { target: 42, projection: 28, expense: 18, variance: 12 },
+            categories: proj.categories,
+            items: proj.items
+          };
+        }
       } else {
         const proj = getProject(pId);
         data = {
@@ -3390,7 +3945,7 @@
           totalBudget: proj.totalBudget,
           plannedProgress: proj.plannedProgress,
           actualProgress: proj.actualProgress,
-          donutShares: proj.donutShares,
+          donutShares: proj.donutShares || { target: 45, projection: 25, expense: 20, variance: 10 },
           categories: proj.categories,
           items: proj.items
         };
