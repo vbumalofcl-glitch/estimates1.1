@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FCL Aranang Development Corporation - Integrated Project Controls</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -626,6 +630,81 @@
       .modules-launch-grid { grid-template-columns: 1fr; }
       .charts-split-grid { grid-template-columns: 1fr; }
     }
+
+    /* Executive PDF Print Stylesheet */
+    @media print {
+      @page {
+        size: A4 landscape;
+        margin: 8mm 10mm;
+      }
+      *, *:before, *:after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .top-navbar,
+      .sidebar,
+      .modules-launch-grid,
+      .card-controls,
+      .table-pagination,
+      #pwaInstallBtn,
+      .nav-actions,
+      .no-print {
+        display: none !important;
+      }
+      .dashboard-container {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        border: none !important;
+        background: transparent !important;
+      }
+      .dashboard-body {
+        display: block !important;
+        background: transparent !important;
+      }
+      .main-content {
+        padding: 0 !important;
+        background: transparent !important;
+        gap: 12px !important;
+      }
+      .dashboard-card {
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        margin-bottom: 12px !important;
+        padding: 12px 16px !important;
+        background: #ffffff !important;
+      }
+      .charts-split-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+        page-break-inside: avoid;
+      }
+      .executive-print-header {
+        display: block !important;
+      }
+      .executive-print-signatures {
+        display: flex !important;
+      }
+    }
+
+    /* Screen display defaults for print blocks */
+    .executive-print-header {
+      display: none;
+    }
+    .executive-print-signatures {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -655,6 +734,14 @@
       </nav>
 
       <div class="nav-actions">
+        <button class="ctrl-btn" type="button" onclick="printExecutiveDashboard()" style="background:#2563eb; color:#fff; border:none; padding:7px 14px; font-weight:700; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow: 0 2px 8px rgba(37,99,235,0.3); font-size:12px;" title="Print / Export 1-Page High-Resolution Executive Dashboard PDF">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Executive PDF
+        </button>
+        <button id="pwaInstallBtn" class="ctrl-btn" type="button" onclick="promptPWAInstall()" style="display:none; background:#0ea5e9; color:#fff; border:none; padding:7px 12px; font-weight:700; border-radius:6px; cursor:pointer; font-size:12px; align-items:center; gap:6px;" title="Install FCL Project Controls on this device">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Install App
+        </button>
         <button class="ctrl-btn" type="button" onclick="FCLStorage.exportMasterProject()" style="background:#059669; color:#fff; border:none; padding:7px 14px; font-weight:700; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow: 0 2px 8px rgba(5,150,105,0.3); font-size:12px;" title="Export entire project (.fclproj) containing Price List, DUPA, BOQ, Gantt, and Proposal">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Save Project (.fclproj)
@@ -755,6 +842,48 @@
       <!-- Main Dashboard Area (based on SAMPLE.png) -->
       <main class="main-content">
         
+        <!-- Executive Print Header (Only shown when printing / exporting PDF) -->
+        <header id="executivePrintHeader" class="executive-print-header" style="border-bottom: 2px solid #1e3a8a; padding-bottom: 12px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 44px; height: 44px; background: #1e3a8a; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="white">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </div>
+              <div>
+                <h1 style="margin: 0; font-size: 18px; font-weight: 800; color: #1e3a8a; letter-spacing: -0.5px; text-transform: uppercase;">FCL Aranang Development Corporation</h1>
+                <div style="font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase;">Executive Project Progress &amp; Financial Performance Report</div>
+              </div>
+            </div>
+            <div style="text-align: right; font-size: 11px; color: #334155; line-height: 1.5;">
+              <div><strong>Report Date:</strong> <span id="execPrintDate">-</span></div>
+              <div><strong>Project Ref:</strong> <span id="execPrintProjCode">PRJ-2026-001</span></div>
+              <div><strong>Baseline Status:</strong> <span id="execPrintStatus" style="font-weight: 700; color: #059669;">ACTIVE ON TRACK</span></div>
+            </div>
+          </div>
+
+          <!-- Executive KPI Ribbon for Print -->
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 12px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px 14px;">
+            <div>
+              <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Total Project Value</div>
+              <div id="execPrintTotalBudget" style="font-size: 15px; font-weight: 800; color: #0f172a;">₱ 0.00</div>
+            </div>
+            <div>
+              <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Planned Accomplishment</div>
+              <div id="execPrintPlannedPct" style="font-size: 15px; font-weight: 800; color: #2563eb;">0.00%</div>
+            </div>
+            <div>
+              <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Actual Accomplishment</div>
+              <div id="execPrintActualPct" style="font-size: 15px; font-weight: 800; color: #059669;">0.00%</div>
+            </div>
+            <div>
+              <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Slippage / Variance</div>
+              <div id="execPrintVariance" style="font-size: 15px; font-weight: 800; color: #0284c7;">+0.00%</div>
+            </div>
+          </div>
+        </header>
+
         <!-- Module Quick Launch Banners -->
         <div class="modules-launch-grid">
           <a href="pricelist_dupa/index.html" class="module-card card-blue">
@@ -945,6 +1074,31 @@
             <button class="page-btn">2</button>
             <button class="page-btn">3</button>
             <button class="page-btn">&gt;</button>
+          </div>
+        </section>
+
+        <!-- Executive Signatures Block (Only shown in print / PDF report) -->
+        <section id="executiveSignatures" class="executive-print-signatures" style="margin-top: 20px; padding-top: 16px; border-top: 1.5px solid #cbd5e1; justify-content: space-between; gap: 32px; page-break-inside: avoid;">
+          <div style="flex: 1; text-align: center;">
+            <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 40px;">Prepared &amp; Submitted By:</div>
+            <div style="border-top: 1.5px solid #0f172a; padding-top: 4px;">
+              <strong style="font-size: 11px; color: #0f172a; text-transform: uppercase;">ENGR. J. DELA CRUZ</strong>
+              <div style="font-size: 9.5px; color: #475569;">Project Planning &amp; Cost Engineer</div>
+            </div>
+          </div>
+          <div style="flex: 1; text-align: center;">
+            <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 40px;">Reviewed &amp; Verified By:</div>
+            <div style="border-top: 1.5px solid #0f172a; padding-top: 4px;">
+              <strong style="font-size: 11px; color: #0f172a; text-transform: uppercase;">ENGR. V. BUMALANG</strong>
+              <div style="font-size: 9.5px; color: #475569;">Project Manager / QA-QC In-Charge</div>
+            </div>
+          </div>
+          <div style="flex: 1; text-align: center;">
+            <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 40px;">Approved For Client Submission:</div>
+            <div style="border-top: 1.5px solid #0f172a; padding-top: 4px;">
+              <strong style="font-size: 11px; color: #0f172a; text-transform: uppercase;">FCL MANAGEMENT</strong>
+              <div style="font-size: 9.5px; color: #475569;">Managing Director &bull; Executive Office</div>
+            </div>
           </div>
         </section>
 
@@ -1206,6 +1360,88 @@
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
     }
+
+    // Feature 7: Executive PDF Export / Print Logic
+    function printExecutiveDashboard() {
+      const data = FCLStorage.getLiveDashboardData();
+
+      const execDateEl = document.getElementById('execPrintDate');
+      const execProjEl = document.getElementById('execPrintProjCode');
+      const execStatusEl = document.getElementById('execPrintStatus');
+      const execBudgetEl = document.getElementById('execPrintTotalBudget');
+      const execPlannedEl = document.getElementById('execPrintPlannedPct');
+      const execActualEl = document.getElementById('execPrintActualPct');
+      const execVarEl = document.getElementById('execPrintVariance');
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      
+      if (execDateEl) execDateEl.textContent = dateStr;
+      if (execProjEl) execProjEl.textContent = `${data.projectName} • ${data.projectCode}`;
+      if (execBudgetEl) execBudgetEl.textContent = '₱ ' + formatPeso(data.totalBudget);
+      if (execPlannedEl) execPlannedEl.textContent = data.plannedProgress.toFixed(2) + '%';
+      if (execActualEl) execActualEl.textContent = data.actualProgress.toFixed(2) + '%';
+      
+      const diff = data.actualProgress - data.plannedProgress;
+      if (execVarEl) {
+        execVarEl.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(2) + '%';
+        execVarEl.style.color = diff >= 0 ? '#059669' : '#dc2626';
+      }
+      if (execStatusEl) {
+        if (diff < -5) {
+          execStatusEl.textContent = 'BEHIND SCHEDULE (SLIPPAGE)';
+          execStatusEl.style.color = '#dc2626';
+        } else if (diff >= 0) {
+          execStatusEl.textContent = 'AHEAD / ON SCHEDULE';
+          execStatusEl.style.color = '#059669';
+        } else {
+          execStatusEl.textContent = 'SLIGHT VARIANCE (-' + Math.abs(diff).toFixed(1) + '%)';
+          execStatusEl.style.color = '#d97706';
+        }
+      }
+
+      window.print();
+    }
+
+    // Feature 6: PWA Service Worker Registration & App Install Handler
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('FCL PWA ServiceWorker registered with scope:', reg.scope))
+          .catch(err => console.warn('FCL PWA ServiceWorker registration error:', err));
+      });
+    }
+
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const pwaBtn = document.getElementById('pwaInstallBtn');
+      if (pwaBtn) pwaBtn.style.display = 'inline-flex';
+    });
+
+    function promptPWAInstall() {
+      if (!deferredPrompt) {
+        alert('FCL Project Controls is ready for offline use or already installed.');
+        return;
+      }
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted PWA installation');
+          const pwaBtn = document.getElementById('pwaInstallBtn');
+          if (pwaBtn) pwaBtn.style.display = 'none';
+        }
+        deferredPrompt = null;
+      });
+    }
+
+    window.addEventListener('appinstalled', () => {
+      console.log('FCL Project Controls PWA installed successfully');
+      const pwaBtn = document.getElementById('pwaInstallBtn');
+      if (pwaBtn) pwaBtn.style.display = 'none';
+      deferredPrompt = null;
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       renderDashboard();

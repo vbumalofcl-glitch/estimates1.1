@@ -9211,6 +9211,111 @@
 
     window.updateQtyTimelineViewport = updateQtyTimelineViewport;
 
+    let fclBillingPeriods = [];
+
+    function initBillingCycles() {
+      try {
+        const saved = localStorage.getItem('fcl_billing_periods');
+        if (saved) {
+          fclBillingPeriods = JSON.parse(saved);
+        }
+      } catch (e) {
+        console.warn('Could not read fcl_billing_periods from storage', e);
+      }
+
+      const projStartInput = document.getElementById('ganttProjectStartInput');
+      const currentDateInput = document.getElementById('ganttCurrentDateInput');
+      const projStart = projStartInput?.value || getTodayDateString();
+      const currDate = currentDateInput?.value || getTodayDateString();
+
+      if (!Array.isArray(fclBillingPeriods) || fclBillingPeriods.length === 0) {
+        fclBillingPeriods = [
+          { id: 1, name: 'Progress Billing #1', prevDate: projStart, currDate: currDate, retentionRate: 10, dpRate: 15 }
+        ];
+      }
+
+      populateBillingSelect();
+    }
+
+    function populateBillingSelect(selectedId) {
+      const select = document.getElementById('billingPeriodSelect');
+      if (!select) return;
+      select.innerHTML = '';
+
+      fclBillingPeriods.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = p.name;
+        select.appendChild(opt);
+      });
+
+      const targetId = selectedId || fclBillingPeriods[0]?.id || 1;
+      select.value = targetId;
+      applyBillingPeriodInputs(targetId);
+    }
+
+    function applyBillingPeriodInputs(periodId) {
+      const cycle = fclBillingPeriods.find(p => p.id === parseInt(periodId)) || fclBillingPeriods[0];
+      if (!cycle) return;
+
+      const prevInput = document.getElementById('billingPrevDate');
+      const currInput = document.getElementById('billingCurrDate');
+      const retInput = document.getElementById('billingRetentionRate');
+      const dpInput = document.getElementById('billingDPRate');
+
+      if (prevInput) prevInput.value = cycle.prevDate || '';
+      if (currInput) currInput.value = cycle.currDate || '';
+      if (retInput) retInput.value = cycle.retentionRate !== undefined ? cycle.retentionRate : 10;
+      if (dpInput) dpInput.value = cycle.dpRate !== undefined ? cycle.dpRate : 15;
+    }
+
+    function switchBillingPeriod(periodId) {
+      applyBillingPeriodInputs(periodId);
+      recalculateBillingTable();
+    }
+
+    function createNewBillingPeriod() {
+      const nextId = fclBillingPeriods.length > 0 ? (Math.max(...fclBillingPeriods.map(p => p.id)) + 1) : 1;
+      const currentSelect = document.getElementById('billingPeriodSelect');
+      const currentCycle = fclBillingPeriods.find(p => p.id === parseInt(currentSelect?.value)) || fclBillingPeriods[fclBillingPeriods.length - 1];
+
+      const newCycle = {
+        id: nextId,
+        name: `Progress Billing #${nextId}`,
+        prevDate: currentCycle?.currDate || getTodayDateString(),
+        currDate: getTodayDateString(),
+        retentionRate: currentCycle?.retentionRate || 10,
+        dpRate: currentCycle?.dpRate || 15
+      };
+
+      fclBillingPeriods.push(newCycle);
+      try {
+        localStorage.setItem('fcl_billing_periods', JSON.stringify(fclBillingPeriods));
+      } catch (e) {}
+
+      populateBillingSelect(nextId);
+      recalculateBillingTable();
+    }
+
+    function saveCurrentBillingPeriod() {
+      const select = document.getElementById('billingPeriodSelect');
+      const activeId = parseInt(select?.value) || 1;
+      const cycle = fclBillingPeriods.find(p => p.id === activeId);
+      if (!cycle) return;
+
+      cycle.prevDate = document.getElementById('billingPrevDate')?.value || '';
+      cycle.currDate = document.getElementById('billingCurrDate')?.value || '';
+      cycle.retentionRate = parseFloat(document.getElementById('billingRetentionRate')?.value) || 10;
+      cycle.dpRate = parseFloat(document.getElementById('billingDPRate')?.value) || 15;
+
+      try {
+        localStorage.setItem('fcl_billing_periods', JSON.stringify(fclBillingPeriods));
+        alert(`${cycle.name} saved successfully!`);
+      } catch (e) {
+        console.warn('Error saving billing cycle:', e);
+      }
+    }
+
     function showBillingRecord(event) {
       if (event) event.preventDefault();
       
@@ -9220,19 +9325,7 @@
       const modal = document.getElementById('ganttBillingRecordModal');
       if (modal) modal.style.display = 'flex';
       
-      const projStartInput = document.getElementById('ganttProjectStartInput');
-      const currentDateInput = document.getElementById('ganttCurrentDateInput');
-      
-      const prevInput = document.getElementById('billingPrevDate');
-      const currInput = document.getElementById('billingCurrDate');
-      
-      if (prevInput && !prevInput.value) {
-        prevInput.value = projStartInput?.value || getTodayDateString();
-      }
-      if (currInput && !currInput.value) {
-        currInput.value = currentDateInput?.value || getTodayDateString();
-      }
-      
+      initBillingCycles();
       recalculateBillingTable();
     }
     
@@ -9350,6 +9443,8 @@
         } else {
           indentStyle = 'padding-left: 36px;';
         }
+
+        const pctAccomplished = contractAmt > 0 ? ((cumCost / contractAmt) * 100).toFixed(1) + '%' : (estQty > 0 ? ((cumQty / estQty) * 100).toFixed(1) + '%' : '-');
         
         const tr = document.createElement('tr');
         tr.className = rowClass;
@@ -9370,6 +9465,7 @@
           <td style="text-align: center; border-right: 1px solid var(--line); font-weight: bold;">${isParent ? '' : cumQty.toFixed(2)}</td>
           <td style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-weight: bold;">${peso(cumCost)}</td>
           
+          <td style="text-align: center; border-right: 1px solid var(--line); font-weight: 600; color: #1e40af;">${pctAccomplished}</td>
           <td style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; color: #b91c1c;">${peso(retention)}</td>
           <td style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; color: #b91c1c;">${peso(dpRecovery)}</td>
           <td style="text-align: right; padding-right: 8px; font-weight: bold; color: #047857;">${peso(netBilling)}</td>
@@ -9378,6 +9474,8 @@
         tbody.appendChild(tr);
       });
       
+      const grandPctAccomplished = grandContractAmt > 0 ? ((grandCumCost / grandContractAmt) * 100).toFixed(2) + '%' : '0.00%';
+
       let tfoot = document.querySelector('#billingRecordTable tfoot');
       if (!tfoot) {
         tfoot = document.createElement('tfoot');
@@ -9393,11 +9491,111 @@
           <td style="text-align: right; padding-right: 8px; border-right: 1px solid var(--line);">${peso(grandCurrCost)}</td>
           <td style="border-right: 1px solid var(--line);"></td>
           <td style="text-align: right; padding-right: 8px; border-right: 1px solid var(--line);">${peso(grandCumCost)}</td>
+          <td style="text-align: center; border-right: 1px solid var(--line); font-weight: bold; color: #1e40af;">${grandPctAccomplished}</td>
           <td style="text-align: right; padding-right: 8px; border-right: 1px solid var(--line); color: #b91c1c;">${peso(grandRetention)}</td>
           <td style="text-align: right; padding-right: 8px; border-right: 1px solid var(--line); color: #b91c1c;">${peso(grandDP)}</td>
           <td style="text-align: right; padding-right: 8px; color: #047857;">${peso(grandNetBilling)}</td>
         </tr>
       `;
+
+      window._latestBillingTotals = {
+        grandContractAmt,
+        grandPrevCost,
+        grandCurrCost,
+        grandCumCost,
+        grandRetention,
+        grandDP,
+        grandNetBilling,
+        grandPctAccomplished,
+        retentionRate: retentionRate * 100,
+        dpRate: dpRate * 100,
+        prevDateStr,
+        currDateStr
+      };
+    }
+
+    function generatePaymentCertificate() {
+      recalculateBillingTable();
+      const totals = window._latestBillingTotals || {};
+      
+      const modal = document.getElementById('paymentCertificateModal');
+      if (!modal) return;
+
+      const projTitleEl = document.getElementById('coverProjectTitle');
+      const projName = (projTitleEl && projTitleEl.textContent.trim()) ? projTitleEl.textContent.trim() : 'Sports Club & Recreation Facility';
+      
+      const select = document.getElementById('billingPeriodSelect');
+      const periodName = select ? (select.options[select.selectedIndex]?.text || 'Progress Billing #1') : 'Progress Billing #1';
+      
+      const todayStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      const certProjName = document.getElementById('certProjectName');
+      const certBillingNo = document.getElementById('certBillingNo');
+      const certPeriodFrom = document.getElementById('certPeriodFrom');
+      const certPeriodTo = document.getElementById('certPeriodTo');
+      const certDateIssued = document.getElementById('certDateIssued');
+      
+      if (certProjName) certProjName.textContent = projName;
+      if (certBillingNo) certBillingNo.textContent = periodName;
+      if (certPeriodFrom) certPeriodFrom.textContent = totals.prevDateStr || 'Project Start';
+      if (certPeriodTo) certPeriodTo.textContent = totals.currDateStr || todayStr;
+      if (certDateIssued) certDateIssued.textContent = todayStr;
+
+      const contractSum = totals.grandContractAmt || 0;
+      const cumAccomplished = totals.grandCumCost || 0;
+      const cumPct = contractSum > 0 ? ((cumAccomplished / contractSum) * 100).toFixed(2) : '0.00';
+      const retentionDeduction = totals.grandRetention || 0;
+      const dpDeduction = totals.grandDP || 0;
+      const totalEarnedLessRetainage = cumAccomplished - retentionDeduction - dpDeduction;
+      
+      const priorAccomplished = totals.grandPrevCost || 0;
+      const priorRet = priorAccomplished * ((totals.retentionRate || 10) / 100);
+      const priorDP = priorAccomplished * ((totals.dpRate || 15) / 100);
+      const priorPaid = priorAccomplished - priorRet - priorDP;
+
+      const currentDue = totals.grandNetBilling || (totalEarnedLessRetainage - priorPaid);
+      const balanceToFinish = Math.max(0, contractSum - totalEarnedLessRetainage);
+
+      const elOrigSum = document.getElementById('certOrigContractSum');
+      const elContractToDate = document.getElementById('certContractToDate');
+      const elGrossAccomplished = document.getElementById('certGrossAccomplished');
+      const elGrossAccomplishedPct = document.getElementById('certGrossAccomplishedPct');
+      const elRetentionDisplay = document.getElementById('certRetentionRateDisplay');
+      const elRetentionDeduction = document.getElementById('certRetentionDeduction');
+      const elDPDisplay = document.getElementById('certDPRateDisplay');
+      const elDPDeduction = document.getElementById('certDPDeduction');
+      const elTotalEarned = document.getElementById('certTotalEarnedLessRet');
+      const elPriorPaid = document.getElementById('certPriorBillingsPaid');
+      const elCurrentDue = document.getElementById('certCurrentPaymentDue');
+      const elBalance = document.getElementById('certBalanceToFinish');
+
+      if (elOrigSum) elOrigSum.textContent = peso(contractSum);
+      if (elContractToDate) elContractToDate.textContent = peso(contractSum);
+      if (elGrossAccomplished) elGrossAccomplished.textContent = peso(cumAccomplished);
+      if (elGrossAccomplishedPct) elGrossAccomplishedPct.textContent = `(${cumPct}%)`;
+      if (elRetentionDisplay) elRetentionDisplay.textContent = `${totals.retentionRate || 10}%`;
+      if (elRetentionDeduction) elRetentionDeduction.textContent = `(${peso(retentionDeduction)})`;
+      if (elDPDisplay) elDPDisplay.textContent = `${totals.dpRate || 15}%`;
+      if (elDPDeduction) elDPDeduction.textContent = `(${peso(dpDeduction)})`;
+      if (elTotalEarned) elTotalEarned.textContent = peso(totalEarnedLessRetainage);
+      if (elPriorPaid) elPriorPaid.textContent = `(${peso(priorPaid)})`;
+      if (elCurrentDue) elCurrentDue.textContent = peso(currentDue);
+      if (elBalance) elBalance.textContent = peso(balanceToFinish);
+
+      modal.style.display = 'flex';
+    }
+
+    function closePaymentCertificateModal() {
+      const modal = document.getElementById('paymentCertificateModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function printPaymentCertificate() {
+      document.body.classList.add('printing-payment-cert');
+      window.print();
+      setTimeout(() => {
+        document.body.classList.remove('printing-payment-cert');
+      }, 500);
     }
     
     function getParentBillingSummary(parentIndex, field, prevDate, currDate) {
@@ -9454,13 +9652,13 @@
       let tableHtml = `<table border="1">
         <thead>
           <tr style="background-color: #dbeafe; font-weight: bold;">
-            <th colspan="12" style="font-size: 14pt; padding: 10px; text-align: center;">PROGRESS BILLING RECORD</th>
+            <th colspan="13" style="font-size: 14pt; padding: 10px; text-align: center;">PROGRESS BILLING RECORD</th>
           </tr>
           <tr style="background-color: #f1f5f9;">
             <th colspan="3" style="text-align: left;">Previous Cut-off Date: ${prevDateStr}</th>
             <th colspan="3" style="text-align: left;">Current Cut-off Date: ${currDateStr}</th>
             <th colspan="3" style="text-align: left;">Retention Rate: ${retentionRate}%</th>
-            <th colspan="3" style="text-align: left;">DP Recovery Rate: ${dpRate}%</th>
+            <th colspan="4" style="text-align: left;">DP Recovery Rate: ${dpRate}%</th>
           </tr>
           <tr style="background-color: #2563eb; color: white;">
             <th>Code</th>
@@ -9472,6 +9670,7 @@
             <th>Curr. Cost</th>
             <th>Cum. Qty</th>
             <th>Cum. Cost</th>
+            <th>% Accomplished</th>
             <th>Retention</th>
             <th>DP Recovery</th>
             <th>Net Billing</th>
@@ -9576,12 +9775,14 @@
           <td style="text-align: right;">${currCost.toFixed(2)}</td>
           <td style="text-align: center;">${isParent ? '' : (prevQty+currQty).toFixed(2)}</td>
           <td style="text-align: right;">${cumCost.toFixed(2)}</td>
+          <td style="text-align: center;">${contractAmt > 0 ? ((cumCost / contractAmt) * 100).toFixed(1) + '%' : '-'}</td>
           <td style="text-align: right;">${retention.toFixed(2)}</td>
           <td style="text-align: right;">${dpRecovery.toFixed(2)}</td>
           <td style="text-align: right; font-weight: bold;">${netBilling.toFixed(2)}</td>
         </tr>`;
       });
       
+      const grandPctAccomplished = grandContractAmt > 0 ? ((grandCumCost / grandContractAmt) * 100).toFixed(2) + '%' : '0.00%';
       tableHtml += `<tr style="font-weight: bold; background-color: #f1f5f9;">
         <td colspan="2" style="text-align: right;">Grand Total:</td>
         <td style="text-align: right;">${grandContractAmt.toFixed(2)}</td>
@@ -9591,6 +9792,7 @@
         <td style="text-align: right;">${grandCurrCost.toFixed(2)}</td>
         <td></td>
         <td style="text-align: right;">${grandCumCost.toFixed(2)}</td>
+        <td style="text-align: center;">${grandPctAccomplished}</td>
         <td style="text-align: right;">${grandRetention.toFixed(2)}</td>
         <td style="text-align: right;">${grandDP.toFixed(2)}</td>
         <td style="text-align: right;">${grandNetBilling.toFixed(2)}</td>
@@ -9618,7 +9820,15 @@
     window.updatePeriodQty = updatePeriodQty;
     window.updateQtyModalTask = updateQtyModalTask;
     window.showBillingRecord = showBillingRecord;
+    window.openGanttBillingRecordModal = showBillingRecord;
     window.closeGanttBillingRecordModal = closeGanttBillingRecordModal;
+    window.initBillingCycles = initBillingCycles;
+    window.switchBillingPeriod = switchBillingPeriod;
+    window.createNewBillingPeriod = createNewBillingPeriod;
+    window.saveCurrentBillingPeriod = saveCurrentBillingPeriod;
+    window.generatePaymentCertificate = generatePaymentCertificate;
+    window.closePaymentCertificateModal = closePaymentCertificateModal;
+    window.printPaymentCertificate = printPaymentCertificate;
     window.recalculateBillingTable = recalculateBillingTable;
     window.exportBillingToExcel = exportBillingToExcel;
     window.regenerateCoverProposalFromData = regenerateCoverProposalFromData;

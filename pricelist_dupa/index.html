@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Price List & Detailed Unit Price Analysis (D.U.P.A.)</title>
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="apple-touch-icon" href="../icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../icon-192.png">
   <link rel="stylesheet" href="pricelist_dupa.css" />
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
@@ -272,5 +276,14 @@
 
   <script src="../storage_manager.js"></script>
   <script src="pricelist_dupa.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('../sw.js')
+          .then(reg => console.log('PriceList SW registered:', reg.scope))
+          .catch(err => console.warn('PriceList SW registration error:', err));
+      });
+    }
+  </script>
 </body>
 </html>
