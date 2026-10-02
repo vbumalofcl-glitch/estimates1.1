@@ -11379,10 +11379,12 @@
         }
       } else {
         let focusAttr = '';
+        let listAttr = '';
         if (kind === 'boq') {
           focusAttr = ` onfocus="selectBOQRow(${index}, true)"`;
         } else if (kind === 'analysis') {
           focusAttr = ` onfocus="selectAnalysisRow(${index}, true)"`;
+          listAttr = ` list="priceListOptionsList"`;
         }
         let suffixHtml = '';
         if (kind === 'boq') {
@@ -11391,7 +11393,7 @@
             suffixHtml = `<span class="boq-desc-suffix" style="color: #ff0000; font-weight: bold; margin-left: 4px; font-style: normal; display: inline-block; white-space: nowrap;">(${condition})</span>`;
           }
         }
-        inputHtml = `<input value="${escapeHtml(row.title)}" onchange="${textOnchange}"${focusAttr} placeholder="Work description">${suffixHtml}`;
+        inputHtml = `<input value="${escapeHtml(row.title)}" onchange="${textOnchange}"${focusAttr}${listAttr} placeholder="Work description">${suffixHtml}`;
       }
       return `<div class="inline-cell ${indentClass}" title="${escapeAttr(row.title || '')}">${toggleHtml}${inputHtml}</div>`;
     }
@@ -11598,6 +11600,7 @@
 
     function renderPriceListTable() {
       if (!document.getElementById("priceListTable")) return;
+      if (typeof updatePriceListDatalist === 'function') updatePriceListDatalist();
       recomputePriceListCodes();
       const tbody = document.querySelector('#priceListTable tbody');
       tbody.innerHTML = '';
@@ -11812,7 +11815,12 @@
       }
 
       row[field] = value;
-      if (field === 'title') recomputeAnalysisCodes();
+      if (field === 'title') {
+        if (row.type !== 'category') {
+          autoMatchAnalysisRowFromPriceList(row);
+        }
+        recomputeAnalysisCodes();
+      }
       renderAnalysisTable();
     }
 
@@ -11829,6 +11837,85 @@
       recomputeAnalysisCodes();
       renderAnalysisTable();
     }
+
+    function updatePriceListDatalist() {
+      const dl = document.getElementById('priceListOptionsList');
+      if (!dl || !Array.isArray(priceListData)) return;
+      let opts = '';
+      priceListData.forEach(item => {
+        if (item && item.type === 'material' && item.materialName) {
+          const spec = item.specification ? ` (${item.specification})` : '';
+          const rate = item.pricePerUnit ? ` - ₱${Number(item.pricePerUnit).toLocaleString()}/${item.unit || 'unit'}` : '';
+          opts += `<option value="${escapeAttr(item.materialName)}">${escapeHtml(item.materialName + spec + rate)}</option>`;
+        }
+      });
+      dl.innerHTML = opts;
+    }
+
+    function autoMatchAnalysisRowFromPriceList(row) {
+      if (!row || !row.title || !Array.isArray(priceListData)) return;
+      const t = normalizeMatchValue(row.title);
+      const match = priceListData.find(p => p && p.type === 'material' && normalizeMatchValue(p.materialName) === t);
+      if (match) {
+        if (!row.specification && match.specification) {
+          row.specification = match.specification;
+        }
+        if (match.unit) {
+          row.unit = match.unit;
+        }
+        const isRental = isEquipmentOrToolPriceListRow(match, row);
+        if (isRental) {
+          if (match.rentalPerUnit !== undefined && match.rentalPerUnit !== null && match.rentalPerUnit !== '') {
+            row.laborUnitCost = numberOrZero(match.rentalPerUnit);
+          }
+        } else {
+          if (match.pricePerUnit !== undefined && match.pricePerUnit !== null && match.pricePerUnit !== '') {
+            row.materialUnitCost = numberOrZero(match.pricePerUnit);
+          }
+        }
+      }
+    }
+
+    function syncRatesFromPriceListAction() {
+      if (!Array.isArray(analysisData) || !Array.isArray(priceListData)) return;
+      let count = 0;
+      analysisData.forEach(row => {
+        if (row && row.type !== 'category' && row.title) {
+          const t = normalizeMatchValue(row.title);
+          const spec = normalizeMatchValue(row.specification);
+          let match = priceListData.find(p => p && p.type === 'material' && normalizeMatchValue(p.materialName) === t && normalizeMatchValue(p.specification) === spec);
+          if (!match) {
+            match = priceListData.find(p => p && p.type === 'material' && normalizeMatchValue(p.materialName) === t);
+          }
+          if (match) {
+            let changed = false;
+            const isRental = isEquipmentOrToolPriceListRow(match, row);
+            if (isRental) {
+              const newRate = numberOrZero(match.rentalPerUnit);
+              if (newRate > 0 && row.laborUnitCost !== newRate) {
+                row.laborUnitCost = newRate;
+                changed = true;
+              }
+            } else {
+              const newRate = numberOrZero(match.pricePerUnit);
+              if (newRate > 0 && row.materialUnitCost !== newRate) {
+                row.materialUnitCost = newRate;
+                changed = true;
+              }
+            }
+            if (match.unit && row.unit !== match.unit) {
+              row.unit = match.unit;
+              changed = true;
+            }
+            if (changed) count++;
+          }
+        }
+      });
+      renderAnalysisTable();
+      markUnsaved();
+      alert(`Synchronized ${count} D.U.P.A. item(s) with current Price List unit rates.`);
+    }
+    window.syncRatesFromPriceListAction = syncRatesFromPriceListAction;
 
 
     function normalizeMatchValue(value) {
@@ -13395,7 +13482,11 @@
 
     function saveToBrowser(key, payload, label, silent = false) {
       try {
-        localStorage.setItem(key, JSON.stringify(payload));
+        if (window.FCLStorage && typeof window.FCLStorage.save === 'function') {
+          window.FCLStorage.save(key, payload);
+        } else {
+          localStorage.setItem(key, JSON.stringify(payload));
+        }
         hasUnsavedChanges = false;
         if (!silent) {
           alert(label + " saved successfully in this browser.");
@@ -13407,6 +13498,10 @@
 
     function readFromBrowser(key) {
       try {
+        if (window.FCLStorage && typeof window.FCLStorage.readSync === 'function') {
+          const val = window.FCLStorage.readSync(key);
+          if (val !== null && val !== undefined) return val;
+        }
         const localRaw = localStorage.getItem(key);
         return localRaw ? JSON.parse(localRaw) : null;
       } catch (e) {

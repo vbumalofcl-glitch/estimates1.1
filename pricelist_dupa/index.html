@@ -15,6 +15,9 @@
         <p style="margin:2px 0 0; font-size:12px; font-weight:600; color:var(--accent);">Module: Price List &amp; Detailed Unit Price Analysis (D.U.P.A.)</p>
       </div>
       <div class="toolbar header-save-toolbar">
+        <button class="btn-primary" type="button" style="background:#059669; border-color:#059669;" onclick="FCLStorage.exportMasterProject()" title="Export all modules (Price List, DUPA, BOQ, Gantt, Proposal) into a single .fclproj file">📦 Export Master Project (.fclproj)</button>
+        <button class="btn-secondary" type="button" onclick="document.getElementById('masterProjFileInput').click()" title="Open and restore a master .fclproj project bundle">📂 Open Master Project</button>
+        <input id="masterProjFileInput" type="file" accept=".fclproj,application/json,.json" style="display:none" onchange="FCLStorage.importMasterProjectFile(this.files[0])">
         <button id="savePriceListBtn" class="btn-primary header-save-btn" type="button" onclick="savePriceListSection()">Save Price List</button>
         <button id="saveDUPABtn" class="btn-primary header-save-btn" type="button" onclick="saveDUPASection()">Save D.U.P.A.</button>
         <button id="exportPriceListJsonBtn" class="btn-secondary header-json-btn" type="button" onclick="exportSectionJson('priceList')">Save Price List JSON</button>
@@ -173,7 +176,10 @@
           </div>
 
 
-          <div><button class="btn-primary" onclick="showSheet('boqSheet')">Go to Bill of Quantity</button></div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button class="btn-secondary" type="button" onclick="syncRatesFromPriceListAction()" title="Auto-match and update D.U.P.A. material and labor rates from Price List" style="display:inline-flex; align-items:center; gap:4px; font-weight:600;"><span style="font-size:13px;">🔄</span> Sync Rates from Price List</button>
+            <button class="btn-primary" type="button" onclick="window.location.href='../boq_schedule/index.html'">Go to BOQ &amp; Gantt Schedule &rarr;</button>
+          </div>
 
 
         </div>
@@ -262,6 +268,9 @@
     <div class="stat-item"><span class="stat-label">SUM:</span><span id="appStatSum" class="stat-val">-</span></div>
   </div>
 
+  <datalist id="priceListOptionsList"></datalist>
+
+  <script src="../storage_manager.js"></script>
   <script src="pricelist_dupa.js"></script>
 </body>
 </html>

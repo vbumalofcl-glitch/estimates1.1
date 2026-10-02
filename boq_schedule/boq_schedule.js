@@ -13395,7 +13395,11 @@
 
     function saveToBrowser(key, payload, label, silent = false) {
       try {
-        localStorage.setItem(key, JSON.stringify(payload));
+        if (window.FCLStorage && typeof window.FCLStorage.save === 'function') {
+          window.FCLStorage.save(key, payload);
+        } else {
+          localStorage.setItem(key, JSON.stringify(payload));
+        }
         hasUnsavedChanges = false;
         if (!silent) {
           alert(label + " saved successfully in this browser.");
@@ -13407,6 +13411,10 @@
 
     function readFromBrowser(key) {
       try {
+        if (window.FCLStorage && typeof window.FCLStorage.readSync === 'function') {
+          const val = window.FCLStorage.readSync(key);
+          if (val !== null && val !== undefined) return val;
+        }
         const localRaw = localStorage.getItem(key);
         return localRaw ? JSON.parse(localRaw) : null;
       } catch (e) {

@@ -15,6 +15,9 @@
         <p style="margin:2px 0 0; font-size:12px; font-weight:600; color:var(--accent);">Module: Bill of Quantity &amp; Gantt-chart Schedule</p>
       </div>
       <div class="toolbar header-save-toolbar">
+        <button class="btn-primary" type="button" style="background:#059669; border-color:#059669;" onclick="FCLStorage.exportMasterProject()" title="Export all modules (Price List, DUPA, BOQ, Gantt, Proposal) into a single .fclproj file">📦 Export Master Project (.fclproj)</button>
+        <button class="btn-secondary" type="button" onclick="document.getElementById('masterProjFileInput').click()" title="Open and restore a master .fclproj project bundle">📂 Open Master Project</button>
+        <input id="masterProjFileInput" type="file" accept=".fclproj,application/json,.json" style="display:none" onchange="FCLStorage.importMasterProjectFile(this.files[0])">
         <button id="saveBOQBtn" class="btn-primary header-save-btn" type="button" onclick="saveBOQSection()">Save BOQ</button>
         <button id="saveCoverLetterBtn" class="btn-primary header-save-btn" type="button" onclick="saveCoverLetterSection()">Save Cover Letter</button>
         <button id="exportBOQJsonBtn" class="btn-secondary header-json-btn" type="button" onclick="exportSectionJson('boq')">Save BOQ JSON</button>
@@ -6333,6 +6336,7 @@
 
   
 
+  <script src="../storage_manager.js"></script>
   <script src="pdf.min.js"></script>
   <script src="boq_schedule.js"></script>
 </body>

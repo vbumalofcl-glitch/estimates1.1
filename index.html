@@ -655,6 +655,15 @@
       </nav>
 
       <div class="nav-actions">
+        <button class="ctrl-btn" type="button" onclick="FCLStorage.exportMasterProject()" style="background:#059669; color:#fff; border:none; padding:7px 14px; font-weight:700; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow: 0 2px 8px rgba(5,150,105,0.3); font-size:12px;" title="Export entire project (.fclproj) containing Price List, DUPA, BOQ, Gantt, and Proposal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Save Project (.fclproj)
+        </button>
+        <button class="ctrl-btn" type="button" onclick="document.getElementById('masterProjectFileInput').click()" style="background:rgba(255,255,255,0.12); color:#fff; border:1px solid rgba(255,255,255,0.25); padding:7px 14px; font-weight:600; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-size:12px;" title="Open and restore master project file (.fclproj / .json)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Open Project
+        </button>
+        <input type="file" id="masterProjectFileInput" accept=".fclproj,application/json,.json" style="display:none" onchange="FCLStorage.importMasterProjectFile(this.files[0])">
         <div class="notification-btn" title="Notifications">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
           <div class="notification-badge"></div>
@@ -777,18 +786,22 @@
         <section class="dashboard-card">
           <div class="card-header">
             <div>
-              <div style="font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase;">Direct Line Baseline</div>
-              <h2 class="card-title">Project S-Curve &amp; Timeline Progress</h2>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase;">Direct Line Baseline</span>
+                <span id="dashStatusBadge" class="brand-tag" style="background: rgba(37,99,235,0.1); color: #2563eb; border-color: rgba(37,99,235,0.3);">● DEMO PREVIEW</span>
+              </div>
+              <h2 class="card-title" id="dashProjectTitle">Project S-Curve &amp; Timeline Progress</h2>
+              <div id="dashProjectSub" style="font-size: 12px; font-weight: 500; color: var(--text-muted); margin-top: 2px;">Sports Club & Recreation Facility &bull; PRJ-2026-001</div>
             </div>
             <div class="card-controls">
-              <button class="ctrl-btn">Docs &#9662;</button>
-              <button class="ctrl-btn primary">Save &#9662;</button>
+              <button class="ctrl-btn" type="button" onclick="FCLStorage.exportMasterProject()" title="Export Project File (.fclproj)">Export (.fclproj)</button>
+              <button class="ctrl-btn primary" type="button" onclick="document.getElementById('masterProjectFileInput').click()" title="Load Project File">Load Project</button>
             </div>
           </div>
 
           <!-- SVG S-Curve Chart -->
           <div style="position: relative; width: 100%; height: 260px;">
-            <svg class="chart-svg" viewBox="0 0 950 240" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+            <svg id="scurveSvg" class="chart-svg" viewBox="0 0 950 240" preserveAspectRatio="none" style="width: 100%; height: 100%;">
               <defs>
                 <linearGradient id="curveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                   <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.35"/>
@@ -804,65 +817,31 @@
               <line x1="50" y1="190" x2="920" y2="190" stroke="#e2e8f0" stroke-width="1"/>
 
               <!-- Y-Axis labels -->
-              <text x="35" y="34" font-size="10" fill="#94a3b8" text-anchor="end">1000</text>
-              <text x="35" y="74" font-size="10" fill="#94a3b8" text-anchor="end">800</text>
-              <text x="35" y="114" font-size="10" fill="#94a3b8" text-anchor="end">600</text>
-              <text x="35" y="154" font-size="10" fill="#94a3b8" text-anchor="end">400</text>
-              <text x="35" y="194" font-size="10" fill="#94a3b8" text-anchor="end">0</text>
+              <text x="35" y="34" font-size="10" fill="#94a3b8" text-anchor="end">100%</text>
+              <text x="35" y="74" font-size="10" fill="#94a3b8" text-anchor="end">75%</text>
+              <text x="35" y="114" font-size="10" fill="#94a3b8" text-anchor="end">50%</text>
+              <text x="35" y="154" font-size="10" fill="#94a3b8" text-anchor="end">25%</text>
+              <text x="35" y="194" font-size="10" fill="#94a3b8" text-anchor="end">0%</text>
 
-              <!-- S-Curve Path with Gradient Fill -->
-              <path d="M 60 170 
-                       Q 160 160, 240 150 
-                       T 400 135 
-                       T 550 90 
-                       T 700 70 
-                       T 880 50 
-                       L 880 190 
-                       L 60 190 Z" 
-                    fill="url(#curveGradient)"/>
-
-              <!-- S-Curve Stroke Line -->
-              <path d="M 60 170 
-                       Q 160 160, 240 150 
-                       T 400 135 
-                       T 550 90 
-                       T 700 70 
-                       T 880 50" 
-                    fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+              <!-- Dynamic Paths -->
+              <path id="scurveFillPath" d="M 60 170 Q 160 160, 240 150 T 400 135 T 550 90 T 700 70 T 880 50 L 880 190 L 60 190 Z" fill="url(#curveGradient)"/>
+              <path id="scurveStrokePath" d="M 60 170 Q 160 160, 240 150 T 400 135 T 550 90 T 700 70 T 880 50" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
 
               <!-- Milestone Vertical Dashed Line -->
-              <line x1="620" y1="40" x2="620" y2="190" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <line id="scurveMilestoneLine" x1="620" y1="40" x2="620" y2="190" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 3"/>
 
-              <!-- Tooltip Box for Project Dependency (matching SAMPLE.png) -->
-              <g transform="translate(580, 20)">
-                <rect x="0" y="0" width="105" height="38" rx="6" fill="#0f172a" opacity="0.95"/>
-                <text x="52" y="16" font-size="9.5" fill="#94a3b8" text-anchor="middle" font-weight="500">Project</text>
-                <text x="52" y="30" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700">Dependency</text>
+              <!-- Tooltip Box for Project Dependency -->
+              <g id="scurveTooltip" transform="translate(580, 20)">
+                <rect x="0" y="0" width="115" height="38" rx="6" fill="#0f172a" opacity="0.95"/>
+                <text id="scurveTooltipTop" x="57" y="16" font-size="9.5" fill="#94a3b8" text-anchor="middle" font-weight="500">Progress Milestone</text>
+                <text id="scurveTooltipBottom" x="57" y="30" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700">62.4% Actual</text>
               </g>
 
               <!-- Data Point Nodes -->
-              <circle cx="60" cy="170" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
-              <circle cx="140" cy="162" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
-              <circle cx="230" cy="151" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
-              <circle cx="320" cy="144" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
-              <circle cx="420" cy="130" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
-              <circle cx="520" cy="100" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
-              <circle cx="620" cy="85" r="5.5" fill="#ffffff" stroke="#2563eb" stroke-width="3"/>
-              <circle cx="710" cy="74" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
-              <circle cx="800" cy="62" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
-              <circle cx="880" cy="50" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+              <g id="scurveNodes"></g>
 
               <!-- X-Axis Milestone Labels -->
-              <text x="60" y="212" font-size="10" fill="#94a3b8" text-anchor="middle">1.0</text>
-              <text x="140" y="212" font-size="10" fill="#94a3b8" text-anchor="middle">2.0</text>
-              <text x="230" y="212" font-size="10" fill="#94a3b8" text-anchor="middle">3.0</text>
-              <text x="320" y="212" font-size="10" fill="#94a3b8" text-anchor="middle">4.0</text>
-              <text x="420" y="212" font-size="10" fill="#94a3b8" text-anchor="middle">6.0</text>
-              <text x="520" y="212" font-size="10" fill="#94a3b8" text-anchor="middle">8.0</text>
-              <text x="620" y="212" font-size="10" fill="#2563eb" font-weight="700" text-anchor="middle">10.0</text>
-              <text x="710" y="212" font-size="10" fill="#94a3b8" text-anchor="middle">12.0</text>
-              <text x="800" y="212" font-size="10" fill="#94a3b8" text-anchor="middle">14.0</text>
-              <text x="880" y="212" font-size="10" fill="#94a3b8" text-anchor="middle">18.0</text>
+              <g id="scurveLabels"></g>
             </svg>
           </div>
         </section>
@@ -874,7 +853,7 @@
           <section class="dashboard-card">
             <div class="card-header">
               <h2 class="card-title">Budget Allocation</h2>
-              <span style="font-size: 11px; font-weight: 600; color: #2563eb;">Total: ₱14,850,000.00</span>
+              <span id="dashTotalBudget" style="font-size: 11px; font-weight: 600; color: #2563eb;">Total: ₱14,850,000.00</span>
             </div>
             
             <div class="donut-layout">
@@ -882,14 +861,14 @@
                 <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; transform: rotate(-90deg);">
                   <!-- Background circle -->
                   <circle cx="50" cy="50" r="38" fill="none" stroke="#f1f5f9" stroke-width="16"/>
-                  <!-- Segment 1: Target (42%) -->
-                  <circle cx="50" cy="50" r="38" fill="none" stroke="#2563eb" stroke-width="16" stroke-dasharray="100 238" stroke-dashoffset="0"/>
-                  <!-- Segment 2: Projection (28%) -->
-                  <circle cx="50" cy="50" r="38" fill="none" stroke="#10b981" stroke-width="16" stroke-dasharray="67 238" stroke-dashoffset="-100"/>
-                  <!-- Segment 3: Expense (18%) -->
-                  <circle cx="50" cy="50" r="38" fill="none" stroke="#f59e0b" stroke-width="16" stroke-dasharray="43 238" stroke-dashoffset="-167"/>
-                  <!-- Segment 4: Variance (12%) -->
-                  <circle cx="50" cy="50" r="38" fill="none" stroke="#ef4444" stroke-width="16" stroke-dasharray="28 238" stroke-dashoffset="-210"/>
+                  <!-- Segment 1: Target -->
+                  <circle id="dashDonutTarget" cx="50" cy="50" r="38" fill="none" stroke="#2563eb" stroke-width="16" stroke-dasharray="100 238" stroke-dashoffset="0"/>
+                  <!-- Segment 2: Projection -->
+                  <circle id="dashDonutProjection" cx="50" cy="50" r="38" fill="none" stroke="#10b981" stroke-width="16" stroke-dasharray="67 238" stroke-dashoffset="-100"/>
+                  <!-- Segment 3: Expense -->
+                  <circle id="dashDonutExpense" cx="50" cy="50" r="38" fill="none" stroke="#f59e0b" stroke-width="16" stroke-dasharray="43 238" stroke-dashoffset="-167"/>
+                  <!-- Segment 4: Variance -->
+                  <circle id="dashDonutVariance" cx="50" cy="50" r="38" fill="none" stroke="#ef4444" stroke-width="16" stroke-dasharray="28 238" stroke-dashoffset="-210"/>
                 </svg>
                 <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                   <span style="font-size: 9px; font-weight: 600; color: #64748b;">TOTAL</span>
@@ -898,10 +877,10 @@
               </div>
 
               <ul class="legend-list">
-                <li class="legend-item"><span class="legend-color" style="background:#2563eb;"></span> Target Cost (42%)</li>
-                <li class="legend-item"><span class="legend-color" style="background:#10b981;"></span> Projection (28%)</li>
-                <li class="legend-item"><span class="legend-color" style="background:#f59e0b;"></span> Actual Expense (18%)</li>
-                <li class="legend-item"><span class="legend-color" style="background:#ef4444;"></span> Contingency / Variance (12%)</li>
+                <li class="legend-item"><span class="legend-color" style="background:#2563eb;"></span> <span id="dashLegendTarget">Target Cost (42%)</span></li>
+                <li class="legend-item"><span class="legend-color" style="background:#10b981;"></span> <span id="dashLegendProjection">Projection (28%)</span></li>
+                <li class="legend-item"><span class="legend-color" style="background:#f59e0b;"></span> <span id="dashLegendExpense">Actual Expense (18%)</span></li>
+                <li class="legend-item"><span class="legend-color" style="background:#ef4444;"></span> <span id="dashLegendVariance">Contingency / Variance (12%)</span></li>
               </ul>
             </div>
           </section>
@@ -910,46 +889,22 @@
           <section class="dashboard-card">
             <div class="card-header">
               <h2 class="card-title">Budget Categories</h2>
-              <button class="ctrl-btn">Scope &#9662;</button>
+              <div style="display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-muted);">
+                <span style="display:inline-block; width:8px; height:8px; background:#2563eb; border-radius:2px;"></span> Planned
+                <span style="display:inline-block; width:8px; height:8px; background:#93c5fd; border-radius:2px; margin-left:4px;"></span> Actual
+              </div>
             </div>
             
             <div style="width: 100%; height: 160px; padding-top: 10px;">
-              <svg viewBox="0 0 450 140" style="width: 100%; height: 100%;">
+              <svg id="dashCategoriesSvg" viewBox="0 0 450 140" style="width: 100%; height: 100%;">
                 <!-- Horizontal guidelines -->
                 <line x1="30" y1="20" x2="430" y2="20" stroke="#f1f5f9" stroke-width="1"/>
                 <line x1="30" y1="55" x2="430" y2="55" stroke="#f1f5f9" stroke-width="1"/>
                 <line x1="30" y1="90" x2="430" y2="90" stroke="#f1f5f9" stroke-width="1"/>
                 <line x1="30" y1="115" x2="430" y2="115" stroke="#e2e8f0" stroke-width="1"/>
 
-                <!-- Category Group 1 (Substructure) -->
-                <rect x="50" y="55" width="14" height="60" rx="3" fill="#2563eb"/>
-                <rect x="68" y="70" width="14" height="45" rx="3" fill="#93c5fd"/>
-                <text x="66" y="130" font-size="9" fill="#94a3b8" text-anchor="middle">Civil</text>
-
-                <!-- Category Group 2 (Structural) -->
-                <rect x="120" y="25" width="14" height="90" rx="3" fill="#2563eb"/>
-                <rect x="138" y="45" width="14" height="70" rx="3" fill="#93c5fd"/>
-                <text x="136" y="130" font-size="9" fill="#94a3b8" text-anchor="middle">Struct</text>
-
-                <!-- Category Group 3 (Architectural) -->
-                <rect x="190" y="35" width="14" height="80" rx="3" fill="#2563eb"/>
-                <rect x="208" y="50" width="14" height="65" rx="3" fill="#93c5fd"/>
-                <text x="206" y="130" font-size="9" fill="#94a3b8" text-anchor="middle">Arch</text>
-
-                <!-- Category Group 4 (MEPF) -->
-                <rect x="260" y="45" width="14" height="70" rx="3" fill="#2563eb"/>
-                <rect x="278" y="60" width="14" height="55" rx="3" fill="#93c5fd"/>
-                <text x="276" y="130" font-size="9" fill="#94a3b8" text-anchor="middle">MEPF</text>
-
-                <!-- Category Group 5 (Finishes) -->
-                <rect x="330" y="50" width="14" height="65" rx="3" fill="#2563eb"/>
-                <rect x="348" y="68" width="14" height="47" rx="3" fill="#93c5fd"/>
-                <text x="346" y="130" font-size="9" fill="#94a3b8" text-anchor="middle">Finishes</text>
-
-                <!-- Category Group 6 (Site Works) -->
-                <rect x="400" y="60" width="14" height="55" rx="3" fill="#2563eb"/>
-                <rect x="418" y="75" width="14" height="40" rx="3" fill="#93c5fd"/>
-                <text x="416" y="130" font-size="9" fill="#94a3b8" text-anchor="middle">Site</text>
+                <!-- Category Group Bars Container -->
+                <g id="dashCategoriesBars"></g>
               </svg>
             </div>
           </section>
@@ -961,7 +916,7 @@
           <div class="card-header">
             <h2 class="card-title">Expense &amp; Work Progress Items</h2>
             <div class="card-controls">
-              <button class="ctrl-btn primary">Rows &#9662;</button>
+              <button class="ctrl-btn primary" type="button" onclick="renderDashboard()">Refresh Data</button>
             </div>
           </div>
 
@@ -970,7 +925,7 @@
               <thead>
                 <tr>
                   <th style="width: 32px;"><input type="checkbox"></th>
-                  <th>Engineer / Assignee</th>
+                  <th>Scope Item / Engineer</th>
                   <th>Scope Item Description</th>
                   <th>Category</th>
                   <th>Planned (₱)</th>
@@ -978,89 +933,17 @@
                   <th>Progress Status</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <td>
-                    <div class="avatar-cell">
-                      <div class="user-avatar-sm" style="background:#bfdbfe; color:#1e40af;">JD</div>
-                      <span>Structural Foundation Pouring</span>
-                    </div>
-                  </td>
-                  <td>Footings &amp; Grade Beams (Class A 3000 PSI)</td>
-                  <td>Civil Works</td>
-                  <td>₱ 850,000.00</td>
-                  <td>₱ 842,500.00</td>
-                  <td><span class="status-pill success">Completed</span></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" checked></td>
-                  <td>
-                    <div class="avatar-cell">
-                      <div class="user-avatar-sm" style="background:#bbf7d0; color:#166534;">MR</div>
-                      <span>Column &amp; Shear Wall Rebar</span>
-                    </div>
-                  </td>
-                  <td>Grade 60 Deformed Bars Fabrication &amp; Tie</td>
-                  <td>Structural</td>
-                  <td>₱ 1,240,000.00</td>
-                  <td>₱ 980,000.00</td>
-                  <td><span class="status-pill active">In Progress</span></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <td>
-                    <div class="avatar-cell">
-                      <div class="user-avatar-sm" style="background:#fef08a; color:#854d0e;">AT</div>
-                      <span>Suspended Slab Formwork</span>
-                    </div>
-                  </td>
-                  <td>Phenolic Board &amp; Scaffolding Shoring</td>
-                  <td>Formworks</td>
-                  <td>₱ 520,000.00</td>
-                  <td>₱ 490,000.00</td>
-                  <td><span class="status-pill active">In Progress</span></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <td>
-                    <div class="avatar-cell">
-                      <div class="user-avatar-sm" style="background:#fed7aa; color:#9a3412;">EL</div>
-                      <span>MEPF Conduiting &amp; Piping</span>
-                    </div>
-                  </td>
-                  <td>Rough-in PVC conduit &amp; Sanitary stacks</td>
-                  <td>Utilities</td>
-                  <td>₱ 680,000.00</td>
-                  <td>₱ 610,000.00</td>
-                  <td><span class="status-pill warning">Review</span></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <td>
-                    <div class="avatar-cell">
-                      <div class="user-avatar-sm" style="background:#e9d5ff; color:#6b21a8;">KC</div>
-                      <span>Masonry &amp; CHB Laying</span>
-                    </div>
-                  </td>
-                  <td>6-inch CHB Wall with 10mm rebars at 600mm</td>
-                  <td>Architectural</td>
-                  <td>₱ 430,000.00</td>
-                  <td>₱ 390,000.00</td>
-                  <td><span class="status-pill active">In Progress</span></td>
-                </tr>
+              <tbody id="dashExpenseTableBody">
+                <!-- Rendered dynamically -->
               </tbody>
             </table>
           </div>
 
           <div class="table-pagination">
             <button class="page-btn">&lt;</button>
-            <button class="page-btn">1</button>
+            <button class="page-btn active">1</button>
             <button class="page-btn">2</button>
             <button class="page-btn">3</button>
-            <button class="page-btn active">4</button>
-            <button class="page-btn">5</button>
-            <button class="page-btn">6</button>
             <button class="page-btn">&gt;</button>
           </div>
         </section>
@@ -1070,5 +953,264 @@
 
   </div>
 
+  <script src="storage_manager.js"></script>
+  <script>
+    function formatPeso(val) {
+      return Number(val || 0).toLocaleString('en-PH', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function renderDashboard() {
+      const data = FCLStorage.getLiveDashboardData();
+      
+      // 1. Project Title & Status Badge
+      const statusBadge = document.getElementById('dashStatusBadge');
+      const projectSub = document.getElementById('dashProjectSub');
+      
+      if (statusBadge) {
+        if (data.isLive) {
+          statusBadge.textContent = '● LIVE ESTIMATE';
+          statusBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+          statusBadge.style.color = '#059669';
+          statusBadge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+        } else {
+          statusBadge.textContent = '● DEMO PREVIEW';
+          statusBadge.style.background = 'rgba(37, 99, 235, 0.1)';
+          statusBadge.style.color = '#2563eb';
+          statusBadge.style.borderColor = 'rgba(37, 99, 235, 0.3)';
+        }
+      }
+      if (projectSub) {
+        projectSub.textContent = `${data.projectName} • ${data.projectCode}`;
+      }
+
+      // 2. S-Curve Dynamic Render
+      renderSCurve(data.plannedProgress, data.actualProgress);
+
+      // 3. Donut Chart Dynamic Render
+      const totalBudgetEl = document.getElementById('dashTotalBudget');
+      if (totalBudgetEl) {
+        totalBudgetEl.textContent = 'Total: ₱' + formatPeso(data.totalBudget);
+      }
+      renderDonut(data.donutShares);
+
+      // 4. Budget Categories Bar Chart
+      renderCategories(data.categories);
+
+      // 5. Work Items Table
+      renderItemsTable(data.items);
+    }
+
+    function renderSCurve(plannedPct, actualPct) {
+      const startX = 60, endX = 880, baseY = 190, topY = 40;
+      const height = baseY - topY; // 150
+      const width = endX - startX; // 820
+
+      // Compute 10 points along the S-curve
+      const numPoints = 10;
+      const points = [];
+      for (let i = 0; i < numPoints; i++) {
+        const t = i / (numPoints - 1);
+        const x = Math.round(startX + t * width);
+        // Sigmoid curve
+        const sigmoid = 1 / (1 + Math.exp(-6 * (t - 0.5)));
+        const y = Math.round(baseY - sigmoid * height);
+        points.push({ x, y, t, label: (i * 2 + 1).toFixed(1) });
+      }
+
+      // Build path d
+      let pathD = `M ${points[0].x} ${points[0].y}`;
+      for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1];
+        const curr = points[i];
+        const cpx = (prev.x + curr.x) / 2;
+        pathD += ` C ${cpx} ${prev.y}, ${cpx} ${curr.y}, ${curr.x} ${curr.y}`;
+      }
+
+      const strokePath = document.getElementById('scurveStrokePath');
+      if (strokePath) strokePath.setAttribute('d', pathD);
+
+      const fillPath = document.getElementById('scurveFillPath');
+      if (fillPath) {
+        fillPath.setAttribute('d', `${pathD} L ${endX} ${baseY} L ${startX} ${baseY} Z`);
+      }
+
+      // Milestone dashed line & tooltip
+      const progressRatio = Math.max(0.1, Math.min(0.95, (actualPct || 62.4) / 100));
+      const milestoneX = Math.round(startX + progressRatio * width);
+      const milestoneY = Math.round(baseY - (1 / (1 + Math.exp(-6 * (progressRatio - 0.5)))) * height);
+
+      const milestoneLine = document.getElementById('scurveMilestoneLine');
+      if (milestoneLine) {
+        milestoneLine.setAttribute('x1', milestoneX);
+        milestoneLine.setAttribute('x2', milestoneX);
+      }
+
+      const tooltip = document.getElementById('scurveTooltip');
+      if (tooltip) {
+        const tooltipX = Math.max(70, Math.min(800, milestoneX - 58));
+        tooltip.setAttribute('transform', `translate(${tooltipX}, 20)`);
+      }
+      const tooltipBottom = document.getElementById('scurveTooltipBottom');
+      if (tooltipBottom) {
+        tooltipBottom.textContent = `${actualPct}% Actual`;
+      }
+
+      // Nodes
+      const nodesGroup = document.getElementById('scurveNodes');
+      if (nodesGroup) {
+        let nodesHtml = '';
+        points.forEach((pt) => {
+          const isMilestone = Math.abs(pt.x - milestoneX) < 45;
+          if (isMilestone) {
+            nodesHtml += `<circle cx="${milestoneX}" cy="${milestoneY}" r="6" fill="#ffffff" stroke="#2563eb" stroke-width="3"/>`;
+          } else {
+            nodesHtml += `<circle cx="${pt.x}" cy="${pt.y}" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>`;
+          }
+        });
+        nodesGroup.innerHTML = nodesHtml;
+      }
+
+      // Labels
+      const labelsGroup = document.getElementById('scurveLabels');
+      if (labelsGroup) {
+        let labelsHtml = '';
+        points.forEach((pt) => {
+          labelsHtml += `<text x="${pt.x}" y="212" font-size="10" fill="#94a3b8" text-anchor="middle">${pt.label}</text>`;
+        });
+        labelsGroup.innerHTML = labelsHtml;
+      }
+    }
+
+    function renderDonut(shares) {
+      const circ = 238.76;
+      const target = shares.target || 40;
+      const projection = shares.projection || 30;
+      const expense = shares.expense || 20;
+      const variance = shares.variance || 10;
+
+      const lenTarget = (target / 100) * circ;
+      const lenProj = (projection / 100) * circ;
+      const lenExp = (expense / 100) * circ;
+      const lenVar = (variance / 100) * circ;
+
+      const elTarget = document.getElementById('dashDonutTarget');
+      const elProj = document.getElementById('dashDonutProjection');
+      const elExp = document.getElementById('dashDonutExpense');
+      const elVar = document.getElementById('dashDonutVariance');
+
+      if (elTarget) {
+        elTarget.setAttribute('stroke-dasharray', `${lenTarget.toFixed(1)} ${circ}`);
+        elTarget.setAttribute('stroke-dashoffset', '0');
+      }
+      if (elProj) {
+        elProj.setAttribute('stroke-dasharray', `${lenProj.toFixed(1)} ${circ}`);
+        elProj.setAttribute('stroke-dashoffset', `-${lenTarget.toFixed(1)}`);
+      }
+      if (elExp) {
+        elExp.setAttribute('stroke-dasharray', `${lenExp.toFixed(1)} ${circ}`);
+        elExp.setAttribute('stroke-dashoffset', `-${(lenTarget + lenProj).toFixed(1)}`);
+      }
+      if (elVar) {
+        elVar.setAttribute('stroke-dasharray', `${lenVar.toFixed(1)} ${circ}`);
+        elVar.setAttribute('stroke-dashoffset', `-${(lenTarget + lenProj + lenExp).toFixed(1)}`);
+      }
+
+      const legT = document.getElementById('dashLegendTarget');
+      const legP = document.getElementById('dashLegendProjection');
+      const legE = document.getElementById('dashLegendExpense');
+      const legV = document.getElementById('dashLegendVariance');
+      if (legT) legT.textContent = `Target Cost (${target}%)`;
+      if (legP) legP.textContent = `Projection (${projection}%)`;
+      if (legE) legE.textContent = `Actual Expense (${expense}%)`;
+      if (legV) legV.textContent = `Contingency / Variance (${variance}%)`;
+    }
+
+    function renderCategories(categories) {
+      const container = document.getElementById('dashCategoriesBars');
+      if (!container) return;
+
+      const maxVal = Math.max(...categories.map(c => Math.max(c.planned, c.actual)), 1000);
+      const maxHeight = 90; // max px height for bars
+      const baseY = 115;
+      const startX = 40;
+      const gap = 64;
+
+      let html = '';
+      categories.slice(0, 6).forEach((cat, i) => {
+        const x = startX + i * gap;
+        const hPlanned = Math.max(8, Math.round((cat.planned / maxVal) * maxHeight));
+        const hActual = Math.max(6, Math.round((cat.actual / maxVal) * maxHeight));
+        const yPlanned = baseY - hPlanned;
+        const yActual = baseY - hActual;
+
+        html += `
+          <g>
+            <title>${cat.name}: Planned ₱${formatPeso(cat.planned)}, Actual ₱${formatPeso(cat.actual)}</title>
+            <rect x="${x}" y="${yPlanned}" width="14" height="${hPlanned}" rx="3" fill="#2563eb"/>
+            <rect x="${x + 18}" y="${yActual}" width="14" height="${hActual}" rx="3" fill="#93c5fd"/>
+            <text x="${x + 16}" y="130" font-size="9" fill="#94a3b8" text-anchor="middle">${cat.name}</text>
+          </g>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function renderItemsTable(items) {
+      const tbody = document.getElementById('dashExpenseTableBody');
+      if (!tbody) return;
+
+      const avatarColors = [
+        { bg: '#bfdbfe', text: '#1e40af' },
+        { bg: '#bbf7d0', text: '#166534' },
+        { bg: '#fef08a', text: '#854d0e' },
+        { bg: '#fed7aa', text: '#9a3412' },
+        { bg: '#e9d5ff', text: '#6b21a8' },
+        { bg: '#e2e8f0', text: '#475569' }
+      ];
+
+      let html = '';
+      items.forEach((item, idx) => {
+        const col = avatarColors[idx % avatarColors.length];
+        let statusClass = 'active';
+        if (item.status === 'Completed') statusClass = 'success';
+        else if (item.status === 'Review' || item.status === 'Pending') statusClass = 'warning';
+
+        html += `
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>
+              <div class="avatar-cell">
+                <div class="user-avatar-sm" style="background:${col.bg}; color:${col.text};">${item.avatar || 'IT'}</div>
+                <span>${escapeHtml(item.name)}</span>
+              </div>
+            </td>
+            <td>${escapeHtml(item.desc)}</td>
+            <td>${escapeHtml(item.cat)}</td>
+            <td>₱ ${formatPeso(item.planned)}</td>
+            <td>₱ ${formatPeso(item.actual)}</td>
+            <td><span class="status-pill ${statusClass}">${item.status}</span></td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderDashboard();
+      window.addEventListener('storage', () => renderDashboard());
+    });
+  </script>
 </body>
 </html>
