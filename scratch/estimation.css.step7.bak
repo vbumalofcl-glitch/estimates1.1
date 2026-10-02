@@ -1,0 +1,4918 @@
+:root {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --line: #cbd5e1;
+  --text: #0f172a;
+  --muted: #475569;
+  --accent: #2563eb;
+  --accent-dark: #1d4ed8;
+  --danger: #dc2626;
+  --soft: #eff6ff;
+  --accent-gradient: linear-gradient(180deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+  --danger-gradient: linear-gradient(180deg, #f87171 0%, #dc2626 50%, #b91c1c 100%);
+  --gloss-overlay: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(0, 0, 0, 0.03) 50%, rgba(0, 0, 0, 0.12) 100%);
+  --gloss-light: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 100%);
+  --btn-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.02);
+  --active-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.15);
+}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: var(--bg); color: var(--text); }
+    .container {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 10px;
+    }
+    h1, h2 { margin: 0 0 8px; }
+    p { margin: 0; color: var(--muted); }
+    .header, .section-title, .sheet-nav, .toolbar, .work-actions, .totals-bar { display: flex; gap: 4px; align-items: center; }
+    .work-actions { flex-wrap: nowrap; justify-content: center; white-space: nowrap; }
+    .header, .section-title {
+      justify-content: space-between;
+      margin-bottom: 2px;
+    }
+    .header { align-items: flex-start; gap: 8px; }
+    .header h1 { margin-bottom: 0; line-height: 1.1; font-size: 20px; }
+    .header p { line-height: 1.1; }
+    .sheet-nav { margin: 0 0 8px; }
+    .toolbar { margin-top: 0; }
+    .header-save-toolbar { justify-content: flex-end; align-items: flex-start; flex-wrap: wrap; gap: 3px; max-width: 72%; }
+    .header-save-toolbar button { padding: 4px 7px; font-size: 11px; line-height: 1.15; }
+    .header-save-toolbar .btn-primary { white-space: nowrap; }
+    .header-save-btn, .header-json-btn, .header-excel-btn, .header-proposal-action { display: none; }
+    .header-save-btn.active-save, .header-json-btn.active-save, .header-excel-btn.active-save, .header-proposal-action.active-save { display: inline-flex; }
+    .totals-bar { justify-content: flex-end; margin-top: 8px; font-weight: 700; }
+    .gantt-col-resizer:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+    .boq-col-resizer:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px;
+      margin-bottom: 8px;
+      box-shadow: var(--card-shadow);
+      position: relative;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: rgba(255, 255, 255, 0.8);
+      pointer-events: none;
+      border-radius: 6px 6px 0 0;
+    }
+    .sheet { display: none; }
+    .sheet.active { display: block; }
+    button {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+      color: var(--text);
+      box-shadow: var(--btn-shadow);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.1s ease, border-color 0.1s ease, box-shadow 0.1s ease, transform 0.1s ease;
+    }
+    button::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      pointer-events: none;
+    }
+    button:hover {
+      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+      border-color: #94a3b8;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+    button:active {
+      box-shadow: var(--active-shadow);
+      transform: translateY(0.5px);
+    }
+    .btn-primary {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      border-color: var(--accent-dark);
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+      border-color: #1e3a8a;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    .btn-secondary {
+      background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+      color: #0f172a;
+      border-color: #cbd5e1;
+    }
+    .btn-secondary:hover {
+      background: linear-gradient(180deg, #f1f5f9 0%, #cbd5e1 100%);
+      border-color: #94a3b8;
+    }
+    .btn-danger {
+      background: var(--danger-gradient);
+      color: #ffffff;
+      border-color: #991b1b;
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    .btn-danger:hover {
+      background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
+      border-color: #7f1d1d;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    .btn-tab {
+      background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+      color: #1e40af;
+      border-color: #bfdbfe;
+    }
+    .btn-tab:hover {
+      background: linear-gradient(180deg, #dbeafe 0%, #bfdbfe 100%);
+      color: #1e3a8a;
+    }
+    .btn-tab.active {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      border-color: var(--accent-dark);
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+      box-shadow: var(--active-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .home-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    .btn-small { padding: 2px 6px; font-size: 11px; }
+    .plus-btn { min-width: 18px; width: 18px; height: 18px; padding: 0; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
+
+    input[type="text"], input:not([type]) {
+      text-transform: capitalize;
+    }
+    .toggle-btn {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      min-width: 12px;
+      width: 12px;
+      height: 18px;
+      padding: 0;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #6b7280;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .toggle-btn::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      display: inline-block;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(45deg);
+      transform-origin: center;
+      margin-top: -2px;
+    }
+    .toggle-btn.collapsed::before {
+      transform: rotate(-45deg);
+      margin-top: 0;
+      margin-left: -2px;
+    }
+    .grid, .summary { display: grid; grid-template-columns: repeat(4, minmax(180px, 1fr)); gap: 8px; }
+    .project-info-grid { display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: 8px; }
+    .project-subject-row { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px; }
+    .project-subject-row input {
+      width: 100%;
+      height: 22px;
+      padding: 2px 4px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+      background: #ffffff;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
+      transition: border-color 0.1s ease, box-shadow 0.1s ease;
+    }
+    .project-subject-row input:focus {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15), inset 0 1px 2px rgba(15, 23, 42, 0.05);
+    }
+    #boqSheet .section-title h2, #boqSheet .boq-title-row h2 { text-transform: uppercase !important; font-size: 14pt !important; line-height: 14pt !important; }
+    @media (max-width: 980px) { .project-info-grid { grid-template-columns: repeat(2, minmax(180px, 1fr)); } }
+    @media (max-width: 640px) { .project-info-grid { grid-template-columns: 1fr; } }
+    .field label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 2px; font-weight: 700; text-transform: uppercase; }
+    .field input, td input, td select {
+      width: 100%; min-width: 0; max-width: 100%; padding: 0 2px; font-size: 11px; border: none; outline: none; background: transparent; box-shadow: none; height: 18px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .field input {
+      border: 1px solid var(--line);
+      background: #ffffff;
+      height: 22px;
+      padding: 2px 4px;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
+      transition: border-color 0.1s ease, box-shadow 0.1s ease;
+    }
+    .field input:focus {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15), inset 0 1px 2px rgba(15, 23, 42, 0.05);
+    }
+    .project-content-field { margin-top: 8px; }
+    .field textarea {
+      width: 100%;
+      min-height: 80px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 6px;
+      font-size: 11px;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ffffff;
+      resize: vertical;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
+      transition: border-color 0.1s ease, box-shadow 0.1s ease;
+    }
+    .field textarea:focus {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15), inset 0 1px 2px rgba(15, 23, 42, 0.05);
+    }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); }
+    table {
+      width: 100%;
+      min-width: 980px;
+      border-collapse: collapse;
+      background: #fff;
+      table-layout: fixed;
+    }
+    #ganttTaskTable, #qtyTaskTable {
+      min-width: 0 !important;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 2px 4px;
+      vertical-align: middle;
+      text-align: left;
+      font-size: 11px; overflow: hidden; word-break: break-word; overflow-wrap: anywhere; white-space: normal; }
+    thead th {
+      background: var(--accent) !important;
+      color: #ffffff !important;
+      text-transform: uppercase !important;
+      font-weight: bold !important;
+      border: 1px solid var(--accent-dark) !important;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      text-align: center;
+      vertical-align: middle;
+    }
+    thead th .toggle-btn {
+      color: #ffffff !important;
+    }
+    .number { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; }
+    .plus-cell { text-align: center; vertical-align: middle; white-space: nowrap; }
+    .work-cell { min-width: 0; width: 100%; overflow: hidden; }
+    .work-stack { display: grid; gap: 1px; }
+    #priceListTable th, #priceListTable td { white-space: nowrap; }
+    #priceListTable td:last-child, #priceListTable th:last-child { text-align: center; }
+    #priceListTable td { padding-top: 1px; padding-bottom: 1px; }
+    #priceListTable input, #priceListTable select { height: 16px; }
+
+    /* Center Qty values and hide number input spinner controls in D.U.P.A. and BOQ tables */
+    #analysisTable td:nth-child(5), #analysisTable td:nth-child(5) input,
+    #boqTable td:nth-child(5), #boqTable td:nth-child(5) input {
+      text-align: center;
+    }
+    #analysisTable td:nth-child(5) input[type="number"],
+    #boqTable td:nth-child(5) input[type="number"] {
+      appearance: textfield;
+      -moz-appearance: textfield;
+    }
+    #analysisTable td:nth-child(5) input[type="number"]::-webkit-outer-spin-button,
+    #analysisTable td:nth-child(5) input[type="number"]::-webkit-inner-spin-button,
+    #boqTable td:nth-child(5) input[type="number"]::-webkit-outer-spin-button,
+    #boqTable td:nth-child(5) input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Center Qty and Unit column values in Price List, D.U.P.A., and BOQ tables */
+    #priceListTable td:nth-child(5),
+    #priceListTable td:nth-child(5) input,
+    #analysisTable td:nth-child(5),
+    #analysisTable td:nth-child(5) input,
+    #analysisTable td:nth-child(6),
+    #analysisTable td:nth-child(6) input,
+    #boqTable td:nth-child(5),
+    #boqTable td:nth-child(5) input,
+    #boqTable td:nth-child(6),
+    #boqTable td:nth-child(6) input {
+      text-align: center;
+    }
+    .inline-cell { display: flex; align-items: center; gap: 0; min-width: 0; white-space: nowrap; overflow: hidden; }
+    .inline-cell select, .inline-cell input { flex: 1 1 auto; min-width: 0; }
+    .inline-cell .toggle-btn { flex: 0 0 12px; margin: 0; }
+    .inline-cell .toggle-btn + select,
+    .inline-cell .toggle-btn + input,
+    .inline-cell .toggle-btn + span { margin-left: 0; }
+    
+    .gantt-summary-cell-wrapper {
+      position: relative !important;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 4px;
+      box-sizing: border-box;
+      border-right: none !important;
+      overflow: visible !important;
+    }
+    .gantt-summary-cell-wrapper::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background-color: var(--line);
+      transform: translateX(50%);
+      z-index: 1;
+    }
+    .gantt-summary-cell-wrapper:hover .dropdown-arrow {
+      display: inline-block !important;
+    }
+
+    .price-inline { display: flex; align-items: center; gap: 0; min-width: 0; white-space: nowrap; overflow: hidden; }
+    .price-inline .subcat-label { font-size: 10px; color: #6b7280; flex: 0 0 auto; white-space: nowrap; }
+    .price-inline .material-input { flex: 1 1 auto; min-width: 0; }
+    .indent-1 { padding-left: 0; font-weight: 700; }
+    .indent-2 { padding-left: 4mm; }
+    .indent-3 { padding-left: 8mm; }
+    .indent-4 { padding-left: 12mm; }
+    .row-category { background: #dbeafe; font-weight: bold !important; }
+    .row-category td { border-top: 1px solid #93c5fd !important; border-bottom: 1px solid #93c5fd !important; color: #1e3a8a !important; }
+    .row-subcategory { background: #fef3c7; font-weight: bold !important; }
+    .row-subcategory td { border-top: 1px solid #fcd34d !important; border-bottom: 1px solid #fcd34d !important; color: #78350f !important; }
+    .row-category td,
+    .row-category input,
+    .row-category select,
+    .row-subcategory td,
+    .row-subcategory input,
+    .row-subcategory select {
+      font-weight: bold !important;
+    }
+    .row-subsubcategory { background: #ffffff; font-style: italic; }
+    .row-subsubsubcategory { background: #ffffff; font-style: italic; }
+    .row-spacer td {
+      height: 18px;
+      padding: 0;
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    /* BOQ hierarchy display updates */
+    #boqTable tbody .row-subsubcategory.has-children { background: #dcfce7 !important; }
+    #boqTable tbody .row-subsubcategory.has-children td { border-top: 1px solid #86efac !important; border-bottom: 1px solid #86efac !important; color: #14532d !important; }
+    #boqTable tbody .row-subsubsubcategory,
+    #boqTable tbody .row-subsubsubcategory td,
+    #boqTable tbody .row-subsubsubcategory input,
+    #boqTable tbody .row-subsubsubcategory select,
+    #boqTable tbody .row-subsubsubcategory .number {
+      font-style: italic !important;
+      font-weight: 400 !important;
+    }
+
+    .row-total { background: #f1f5f9; font-weight: bold !important; font-style: normal !important; }
+    .row-total td {
+      border-top: 2px solid #64748b !important;
+      border-bottom: 2px solid #64748b !important;
+      color: #0f172a !important;
+      text-align: center;
+      vertical-align: middle;
+      font-weight: bold !important;
+      font-style: normal !important;
+    }
+    .row-grand-total { background: #bae6fd; font-weight: 800 !important; }
+    .row-grand-total td {
+      border-top: 2px solid #0284c7 !important;
+      border-bottom: 2px solid #0284c7 !important;
+      color: #0369a1 !important;
+    }
+    .row-total .number { text-align: right; font-weight: bold !important; font-style: normal !important; }
+    .total-label { text-align: center; font-weight: bold !important; font-style: normal !important; text-transform: uppercase !important; }
+    #boqTable .total-label { text-align: left; padding-left: 4px; }
+    .boq-section-title { align-items: center; overflow-x: auto; white-space: nowrap; }
+    .boq-title-row { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; width: 100%; min-width: max-content; }
+    .boq-title-row h2 { margin-bottom: 0; flex: 0 0 auto; }
+    .boq-multipliers { display: flex; flex-wrap: nowrap; gap: 8px; align-items: center; margin-top: 0; flex: 1 1 auto; width: 100%; }
+    .boq-multiplier-field { display: inline-flex; align-items: center; gap: 4px; min-width: 0; white-space: nowrap; }
+    .boq-multiplier-field label { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+    .percent-input-wrap { position: relative; display: inline-block; width: 2cm; flex: 0 0 2cm; }
+    .boq-multiplier-field input { width: 2cm; height: 22px; border: 1px solid var(--line); border-radius: 4px; padding: 2px 18px 2px 4px; text-align: center; font-size: 11px; background: #fff; appearance: textfield; -moz-appearance: textfield; }
+    .boq-multiplier-field input::-webkit-outer-spin-button,
+    .boq-multiplier-field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    .boq-summary-btn { margin-left: auto; white-space: nowrap; }
+    .summary-sheet-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .summary-area-field { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+    .summary-area-field input { width: 90px; height: 22px; border: 1px solid var(--line); border-radius: 4px; padding: 2px 4px; text-align: center; font-size: 11px; background: #fff; }
+    #boqSummaryTable th, #boqSummaryTable td { white-space: nowrap; }
+    #boqSummaryTable tbody tr { height: 16pt !important; }
+    #boqSummaryTable .row-subcategory td,
+    #boqSummaryTable .row-subcategory td span { font-weight: normal !important; }
+    #boqSummaryTable .summary-total-row { background: #f1f5f9; font-weight: bold !important; text-transform: uppercase; }
+    #boqSummaryTable .summary-total-row td { border-top: 2px solid #64748b !important; border-bottom: 2px solid #64748b !important; color: #0f172a !important; }
+    #boqSummaryTable .summary-total-row td,
+    #boqSummaryTable .summary-total-row td span { font-weight: bold !important; }
+    .percent-symbol { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--muted); pointer-events: none; font-weight: 700; }
+    #analysisTable tbody .row-category { background: #dbeafe; font-weight: 700; }
+    #analysisTable tbody .row-category td { border-top: 1px solid #93c5fd !important; border-bottom: 1px solid #93c5fd !important; color: #1e3a8a !important; }
+    #analysisTable tbody .row-subcategory { background: #fef3c7; }
+    #analysisTable tbody .row-subcategory td { border-top: 1px solid #fcd34d !important; border-bottom: 1px solid #fcd34d !important; color: #78350f !important; }
+    #analysisTable tbody .row-subsubcategory { background: #ffffff; font-style: italic; }
+    #analysisTable tbody .row-subsubcategory input,
+    #analysisTable tbody .row-subsubcategory select,
+    #analysisTable tbody .row-subsubcategory .number { font-style: italic; }
+
+    /* Gantt Chart Styles */
+    .gantt-view-options button.activeScale {
+      background-color: var(--accent) !important;
+      color: white !important;
+      border-color: var(--accent-dark) !important;
+    }
+    .gantt-divider {
+      width: 6px;
+      cursor: col-resize;
+      background: var(--line, #cfd8e3);
+      flex-shrink: 0;
+      user-select: none;
+      transition: background 0.15s;
+      z-index: 15;
+    }
+    .gantt-divider:hover, .gantt-divider:active {
+      background: var(--accent, #2563eb) !important;
+    }
+    .gantt-row {
+      height: 36px;
+      box-sizing: border-box;
+    }
+    .gantt-container th, .gantt-container td,
+    #qtyTaskTable th, #qtyTaskTable td {
+      border-top: none !important;
+      box-sizing: border-box !important;
+    }
+    .gantt-row td {
+      height: 36px;
+      padding: 0 4px !important;
+      vertical-align: middle;
+      font-size: 11px;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      box-sizing: border-box;
+    }
+    .gantt-row td input {
+      width: 100%;
+      height: 24px;
+      border: 1px solid transparent;
+      background: transparent;
+      padding: 2px 4px;
+      font-size: 11px;
+      box-sizing: border-box;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+    .gantt-row td input:focus, .gantt-row td input:hover {
+      border-color: var(--accent-light);
+      background: #fff;
+    }
+    .gantt-timeline-row {
+      height: 36px;
+      box-sizing: border-box;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+      z-index: 2;
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      min-width: 100% !important;
+    }
+    .gantt-grid-days {
+      background-image: linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 28px 100%;
+    }
+    .gantt-grid-weeks {
+      background-image: linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 64px 100%;
+    }
+    .gantt-grid-months {
+      background-image: linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 120px 100%;
+    }
+    .gantt-bar-wrapper {
+      position: absolute;
+      height: 18px;
+      top: 9px;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    .gantt-bar-wrapper:hover .gantt-bar-handle {
+      opacity: 1 !important;
+    }
+    .gantt-bar {
+      width: 100%;
+      height: 100%;
+      background: var(--gloss-overlay), linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+      border-radius: 3px;
+      position: relative;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.15);
+      border: 1px solid #1e40af;
+      box-sizing: border-box;
+    }
+    .gantt-progress-bar {
+      height: 100%;
+      background: var(--gloss-overlay), linear-gradient(90deg, #10b981 0%, #059669 100%);
+      border-radius: 3px 0 0 3px;
+      border-right: 1px solid #047857;
+      box-sizing: border-box;
+    }
+    .gantt-summary-bar {
+      width: 100%;
+      height: 6px;
+      background: var(--gloss-overlay), #0f172a;
+      position: relative;
+      top: 6px;
+      box-sizing: border-box;
+    }
+    .gantt-summary-bar::before, .gantt-summary-bar::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+    }
+    .gantt-summary-bar::before {
+      left: 0;
+      top: 0;
+      border-width: 10px 0 0 10px;
+      border-color: #0f172a transparent transparent transparent;
+    }
+    .gantt-summary-bar::after {
+      right: 0;
+      top: 0;
+      border-width: 10px 10px 0 0;
+      border-color: #0f172a transparent transparent transparent;
+    }
+    .gantt-bar-label {
+      position: absolute;
+      left: calc(100% + 8px);
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      font-weight: 700;
+      color: #374151;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .gantt-timeline-header-row {
+      display: flex;
+      box-sizing: border-box;
+      border-bottom: 1px solid var(--line);
+    }
+    .gantt-header-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #374151;
+      border-right: 1px solid var(--line) !important;
+      box-sizing: border-box;
+      height: 24px;
+      background: #f1f5f9;
+      overflow: visible !important;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      position: relative !important;
+    }
+    .gantt-header-cell::after {
+      display: none !important;
+    }
+
+    .cover-letter-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .cover-letter-page { background: #fff; border: 1px solid var(--line); width: 210mm; min-height: 297mm; max-width: 100%; padding: 10mm; margin: 0 auto; line-height: 1.45; box-sizing: border-box; }
+    .cover-letter-header { text-align: center; margin-bottom: 18px; }
+    .cover-company-logo {
+      display: block;
+      width: min(100%, 760px);
+      max-height: 70px;
+      object-fit: contain;
+      margin: 0 auto 14px;
+    }
+    /* HARD FINAL META ALIGNMENT OVERRIDE: left labels, aligned colon, aligned linked values */
+    .cover-letter-meta .cover-meta-row {
+      display: grid !important;
+      grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr) !important;
+      align-items: center !important;
+      column-gap: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .cover-letter-meta .cover-meta-label { display: contents !important; }
+    .cover-letter-meta .cover-meta-text {
+      grid-column: 1 !important;
+      justify-self: start !important;
+      text-align: left !important;
+      width: 32mm !important;
+      min-width: 32mm !important;
+      max-width: 32mm !important;
+    }
+    .cover-letter-meta .cover-meta-colon {
+      grid-column: 3 !important;
+      justify-self: start !important;
+      text-align: left !important;
+      width: 3mm !important;
+      min-width: 3mm !important;
+      max-width: 3mm !important;
+    }
+    .cover-letter-meta .cover-linked-value,
+    #coverProposalDate, #coverProjectName, #coverClientName, #coverSubject {
+      grid-column: 5 !important;
+      margin-left: 0 !important;
+      text-align: left !important;
+      white-space: nowrap !important;
+    }
+    @media print {
+      @page { size: A4; margin: 10mm; }
+      .cover-company-logo { max-height: 70px !important; height: auto !important; }
+      body.print-cover-proposal { background: #fff; }
+      body.print-cover-proposal .header,
+      body.print-cover-proposal .sheet-nav,
+      body.print-cover-proposal .cover-letter-toolbar,
+      body.print-cover-proposal .sheet:not(#coverLetterSheet) { display: none !important; }
+      body.print-cover-proposal #coverLetterSheet { display: block !important; }
+      body.print-cover-proposal #coverLetterSheet .card { box-shadow: none; border: 0; padding: 0; margin: 0; }
+      body.print-cover-proposal .cover-letter-page { border: 0; width: auto; min-height: auto; max-width: none; padding: 0; margin: 0; box-sizing: border-box; }
+      body.print-cover-proposal .cover-letter-page input,
+      body.print-cover-proposal .cover-letter-page textarea,
+      body.print-cover-proposal .cover-letter-body [contenteditable="true"] { min-height: 28px; border: 1px solid var(--line); border-radius: 4px; padding: 6px; outline: none; background: #fff; text-align: justify; font-size: 10pt; line-height: 1.45; }
+      body.print-cover-proposal .container { padding: 0; }
+    }
+
+    .cover-letter-header h2 { margin-bottom: 4px; text-transform: uppercase; }
+    .cover-letter-meta { display: grid; grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr); row-gap: 1px; column-gap: 0; margin: 4px 0 6px; align-items: center; overflow: visible; }
+    .cover-letter-meta label, .cover-letter-meta .cover-linked-value, .cover-meta-label { min-height: 18px; display: flex; align-items: center; line-height: 1.2; }
+    .cover-linked-value { display: flex; align-items: center; width: 100%; min-width: 0; min-height: 18px; border: 0; padding: 0; font-size: 10pt; line-height: 1.2; background: transparent; color: var(--text); }
+    #coverProjectName, #coverClientName { white-space: nowrap; overflow: visible; text-overflow: clip; }
+    .cover-letter-meta label, .cover-letter-terms label, .cover-meta-label { font-size: 10pt; color: var(--muted); font-weight: 800; text-transform: uppercase; }
+    .cover-letter-page input, .cover-letter-page textarea { width: 100%; border: 1px solid var(--line); border-radius: 4px; padding: 4px 6px; font-size: 12px; background: #fff; }
+    .cover-letter-page textarea { min-height: 72px; resize: vertical; font-family: Arial, Helvetica, sans-serif; line-height: 1.4; }
+    .cover-letter-body { display: grid; gap: 8px; margin: 12px 0; font-size: 10pt; }
+    .cover-letter-body [contenteditable="true"] { min-height: 34px; border: 1px solid var(--line); border-radius: 4px; padding: 8px; outline: none; background: #fff; text-align: justify; line-height: 1.45; }
+    .proposal-amount-box { border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 6px; padding: 10px; font-weight: 700; }
+    .proposal-amount-box span { font-size: 15px; font-weight: 900; }
+    .proposal-vat-note { font-size: 11px; color: var(--muted); margin: -4px 0 4px; font-weight: 700; }
+    .cover-letter-section-title { margin: 16px 0 6px; font-size: 12px; font-weight: 900; text-transform: uppercase; color: #111827; letter-spacing: .02em; }
+    .cover-letter-terms { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+    .cover-letter-terms > div {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px 14px;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .cover-letter-terms > div::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: rgba(255, 255, 255, 0.8);
+      pointer-events: none;
+      border-radius: 6px 6px 0 0;
+    }
+    .cover-summary-table { margin-top: 12px; overflow: visible; }
+    .cover-summary-table table { width: 100%; min-width: 0; table-layout: fixed; }
+    #coverSummaryTable th, #coverSummaryTable td { box-sizing: border-box; }
+    #coverSummaryTable th { white-space: nowrap; font-size: 10px; padding: 4px 3px; }
+    #coverSummaryTable td { font-size: 10px; padding: 4px 3px; }
+    #coverSummaryTable .number { white-space: nowrap; }
+    .cover-letter-signatures { display: flex; flex-direction: column; gap: 24px; margin-top: 28px; }
+    .cover-letter-signature-line { border-bottom: 1px solid #111827; height: 38px; margin-bottom: 6px; }
+    @media (max-width: 700px) { .cover-letter-terms, .cover-letter-signatures { grid-template-columns: 1fr; } .cover-letter-meta { display: grid; grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr); row-gap: 1px; column-gap: 0; margin: 4px 0 6px; align-items: center; overflow: visible; } .cover-letter-page { width: 100%; min-height: auto; padding: 12px; } }
+
+    .summary-box { background: var(--soft); border: 1px solid #dbe8ff; border-radius: 4px; padding: 8px; }
+    .summary-box .label { font-size: 11px; color: var(--muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+    .summary-box .value { font-size: 18px; font-weight: 800; }
+
+    .boq-signatures {
+      display: flex;
+      justify-content: space-between;
+      gap: 48px;
+      margin-top: 34px;
+      padding: 0 32px 10px;
+    }
+    .signature-block {
+      flex: 1 1 0;
+      max-width: 360px;
+      text-align: center;
+    }
+    .signature-heading {
+      text-align: left;
+      font-weight: 700;
+      font-size: 12px;
+      margin-bottom: 34px;
+    }
+    .signature-line {
+      border-bottom: 1px solid #111827;
+      height: 28px;
+      margin-bottom: 6px;
+    }
+    .signature-name-input,
+    .signature-position-input {
+      width: 100%;
+      max-width: 260px;
+      height: 20px;
+      border: none;
+      outline: none;
+      background: transparent;
+      text-align: center;
+      color: var(--text);
+      margin-top: 2px;
+    }
+    .signature-name-input {
+      min-height: 18px;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .signature-position-input {
+      font-size: 11px;
+    }
+    .signature-name-input::placeholder,
+    .signature-position-input::placeholder {
+      color: var(--muted);
+    }
+    @media (max-width: 700px) {
+      .boq-signatures {
+        flex-direction: column;
+        gap: 24px;
+        padding: 0 12px 10px;
+      }
+      .signature-block {
+        max-width: none;
+      }
+    }
+
+
+
+    .boq-review-section {
+      margin: 20px 0 8px;
+      padding: 0 6px;
+    }
+    .boq-review-title {
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      margin: 0 0 6px;
+      color: #111827;
+    }
+    #boqReviewTable { min-width: 900px; table-layout: fixed; }
+    #boqReviewTable th { font-weight: 800; text-transform: uppercase; font-size: 10px; }
+    #boqReviewTable td { height: 28px; background: #fff; }
+    #boqReviewTable input,
+    #boqReviewTable select,
+    #boqReviewTable textarea {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 11px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    #boqReviewTable textarea { min-height: 24px; resize: vertical; overflow: hidden; padding: 2px; }
+    #boqReviewTable select,
+    #boqReviewTable input { text-align: center; height: 22px; }
+    .boq-review-note { margin-top: 6px; font-size: 11px; color: var(--muted); font-weight: 700; }
+
+    .pill { display: inline-block; background: #ecfeff; color: #0f766e; border: 1px solid #a5f3fc; padding: 2px 6px; border-radius: 999px; font-size: 11px; font-weight: 700; margin-left: 6px; }
+    @media (max-width: 980px) { .grid, .summary { grid-template-columns: repeat(2, minmax(180px, 1fr)); } }
+    @media (max-width: 640px) { .grid, .summary { grid-template-columns: 1fr; } }
+  
+    @media (max-width: 1200px) {
+      .container { padding: 8px; }
+      table { min-width: 860px; }
+      th, td { font-size: 10px; padding: 2px 3px; }
+      .field input, td input, td select { font-size: 10px; height: 18px; }
+      button { font-size: 11px; padding: 3px 6px; }
+    }
+
+    @media (max-width: 900px) {
+      .header, .section-title, .sheet-nav, .toolbar, .totals-bar {
+        gap: 6px;
+      }
+      table { min-width: 760px; }
+      th, td { font-size: 10px; padding: 1px 2px; }
+      .grid, .summary { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 6px; }
+      h1 { font-size: 18px; }
+      h2 { font-size: 15px; }
+      p { font-size: 11px; }
+      .grid, .summary { grid-template-columns: 1fr; }
+      .header { flex-direction: column; }
+      .header-save-toolbar { max-width: 100%; justify-content: flex-start; }
+      .table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      table { min-width: 680px; }
+      th, td { font-size: 9px; }
+      .field input, td input, td select { font-size: 9px; height: 17px; }
+      button { font-size: 10px; padding: 3px 5px; }
+      .plus-btn { min-width: 16px; width: 16px; height: 16px; font-size: 10px; }
+    }
+
+  
+    /* Final cleanup: tight cover metadata and no underline lines */
+    .cover-letter-meta,
+    .cover-meta-row,
+    .cover-letter-meta > div {
+      gap: 2px !important;
+      row-gap: 2px !important;
+      margin-top: 1px !important;
+      margin-bottom: 1px !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      border: 0 !important;
+      border-bottom: 0 !important;
+      box-shadow: none !important;
+    }
+    .cover-linked-value,
+    .cover-letter-meta span,
+    .cover-letter-meta input,
+    .cover-letter-meta textarea {
+      border: 0 !important;
+      border-bottom: 0 !important;
+      box-shadow: none !important;
+      text-decoration: none !important;
+      min-height: 34px !important;
+      display: flex !important;
+      align-items: center !important;
+      line-height: 1.45 !important;
+    }
+
+
+    /* Cover letter metadata: aligned colons, tighter rows, 10pt body */
+    .cover-letter-meta { display: grid; grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr); row-gap: 1px; column-gap: 0; margin: 4px 0 6px; align-items: center; overflow: visible; }
+    .cover-meta-label {
+      min-height: 18px !important;
+      display: grid !important;
+      grid-template-columns: 1fr auto !important;
+      align-items: center !important;
+      gap: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      font-size: 10pt !important;
+      line-height: 1.2 !important;
+      font-weight: 700 !important;
+      color: var(--muted) !important;
+      text-transform: uppercase !important;
+    }
+    .cover-meta-colon {
+      justify-self: end !important;
+      text-align: right !important;
+      padding-left: 0 !important;
+    }
+    .cover-linked-value,
+    .cover-letter-meta span.cover-linked-value {
+      min-height: 18px !important;
+      height: auto !important;
+      font-size: 10pt !important;
+      line-height: 1.2 !important;
+      display: flex !important;
+      align-items: center !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      min-width: 0 !important;
+    }
+    #coverProjectName, #coverClientName {
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+    }
+    .cover-letter-body {
+      font-size: 10pt !important;
+      gap: 8px !important;
+      margin: 12px 0 !important;
+    }
+    .cover-letter-body [contenteditable="true"] {
+      font-size: 10pt !important;
+      text-align: justify !important;
+      line-height: 1.45 !important;
+      min-height: 28px !important;
+    }
+
+
+    /* Download/print fix: keep cover letter project and client fields on one line */
+    .cover-letter-meta { display: grid; grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr); row-gap: 1px; column-gap: 0; margin: 4px 0 6px; align-items: center; overflow: visible; }
+    .cover-linked-value,
+    #coverProjectName,
+    #coverClientName,
+    #coverSubject {
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      word-break: normal !important;
+      overflow-wrap: normal !important;
+      max-width: none !important;
+    }
+    .cover-meta-label {
+      white-space: nowrap !important;
+      word-break: normal !important;
+      overflow-wrap: normal !important;
+    }
+
+  
+
+    /* Final corrected cover letter metadata spacing and colon alignment */
+    .cover-letter-meta { display: grid; grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr); row-gap: 1px; column-gap: 0; margin: 4px 0 6px; align-items: center; overflow: visible; }
+    .cover-meta-label {
+      min-height: 14px !important;
+      height: 14px !important;
+      display: grid !important;
+      grid-template-columns: 1fr 8px !important;
+      align-items: center !important;
+      gap: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      font-size: 10pt !important;
+      line-height: 1 !important;
+      font-weight: 700 !important;
+      color: var(--muted) !important;
+      text-transform: uppercase !important;
+      white-space: nowrap !important;
+    }
+    .cover-meta-text {
+      white-space: nowrap !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    .cover-meta-colon {
+      justify-self: end !important;
+      text-align: right !important;
+      width: 8px !important;
+      padding-left: 0 !important;
+    }
+    .cover-linked-value,
+    .cover-letter-meta span.cover-linked-value {
+      min-height: 14px !important;
+      height: 14px !important;
+      display: flex !important;
+      align-items: center !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      font-size: 10pt !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      word-break: normal !important;
+      overflow-wrap: normal !important;
+    }
+    #coverProjectName,
+    #coverClientName,
+    #coverSubject,
+    #coverProposalDate {
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      word-break: normal !important;
+      overflow-wrap: normal !important;
+    }
+
+
+    /* FINAL FIX: Cover letter metadata rows stay label + value on one line */
+    .cover-letter-meta {
+      display: block !important;
+      width: 100% !important;
+      margin: 2px 0 6px 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      overflow: visible !important;
+    }
+    .cover-letter-meta .cover-meta-row {
+      display: grid !important;
+      grid-template-columns: 112px minmax(0, 1fr) !important;
+      column-gap: 6px !important;
+      row-gap: 0 !important;
+      align-items: center !important;
+      min-height: 14px !important;
+      height: 14px !important;
+      line-height: 1 !important;
+      margin: 0 0 1px 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      border-bottom: 0 !important;
+      box-shadow: none !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+    }
+    .cover-letter-meta .cover-meta-label {
+      display: grid !important;
+      grid-template-columns: 1fr 8px !important;
+      align-items: center !important;
+      gap: 0 !important;
+      min-height: 14px !important;
+      height: 14px !important;
+      line-height: 1 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      font-size: 10pt !important;
+      font-weight: 700 !important;
+      color: var(--muted) !important;
+      text-transform: uppercase !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+    }
+    .cover-letter-meta .cover-meta-text {
+      display: block !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      line-height: 1 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .cover-letter-meta .cover-meta-colon {
+      display: block !important;
+      justify-self: end !important;
+      width: 8px !important;
+      text-align: right !important;
+      line-height: 1 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .cover-letter-meta .cover-linked-value,
+    #coverProposalDate,
+    #coverProjectName,
+    #coverClientName,
+    #coverSubject {
+      display: block !important;
+      min-height: 14px !important;
+      height: 14px !important;
+      line-height: 1 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      font-size: 10pt !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      word-break: normal !important;
+      overflow-wrap: normal !important;
+      min-width: 0 !important;
+      max-width: none !important;
+    }
+    @media (max-width: 700px) {
+      .cover-letter-meta {
+        display: block !important;
+      }
+      .cover-letter-meta .cover-meta-row {
+        display: grid !important;
+        grid-template-columns: 112px minmax(0, 1fr) !important;
+      }
+    }
+
+
+    /* FINAL OVERRIDE: align cover-letter metadata colons to Client / Owner and keep 10mm gap before values */
+    .cover-letter-meta {
+      display: block !important;
+      width: 100% !important;
+      margin: 2px 0 6px 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      overflow: visible !important;
+    }
+    .cover-letter-meta .cover-meta-row {
+      display: grid !important;
+      grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr) !important;
+      column-gap: 0 !important;
+      row-gap: 0 !important;
+      align-items: center !important;
+      min-height: 13px !important;
+      height: 13px !important;
+      line-height: 1 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+    }
+    .cover-letter-meta .cover-meta-label {
+      display: contents !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      font-size: 10pt !important;
+      font-weight: 700 !important;
+      color: var(--muted) !important;
+      text-transform: uppercase !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+    .cover-letter-meta .cover-meta-text {
+      grid-column: 1 !important;
+      justify-self: start !important;
+      text-align: left !important;
+      display: block !important;
+      width: 32mm !important;
+      min-width: 32mm !important;
+      max-width: 32mm !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      font-size: 10pt !important;
+      font-weight: 700 !important;
+      color: var(--muted) !important;
+      text-transform: uppercase !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+    }
+    .cover-letter-meta .cover-meta-colon {
+      grid-column: 3 !important;
+      justify-self: start !important;
+      text-align: left !important;
+      display: block !important;
+      width: 3mm !important;
+      min-width: 3mm !important;
+      max-width: 3mm !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      font-size: 10pt !important;
+      font-weight: 700 !important;
+      color: var(--muted) !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+    .cover-letter-meta .cover-linked-value,
+    #coverProposalDate,
+    #coverProjectName,
+    #coverClientName,
+    #coverSubject {
+      grid-column: 5 !important;
+      display: block !important;
+      min-height: 13px !important;
+      height: 13px !important;
+      line-height: 1 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      font-size: 10pt !important;
+      color: var(--text) !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      word-break: normal !important;
+      overflow-wrap: normal !important;
+      min-width: 0 !important;
+      max-width: none !important;
+    }
+    @media (max-width: 700px) {
+      .cover-letter-meta .cover-meta-row {
+        grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr) !important;
+      }
+      .cover-letter-meta .cover-linked-value,
+      #coverProposalDate,
+      #coverProjectName,
+      #coverClientName,
+      #coverSubject {
+        margin-left: 10mm !important;
+      }
+    }
+
+
+    /* FINAL USER REQUEST: label text, 5mm gap, aligned colon, 10mm gap, linked value */
+    .cover-letter-meta {
+      display: block !important;
+      width: 100% !important;
+      margin: 2px 0 6px 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      overflow: visible !important;
+    }
+    .cover-letter-meta .cover-meta-row {
+      display: grid !important;
+      grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr) !important;
+      column-gap: 0 !important;
+      row-gap: 0 !important;
+      align-items: center !important;
+      min-height: 13px !important;
+      height: 13px !important;
+      line-height: 1 !important;
+      margin: 0 0 1px 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+    }
+    .cover-letter-meta .cover-meta-label {
+      display: contents !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      font-size: 10pt !important;
+      font-weight: 700 !important;
+      color: var(--muted) !important;
+      text-transform: uppercase !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+    .cover-letter-meta .cover-meta-text {
+      grid-column: 1 !important;
+      justify-self: end !important;
+      text-align: right !important;
+      display: block !important;
+      width: 32mm !important;
+      min-width: 32mm !important;
+      max-width: 32mm !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      font-size: 10pt !important;
+      font-weight: 700 !important;
+      color: var(--muted) !important;
+      text-transform: uppercase !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+    }
+    .cover-letter-meta .cover-meta-colon {
+      grid-column: 3 !important;
+      justify-self: start !important;
+      text-align: left !important;
+      display: block !important;
+      width: 3mm !important;
+      min-width: 3mm !important;
+      max-width: 3mm !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      font-size: 10pt !important;
+      font-weight: 700 !important;
+      color: var(--muted) !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+    .cover-letter-meta .cover-linked-value,
+    #coverProposalDate,
+    #coverProjectName,
+    #coverClientName,
+    #coverSubject {
+      grid-column: 5 !important;
+      display: block !important;
+      min-height: 13px !important;
+      height: 13px !important;
+      line-height: 1 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      font-size: 10pt !important;
+      color: var(--text) !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      word-break: normal !important;
+      overflow-wrap: normal !important;
+      min-width: 0 !important;
+      max-width: none !important;
+    }
+    @media (max-width: 700px) {
+      .cover-letter-meta .cover-meta-row {
+        grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr) !important;
+      }
+    }
+
+    /* HARD FINAL META ALIGNMENT OVERRIDE: left labels, aligned colon, aligned linked values */
+    .cover-letter-meta .cover-meta-row {
+      display: grid !important;
+      grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr) !important;
+      align-items: center !important;
+      column-gap: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .cover-letter-meta .cover-meta-label { display: contents !important; }
+    .cover-letter-meta .cover-meta-text {
+      grid-column: 1 !important;
+      justify-self: start !important;
+      text-align: left !important;
+      width: 32mm !important;
+      min-width: 32mm !important;
+      max-width: 32mm !important;
+    }
+    .cover-letter-meta .cover-meta-colon {
+      grid-column: 3 !important;
+      justify-self: start !important;
+      text-align: left !important;
+      width: 3mm !important;
+      min-width: 3mm !important;
+      max-width: 3mm !important;
+    }
+    .cover-letter-meta .cover-linked-value,
+    #coverProposalDate, #coverProjectName, #coverClientName, #coverSubject {
+      grid-column: 5 !important;
+      margin-left: 0 !important;
+      text-align: left !important;
+      white-space: nowrap !important;
+    }
+  
+    /* FINAL FIX: exact vertical alignment for cover-letter metadata rows */
+    .cover-letter-meta .cover-meta-row {
+      display: grid !important;
+      grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr) !important;
+      column-gap: 0 !important;
+      align-items: start !important;
+      min-height: 12pt !important;
+      height: 12pt !important;
+      line-height: 12pt !important;
+      margin: 0 0 1mm 0 !important;
+      padding: 0 !important;
+    }
+    .cover-letter-meta .cover-meta-label { display: contents !important; }
+    .cover-letter-meta .cover-meta-text,
+    .cover-letter-meta .cover-meta-colon,
+    .cover-letter-meta .cover-linked-value,
+    #coverProposalDate, #coverProjectName, #coverClientName, #coverSubject {
+      display: block !important;
+      align-self: start !important;
+      justify-self: start !important;
+      height: 12pt !important;
+      min-height: 12pt !important;
+      max-height: 12pt !important;
+      line-height: 12pt !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: 0 !important;
+      vertical-align: top !important;
+      transform: none !important;
+      position: static !important;
+      font-size: 10pt !important;
+    }
+    .cover-letter-meta .cover-meta-text {
+      grid-column: 1 !important;
+      text-align: left !important;
+      width: 32mm !important;
+      min-width: 32mm !important;
+      max-width: 32mm !important;
+      white-space: nowrap !important;
+    }
+    .cover-letter-meta .cover-meta-colon {
+      grid-column: 3 !important;
+      text-align: left !important;
+      width: 3mm !important;
+      min-width: 3mm !important;
+      max-width: 3mm !important;
+    }
+    .cover-letter-meta .cover-linked-value,
+    #coverProposalDate, #coverProjectName, #coverClientName, #coverSubject {
+      grid-column: 5 !important;
+      width: auto !important;
+      min-width: 0 !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      color: var(--text) !important;
+    }
+
+
+    /* FINAL: clean professional cover letter body - no visible edit box border/padding */
+    .cover-letter-body [contenteditable="true"] {
+      border: 0 !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      outline: none !important;
+      min-height: auto !important;
+      font-size: 10pt !important;
+      line-height: 1.45 !important;
+      text-align: justify !important;
+    }
+    @media print {
+      body.print-cover-proposal .cover-letter-body [contenteditable="true"] {
+        border: 0 !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        min-height: auto !important;
+        font-size: 10pt !important;
+        line-height: 1.45 !important;
+        text-align: justify !important;
+      }
+    }
+
+  
+
+    /* FINAL PDF PRINT SYNC: print/PDF must reflect the live cover letter layout exactly */
+    @media print {
+      @page { size: A4; margin: 10mm; }
+      body.print-cover-proposal { background: #fff !important; }
+      body.print-cover-proposal .header,
+      body.print-cover-proposal .sheet-nav,
+      body.print-cover-proposal .cover-letter-toolbar,
+      body.print-cover-proposal .sheet:not(#coverLetterSheet) {
+        display: none !important;
+      }
+      body.print-cover-proposal #coverLetterSheet,
+      body.print-cover-proposal #coverLetterSheet .card {
+        display: block !important;
+        background: #fff !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      body.print-cover-proposal .container {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+      }
+      body.print-cover-proposal .cover-letter-page {
+        width: 190mm !important;
+        min-height: auto !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 auto !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        background: #fff !important;
+        box-sizing: border-box !important;
+      }
+      body.print-cover-proposal .cover-letter-body [contenteditable="true"] {
+        border: 0 !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        outline: none !important;
+        min-height: auto !important;
+        font-size: 10pt !important;
+        line-height: 1.45 !important;
+        text-align: justify !important;
+      }
+      body.print-cover-proposal .cover-letter-page input,
+      body.print-cover-proposal .cover-letter-page textarea {
+        border: 0 !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        outline: none !important;
+        font: inherit !important;
+        color: inherit !important;
+      }
+      body.print-cover-proposal .cover-letter-page textarea {
+        resize: none !important;
+        overflow: hidden !important;
+        white-space: pre-wrap !important;
+      }
+      body.print-cover-proposal .cover-letter-meta .cover-meta-row {
+        display: grid !important;
+        grid-template-columns: 32mm 5mm 3mm 10mm minmax(0, 1fr) !important;
+        align-items: start !important;
+        height: 12pt !important;
+        min-height: 12pt !important;
+        line-height: 12pt !important;
+        margin: 0 0 1mm 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+      }
+      body.print-cover-proposal .cover-letter-meta .cover-meta-label { display: contents !important; }
+      body.print-cover-proposal .cover-letter-meta .cover-meta-text,
+      body.print-cover-proposal .cover-letter-meta .cover-meta-colon,
+      body.print-cover-proposal .cover-letter-meta .cover-linked-value,
+      body.print-cover-proposal #coverProposalDate,
+      body.print-cover-proposal #coverProjectName,
+      body.print-cover-proposal #coverClientName,
+      body.print-cover-proposal #coverSubject {
+        display: block !important;
+        height: 12pt !important;
+        min-height: 12pt !important;
+        line-height: 12pt !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        font-size: 10pt !important;
+        vertical-align: top !important;
+        white-space: nowrap !important;
+      }
+      body.print-cover-proposal .cover-letter-meta .cover-meta-text { grid-column: 1 !important; text-align: left !important; }
+      body.print-cover-proposal .cover-letter-meta .cover-meta-colon { grid-column: 3 !important; text-align: left !important; }
+      body.print-cover-proposal .cover-letter-meta .cover-linked-value,
+      body.print-cover-proposal #coverProposalDate,
+      body.print-cover-proposal #coverProjectName,
+      body.print-cover-proposal #coverClientName,
+      body.print-cover-proposal #coverSubject { grid-column: 5 !important; }
+    }
+
+
+    /* FINAL PDF FIX: commercial terms/conditions print as full expanding text, not clipped textareas */
+    .cover-print-textarea {
+      display: block !important;
+      width: 100% !important;
+      min-height: 0 !important;
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+      white-space: pre-wrap !important;
+      word-break: normal !important;
+      overflow-wrap: break-word !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      margin: 2px 0 0 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      color: var(--text) !important;
+      font-family: Arial, Helvetica, sans-serif !important;
+      font-size: 10pt !important;
+      line-height: 1.35 !important;
+      text-align: justify !important;
+    }
+    @media print {
+      body.print-cover-proposal .cover-letter-terms {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6mm !important;
+        align-items: stretch !important;
+        break-inside: auto !important;
+        page-break-inside: auto !important;
+      }
+      body.print-cover-proposal .cover-letter-terms > div {
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        break-inside: avoid-page !important;
+        page-break-inside: avoid !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin-bottom: 4mm !important;
+      }
+      body.print-cover-proposal .cover-letter-terms > div::before {
+        display: none !important;
+      }
+      body.print-cover-proposal .cover-letter-terms textarea {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        border: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        font-size: 10pt !important;
+        line-height: 1.35 !important;
+        text-align: justify !important;
+      }
+    }
+
+  
+    /* FINAL PDF TERMS BOX FIX: show full terms content with visible border and padding in PDF */
+    .cover-print-textarea {
+      display: block !important;
+      width: 100% !important;
+      min-height: var(--cover-print-box-height, 22mm) !important;
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+      white-space: pre-wrap !important;
+      word-break: normal !important;
+      overflow-wrap: break-word !important;
+      border: 1px solid var(--line) !important;
+      border-radius: 4px !important;
+      padding: 4mm !important;
+      margin: 2mm 0 0 0 !important;
+      background: #fff !important;
+      box-shadow: none !important;
+      color: var(--text) !important;
+      font-family: Arial, Helvetica, sans-serif !important;
+      font-size: 10pt !important;
+      line-height: 1.35 !important;
+      text-align: justify !important;
+      box-sizing: border-box !important;
+    }
+    @media print {
+      body.print-cover-proposal .cover-letter-terms {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6mm !important;
+        align-items: stretch !important;
+        break-inside: auto !important;
+        page-break-inside: auto !important;
+        overflow: visible !important;
+      }
+      body.print-cover-proposal .cover-letter-terms > div {
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin-bottom: 4mm !important;
+      }
+      body.print-cover-proposal .cover-letter-terms > div::before {
+        display: none !important;
+      }
+      body.print-cover-proposal .cover-print-textarea,
+      body.print-cover-proposal .cover-letter-terms textarea {
+        display: block !important;
+        width: 100% !important;
+        min-height: var(--cover-print-box-height, 22mm) !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        white-space: pre-wrap !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+        border: 1px solid var(--line) !important;
+        border-radius: 4px !important;
+        padding: 4mm !important;
+        margin: 2mm 0 0 0 !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        font-size: 10pt !important;
+        line-height: 1.35 !important;
+        text-align: justify !important;
+        box-sizing: border-box !important;
+      }
+    }
+
+
+    /* FINAL PDF FIX: preserve manually resized Commercial Terms box heights in print */
+    .cover-print-textarea {
+      min-height: var(--cover-print-box-height, 22mm) !important;
+    }
+    @media print {
+      body.print-cover-proposal .cover-print-textarea {
+        min-height: var(--cover-print-box-height, 22mm) !important;
+      }
+    }
+
+
+    /* FINAL PDF FIX: keep paired Commercial Terms boxes bottom-aligned in print */
+    @media print {
+      body.print-cover-proposal .cover-letter-terms {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6mm !important;
+        align-items: stretch !important;
+        overflow: visible !important;
+      }
+      body.print-cover-proposal .cover-letter-terms > div {
+        display: block !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin-bottom: 4mm !important;
+      }
+      body.print-cover-proposal .cover-letter-terms > div::before {
+        display: none !important;
+      }
+      body.print-cover-proposal .cover-print-textarea {
+        display: block !important;
+        height: auto !important;
+        min-height: var(--cover-print-box-height, 22mm) !important;
+      }
+    }
+
+
+    /* FINAL TYPOGRAPHY STANDARDIZATION: modern/minimal professional weight */
+    body,
+    .cover-letter-page,
+    .cover-letter-page input,
+    .cover-letter-page textarea,
+    .cover-letter-body,
+    .cover-letter-body [contenteditable="true"],
+    table,
+    th,
+    td,
+    button {
+      font-family: Arial, Helvetica, sans-serif !important;
+      font-weight: 400;
+    }
+
+    strong,
+    b,
+    h1,
+    h2,
+    h3,
+    .section-title h2,
+    .cover-letter-toolbar h2,
+    .cover-letter-header h2,
+    .cover-letter-section-title,
+    .cover-letter-meta label,
+    .cover-letter-terms label,
+    .cover-meta-label,
+    .cover-meta-text,
+    .cover-meta-colon,
+    .proposal-amount-box,
+    .summary-box .label,
+    .summary-box .value,
+    .pill,
+    thead th,
+    .row-category,
+    .row-total,
+    .row-grand-total,
+    .total-label,
+    .signature-heading,
+    .boq-review-title,
+    #boqReviewTable th,
+    .boq-review-section strong {
+      font-weight: 500 !important;
+      letter-spacing: 0.01em;
+    }
+
+    .cover-letter-section-title,
+    .cover-letter-toolbar h2,
+    .cover-letter-header h2,
+    .section-title h2 {
+      letter-spacing: 0.015em;
+    }
+
+    .proposal-amount-box span {
+      font-weight: 500 !important;
+    }
+
+    @media print {
+      body.print-cover-proposal,
+      body.print-cover-proposal .cover-letter-page,
+      body.print-cover-proposal .cover-letter-page input,
+      body.print-cover-proposal .cover-letter-page textarea,
+      body.print-cover-proposal .cover-letter-body [contenteditable="true"],
+      body.print-cover-proposal table,
+      body.print-cover-proposal th,
+      body.print-cover-proposal td {
+        font-family: Arial, Helvetica, sans-serif !important;
+        font-weight: 400;
+      }
+      body.print-cover-proposal strong,
+      body.print-cover-proposal b,
+      body.print-cover-proposal h1,
+      body.print-cover-proposal h2,
+      body.print-cover-proposal h3,
+      body.print-cover-proposal .cover-letter-section-title,
+      body.print-cover-proposal .cover-letter-meta label,
+      body.print-cover-proposal .cover-letter-terms label,
+      body.print-cover-proposal .cover-meta-label,
+      body.print-cover-proposal .cover-meta-text,
+      body.print-cover-proposal .cover-meta-colon,
+      body.print-cover-proposal .proposal-amount-box,
+      body.print-cover-proposal thead th {
+        font-weight: 500 !important;
+        letter-spacing: 0.01em;
+      }
+    }
+
+
+    /* FINAL: Cover letter bold text standardized to 11pt with modern/minimal 500 weight */
+    #coverLetterSheet .cover-letter-page strong,
+    #coverLetterSheet .cover-letter-page b,
+    #coverLetterSheet .cover-letter-page h2,
+    #coverLetterSheet .cover-letter-page h3,
+    #coverLetterSheet .cover-letter-page h4,
+    #coverLetterSheet .cover-letter-page label,
+    #coverLetterSheet .cover-letter-page .cover-meta-label,
+    #coverLetterSheet .cover-letter-page .cover-meta-text,
+    #coverLetterSheet .cover-letter-page .cover-meta-colon,
+    #coverLetterSheet .cover-letter-page .cover-letter-section-title,
+    #coverLetterSheet .cover-letter-page .proposal-amount-box,
+    #coverLetterSheet .cover-letter-page .proposal-amount-box span,
+    #coverLetterSheet .cover-letter-page .cover-summary-table th,
+    #coverLetterSheet .cover-letter-page .cover-summary-table .summary-total-row {
+      font-size: 11pt !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.01em !important;
+    }
+    @media print {
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page strong,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page b,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page h2,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page h3,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page h4,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page label,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .cover-meta-label,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .cover-meta-text,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .cover-meta-colon,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .cover-letter-section-title,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .proposal-amount-box,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .proposal-amount-box span,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .cover-summary-table th,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .cover-summary-table .summary-total-row {
+        font-size: 11pt !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
+      }
+    }
+
+    /* FINAL USER REQUEST: cover letter bold text set to 700 while keeping 11pt size */
+    #coverLetterSheet .cover-letter-page strong,
+    #coverLetterSheet .cover-letter-page b,
+    #coverLetterSheet .cover-letter-page .cover-meta-label,
+    #coverLetterSheet .cover-letter-page .cover-meta-text,
+    #coverLetterSheet .cover-letter-page .cover-meta-colon,
+    #coverLetterSheet .cover-letter-page .cover-letter-section-title,
+    #coverLetterSheet .cover-letter-page .proposal-amount-box,
+    #coverLetterSheet .cover-letter-page .proposal-amount-box span,
+    #coverLetterSheet .cover-letter-page label {
+      font-weight: 700 !important;
+      font-size: 11pt !important;
+    }
+    @media print {
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page strong,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page b,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .cover-meta-label,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .cover-meta-text,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .cover-meta-colon,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .cover-letter-section-title,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .proposal-amount-box,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page .proposal-amount-box span,
+      body.print-cover-proposal #coverLetterSheet .cover-letter-page label {
+        font-weight: 700 !important;
+        font-size: 11pt !important;
+      }
+    }
+
+    /* FINAL REQUEST: blue Cost Proposal header row below logo */
+    .cover-letter-header h2 {
+      display: block !important;
+      width: 100% !important;
+      margin: 0 0 4mm 0 !important;
+      padding: 2mm 0 !important;
+      background: #e6f2fb !important;
+      color: #111827 !important;
+      font-family: "Arial Black", Arial, Helvetica, sans-serif !important;
+      font-size: 12pt !important;
+      line-height: 12pt !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.02em !important;
+      text-align: center !important;
+      text-transform: uppercase !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+    @media print {
+      body.print-cover-proposal .cover-letter-header h2 {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 0 4mm 0 !important;
+        padding: 2mm 0 !important;
+        background: #e6f2fb !important;
+        color: #111827 !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+        font-size: 12pt !important;
+        line-height: 12pt !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.02em !important;
+        text-align: center !important;
+        text-transform: uppercase !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  
+
+    /* FINAL REQUEST: COST PROPOSAL Arial Black 800 */
+    .cover-letter-header h2 {
+      font-family: "Arial Black", Arial, Helvetica, sans-serif !important;
+      font-weight: 800 !important;
+      font-size: 12pt !important;
+      line-height: 12pt !important;
+      background: #e6f2fb !important;
+    }
+
+    /* FINAL FIX: logo height and PDF print must match cover letter styling */
+    .cover-company-logo,
+    #coverLetterSheet .cover-company-logo,
+    body.print-cover-proposal .cover-company-logo {
+      max-height: 70px !important;
+      height: auto !important;
+      width: min(100%, 760px) !important;
+      object-fit: contain !important;
+      display: block !important;
+      margin: 0 auto 10px !important;
+    }
+
+    #coverLetterSheet .cover-letter-header h2 {
+      display: block !important;
+      width: 100% !important;
+      margin: 0 0 4mm 0 !important;
+      padding: 2mm 0 !important;
+      font-family: "Arial Black", Arial, Helvetica, sans-serif !important;
+      font-size: 12pt !important;
+      line-height: 12pt !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.02em !important;
+      text-align: center !important;
+      text-transform: uppercase !important;
+      color: #111827 !important;
+      background: #e6f2fb !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+
+    @media print {
+      @page { size: A4; margin: 10mm; }
+      body.print-cover-proposal,
+      body.print-cover-proposal * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      body.print-cover-proposal .cover-company-logo {
+        max-height: 70px !important;
+        height: auto !important;
+        width: min(100%, 760px) !important;
+        object-fit: contain !important;
+        margin: 0 auto 10px !important;
+      }
+      body.print-cover-proposal #coverLetterSheet .cover-letter-header h2 {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 0 4mm 0 !important;
+        padding: 2mm 0 !important;
+        font-family: "Arial Black", Arial, Helvetica, sans-serif !important;
+        font-size: 12pt !important;
+        line-height: 12pt !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.02em !important;
+        text-align: center !important;
+        text-transform: uppercase !important;
+        color: #111827 !important;
+        background: #e6f2fb !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+      body.print-cover-proposal .cover-letter-page {
+        width: auto !important;
+        min-height: auto !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+        box-shadow: none !important;
+      }
+    }
+
+    /* Final cost proposal footer: confidentiality notice pinned to bottom before page margin */
+    .cover-letter-page {
+      display: flex;
+      flex-direction: column;
+    }
+    .cover-confidentiality-notice {
+      display: block !important;
+      font-size: 6pt !important;
+      line-height: 1.15 !important;
+      color: #111827 !important;
+      text-align: justify !important;
+      margin-top: auto !important;
+      padding-top: 2mm !important;
+      font-weight: 400 !important;
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+    @media print {
+      body.print-cover-proposal .cover-letter-page {
+        display: flex !important;
+        flex-direction: column !important;
+        min-height: calc(297mm - 20mm) !important;
+      }
+      body.print-cover-proposal .cover-confidentiality-notice {
+        display: block !important;
+        font-size: 6pt !important;
+        line-height: 1.15 !important;
+        color: #111827 !important;
+        text-align: justify !important;
+        margin-top: auto !important;
+        padding-top: 2mm !important;
+        padding-bottom: 0 !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+    }
+  
+
+    /* BOQ PDF print: print only Bill of Quantity and Summary of BOQ */
+    @media print {
+      @page { size: A4 landscape; margin: 10mm; }
+      body.print-boq-pdf { background: #fff !important; }
+      body.print-boq-pdf,
+      body.print-boq-pdf * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      body.print-boq-pdf .header,
+      body.print-boq-pdf .sheet-nav,
+      body.print-boq-pdf .header-save-toolbar,
+      body.print-boq-pdf #priceListSheet,
+      body.print-boq-pdf #estimateSheet,
+      body.print-boq-pdf #coverLetterSheet {
+        display: none !important;
+      }
+      body.print-boq-pdf #boqSheet,
+      body.print-boq-pdf #boqSummarySheet {
+        display: block !important;
+      }
+      body.print-boq-pdf .container {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+      }
+      body.print-boq-pdf .card {
+        border: 0 !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 0 8mm 0 !important;
+        background: #fff !important;
+      }
+      body.print-boq-pdf .table-wrap {
+        overflow: visible !important;
+        border: 0 !important;
+      }
+      body.print-boq-pdf table {
+        min-width: 0 !important;
+        width: 100% !important;
+        table-layout: fixed !important;
+        page-break-inside: auto !important;
+      }
+      body.print-boq-pdf thead { display: table-header-group !important; }
+      body.print-boq-pdf tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+      body.print-boq-pdf th,
+      body.print-boq-pdf td {
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        word-break: normal !important;
+        overflow-wrap: anywhere !important;
+      }
+      body.print-boq-pdf #boqTable th:nth-child(4),
+      body.print-boq-pdf #boqTable td:nth-child(4) {
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: anywhere !important;
+        line-height: 1.25 !important;
+        vertical-align: top !important;
+      }
+      body.print-boq-pdf #boqTable th:nth-child(4) {
+        height: auto !important;
+        min-height: 0 !important;
+      }
+      .boq-print-wrapped-text {
+        display: block;
+        width: 100%;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        word-break: normal;
+        overflow-wrap: anywhere;
+        line-height: 1.25;
+        min-height: 14px;
+      }
+      body.print-boq-pdf button,
+      body.print-boq-pdf .btn-primary,
+      body.print-boq-pdf .btn-secondary,
+      body.print-boq-pdf .boq-multipliers,
+      body.print-boq-pdf .plus-cell,
+      body.print-boq-pdf #boqTable th:first-child,
+      body.print-boq-pdf #boqTable td:first-child,
+      body.print-boq-pdf #boqTable th:last-child,
+      body.print-boq-pdf #boqTable td:last-child {
+        display: none !important;
+      }
+      body.print-boq-pdf .boq-title-row {
+        display: block !important;
+        min-width: 0 !important;
+      }
+      body.print-boq-pdf #boqSummarySheet {
+        page-break-before: always !important;
+        break-before: page !important;
+      }
+    }
+
+
+    /* FINAL REQUEST: wrap BOQ Specification header and cells on screen display */
+    #boqTable th:nth-child(4),
+    #boqTable td:nth-child(4) {
+      white-space: normal !important;
+      word-break: normal !important;
+      overflow-wrap: anywhere !important;
+      vertical-align: top !important;
+    }
+    #boqTable td:nth-child(4) textarea.boq-specification-input {
+      width: 100% !important;
+      min-height: 34px !important;
+      height: auto !important;
+      border: none !important;
+      outline: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      resize: vertical !important;
+      overflow: hidden !important;
+      white-space: pre-wrap !important;
+      word-break: normal !important;
+      overflow-wrap: anywhere !important;
+      font-family: Arial, Helvetica, sans-serif !important;
+      font-size: 11px !important;
+      line-height: 1.25 !important;
+      padding: 0 2px !important;
+    }
+
+
+    /* FINAL FIX: prevent wrapped BOQ Specification text from being clipped on screen */
+    #boqTable tbody tr,
+    #boqTable tbody td {
+      height: auto !important;
+      min-height: 0 !important;
+    }
+    #boqTable td:nth-child(4) {
+      height: auto !important;
+      min-height: 34px !important;
+      overflow: visible !important;
+      padding-top: 3px !important;
+      padding-bottom: 3px !important;
+    }
+    #boqTable td:nth-child(4) textarea.boq-specification-input {
+      display: block !important;
+      box-sizing: border-box !important;
+      height: auto !important;
+      min-height: 34px !important;
+      max-height: none !important;
+      overflow: hidden !important;
+      padding: 2px 2px 4px 2px !important;
+      margin: 0 !important;
+      line-height: 1.35 !important;
+    }
+
+
+    /* FINAL FIX: BOQ Specification wrapped text must show every line on screen */
+    #boqTable {
+      table-layout: fixed !important;
+    }
+    #boqTable th:nth-child(4),
+    #boqTable td:nth-child(4) {
+      white-space: normal !important;
+      word-break: normal !important;
+      overflow-wrap: anywhere !important;
+      overflow: visible !important;
+      height: auto !important;
+      min-height: 0 !important;
+      vertical-align: top !important;
+    }
+    #boqTable td:nth-child(4) textarea.boq-specification-input {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      height: auto !important;
+      min-height: 38px !important;
+      max-height: none !important;
+      overflow: hidden !important;
+      resize: none !important;
+      white-space: pre-wrap !important;
+      word-break: normal !important;
+      overflow-wrap: anywhere !important;
+      box-sizing: border-box !important;
+      line-height: 1.45 !important;
+      padding: 3px 2px 8px 2px !important;
+      margin: 0 !important;
+      font-family: Arial, Helvetica, sans-serif !important;
+      font-size: 11px !important;
+    }
+
+
+    /* FINAL REFINEMENT: make BOQ Specification wrapped text fully visible on screen and PDF */
+    #boqTable thead th:nth-child(4),
+    #boqTable tbody td:nth-child(4) {
+      white-space: normal !important;
+      word-break: normal !important;
+      overflow-wrap: anywhere !important;
+      overflow: visible !important;
+      vertical-align: top !important;
+      height: auto !important;
+      min-height: 0 !important;
+      line-height: 1.35 !important;
+    }
+    #boqTable thead th:nth-child(4) {
+      padding-top: 5px !important;
+      padding-bottom: 5px !important;
+    }
+    #boqTable tbody td:nth-child(4) {
+      padding: 4px 4px 6px 4px !important;
+    }
+    #boqTable tbody td:nth-child(4) textarea.boq-specification-input {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      height: auto !important;
+      min-height: 46px !important;
+      max-height: none !important;
+      overflow: hidden !important;
+      resize: none !important;
+      white-space: pre-wrap !important;
+      word-break: normal !important;
+      overflow-wrap: anywhere !important;
+      box-sizing: border-box !important;
+      line-height: 1.45 !important;
+      padding: 4px 2px 14px 2px !important;
+      margin: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+      font-family: Arial, Helvetica, sans-serif !important;
+      font-size: 11px !important;
+      vertical-align: top !important;
+      field-sizing: content;
+    }
+    body.print-boq-pdf #boqTable thead th:nth-child(4),
+    body.print-boq-pdf #boqTable tbody td:nth-child(4),
+    body.print-boq-pdf #boqTable tbody td:nth-child(4) .boq-print-cell-text {
+      white-space: pre-wrap !important;
+      word-break: normal !important;
+      overflow-wrap: anywhere !important;
+      overflow: visible !important;
+      height: auto !important;
+      max-height: none !important;
+      line-height: 1.35 !important;
+    }
+
+
+    /* FINAL REQUEST: BOQ Specification cells style like other columns (unit items) */
+    #boqTable tbody td.boq-specification-cell {
+      padding: 2px 4px !important;
+      vertical-align: middle !important;
+    }
+    #boqTable tbody td.boq-specification-cell input.boq-specification-input {
+      text-align: left !important;
+    }
+    #boqTable tbody tr {
+      height: auto !important;
+      min-height: 0 !important;
+    }
+
+
+
+    /* FINAL FIX: BOQ PDF must print one value per cell only (hide live editors, show print text) */
+    @media print {
+      body.print-boq-pdf #boqTable tbody td input,
+      body.print-boq-pdf #boqTable tbody td textarea,
+      body.print-boq-pdf #boqTable tbody td select {
+        display: none !important;
+      }
+      body.print-boq-pdf #boqTable tbody td .boq-print-wrapped-text {
+        display: block !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        white-space: pre-wrap !important;
+        word-break: normal !important;
+        overflow-wrap: anywhere !important;
+        line-height: inherit !important;
+        color: inherit !important;
+        font: inherit !important;
+      }
+    }
+
+
+    /* REFINED FIX: BOQ PDF Specification values must not duplicate.
+       Keep print mirrors hidden on screen, and force live editors hidden while print mode is active. */
+    #boqTable tbody td .boq-print-wrapped-text {
+      display: none !important;
+    }
+    body.print-boq-pdf #boqTable tbody td .boq-print-wrapped-text {
+      display: block !important;
+    }
+    body.print-boq-pdf #boqTable tbody td input,
+    body.print-boq-pdf #boqTable tbody td textarea,
+    body.print-boq-pdf #boqTable tbody td select {
+      display: none !important;
+      visibility: hidden !important;
+    }
+    @media print {
+      body.print-boq-pdf #boqTable tbody td input,
+      body.print-boq-pdf #boqTable tbody td textarea,
+      body.print-boq-pdf #boqTable tbody td select {
+        display: none !important;
+        visibility: hidden !important;
+      }
+      body.print-boq-pdf #boqTable tbody td .boq-print-wrapped-text {
+        display: block !important;
+        visibility: visible !important;
+      }
+    }
+
+
+    /* FINAL PRINT REFINEMENT: BOQ PDF auto-fit rows, 2mm top/bottom cell padding, top-aligned values */
+    @media print {
+      body.print-boq-pdf #boqTable,
+      body.print-boq-pdf #boqSummaryTable {
+        table-layout: fixed !important;
+        border-collapse: collapse !important;
+      }
+      body.print-boq-pdf #boqTable tr,
+      body.print-boq-pdf #boqSummaryTable tr {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      body.print-boq-pdf #boqTable th,
+      body.print-boq-pdf #boqTable td,
+      body.print-boq-pdf #boqSummaryTable th,
+      body.print-boq-pdf #boqSummaryTable td {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        padding-top: 2mm !important;
+        padding-bottom: 2mm !important;
+        vertical-align: top !important;
+        line-height: 1.35 !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        word-break: normal !important;
+        overflow-wrap: anywhere !important;
+        box-sizing: border-box !important;
+      }
+      body.print-boq-pdf #boqTable td .boq-print-wrapped-text,
+      body.print-boq-pdf #boqSummaryTable td .boq-print-wrapped-text {
+        display: block !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        vertical-align: top !important;
+        line-height: 1.35 !important;
+        white-space: pre-wrap !important;
+        overflow: visible !important;
+        word-break: normal !important;
+        overflow-wrap: anywhere !important;
+      }
+      body.print-boq-pdf #boqTable td input,
+      body.print-boq-pdf #boqTable td textarea,
+      body.print-boq-pdf #boqTable td select {
+        height: auto !important;
+        max-height: none !important;
+      }
+      body.print-boq-pdf #boqTable th,
+      body.print-boq-pdf #boqSummaryTable th {
+        font-weight: bold !important;
+      }
+
+      /* Allow main categories and subtotals to overflow the empty cells on the right in PDF print */
+      body.print-boq-pdf #boqTable tr.row-category td.work-cell,
+      body.print-boq-pdf #boqTable tr.row-subcategory.has-children td.work-cell,
+      body.print-boq-pdf #boqTable tr.row-subsubcategory.has-children td.work-cell,
+      body.print-boq-pdf #boqTable tr.row-total td.total-label {
+        white-space: nowrap !important;
+        overflow: visible !important;
+      }
+      body.print-boq-pdf #boqTable tr.row-category td.work-cell > .boq-print-wrapped-text,
+      body.print-boq-pdf #boqTable tr.row-subcategory.has-children td.work-cell > .boq-print-wrapped-text,
+      body.print-boq-pdf #boqTable tr.row-subsubcategory.has-children td.work-cell > .boq-print-wrapped-text,
+      body.print-boq-pdf #boqTable tr.row-total td.total-label > .boq-print-wrapped-text {
+        display: inline-block !important;
+        width: max-content !important;
+        max-width: 680px !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        position: relative !important;
+        z-index: 10 !important;
+        padding-right: 8px !important;
+      }
+      body.print-boq-pdf #boqTable tr.row-category td.work-cell > .boq-print-wrapped-text {
+        background-color: #dbeafe !important;
+      }
+      body.print-boq-pdf #boqTable tr.row-subcategory.has-children td.work-cell > .boq-print-wrapped-text {
+        background-color: #fef3c7 !important;
+      }
+      body.print-boq-pdf #boqTable tr.row-subsubcategory.has-children td.work-cell > .boq-print-wrapped-text {
+        background-color: #dcfce7 !important;
+      }
+      body.print-boq-pdf #boqTable tr.row-total td.total-label > .boq-print-wrapped-text {
+        background-color: #f8fafc !important;
+      }
+      body.print-boq-pdf #boqTable tr.row-grand-total td.total-label > .boq-print-wrapped-text {
+        background-color: #e0f2fe !important;
+      }
+
+      /* Preserve indentation for categories and items in PDF print */
+      body.print-boq-pdf tr.row-category td.work-cell {
+        padding-left: 2px !important;
+      }
+      body.print-boq-pdf tr.row-subcategory td.work-cell {
+        padding-left: 4mm !important;
+      }
+      body.print-boq-pdf tr.row-subsubcategory td.work-cell {
+        padding-left: 8mm !important;
+      }
+      body.print-boq-pdf tr.row-subsubsubcategory td.work-cell {
+        padding-left: 12mm !important;
+      }
+    }
+
+  
+
+    /* FINAL REFINEMENT: flush all BOQ PDF print values to the top, including Specification */
+        @media print {
+          body.print-boq-pdf #boqTable tbody td,
+          body.print-boq-pdf #boqSummaryTable tbody td {
+            vertical-align: top !important;
+            padding-top: 2mm !important;
+            padding-bottom: 2mm !important;
+            line-height: 1.35 !important;
+            height: auto !important;
+            min-height: 0 !important;
+            max-height: none !important;
+          }
+          body.print-boq-pdf #boqTable tbody td > .boq-print-wrapped-text,
+          body.print-boq-pdf #boqTable tbody td:nth-child(4) > .boq-print-wrapped-text,
+          body.print-boq-pdf #boqSummaryTable tbody td > .boq-print-wrapped-text {
+            display: block !important;
+            position: static !important;
+            top: auto !important;
+            transform: none !important;
+            float: none !important;
+            vertical-align: top !important;
+            align-self: flex-start !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: 0 !important;
+            max-height: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            line-height: 1.35 !important;
+            white-space: pre-wrap !important;
+            overflow: visible !important;
+            text-align: inherit !important;
+          }
+          body.print-boq-pdf #boqTable tbody td:nth-child(4) {
+            vertical-align: top !important;
+          }
+        }
+
+
+    /* FINAL BOQ PDF FIX: clean single print value, top-flushed, no hidden duplicate text */
+    @media print {
+      body.print-boq-pdf #boqTable tbody td,
+      body.print-boq-pdf #boqSummaryTable tbody td {
+        vertical-align: top !important;
+        padding-top: 2mm !important;
+        padding-bottom: 2mm !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        line-height: 1.35 !important;
+      }
+      body.print-boq-pdf #boqTable tbody td > :not(.boq-print-wrapped-text),
+      body.print-boq-pdf #boqSummaryTable tbody td > :not(.boq-print-wrapped-text) {
+        display: none !important;
+        visibility: hidden !important;
+      }
+      body.print-boq-pdf #boqTable tbody td .boq-print-wrapped-text,
+      body.print-boq-pdf #boqSummaryTable tbody td .boq-print-wrapped-text {
+        display: block !important;
+        visibility: visible !important;
+        position: static !important;
+        float: none !important;
+        transform: none !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        line-height: 1.35 !important;
+        white-space: pre-wrap !important;
+        word-break: normal !important;
+        overflow-wrap: anywhere !important;
+        overflow: visible !important;
+        text-align: inherit !important;
+        vertical-align: top !important;
+      }
+      body.print-boq-pdf #boqTable tbody td:nth-child(4) .boq-print-wrapped-text {
+        display: block !important;
+        vertical-align: top !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+      }
+    }
+    
+    /* BOQ document control table and PDF page numbering */
+    .boq-doc-control-table td {
+      text-align: center !important;
+      vertical-align: middle !important;
+      font-size: 11px !important;
+      line-height: 1.2 !important;
+      padding: 2px 4px !important;
+    }
+    .boq-doc-control-table .boq-doc-label {
+      font-weight: 700 !important;
+    }
+    .boq-doc-control-table .boq-doc-value {
+      font-weight: 400 !important;
+    }
+    @media print {
+      .boq-page-number::before {
+        content: "Page " counter(page) " of " counter(pages);
+      }
+      .boq-page-number {
+        font-size: 0 !important;
+      }
+      .boq-page-number::before {
+        font-size: 11px !important;
+      }
+    }
+
+
+    /* BOQ header logo in middle column */
+    .boq-header-logo {
+      display: block !important;
+      max-width: 100% !important;
+      max-height: 88px !important;
+      width: auto !important;
+      height: auto !important;
+      object-fit: contain !important;
+      margin: 1mm auto !important;
+    }
+
+
+    .boq-header-title{
+      font-size:16pt !important;
+      font-weight:700 !important;
+      text-align:center !important;
+      line-height:1.1 !important;
+      text-transform:uppercase !important;
+    }
+
+
+    /* BOQ PDF last-page confidentiality note */
+    .boq-confidentiality-note {
+      display: none;
+      font-size: 7pt !important;
+      line-height: 1.2 !important;
+      text-align: justify !important;
+      color: #111827 !important;
+      margin-top: 8mm !important;
+      padding-top: 2mm !important;
+      font-weight: 400 !important;
+    }
+    @media print {
+      body.print-boq-pdf #boqSummarySheet .boq-confidentiality-note {
+        display: block !important;
+        font-size: 7pt !important;
+        line-height: 1.2 !important;
+        text-align: justify !important;
+        color: #111827 !important;
+        margin-top: 8mm !important;
+        padding-top: 2mm !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+    }
+
+
+    /* FINAL FIX: BOQ category dropdown must display bold uppercase */
+    #boqTable .boq-category-select,
+    #boqTable .boq-category-select option,
+    #boqTable td:nth-child(3) select,
+    #boqTable td:nth-child(3) select option,
+    #boqTable .row-category select,
+    #boqTable .row-category select option {
+      font-weight: 700 !important;
+      text-transform: uppercase !important;
+    }
+
+    /* Selection styles for Indent/Outdent */
+    #boqTable tbody td.selected-work-cell,
+    #analysisTable tbody td.selected-work-cell,
+    #priceListTable tbody td.selected-work-cell {
+      outline: 2px solid var(--accent, #2563eb) !important;
+      outline-offset: -2px;
+      border-radius: 4px;
+    }
+    #boqTable tbody tr.selected-row,
+    #analysisTable tbody tr.selected-row,
+    #priceListTable tbody tr.selected-row {
+      background-color: #f1f5f9 !important;
+    }
+
+    /* Custom Context Menu */
+    .custom-context-menu {
+      position: fixed;
+      background: var(--card, #ffffff);
+      border: 1px solid var(--line, #cfd8e3);
+      border-radius: 4px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      z-index: 10000;
+      display: none;
+      padding: 4px 0;
+      min-width: 120px;
+    }
+    .custom-context-menu-item {
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text, #1f2937);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .custom-context-menu-item svg {
+      flex-shrink: 0;
+    }
+    .custom-context-menu-item:hover {
+      background: var(--bg, #f5f7fb);
+      color: var(--accent, #2563eb);
+    }
+    .custom-context-menu-item.has-submenu {
+      position: relative;
+    }
+    .custom-context-menu-item.has-submenu .custom-context-submenu {
+      display: none;
+      position: absolute;
+      left: 100%;
+      top: 0;
+      background: var(--card, #ffffff);
+      border: 1px solid var(--line, #cfd8e3);
+      border-radius: 4px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      padding: 4px 0;
+      min-width: 140px;
+      z-index: 10100;
+    }
+    .custom-context-menu-item.has-submenu:hover .custom-context-submenu {
+      display: block !important;
+    }
+
+    /* Manage Categories Modal Styles */
+    .mc-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.3);
+      backdrop-filter: blur(3px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20000;
+    }
+    .mc-modal {
+      background: var(--card, #ffffff);
+      border: 1px solid var(--line, #cfd8e3);
+      border-radius: 8px;
+      width: 480px;
+      max-width: 95%;
+      display: flex;
+      flex-direction: column;
+      max-height: 80vh;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      animation: mc-scale-up 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes mc-scale-up {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Qty Inst and Billing Modal Styles */
+    #qtyTaskTable td {
+      border-right: 1px solid var(--line, #cfd8e3) !important;
+      border-bottom: 1px solid var(--line, #cfd8e3) !important;
+      height: 36px;
+      padding: 4px 8px;
+      box-sizing: border-box;
+      background: #ffffff;
+    }
+    #qtyTaskTable th {
+      border-right: 1px solid var(--accent-dark, #1e3a8a) !important;
+      border-bottom: 2px solid var(--line, #cfd8e3) !important;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .qty-period-cell {
+      height: 36px !important;
+      flex-shrink: 0 !important;
+      border-right: 1px solid var(--line, #cfd8e3) !important;
+      border-bottom: 1px solid var(--line, #cfd8e3) !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 0 !important;
+      background: #ffffff !important;
+    }
+    .qty-period-input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-size: 11px;
+      padding: 0;
+      box-sizing: border-box;
+      outline: none;
+    }
+    .qty-period-input:focus {
+      background: #fff;
+      box-shadow: inset 0 0 0 1px var(--accent-light, #3b82f6);
+    }
+    
+    /* Accomplishment Modal Row Height & Alignment Fixes */
+    #qtyTaskTable tbody tr {
+      height: 36px !important;
+    }
+    #qtyTaskTable tbody td {
+      height: 36px !important;
+      padding: 0 4px !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+      vertical-align: middle !important;
+    }
+    #qtyTaskTable tbody td input[type="date"],
+    #qtyTaskTable tbody td input[type="number"],
+    #qtyTaskTable tbody td input[type="text"]:not(.qty-summary-input) {
+      height: 24px !important;
+      line-height: normal !important;
+      padding: 0 4px !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
+    }
+    #qtyTimelineBody {
+      border-bottom: 1px solid var(--line);
+    }
+    #qtyTimelineBody .gantt-timeline-row {
+      height: 36px !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+    
+    .qty-period-summary {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      color: var(--text, #1f2937);
+      background: #f8fafc;
+    }
+    .qty-summary-input {
+      margin: 0 !important;
+      padding: 0 4px !important;
+      border: none !important;
+      background: transparent !important;
+      font-family: inherit !important;
+      font-size: 10px !important;
+      font-weight: bold !important;
+      box-sizing: border-box !important;
+      outline: none !important;
+      height: 100% !important;
+      line-height: normal !important;
+      vertical-align: middle !important;
+    }
+    /* Dropdown Styles */
+    .dropdown-content a:hover {
+      background-color: #f1f5f9 !important;
+    }
+    .mc-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line, #cfd8e3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+    }
+    .mc-header h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text, #1f2937);
+      letter-spacing: 0.02em;
+    }
+    .mc-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--muted, #6b7280);
+      padding: 0;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+    }
+    .mc-close-btn:hover {
+      background: #fee2e2;
+      color: var(--danger, #b91c1c);
+    }
+    .mc-body {
+      padding: 16px 18px;
+      overflow-y: auto;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .mc-add-row {
+      display: flex;
+      gap: 6px;
+    }
+    .mc-add-row input {
+      flex: 1 1 auto;
+      border: 1px solid var(--line, #cfd8e3);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-size: 12px;
+      outline: none;
+      background: #fff;
+    }
+    .mc-add-row input:focus {
+      border-color: var(--accent, #2563eb);
+    }
+    .mc-add-row button {
+      flex: 0 0 auto;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .mc-list-container {
+      border: 1px solid var(--line, #cfd8e3);
+      border-radius: 4px;
+      max-height: 280px;
+      overflow-y: auto;
+      background: #fff;
+    }
+    .mc-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      gap: 8px;
+    }
+    .mc-list-item:last-child {
+      border-bottom: none;
+    }
+    .mc-list-item input {
+      flex: 1 1 auto;
+      border: none;
+      outline: none;
+      font-size: 12px;
+      padding: 2px 4px;
+      background: transparent;
+      color: var(--text, #1f2937);
+    }
+    .mc-list-item input:focus {
+      background: #f1f5f9;
+      border-radius: 2px;
+    }
+    .mc-item-actions {
+      display: flex;
+      gap: 3px;
+    }
+    .mc-item-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted, #6b7280);
+    }
+    .mc-item-btn:hover {
+      background: #fee2e2;
+      color: var(--danger, #b91c1c);
+    }
+    .mc-footer {
+      padding: 12px 18px;
+      border-top: 1px solid var(--line, #cfd8e3);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      background: #f8fafc;
+    }
+    .mc-footer button {
+      padding: 6px 14px;
+      font-size: 12px;
+    }
+
+    /* Manual input indicator style */
+    .manual-indicator {
+      position: absolute;
+      top: 1px;
+      left: 2px;
+      font-size: 10pt;
+      font-weight: 800;
+      color: #ff0000;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      z-index: 5;
+    }
+    @media print {
+      .manual-indicator,
+      body.print-boq-pdf .manual-indicator {
+        display: none !important;
+      }
+    }
+
+    /* Cell level selection styles */
+    #boqTable tbody td.selected-cell,
+    #analysisTable tbody td.selected-cell,
+    #priceListTable tbody td.selected-cell,
+    #boqSummaryTable tbody td.selected-cell,
+    #ganttTaskTable tbody td.selected-cell,
+    #qtyTaskTable tbody td.selected-cell {
+      background-color: rgba(37, 99, 235, 0.12) !important;
+      outline: 2px solid #2563eb !important;
+      outline-offset: -2px;
+      position: relative !important;
+    }
+
+    /* Ensure inputs inside selected cells have transparent background */
+    #boqTable tbody td.selected-cell input,
+    #analysisTable tbody td.selected-cell input,
+    #priceListTable tbody td.selected-cell input,
+    #boqSummaryTable tbody td.selected-cell input,
+    #ganttTaskTable tbody td.selected-cell input,
+    #qtyTaskTable tbody td.selected-cell input {
+      background-color: transparent !important;
+    }
+
+    /* Flat Seamless Excel Cell Inputs */
+    #ganttTaskTable tbody td input,
+    #qtyTaskTable tbody td input,
+    #boqTable tbody td input,
+    #analysisTable tbody td input,
+    #priceListTable tbody td input,
+    #boqSummaryTable tbody td input,
+    #ganttTaskTable tbody td select,
+    #qtyTaskTable tbody td select,
+    #boqTable tbody td select,
+    #analysisTable tbody td select,
+    #priceListTable tbody td select,
+    #boqSummaryTable tbody td select {
+      width: 100% !important;
+      height: 100% !important;
+      border: none !important;
+      outline: none !important;
+      background: transparent !important;
+      padding: 2px 4px !important;
+      margin: 0 !important;
+      font-family: inherit !important;
+      font-size: 11px !important;
+      box-sizing: border-box !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+
+    #ganttTaskTable tbody td input:focus,
+    #qtyTaskTable tbody td input:focus,
+    #boqTable tbody td input:focus,
+    #analysisTable tbody td input:focus,
+    #priceListTable tbody td input:focus,
+    #boqSummaryTable tbody td input:focus {
+      background-color: rgba(37, 99, 235, 0.08) !important;
+    }
+
+    /* Attached Bottom-Right Excel Fill Handle Square */
+    .app-fill-handle {
+      position: absolute !important;
+      width: 9px !important;
+      height: 9px !important;
+      background-color: #1d4ed8 !important;
+      border: 1.5px solid #ffffff !important;
+      bottom: -5px !important;
+      right: -5px !important;
+      cursor: crosshair !important;
+      pointer-events: auto !important;
+      z-index: 1000 !important;
+      border-radius: 1px !important;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Drag Fill Boundary Outline */
+    #appCellFillPreviewBox {
+      position: absolute;
+      border: 2px dashed #2563eb;
+      background: rgba(37, 99, 235, 0.15);
+      pointer-events: none;
+      z-index: 9997;
+      display: none;
+    }
+
+    /* Floating Grid Selection Status Bar */
+    .app-grid-status-bar {
+      position: fixed;
+      bottom: 12px;
+      right: 20px;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(8px);
+      color: #f8fafc;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .app-grid-status-bar .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .app-grid-status-bar .stat-label {
+      color: #94a3b8;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .app-grid-status-bar .stat-val {
+      color: #60a5fa;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-weight: 700;
+    }
+
+    @media print {
+      #boqTable tbody td.selected-cell,
+      #analysisTable tbody td.selected-cell,
+      #priceListTable tbody td.selected-cell,
+      #boqSummaryTable tbody td.selected-cell,
+      body.print-boq-pdf #boqTable tbody td.selected-cell {
+        background-color: transparent !important;
+        outline: none !important;
+      }
+      #appCellSelectionBox,
+      #appCellFillHandle,
+      #appCellFillPreviewBox,
+      .app-grid-status-bar {
+        display: none !important;
+      }
+    }
+
+
+
+/* Cover Letter Top Header Table */
+.cover-letter-header {
+  margin-bottom: 14px;
+}
+.cover-header-table {
+  width: 100%;
+  min-width: 0 !important;
+  height: 20mm;
+  max-height: 20mm;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: 1px solid #111827;
+  margin: 0 0 14px 0;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+.cover-header-table > tbody > tr > td,
+.cover-header-table > tr > td {
+  border: 1px solid #111827;
+  padding: 0;
+  box-sizing: border-box;
+  vertical-align: middle;
+  height: 20mm;
+  max-height: 20mm;
+}
+.cover-header-col1 {
+  width: 30%;
+  height: 20mm;
+  max-height: 20mm;
+  text-align: center;
+  vertical-align: middle;
+  padding: 1mm !important;
+  box-sizing: border-box;
+}
+.cover-header-col1 .cover-company-logo,
+#coverLetterSheet .cover-header-col1 .cover-company-logo,
+body.print-cover-proposal .cover-header-col1 .cover-company-logo {
+  max-height: 18mm !important;
+  max-width: 100% !important;
+  height: auto !important;
+  width: auto !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+.cover-header-col2 {
+  width: 45%;
+  height: 20mm;
+  max-height: 20mm;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 20pt !important;
+  font-weight: 700 !important;
+  color: #111827;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  padding: 0 4px !important;
+  box-sizing: border-box;
+}
+.cover-header-col3 {
+  width: 25%;
+  height: 20mm;
+  max-height: 20mm;
+  vertical-align: middle;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+.cover-header-subtable {
+  width: 100%;
+  min-width: 0 !important;
+  height: 20mm;
+  max-height: 20mm;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: none !important;
+  margin: 0;
+}
+.cover-header-subtable tr {
+  height: 5mm;
+  max-height: 5mm;
+  border: none !important;
+  border-bottom: none !important;
+}
+.cover-header-subtable td {
+  height: 5mm;
+  max-height: 5mm;
+  font-size: 8pt !important;
+  font-weight: 700;
+  color: #111827;
+  padding: 0 4px !important;
+  vertical-align: middle;
+  text-align: left;
+  border: none !important;
+  border-bottom: none !important;
+  text-decoration: none !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  line-height: 1.15;
+}
+.cover-header-subtable tr:last-child td {
+  border-bottom: none !important;
+}
+
+@media print {
+  body.print-cover-proposal .cover-header-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 20mm !important;
+    max-height: 20mm !important;
+    border: 1px solid #000 !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    margin: 0 0 12px 0 !important;
+  }
+  body.print-cover-proposal .cover-header-table td {
+    border: 1px solid #000 !important;
+    height: 20mm !important;
+    max-height: 20mm !important;
+  }
+  body.print-cover-proposal .cover-header-col1 {
+    width: 30% !important;
+    height: 20mm !important;
+    max-height: 20mm !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 1mm !important;
+  }
+  body.print-cover-proposal .cover-header-col1 .cover-company-logo {
+    max-height: 18mm !important;
+    max-width: 100% !important;
+    height: auto !important;
+    width: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 auto !important;
+  }
+  body.print-cover-proposal .cover-header-col2 {
+    width: 45% !important;
+    height: 20mm !important;
+    max-height: 20mm !important;
+    font-size: 20pt !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    text-transform: uppercase !important;
+    padding: 0 4px !important;
+  }
+  body.print-cover-proposal .cover-header-col3 {
+    width: 25% !important;
+    height: 20mm !important;
+    max-height: 20mm !important;
+    padding: 0 !important;
+  }
+  body.print-cover-proposal .cover-header-subtable {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 20mm !important;
+    max-height: 20mm !important;
+    border-collapse: collapse !important;
+    border: none !important;
+  }
+  body.print-cover-proposal .cover-header-subtable tr {
+    height: 5mm !important;
+    max-height: 5mm !important;
+    border: none !important;
+    border-bottom: none !important;
+  }
+  body.print-cover-proposal .cover-header-subtable td {
+    height: 5mm !important;
+    max-height: 5mm !important;
+    font-size: 8pt !important;
+    font-weight: 700 !important;
+    border: none !important;
+    border-bottom: none !important;
+    text-decoration: none !important;
+    padding: 0 4px !important;
+    vertical-align: middle !important;
+    text-align: left !important;
+  }
+  body.print-cover-proposal .cover-header-subtable tr:last-child td {
+    border-bottom: none !important;
+  }
+}
+
+/* ==========================================================================
+   COVER LETTER LIVE PREVIEW & CONFIGURATION SIDEBAR
+   ========================================================================== */
+.cover-workspace-card {
+  padding: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+.cover-workspace-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.cover-toolbar-left,
+.cover-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cover-toolbar-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cover-workspace-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.cover-status-badge {
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cover-page-badge {
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  border: 1px solid #cbd5e1;
+}
+
+/* Zoom Controls */
+.cover-zoom-controls {
+  display: inline-flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.cover-zoom-controls .btn-zoom {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 4px 9px;
+  height: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  transition: background 0.15s ease;
+}
+
+.cover-zoom-controls .btn-zoom:hover {
+  background: #e2e8f0;
+}
+
+.cover-zoom-controls .btn-zoom-display {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  height: 28px;
+  line-height: 28px;
+  padding: 0 8px;
+  min-width: 50px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e293b;
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  cursor: pointer;
+}
+
+.cover-zoom-controls .btn-zoom-display:hover {
+  background: #e2e8f0;
+}
+
+.cover-zoom-controls .btn-zoom-fit {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  height: 28px;
+  line-height: 28px;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.cover-zoom-controls .btn-zoom-fit:hover {
+  background: #e2e8f0;
+}
+
+.btn-toggle-sidebar {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+/* Workspace Split Container */
+.cover-workspace {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  position: relative;
+  min-height: 800px;
+}
+
+/* Configuration Sidebar */
+.cover-sidebar {
+  width: 420px;
+  min-width: 420px;
+  max-width: 420px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 120px);
+  max-height: calc(100vh - 120px);
+  position: sticky;
+  top: 10px;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s ease,
+              transform 0.25s ease;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.cover-sidebar.collapsed {
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-20px);
+}
+
+
+
+.cover-sidebar-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+}
+
+.cover-sidebar-close {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.cover-sidebar-close:hover {
+  background: #e2e8f0;
+  color: var(--text);
+}
+
+.cover-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0 !important;
+}
+
+.cover-sidebar-scroll {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 10px 12px 28px 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #94a3b8 #f1f5f9 !important;
+}
+
+.cover-sidebar-scroll::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+.cover-sidebar-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9 !important;
+  border-radius: 4px !important;
+}
+
+.cover-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #94a3b8 !important;
+  border-radius: 4px !important;
+  border: 2px solid #f1f5f9 !important;
+}
+
+.cover-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: #64748b !important;
+}
+
+.cover-sidebar-group {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+  flex-shrink: 0 !important;
+  min-height: max-content !important;
+}
+
+.cover-sidebar-group[open] {
+  border-color: #94a3b8;
+}
+
+.cover-sidebar-group-title {
+  padding: 8px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #1e293b;
+  background: #f8fafc;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  list-style: none;
+  flex-shrink: 0 !important;
+}
+
+.cover-sidebar-group-title::-webkit-details-marker {
+  display: none;
+}
+
+.cover-sidebar-group[open] .cover-chevron {
+  transform: rotate(180deg);
+}
+
+.cover-chevron {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+  color: #64748b;
+}
+
+.cover-sidebar-group-content {
+  padding: 10px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  background: #ffffff;
+  border-top: 1px solid var(--line);
+  flex-shrink: 0 !important;
+  min-height: max-content !important;
+}
+
+.cover-field {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  flex-shrink: 0 !important;
+  min-height: max-content !important;
+}
+
+.cover-field-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+  min-height: max-content !important;
+}
+
+.cover-field label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cover-field input[type="text"],
+.cover-field input[type="date"],
+.cover-field textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 5px 7px;
+  font-size: 11.5px;
+  font-family: inherit;
+  box-sizing: border-box;
+  background: #ffffff;
+  color: #0f172a;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cover-field textarea {
+  resize: vertical;
+  min-height: 50px;
+  line-height: 1.35;
+}
+
+.cover-field input:focus,
+.cover-field textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+/* Live Preview Desk Area */
+.cover-preview-area {
+  flex: 1;
+  min-width: 0;
+  background: #f1f5f9;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  padding: 24px 16px;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 850px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+.cover-preview-wrapper {
+  display: flex;
+  justify-content: center;
+  transform-origin: top center;
+  transition: transform 0.15s ease-out;
+  width: 100%;
+}
+
+.cover-preview-wrapper .cover-letter-page {
+  margin: 0 auto;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+  border-radius: 2px;
+  background: #ffffff;
+}
+
+/* Contenteditable Styling in Preview */
+.cover-letter-page [contenteditable="true"] {
+  border-radius: 2px;
+  padding: 1px 2px;
+  outline: none;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cover-letter-page [contenteditable="true"]:hover {
+  background: rgba(37, 99, 235, 0.04);
+}
+
+.cover-letter-page [contenteditable="true"]:focus {
+  background: rgba(37, 99, 235, 0.08);
+  box-shadow: 0 0 0 1.5px rgba(37, 99, 235, 0.4);
+}
+
+/* Print & PDF Overrides */
+@media print {
+  .cover-workspace-toolbar,
+  .cover-sidebar,
+  .cover-sidebar-header,
+  .cover-sidebar-scroll {
+    display: none !important;
+  }
+  .cover-workspace {
+    display: block !important;
+    gap: 0 !important;
+    min-height: auto !important;
+  }
+  .cover-preview-area {
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+  .cover-preview-wrapper {
+    display: block !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  body.print-cover-proposal .cover-letter-page {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 auto !important;
+    width: 190mm !important;
+    padding: 0 !important;
+  }
+}
+
+
+
+/* ==========================================================================
+   COVER LETTER HEADER TABLE REFACTOR & STRICT SIZING (20mm Total Height, 20pt/8pt)
+   ========================================================================== */
+
+/* 1. Reset global table min-width (table { min-width: 980px }) for cover letter tables */
+.cover-header-table,
+.cover-header-subtable,
+#coverLetterSheet .cover-header-table,
+#coverLetterSheet .cover-header-subtable {
+  min-width: 0 !important;
+}
+
+/* 2. Workspace Preview Wrapper & Dynamic Paper Sizing */
+.cover-preview-wrapper {
+  display: flex;
+  justify-content: center;
+  transform-origin: top center;
+  transition: transform 0.15s ease-out;
+  width: max-content !important;
+  min-width: 100% !important;
+}
+
+.cover-preview-wrapper .cover-letter-page {
+  margin: 0 auto;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+  border-radius: 2px;
+  background: #ffffff;
+}
+
+.cover-letter-page {
+  background: #ffffff !important;
+  border: 1px solid var(--line) !important;
+  width: var(--cover-page-width, 210mm) !important;
+  min-width: var(--cover-page-width, 210mm) !important;
+  max-width: var(--cover-page-width, 210mm) !important;
+  min-height: var(--cover-page-height, 297mm) !important;
+  flex-shrink: 0 !important;
+  padding: 10mm !important;
+  margin: 0 auto !important;
+  line-height: 1.45 !important;
+  box-sizing: border-box !important;
+  transition: none !important;
+}
+
+.cover-sidebar select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 5px 7px;
+  font-size: 11.5px;
+  font-family: inherit;
+  box-sizing: border-box;
+  background: #ffffff;
+  color: #0f172a;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cover-sidebar select:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+/* 3. Header Container Flush With Margins */
+.cover-letter-header {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 0 14px 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+/* 4. 3-Column Header Table - Strictly 20mm Total Height */
+.cover-header-table,
+#coverLetterSheet .cover-header-table {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: 20mm !important;
+  max-height: 20mm !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+  border: 1px solid #111827 !important;
+  margin: 0 0 14px 0 !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.cover-header-table > tbody > tr > td,
+.cover-header-table > tr > td,
+#coverLetterSheet .cover-header-table > tbody > tr > td,
+#coverLetterSheet .cover-header-table > tr > td {
+  border: 1px solid #111827 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+  height: 20mm !important;
+  max-height: 20mm !important;
+  overflow: hidden !important;
+}
+
+/* Column 1: Company Logo (30% width, 20mm height, max 18mm logo height) */
+.cover-header-col1,
+#coverLetterSheet .cover-header-col1 {
+  width: 30% !important;
+  max-width: 30% !important;
+  height: 20mm !important;
+  max-height: 20mm !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 1mm !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.cover-header-col1 .cover-company-logo,
+#coverLetterSheet .cover-header-col1 .cover-company-logo {
+  max-height: 18mm !important;
+  max-width: 100% !important;
+  height: auto !important;
+  width: auto !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* Column 2: Document Title - Strictly 20pt Bold (45% width, 20mm height) */
+.cover-header-col2,
+#coverLetterSheet .cover-header-col2 {
+  width: 45% !important;
+  max-width: 45% !important;
+  height: 20mm !important;
+  max-height: 20mm !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 0 4px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+#coverDocTitle,
+.cover-header-col2 #coverDocTitle,
+#coverLetterSheet .cover-header-col2 #coverDocTitle {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  font-size: 20pt !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0.01em !important;
+  text-transform: uppercase !important;
+  color: #111827 !important;
+  text-align: center !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  box-sizing: border-box !important;
+}
+
+/* Column 3: Document Control Subtable - Strictly 8pt, 25% width, 20mm height (4 rows at 5mm each, NO underlines) */
+.cover-header-col3,
+#coverLetterSheet .cover-header-col3 {
+  width: 25% !important;
+  max-width: 25% !important;
+  height: 20mm !important;
+  max-height: 20mm !important;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.cover-header-subtable,
+#coverLetterSheet .cover-header-subtable {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: 20mm !important;
+  max-height: 20mm !important;
+  border-collapse: collapse !important;
+  table-layout: fixed !important;
+  border: none !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.cover-header-subtable,
+.cover-header-subtable tr,
+.cover-header-subtable td,
+.cover-header-subtable td span,
+#coverLetterSheet .cover-header-subtable,
+#coverLetterSheet .cover-header-subtable tr,
+#coverLetterSheet .cover-header-subtable td,
+#coverLetterSheet .cover-header-subtable td span {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.cover-header-subtable tr,
+#coverLetterSheet .cover-header-subtable tr {
+  height: 5mm !important;
+  max-height: 5mm !important;
+}
+
+.cover-header-subtable td,
+.cover-header-subtable td span,
+#coverLetterSheet .cover-header-subtable td,
+#coverLetterSheet .cover-header-subtable td span {
+  height: 5mm !important;
+  max-height: 5mm !important;
+  font-size: 8pt !important;
+  font-weight: 700 !important;
+  color: #111827 !important;
+  padding: 0 4px !important;
+  vertical-align: middle !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  box-sizing: border-box !important;
+  line-height: 1.15 !important;
+}
+
+/* 5. Print & PDF Overrides */
+@media print {
+  .cover-preview-wrapper {
+    display: block !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  body.print-cover-proposal .cover-letter-page {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 auto !important;
+    width: calc(var(--cover-page-width, 210mm) - 20mm) !important;
+    min-height: calc(var(--cover-page-height, 297mm) - 20mm) !important;
+    padding: 0 !important;
+  }
+  body.print-cover-proposal .cover-header-table {
+    width: 100% !important;
+    height: 20mm !important;
+    max-height: 20mm !important;
+    min-width: 0 !important;
+    border: 1px solid #000 !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    margin: 0 0 12px 0 !important;
+  }
+  body.print-cover-proposal .cover-header-table td {
+    border: 1px solid #000 !important;
+    height: 20mm !important;
+    max-height: 20mm !important;
+  }
+  body.print-cover-proposal .cover-header-col1 {
+    width: 30% !important;
+    height: 20mm !important;
+    max-height: 20mm !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 1mm !important;
+  }
+  body.print-cover-proposal .cover-header-col1 .cover-company-logo {
+    max-height: 18mm !important;
+    max-width: 100% !important;
+    height: auto !important;
+    width: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 auto !important;
+  }
+  body.print-cover-proposal .cover-header-col2 {
+    width: 45% !important;
+    height: 20mm !important;
+    max-height: 20mm !important;
+    font-size: 20pt !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    text-transform: uppercase !important;
+    padding: 0 4px !important;
+  }
+  body.print-cover-proposal .cover-header-col2 #coverDocTitle {
+    font-size: 20pt !important;
+    font-weight: 700 !important;
+  }
+  body.print-cover-proposal .cover-header-col3 {
+    width: 25% !important;
+    height: 20mm !important;
+    max-height: 20mm !important;
+    padding: 0 !important;
+  }
+  body.print-cover-proposal .cover-header-subtable {
+    width: 100% !important;
+    height: 20mm !important;
+    max-height: 20mm !important;
+    min-width: 0 !important;
+    border-collapse: collapse !important;
+    border: none !important;
+  }
+  body.print-cover-proposal .cover-header-subtable tr {
+    height: 5mm !important;
+    max-height: 5mm !important;
+    border: none !important;
+    border-bottom: none !important;
+  }
+  body.print-cover-proposal .cover-header-subtable td,
+  body.print-cover-proposal .cover-header-subtable td span {
+    height: 5mm !important;
+    max-height: 5mm !important;
+    font-size: 8pt !important;
+    font-weight: 700 !important;
+    border: none !important;
+    border-bottom: none !important;
+    text-decoration: none !important;
+    padding: 0 4px !important;
+    vertical-align: middle !important;
+    text-align: left !important;
+  }
+}
+
+
+/* ==============================================================
+   ATTACHMENTS & ANNEXES (PDF / Images) STYLES
+   ============================================================== */
+.cover-sidebar-attachment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+.cover-sidebar-attachment-item {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.cover-sidebar-attachment-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cover-sidebar-attachment-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.cover-sidebar-attachment-info {
+  flex: 1;
+  min-width: 0;
+}
+.cover-sidebar-attachment-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cover-sidebar-attachment-size {
+  font-size: 10px;
+  color: #64748b;
+  margin-top: 1px;
+}
+.cover-sidebar-attachment-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.cover-sidebar-attachment-caption-input {
+  width: 100%;
+  font-size: 11px;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Attachments in Live Preview Document */
+.cover-attachments-container {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.cover-attachment-card {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.cover-attachment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.cover-attachment-tag {
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #e0e7ff;
+  color: #3730a3;
+}
+.cover-attachment-tag.pdf-tag {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.cover-attachment-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+  flex: 1;
+  margin-left: 10px;
+}
+.cover-attachment-image-wrapper {
+  text-align: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 8px;
+}
+.cover-attachment-img {
+  max-width: 100%;
+  height: auto;
+  max-height: 520px;
+  border-radius: 2px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.cover-attachment-pdf-wrapper {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+.cover-attachment-pdf-frame {
+  width: 100%;
+  height: 480px;
+  border: none;
+  display: block;
+}
+.cover-attachment-footer {
+  margin-top: 8px;
+  font-size: 10px;
+  color: #64748b;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Print and PDF rules for attachments */
+body.print-cover-proposal .cover-attachment-card {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+  box-shadow: none !important;
+  border: 1px solid #cbd5e1 !important;
+  margin-top: 10mm !important;
+}
+body.print-cover-proposal .cover-attachment-img {
+  max-width: 100% !important;
+  max-height: none !important;
+  height: auto !important;
+}
+
+
+/* ==============================================================
+   CORPORATE EXECUTIVE STYLE REFINEMENTS
+   ============================================================== */
+
+/* 1. Sidebar Widening & Anti-Clipping / Anti-Compression */
+.cover-sidebar {
+  width: 420px !important;
+  min-width: 420px !important;
+  max-width: 420px !important;
+  height: calc(100vh - 120px) !important;
+  max-height: calc(100vh - 120px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+.cover-sidebar-header {
+  flex-shrink: 0 !important;
+}
+
+.cover-sidebar-scroll {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 10px 12px 28px 12px !important;
+  gap: 10px !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #94a3b8 #f1f5f9 !important;
+}
+
+.cover-sidebar-scroll::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+.cover-sidebar-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9 !important;
+  border-radius: 4px !important;
+}
+
+.cover-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #94a3b8 !important;
+  border-radius: 4px !important;
+  border: 2px solid #f1f5f9 !important;
+}
+
+.cover-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: #64748b !important;
+}
+
+.cover-sidebar * {
+  box-sizing: border-box !important;
+}
+
+.cover-sidebar-group {
+  flex-shrink: 0 !important;
+  min-height: max-content !important;
+}
+
+.cover-sidebar-group-content {
+  flex-shrink: 0 !important;
+  min-height: max-content !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.cover-field,
+.cover-field-row,
+.cover-field-row > div {
+  flex-shrink: 0 !important;
+  min-height: max-content !important;
+  min-width: 0 !important;
+}
+
+.cover-field input,
+.cover-field select,
+.cover-sidebar input,
+.cover-sidebar select {
+  flex-shrink: 0 !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  min-height: 32px !important;
+  height: 32px !important;
+  box-sizing: border-box !important;
+}
+
+.cover-field textarea,
+.cover-sidebar textarea {
+  flex-shrink: 0 !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  min-height: 68px !important;
+  line-height: 1.4 !important;
+  box-sizing: border-box !important;
+  resize: vertical !important;
+}
+
+.cover-sidebar button,
+.cover-sidebar .btn {
+  flex-shrink: 0 !important;
+  white-space: normal !important;
+  line-height: 1.35 !important;
+  box-sizing: border-box !important;
+}
+
+/* 2. Executive Corporate Sheet Frame */
+.cover-preview-wrapper .cover-letter-page {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  border-radius: 2px !important;
+}
+
+/* 3. Executive Project Metadata Block */
+.cover-letter-meta {
+  border-left: 3.5px solid #1e3a8a !important;
+  padding: 8px 12px !important;
+  background: #f8fafc !important;
+  border-radius: 0 4px 4px 0 !important;
+  margin: 10px 0 12px 0 !important;
+}
+
+.cover-letter-meta .cover-meta-text {
+  font-size: 9.5pt !important;
+  font-weight: 800 !important;
+  color: #475569 !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+}
+
+.cover-linked-value {
+  font-size: 10pt !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+}
+
+/* 4. Financial Callout Box */
+.proposal-amount-box {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-left: 5px solid #1e3a8a !important;
+  border-radius: 6px !important;
+  padding: 12px 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  margin: 16px 0 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+}
+
+.proposal-amount-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+}
+
+.proposal-amount-label {
+  font-size: 9.5pt !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  color: #1e293b !important;
+}
+
+.proposal-vat-note {
+  font-size: 8.5pt !important;
+  color: #64748b !important;
+  font-weight: 600 !important;
+}
+
+.proposal-amount-display {
+  text-align: right !important;
+}
+
+.proposal-amount-num {
+  font-size: 15pt !important;
+  font-weight: 900 !important;
+  color: #0f172a !important;
+  font-variant-numeric: tabular-nums !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* 5. Corporate Cost Summary Breakdown Table */
+#coverSummaryTable {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  border: 1px solid #cbd5e1 !important;
+  margin: 12px 0 16px 0 !important;
+}
+
+#coverSummaryTable th {
+  background: #1e293b !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 9pt !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  padding: 8px 10px !important;
+  border: 1px solid #334155 !important;
+  white-space: nowrap !important;
+}
+
+#coverSummaryTable td {
+  font-size: 9.5pt !important;
+  padding: 6px 10px !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+#coverSummaryTable tbody tr:nth-child(even) {
+  background: #f8fafc !important;
+}
+
+#coverSummaryTable tbody tr:hover {
+  background: #f1f5f9 !important;
+}
+
+#coverSummaryTable .row-category td {
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+#coverSummaryTable .row-subcategory td {
+  color: #334155 !important;
+}
+
+#coverSummaryTable .summary-total-row td {
+  background: #f1f5f9 !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  font-size: 10pt !important;
+  border-top: 2px solid #0f172a !important;
+  border-bottom: 3px double #0f172a !important;
+  padding: 8px 10px !important;
+}
+
+#coverSummaryTable .number {
+  font-variant-numeric: tabular-nums !important;
+  text-align: right !important;
+}
+
+/* 6. Corporate Section Titles */
+.cover-letter-section-title {
+  margin: 22px 0 10px 0 !important;
+  font-size: 10.5pt !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  color: #0f2744 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding-bottom: 5px !important;
+  border-bottom: 1.5px solid #e2e8f0 !important;
+}
+
+.cover-letter-section-title::before {
+  content: '' !important;
+  display: inline-block !important;
+  width: 4px !important;
+  height: 15px !important;
+  background: #2563eb !important;
+  border-radius: 2px !important;
+  flex-shrink: 0 !important;
+}
+
+/* 7. Corporate Content Cards */
+.cover-letter-terms > div {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 6px !important;
+  padding: 10px 14px !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.cover-letter-terms > div:focus-within {
+  border-color: #93c5fd !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08) !important;
+}
+
+.cover-letter-terms label {
+  font-size: 9pt !important;
+  font-weight: 800 !important;
+  color: #475569 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+
+.cover-letter-terms textarea {
+  font-family: inherit !important;
+  font-size: 9.5pt !important;
+  line-height: 1.6 !important;
+  color: #1e293b !important;
+  border: 1px solid transparent !important;
+  padding: 4px 6px !important;
+  border-radius: 4px !important;
+  background: #fafbfc !important;
+  transition: background 0.15s ease, border-color 0.15s ease !important;
+}
+
+.cover-letter-terms textarea:focus {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  outline: none !important;
+}
+
+/* 8. Executive Side-by-Side Signatures Grid */
+.cover-letter-signatures {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 28px !important;
+  margin-top: 32px !important;
+  padding-top: 16px !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+.cover-signature-card {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+.cover-signature-heading {
+  font-size: 9pt !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  color: #475569 !important;
+}
+
+.cover-signature-org {
+  font-size: 9.5pt !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin-bottom: 24px !important;
+}
+
+.cover-letter-signature-line {
+  height: 1.5px !important;
+  background: #0f172a !important;
+  width: 100% !important;
+  margin-bottom: 6px !important;
+}
+
+.cover-signature-card input {
+  border: 1px solid transparent !important;
+  padding: 3px 6px !important;
+  font-size: 9.5pt !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  color: #0f172a !important;
+}
+
+.cover-signature-card input:hover,
+.cover-signature-card input:focus {
+  border-color: #cbd5e1 !important;
+  background: #f8fafc !important;
+  outline: none !important;
+}
+
+.cover-signature-date-row {
+  display: flex !important;
+  gap: 6px !important;
+  font-size: 9pt !important;
+  color: #64748b !important;
+  margin-top: 6px !important;
+}
+
+/* 9. Print & PDF Corporate Rendering */
+body.print-cover-proposal .cover-letter-signatures {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 20mm !important;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+body.print-cover-proposal #coverSummaryTable th {
+  background: #1e293b !important;
+  color: #ffffff !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+body.print-cover-proposal .proposal-amount-box {
+  background: #f1f5f9 !important;
+  border-left: 5px solid #1e3a8a !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+
+/* ==========================================================================
+   MULTI-SHEET ATTACHMENT PAGES & ORIENTATION AUTO-DETECTION
+   ========================================================================== */
+
+/* Stack live preview sheets vertically with clean page separation */
+.cover-preview-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 28px !important;
+  transform-origin: top center !important;
+  transition: transform 0.15s ease-out !important;
+  width: max-content !important;
+  min-width: 100% !important;
+  padding-bottom: 40px !important;
+}
+
+.cover-attachments-container {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 28px !important;
+  width: 100% !important;
+}
+
+/* Base Attachment Sheet - Maximized Display Area */
+.cover-letter-page.cover-attachment-sheet,
+.cover-preview-wrapper .cover-attachment-sheet {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  border-radius: 2px !important;
+  box-sizing: border-box !important;
+  padding: 3mm 5mm 3mm 5mm !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  position: relative !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+/* Portrait Attachment Sheet */
+.cover-attachment-sheet.orientation-portrait {
+  width: var(--cover-page-portrait-width, 210mm) !important;
+  min-width: var(--cover-page-portrait-width, 210mm) !important;
+  max-width: var(--cover-page-portrait-width, 210mm) !important;
+  min-height: var(--cover-page-portrait-height, 297mm) !important;
+  height: var(--cover-page-portrait-height, 297mm) !important;
+}
+
+/* Landscape Attachment Sheet */
+.cover-attachment-sheet.orientation-landscape {
+  width: var(--cover-page-landscape-width, 297mm) !important;
+  min-width: var(--cover-page-landscape-width, 297mm) !important;
+  max-width: var(--cover-page-landscape-width, 297mm) !important;
+  min-height: var(--cover-page-landscape-height, 210mm) !important;
+  height: var(--cover-page-landscape-height, 210mm) !important;
+}
+
+/* Sheet Top Corporate Header - Compact & Slim */
+.cover-attachment-sheet-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-bottom: 1.5px solid #0f2744 !important;
+  padding-bottom: 1.5mm !important;
+  margin-bottom: 2mm !important;
+  flex-shrink: 0 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.cover-attachment-header-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.cover-attachment-badge {
+  background: #0f2744 !important;
+  color: #ffffff !important;
+  font-size: 7pt !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  padding: 1px 5px !important;
+  border-radius: 2px !important;
+  text-transform: uppercase !important;
+}
+
+.cover-attachment-sheet-title {
+  font-size: 8.5pt !important;
+  font-weight: 700 !important;
+  color: #0f2744 !important;
+  letter-spacing: 0.2px !important;
+}
+
+.cover-attachment-page-tag {
+  background: #e2e8f0 !important;
+  color: #1e293b !important;
+  font-size: 7pt !important;
+  font-weight: 600 !important;
+  padding: 1px 4px !important;
+  border-radius: 2px !important;
+}
+
+.cover-attachment-header-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  font-size: 7pt !important;
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+/* Sheet Media Content Area - Fully Maximized */
+.cover-attachment-sheet-body {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+  width: 100% !important;
+  height: calc(100% - 14mm) !important;
+  background: transparent !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 3px !important;
+  padding: 0 !important;
+  position: relative !important;
+}
+
+.cover-attachment-sheet-img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: auto !important;
+  border-radius: 2px !important;
+}
+
+/* Sheet Bottom Corporate Footer - Compact & Slim */
+.cover-attachment-sheet-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-top: 1px solid #cbd5e1 !important;
+  padding-top: 1.5mm !important;
+  margin-top: 2mm !important;
+  font-size: 6.5pt !important;
+  color: #475569 !important;
+  flex-shrink: 0 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.cover-attachment-footer-left,
+.cover-attachment-footer-center,
+.cover-attachment-footer-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.cover-attachment-footer-center {
+  font-weight: 600 !important;
+  letter-spacing: 0.4px !important;
+  color: #64748b !important;
+}
+
+.cover-attachment-footer-right {
+  font-weight: 700 !important;
+  color: #0f2744 !important;
+  font-size: 7pt !important;
+}
+
+/* Print Scope Rules */
+body[data-print-scope="proposal"] .cover-attachment-sheet,
+body[data-print-scope="proposal"] #coverAttachmentsContainer {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+body[data-print-scope="attachments"] .cover-letter-page:not(.cover-attachment-sheet) {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+body[data-print-scope="attachments"] .cover-attachment-sheet:first-child {
+  page-break-before: auto !important;
+  break-before: auto !important;
+}
+
+/* Print & PDF Overrides for Multi-Sheet Attachments */
+@media print {
+  .cover-preview-wrapper {
+    display: block !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  .cover-attachments-container {
+    display: block !important;
+    width: 100% !important;
+  }
+  .cover-letter-page:not(.cover-attachment-sheet) {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+  .cover-attachment-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    page-break-before: always !important;
+    break-before: page !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin: 0 auto !important;
+    padding: 3mm 4mm 2mm 4mm !important;
+    box-sizing: border-box !important;
+  }
+  .cover-attachment-sheet.orientation-landscape {
+    page: landscape-sheet !important;
+    width: calc(var(--cover-page-landscape-width, 297mm) - 16mm) !important;
+    height: calc(var(--cover-page-landscape-height, 210mm) - 12mm) !important;
+  }
+  .cover-attachment-sheet.orientation-portrait {
+    page: portrait-sheet !important;
+    width: calc(var(--cover-page-portrait-width, 210mm) - 12mm) !important;
+    height: calc(var(--cover-page-portrait-height, 297mm) - 16mm) !important;
+  }
+  .cover-attachment-sheet-body {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+}
+@page landscape-sheet {
+  size: landscape;
+  margin: 6mm 8mm 6mm 8mm;
+}
+@page portrait-sheet {
+  size: portrait;
+  margin: 8mm 6mm 8mm 6mm;
+}
