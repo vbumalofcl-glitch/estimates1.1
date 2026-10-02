@@ -14939,7 +14939,7 @@
 
     function navigateHome() {
       if (window.location.hostname.includes('github.io')) {
-        window.location.href = '../fcldcnexus/';
+        window.location.href = '../index.html';
       } else {
         window.location.href = '../index.html';
       }
