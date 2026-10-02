@@ -1582,9 +1582,9 @@
         'orange': 'Row Highlight: Orange'
       };
       const gBtn = document.getElementById('ganttHighlightRowBtn');
-      if (gBtn) gBtn.innerHTML = `${labels[mode] || 'Row Highlight'} <span style="font-size: 9px; vertical-align: middle; line-height: 1;">Ã¢â€“Â¼</span>`;
+      if (gBtn) gBtn.innerHTML = `${labels[mode] || 'Row Highlight'} <span style="font-size: 9px; vertical-align: middle; line-height: 1;">\u25be</span>`;
       const qBtn = document.getElementById('qtyHighlightRowBtn');
-      if (qBtn) qBtn.innerHTML = `${labels[mode] || 'Row Highlight'} <span style="font-size: 9px; vertical-align: middle; line-height: 1;">Ã¢â€“Â¼</span>`;
+      if (qBtn) qBtn.innerHTML = `${labels[mode] || 'Row Highlight'} <span style="font-size: 9px; vertical-align: middle; line-height: 1;">\u25be</span>`;
     }
 
     function saveGanttSettings() {
@@ -2181,7 +2181,7 @@
       
       menu.innerHTML = `
         <div class="custom-context-menu-item" onclick="openGanttStyleSettingsModal()">
-          <span style="font-size: 14px;">Ã°Å¸Å½Â¨</span> Gantt Style Settings...
+          <span style="font-size: 14px;">\u2699\ufe0f</span> Gantt Style Settings...
         </div>
       `;
       menu.style.display = 'block';
@@ -2270,15 +2270,15 @@
       let html = '';
       
       if (col.isCustom) {
-        html += `<div class="custom-context-menu-item" onclick="renameGanttColumn('${col.id}')"><span style="font-size: 14px;">Ã¢Å“ÂÃ¯Â¸Â</span> Rename Column</div>`;
+        html += `<div class="custom-context-menu-item" onclick="renameGanttColumn('${col.id}')"><span style="font-size: 14px;">\u270f\ufe0f</span> Rename Column</div>`;
       }
       
       if (col.id !== 'title') {
-        html += `<div class="custom-context-menu-item" onclick="hideGanttColumn('${col.id}')"><span style="font-size: 14px;">Ã¢ÂÅ’</span> Hide Column</div>`;
+        html += `<div class="custom-context-menu-item" onclick="hideGanttColumn('${col.id}')"><span style="font-size: 14px;">\u274c</span> Hide Column</div>`;
       }
       
       html += `<div style="border-top: 1px solid var(--line); margin: 4px 0;"></div>`;
-      html += `<div class="custom-context-menu-item" onclick="addGanttColumn()"><span style="font-size: 14px;">Ã¢Å¾â€¢</span> Add Column at End</div>`;
+      html += `<div class="custom-context-menu-item" onclick="addGanttColumn()"><span style="font-size: 14px;">\u2795</span> Add Column at End</div>`;
       
       const hiddenCols = ganttColumns.filter(c => !c.visible);
       
@@ -2286,9 +2286,9 @@
         <div class="custom-context-menu-item has-submenu">
           <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
             <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="font-size: 14px;">Ã°Å¸â€œÂ¥</span> Insert Column Right
+              <span style="font-size: 14px;">\ud83d\udce5</span> Insert Column Right
             </div>
-            <span style="font-size: 9px; color: var(--muted-dark);">Ã¢â€“Â¶</span>
+            <span style="font-size: 9px; color: var(--muted-dark);">\u25b6</span>
           </div>
           <div class="custom-context-submenu">
             <div class="custom-context-menu-item" onclick="insertGanttColumn('${col.id}', 'blank')">New Blank Column</div>
@@ -2316,10 +2316,10 @@
       const subSubCatText = anySubSubCatCollapsed ? "Unhide Sub-Sub-Categories" : "Hide Sub-Sub-Categories";
 
       html += `<div style="border-top: 1px solid var(--line); margin: 4px 0;"></div>`;
-      html += `<div class="custom-context-menu-item" onclick="toggleGanttCategories()"><span style="font-size: 14px;">Ã°Å¸â€˜ÂÃ¯Â¸Â</span> ${catText}</div>`;
-      html += `<div class="custom-context-menu-item" onclick="toggleGanttSubcategories()"><span style="font-size: 14px;">Ã°Å¸â€˜ÂÃ¯Â¸Â</span> ${subCatText}</div>`;
-      html += `<div class="custom-context-menu-item" onclick="toggleGanttSubsubcategories()"><span style="font-size: 14px;">Ã°Å¸â€˜ÂÃ¯Â¸Â</span> ${subSubCatText}</div>`;
-      html += `<div class="custom-context-menu-item" onclick="showAllGanttRows()"><span style="font-size: 14px;">Ã°Å¸â€˜ÂÃ¯Â¸Â</span> Show All</div>`;
+      html += `<div class="custom-context-menu-item" onclick="toggleGanttCategories()"><span style="font-size: 14px;">\ud83d\udcc2</span> ${catText}</div>`;
+      html += `<div class="custom-context-menu-item" onclick="toggleGanttSubcategories()"><span style="font-size: 14px;">\ud83d\udcc2</span> ${subCatText}</div>`;
+      html += `<div class="custom-context-menu-item" onclick="toggleGanttSubsubcategories()"><span style="font-size: 14px;">\ud83d\udcc2</span> ${subSubCatText}</div>`;
+      html += `<div class="custom-context-menu-item" onclick="showAllGanttRows()"><span style="font-size: 14px;">\ud83d\udcc2</span> Show All</div>`;
       
       menu.innerHTML = html;
       menu.style.display = 'block';
@@ -3794,7 +3794,7 @@
                   <span style="font-size: 10px; font-weight: bold; text-align: right; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(displayVal)}">
                     ${displayVal}
                   </span>
-                  <span class="dropdown-arrow" style="font-size: 7px; color: #9ca3af; margin-left: 4px; display: none; pointer-events: none;">Ã¢â€“Â¼</span>
+                  <span class="dropdown-arrow" style="font-size: 7px; color: #9ca3af; margin-left: 4px; display: none; pointer-events: none;">\u25be</span>
                   <select onchange="setGanttSummaryCellFunction('${escapeHtml(label)}', '${col.id}', this.value)" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
                     <option value="none" ${func === 'none' ? 'selected' : ''}>- None</option>
                     <option value="subtotal" ${func === 'subtotal' ? 'selected' : ''}>Subtotal</option>
@@ -3997,7 +3997,7 @@
                 <span style="font-size: 10px; font-weight: bold; text-align: center; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(displayVal)}">
                   ${displayVal}
                 </span>
-                <span class="dropdown-arrow" style="font-size: 7px; color: #9ca3af; margin-left: 2px; display: none; pointer-events: none;">Ã¢â€“Â¼</span>
+                <span class="dropdown-arrow" style="font-size: 7px; color: #9ca3af; margin-left: 2px; display: none; pointer-events: none;">\u25be</span>
                 <select onchange="setGanttSummaryCellFunction('${escapeHtml(label)}', '${colId}', this.value)" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
                   <option value="none" ${func === 'none' ? 'selected' : ''}>-</option>
                   <option value="subtotal" ${func === 'subtotal' ? 'selected' : ''}>Sub</option>
@@ -11619,7 +11619,7 @@
         if (row.type === 'category') {
           priceListCategorySeen = true;
           tr.className = 'row-category' + (tr.className ? ' ' + tr.className : '');
-          const icon = row.collapsed ? 'Ã¢â€“Â¸' : 'Ã¢â€“Â¾';
+          const icon = row.collapsed ? '\u25b8' : '\u25be';
           tr.innerHTML = `
             <td class="plus-cell"><button class="btn-secondary plus-btn" type="button" onclick="addPriceListRow()">+</button></td>
             <td class="number" style="text-align:center;">${escapeHtml(row.itemCode || '')}</td>
@@ -11637,7 +11637,7 @@
             <td><button class="btn-danger btn-small" type="button" onclick="removePriceListRow(${index})">Delete</button></td>`;
         } else if (row.type === 'subcategory') {
           tr.className = 'row-subcategory' + (tr.className ? ' ' + tr.className : '');
-          const icon = row.collapsed ? 'Ã¢â€“Â¸' : 'Ã¢â€“Â¾';
+          const icon = row.collapsed ? '\u25b8' : '\u25be';
           tr.innerHTML = `
             <td class="plus-cell"><button class="btn-secondary plus-btn" type="button" onclick="addPriceListMaterialRowBelow(${index})">+</button></td>
             <td class="number" style="text-align:center;">${escapeHtml(row.itemCode || '')}</td>
@@ -13107,7 +13107,7 @@
         try {
           const buffer = event.target.result;
           const previewText = textFromArrayBuffer(buffer.slice ? buffer.slice(0, Math.min(buffer.byteLength || 0, 4096)) : buffer);
-          const isHtmlContent = /^\s*(?:Ã¯Â»Â¿)?\s*</.test(previewText) || /<html|<table|<frameset/i.test(previewText);
+          const isHtmlContent = /^\s*(?:\ufeff)?\s*</.test(previewText) || /<html|<table|<frameset/i.test(previewText);
           let importedRows = [];
           if (isHtmlContent) {
             const fullText = textFromArrayBuffer(buffer);
@@ -14924,3 +14924,17 @@
       }
     });
 
+
+    function navigateHome() {
+      if (window.location.hostname.includes('github.io')) {
+        window.location.href = '../fcldcnexus/';
+      } else {
+        window.location.href = '../index.html';
+      }
+    }
+    window.navigateHome = navigateHome;
+
+    function openLookahead() {
+      window.open('../lookahead/lookahead.html', '_blank');
+    }
+    window.openLookahead = openLookahead;
