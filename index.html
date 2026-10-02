@@ -887,6 +887,7 @@
       #pwaInstallBtn,
       .nav-actions,
       .project-view-navbar,
+      #viewProjectInformation,
       #viewProjectTimeline,
       #viewProjectDocumentation,
       .modal-overlay,
@@ -964,6 +965,7 @@
       </a>
 
       <nav class="nav-links">
+        <a href="javascript:void(0)" onclick="switchMainProjectTab('information')" class="nav-item" id="navItemInfo">Project Information</a>
         <a href="javascript:void(0)" onclick="switchMainProjectTab('overview')" class="nav-item active" id="navItemOverview">Project Overview</a>
         <a href="javascript:void(0)" onclick="switchMainProjectTab('timeline')" class="nav-item" id="navItemTimeline">Project Timeline</a>
         <a href="javascript:void(0)" onclick="switchMainProjectTab('documents')" class="nav-item" id="navItemDocs">Project Documents</a>
@@ -1010,6 +1012,17 @@
             Project Controls
           </div>
           <ul class="sidebar-menu">
+            <!-- 0. Add Project Tab (Before Project List) -->
+            <li class="add-project-menu-item" style="margin-bottom: 6px;">
+              <button id="sidebarBtnAddProject" class="sidebar-link" type="button" onclick="openAddProjectModal()" style="width: 100%; border: none; background: #eff6ff; cursor: pointer; text-align: left; font-family: inherit; border-left: 3px solid #2563eb; transition: all 0.2s;">
+                <span class="link-left">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                  <strong style="color: #1e40af;">Add Project</strong>
+                </span>
+                <span class="badge" style="background:#2563eb; color:#fff;">+ NEW</span>
+              </button>
+            </li>
+
             <!-- 1. Expandable Project List Tab -->
             <li class="project-list-menu-item">
               <button id="projectListToggleBtn" class="sidebar-link project-list-trigger" type="button" onclick="toggleProjectListMenu()" style="border-left: 3px solid #2563eb; background: #eff6ff;">
@@ -1175,6 +1188,10 @@
           </div>
 
           <div class="project-nav-tabs">
+            <button id="tabBtnInfo" class="project-nav-tab-btn" type="button" onclick="switchMainProjectTab('information')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              Project Information
+            </button>
             <button id="tabBtnOverview" class="project-nav-tab-btn active" type="button" onclick="switchMainProjectTab('overview')">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
               Project Overview
@@ -1188,6 +1205,201 @@
               Project Documentation
             </button>
           </div>
+        </div>
+
+        <!-- ================= VIEW 0: PROJECT INFORMATION ================= -->
+        <div id="viewProjectInformation" class="project-main-view no-print" style="display: none;">
+          <!-- Project Info Executive Profile Header Card -->
+          <section class="dashboard-card">
+            <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase;">Official Construction Project Record</span>
+                  <span id="infoStatusBadge" class="brand-tag" style="background: rgba(16, 185, 129, 0.15); color: #059669; border-color: rgba(16, 185, 129, 0.4);">● ACTIVE PROJECT</span>
+                  <span id="infoTypeBadge" class="brand-tag" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; border-color: rgba(37, 99, 235, 0.3);">INSTITUTIONAL &amp; SPORTS</span>
+                </div>
+                <h2 class="card-title" id="infoProjectTitle" style="margin-top: 4px;">Sports Club &amp; Recreation Facility</h2>
+                <div id="infoProjectSub" style="font-size: 12.5px; font-weight: 500; color: var(--text-muted); margin-top: 2px;">
+                  San Fernando • Municipal Sports Dev Office • Ref: PRJ-2026-001
+                </div>
+              </div>
+              <div class="card-controls" style="display:flex; gap:8px;">
+                <button class="ctrl-btn" type="button" onclick="switchMainProjectTab('overview')" style="display:inline-flex; align-items:center; gap:6px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                  Overview &amp; S-Curve
+                </button>
+                <button class="ctrl-btn" type="button" onclick="switchMainProjectTab('timeline')" style="display:inline-flex; align-items:center; gap:6px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Timeline &amp; CPM
+                </button>
+                <button class="ctrl-btn primary" type="button" onclick="switchMainProjectTab('documents')" style="display:inline-flex; align-items:center; gap:6px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  Document Vault
+                </button>
+              </div>
+            </div>
+
+            <!-- 6 Key Parameter Blocks -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 14px; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid var(--line);">
+              <div>
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Total Contract Value</div>
+                <div id="infoTotalBudget" style="font-size: 18px; font-weight: 800; color: #0f172a; margin-top: 2px;">₱ 14,850,000.00</div>
+                <div style="font-size: 10.5px; color: #059669; font-weight:600;">Approved Budget (ABC)</div>
+              </div>
+              <div>
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Contract Duration</div>
+                <div id="infoDuration" style="font-size: 18px; font-weight: 800; color: #2563eb; margin-top: 2px;">240 Calendar Days</div>
+                <div id="infoElapsed" style="font-size: 10.5px; color: #475569;">150 Days Elapsed</div>
+              </div>
+              <div>
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Target Handover</div>
+                <div id="infoTargetDate" style="font-size: 18px; font-weight: 800; color: #0f172a; margin-top: 2px;">OCT 30, 2026</div>
+                <div style="font-size: 10.5px; color: #475569;">Substantial Completion</div>
+              </div>
+              <div>
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Physical Progress</div>
+                <div id="infoProgress" style="font-size: 18px; font-weight: 800; color: #059669; margin-top: 2px;">62.4%</div>
+                <div id="infoPlannedProgress" style="font-size: 10.5px; color: #475569;">60.0% Planned</div>
+              </div>
+              <div>
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Schedule Health</div>
+                <div id="infoCriticalState" style="font-size: 16px; font-weight: 800; color: #16a34a; margin-top: 4px;">ON TRACK</div>
+                <div style="font-size: 10.5px; color: #475569;">Critical Path Safe</div>
+              </div>
+              <div>
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">General Contractor</div>
+                <div style="font-size: 14px; font-weight: 800; color: #1e3a8a; margin-top: 4px;">FCL Aranang Dev</div>
+                <div style="font-size: 10.5px; color: #64748b;">PCAB 'AAA' License</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Core Information 2-Column Split -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px;">
+            <!-- Column 1: Contractual & Administrative Parameters -->
+            <section class="dashboard-card" style="margin-bottom:0;">
+              <div class="card-header">
+                <h3 class="card-title" style="font-size:14px; display:flex; align-items:center; gap:8px;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  Contract &amp; Administrative Parameters
+                </h3>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:10px; font-size:12.5px;">
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Project Reference ID</span>
+                  <strong id="infoCode" style="color:#0f172a;">PRJ-2026-001</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Client / Project Owner</span>
+                  <strong id="infoClient" style="color:#0f172a; text-align:right;">FCL Aranang Dev / Municipal Sports Dev Office</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Site Location</span>
+                  <strong id="infoLocation" style="color:#0f172a; text-align:right;">Barangay Central, San Fernando</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Contract Classification</span>
+                  <strong id="infoContractType" style="color:#0f172a; text-align:right;">Itemized Unit Price Contract</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Retention Money Clause</span>
+                  <strong style="color:#0f172a; text-align:right;">10% on Progress Billings (Released at Final Turn-over)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Performance Security</span>
+                  <strong style="color:#059669; text-align:right;">30% Surety Bond (Active &amp; Compliant)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Liquidated Damages</span>
+                  <strong style="color:#0f172a; text-align:right;">1/10 of 1% of uncompleted works per calendar day</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="color:#64748b; font-weight:600;">Comprehensive All-Risk (CAR)</span>
+                  <strong style="color:#059669; text-align:right;">Policy #CAR-2026-FCL901 (Active)</strong>
+                </div>
+              </div>
+            </section>
+
+            <!-- Column 2: Engineering & Personnel Supervision Matrix -->
+            <section class="dashboard-card" style="margin-bottom:0;">
+              <div class="card-header">
+                <h3 class="card-title" style="font-size:14px; display:flex; align-items:center; gap:8px;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  Project Management &amp; Site Supervision
+                </h3>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:10px; font-size:12.5px;">
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Project Manager / In-Charge</span>
+                  <strong id="infoProjectManager" style="color:#0f172a; text-align:right;">Engr. V. Bumalang, PE (PRC #0093812)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Planning &amp; Cost Engineer</span>
+                  <strong style="color:#0f172a; text-align:right;">Engr. J. Dela Cruz, CE (PRC #0128472)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Lead Architect / Interior Finishes</span>
+                  <strong style="color:#0f172a; text-align:right;">Arch. A. Tolentino, UAP</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Electro-Mechanical Lead</span>
+                  <strong style="color:#0f172a; text-align:right;">Engr. R. Santos, PEE</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Sanitary &amp; Plumbing Engineer</span>
+                  <strong style="color:#0f172a; text-align:right;">Engr. M. Reyes, RMP</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+                  <span style="color:#64748b; font-weight:600;">Materials QA/QC Lead</span>
+                  <strong style="color:#0f172a; text-align:right;">Engr. I. Tan (DPWH Accredited)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="color:#64748b; font-weight:600;">DOLE Safety Officer (SO3)</span>
+                  <strong style="color:#0f172a; text-align:right;">Engr. F. Alcantara (DOLE OSH Certified)</strong>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- Scope of Works & Technical Summary -->
+          <section class="dashboard-card">
+            <div class="card-header">
+              <h3 class="card-title" style="font-size:14px; display:flex; align-items:center; gap:8px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                Project Scope of Works &amp; Technical Summary
+              </h3>
+            </div>
+            <div id="infoScopeSummary" style="font-size:12.5px; line-height:1.6; color:#334155; background:#f8fafc; padding:14px 16px; border-radius:6px; border:1px solid var(--line);">
+              Comprehensive construction and engineering management for the specified facility, strictly executed under DPWH standard specifications and national building code requirements.
+            </div>
+          </section>
+
+          <!-- Cost Division Allocation Table -->
+          <section class="dashboard-card">
+            <div class="card-header">
+              <h3 class="card-title" style="font-size:14px; display:flex; align-items:center; gap:8px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                Major Cost Division Budget Allocation &amp; Baseline Breakdown
+              </h3>
+            </div>
+            <div class="data-table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Cost Division &amp; Scope Classification</th>
+                    <th style="text-align:right;">Planned Budget (₱)</th>
+                    <th style="text-align:right;">Actual Disbursed (₱)</th>
+                    <th style="text-align:center;">Budget Share (%)</th>
+                    <th style="text-align:right;">Variance (₱)</th>
+                    <th style="text-align:center;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="infoCategoriesTableBody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </section>
         </div>
 
         <!-- ================= VIEW 1: PROJECT OVERVIEW ================= -->
@@ -1563,6 +1775,116 @@
           </div>
         </div>
 
+        <!-- Add Project Modal -->
+        <div id="addProjectModal" class="modal-overlay no-print" style="display: none;" onclick="if(event.target===this) closeAddProjectModal()">
+          <div class="modal-content" style="max-width: 680px;" onclick="event.stopPropagation()">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); background: #f8fafc;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px;">
+                  ➕
+                </div>
+                <div>
+                  <div style="font-size: 15px; font-weight: 700; color: #0f172a;">Add New Construction Project</div>
+                  <div style="font-size: 11.5px; font-weight: 500; color: #64748b;">Initialize contract baseline, project details &amp; budget allocation</div>
+                </div>
+              </div>
+              <button type="button" onclick="closeAddProjectModal()" style="background: none; border: none; font-size: 22px; line-height: 1; cursor: pointer; color: #94a3b8;" title="Close">&times;</button>
+            </div>
+
+            <form id="newProjectForm" onsubmit="submitNewProject(event)" style="margin: 0; display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+              <div style="padding: 20px; overflow-y: auto; max-height: calc(90vh - 140px); display: flex; flex-direction: column; gap: 14px;">
+                
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11.5px; font-weight:700; color:#334155; margin-bottom:4px;">Project Full Name *</label>
+                    <input type="text" id="newProjName" required placeholder="e.g. Northgate Cold Storage &amp; Logistics Center" style="width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12.5px; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11.5px; font-weight:700; color:#334155; margin-bottom:4px;">Project Code *</label>
+                    <input type="text" id="newProjCode" required placeholder="e.g. PRJ-2026-005" style="width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12.5px; font-weight:700; color:#2563eb; box-sizing:border-box;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11.5px; font-weight:700; color:#334155; margin-bottom:4px;">Short Name / Alias</label>
+                    <input type="text" id="newProjShortName" placeholder="e.g. Northgate Logistics" style="width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12.5px; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11.5px; font-weight:700; color:#334155; margin-bottom:4px;">Project Classification / Type</label>
+                    <select id="newProjType" style="width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12.5px; background:white; box-sizing:border-box;">
+                      <option value="Commercial / Industrial">Commercial / Industrial</option>
+                      <option value="Institutional / Sports">Institutional / Sports</option>
+                      <option value="Logistics &amp; Warehousing">Logistics &amp; Warehousing</option>
+                      <option value="Infrastructure / Civil">Infrastructure / Civil</option>
+                      <option value="Residential Development">Residential Development</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11.5px; font-weight:700; color:#334155; margin-bottom:4px;">Client / Project Owner *</label>
+                    <input type="text" id="newProjClient" required placeholder="e.g. Northgate Prime Holdings Corp." style="width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12.5px; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11.5px; font-weight:700; color:#334155; margin-bottom:4px;">Location / Site Address *</label>
+                    <input type="text" id="newProjLocation" required placeholder="e.g. Subic Bay Freeport Zone, Zambales" style="width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12.5px; box-sizing:border-box;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11.5px; font-weight:700; color:#334155; margin-bottom:4px;">Total Budget / Contract Sum (₱) *</label>
+                    <input type="number" step="0.01" min="1000" id="newProjBudget" required placeholder="e.g. 28500000" style="width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12.5px; font-weight:700; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11.5px; font-weight:700; color:#334155; margin-bottom:4px;">Duration (Days) *</label>
+                    <input type="number" min="1" id="newProjDuration" required placeholder="e.g. 240" style="width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12.5px; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11.5px; font-weight:700; color:#334155; margin-bottom:4px;">Target Date</label>
+                    <input type="text" id="newProjTargetDate" placeholder="e.g. DEC 15, 2026" style="width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12.5px; box-sizing:border-box;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11.5px; font-weight:700; color:#334155; margin-bottom:4px;">Project Manager / In-Charge</label>
+                    <input type="text" id="newProjManager" placeholder="e.g. Engr. M. Ramos, PE" style="width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12.5px; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11.5px; font-weight:700; color:#334155; margin-bottom:4px;">Project Status</label>
+                    <select id="newProjStatus" style="width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12.5px; background:white; box-sizing:border-box;">
+                      <option value="Mobilization &amp; Setup">Mobilization &amp; Setup</option>
+                      <option value="Active In-Progress">Active In-Progress</option>
+                      <option value="Procurement Stage">Procurement Stage</option>
+                      <option value="Under Detailed Estimate">Under Detailed Estimate</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label style="display:block; font-size:11.5px; font-weight:700; color:#334155; margin-bottom:4px;">Project Scope &amp; Brief Description</label>
+                  <textarea id="newProjScope" rows="2" placeholder="e.g. Complete construction of cold storage facility with structural steel framing, thermal insulated panel walls, laser-screed concrete flooring, and MEPFS infrastructure." style="width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-size:12px; resize:vertical; box-sizing:border-box; font-family:inherit;"></textarea>
+                </div>
+
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-top: 1px solid var(--line); background: #f8fafc;">
+                <span style="font-size: 11px; color: #64748b;">Automatically initializes baseline categories, phases &amp; vault</span>
+                <div style="display: flex; gap: 8px;">
+                  <button class="ctrl-btn" type="button" onclick="closeAddProjectModal()">Cancel</button>
+                  <button class="ctrl-btn primary" type="submit" style="display:inline-flex; align-items:center; gap:6px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Create &amp; Activate Project
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
         <!-- Executive Signatures Block (Only shown in print / PDF report) -->
         <section id="executiveSignatures" class="executive-print-signatures" style="margin-top: 20px; padding-top: 16px; border-top: 1.5px solid #cbd5e1; justify-content: space-between; gap: 32px; page-break-inside: avoid;">
           <div style="flex: 1; text-align: center;">
@@ -1605,7 +1927,7 @@
     /* ==========================================================================
        MULTI-PROJECT CATALOG & WORKSPACE DATA
        ========================================================================== */
-    const FCL_PROJECT_CATALOG = [
+    let FCL_PROJECT_CATALOG = [
       {
         id: 'PRJ-2026-001',
         name: 'Sports Club & Recreation Facility',
@@ -1613,6 +1935,10 @@
         code: 'PRJ-2026-001',
         location: 'Barangay Central, San Fernando',
         client: 'FCL Aranang Dev / Municipal Sports Dev Office',
+        projectType: 'Institutional & Sports Facility',
+        contractType: 'Itemized Unit Price Contract with Milestone Billing',
+        projectManager: 'Engr. V. Bumalang, PE (PRC #0093812)',
+        scopeSummary: 'Construction of a comprehensive modern sports complex featuring an Olympic-grade indoor swimming pool facility, FIBA-standard maple hardwood indoor basketball gymnasium, 1,200-seat reinforced concrete bleachers, long-span structural steel roof trusses, specialized high-bay arena sports lighting, MEPFS substations, and site civil drainage swale development.',
         status: 'Active (Live Estimate)',
         badge: 'ACTIVE',
         totalBudget: 14850000.00,
@@ -1670,6 +1996,10 @@
         code: 'HCC-2026-B1',
         location: 'Highland Boulevard, Baguio City',
         client: 'Highland Vista Holdings Inc.',
+        projectType: 'Commercial & Mixed-Use High-Rise',
+        contractType: 'Lump Sum EPC Contract with Escalation Clauses',
+        projectManager: 'Engr. H. Bautista, PE (PRC #0084519)',
+        scopeSummary: 'Multi-level commercial podium and office complex with deep secant pile shoring, 1.2m diameter bored foundation piling, dual basement parking, central slipformed reinforced concrete elevator shear cores, energy-efficient double-glazed curtain wall facades, and centralized high-efficiency chiller HVAC plant.',
         status: 'In Progress',
         badge: 'ACTIVE',
         totalBudget: 48500000.00,
@@ -1726,6 +2056,10 @@
         code: 'MLH-2025-04',
         location: 'Clark Special Economic Zone, Pampanga',
         client: 'Trans-Island Logistics Corp.',
+        projectType: 'Industrial & Logistics Warehouse',
+        contractType: 'Turnkey Design-Build Agreement with Early Completion Bonus',
+        projectManager: 'Engr. E. Garcia, PE (PRC #0119284)',
+        scopeSummary: 'Modern industrial logistics terminal featuring 45-meter clear-span pre-engineered steel frames (PEB), FM Global-compliant standing seam insulated roofing, FF/FL 52 superflat laser-screeded post-tensioned floor slab for VNA forklifts, ESFR high-density sprinkler system, and 12 automated hydraulic loading dock levelers.',
         status: 'Near Completion',
         badge: 'ACTIVE',
         totalBudget: 32200000.00,
@@ -1782,6 +2116,10 @@
         code: 'RTO-2026-C2',
         location: 'Riverside Drive, Marikina',
         client: 'Metropolitan Public Works Division',
+        projectType: 'Civil Infrastructure & Bridge Engineering',
+        contractType: 'Government Infrastructure Contract (DPWH Standard Specifications)',
+        projectManager: 'Engr. P. Alcantara, PE (PRC #0076231)',
+        scopeSummary: 'Urban infrastructure connectivity project comprising heavy 1,500mm bored river pier foundations, dewatering cofferdams, precast AASHTO Type IV prestressed concrete bridge girders, reinforced deck slab, MSE approach retaining walls, pedestrian safety barriers, and solar highway illumination.',
         status: 'Procurement & Mobilization',
         badge: 'ACTIVE',
         totalBudget: 21400000.00,
@@ -1842,7 +2180,34 @@
     }
 
     function initProjectCatalog() {
+      // 0. Load any saved custom projects from localStorage
+      try {
+        const stored = localStorage.getItem('FCL_CUSTOM_PROJECTS');
+        if (stored) {
+          const list = JSON.parse(stored);
+          if (Array.isArray(list)) {
+            list.forEach(p => {
+              if (!FCL_PROJECT_CATALOG.some(ex => ex.id === p.id)) {
+                FCL_PROJECT_CATALOG.push(p);
+              }
+            });
+          }
+        }
+      } catch (e) {
+        console.warn('Could not load custom projects from storage', e);
+      }
+
       // 1. Populate mainProjectSelector dropdown
+      populateProjectSelector();
+
+      // 2. Render sidebar project accordion
+      renderSidebarProjectList();
+
+      // 3. Select initial project and tab
+      selectProject(currentProjectId, currentTabKey);
+    }
+
+    function populateProjectSelector() {
       const selector = document.getElementById('mainProjectSelector');
       if (selector) {
         selector.innerHTML = FCL_PROJECT_CATALOG.map(p => 
@@ -1850,18 +2215,131 @@
         ).join('');
         selector.value = currentProjectId;
       }
+      updateProjectCountBadge();
+    }
 
-      // 2. Update badge count
+    function updateProjectCountBadge() {
       const badge = document.getElementById('projectCountBadge');
       if (badge) {
         badge.textContent = `${FCL_PROJECT_CATALOG.length} Projects`;
       }
+    }
 
-      // 3. Render sidebar project accordion
+    function openAddProjectModal() {
+      const modal = document.getElementById('addProjectModal');
+      if (!modal) return;
+      const nextNum = FCL_PROJECT_CATALOG.length + 1;
+      const codeInput = document.getElementById('newProjCode');
+      if (codeInput && !codeInput.value) {
+        codeInput.value = `PRJ-2026-00${nextNum}`;
+      }
+      modal.style.display = 'flex';
+    }
+
+    function closeAddProjectModal() {
+      const modal = document.getElementById('addProjectModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function submitNewProject(e) {
+      if (e) e.preventDefault();
+      const name = document.getElementById('newProjName')?.value.trim();
+      const code = document.getElementById('newProjCode')?.value.trim();
+      const shortName = document.getElementById('newProjShortName')?.value.trim() || name;
+      const type = document.getElementById('newProjType')?.value || 'Commercial / Industrial';
+      const client = document.getElementById('newProjClient')?.value.trim();
+      const location = document.getElementById('newProjLocation')?.value.trim();
+      const budget = parseFloat(document.getElementById('newProjBudget')?.value) || 10000000;
+      const duration = parseInt(document.getElementById('newProjDuration')?.value, 10) || 180;
+      const targetDate = document.getElementById('newProjTargetDate')?.value.trim() || 'TBD 2026';
+      const manager = document.getElementById('newProjManager')?.value.trim() || 'Engr. In-Charge';
+      const status = document.getElementById('newProjStatus')?.value || 'Active (Live Estimate)';
+      const scope = document.getElementById('newProjScope')?.value.trim() || `${name} execution and engineering management under FCL Aranang Development Corporation.`;
+
+      if (!name || !code || !client || !location) {
+        alert('Please fill in all required fields marked with *');
+        return;
+      }
+
+      const id = code.replace(/[^A-Za-z0-9_-]/g, '_');
+
+      if (FCL_PROJECT_CATALOG.some(p => p.id === id || p.code === code)) {
+        alert('A project with this Code / ID already exists. Please specify a unique project code.');
+        return;
+      }
+
+      // Generate default division budgets
+      const p1 = Math.round(budget * 0.18);
+      const p2 = Math.round(budget * 0.38);
+      const p3 = Math.round(budget * 0.28);
+      const p4 = budget - (p1 + p2 + p3);
+
+      const newProj = {
+        id: id,
+        name: name,
+        shortName: shortName,
+        code: code,
+        location: location,
+        client: client,
+        projectType: type,
+        status: status,
+        badge: 'ACTIVE',
+        totalBudget: budget,
+        plannedProgress: 0.0,
+        actualProgress: 0.0,
+        durationDays: duration,
+        elapsedDays: 0,
+        targetDate: targetDate,
+        projectManager: manager,
+        contractor: 'FCL Aranang Development Corporation',
+        contractType: 'Itemized Unit Price / EPC Lump Sum',
+        scopeSummary: scope,
+        donutShares: { target: 45, projection: 25, expense: 20, variance: 10 },
+        categories: [
+          { name: 'Earthworks & Site Civil', planned: p1, actual: 0 },
+          { name: 'Substructure & Concrete Frame', planned: p2, actual: 0 },
+          { name: 'Structural Steel & Roofing', planned: p3, actual: 0 },
+          { name: 'Architectural & MEPFS Utilities', planned: p4, actual: 0 }
+        ],
+        items: [
+          { avatar: 'PM', name: manager, desc: 'Mobilization & Site Facilities Setup', cat: 'Site Civil', planned: Math.round(p1 * 0.3), actual: 0, status: 'In Progress' },
+          { avatar: 'FA', name: 'Engr. FA Aranang', desc: 'Permits, Clearances & Engineering Submittals', cat: 'Administration', planned: Math.round(p1 * 0.2), actual: 0, status: 'In Progress' }
+        ],
+        timeline: {
+          criticalState: 'MOBILIZATION (INITIAL STAGE)',
+          phases: [
+            { name: 'Mobilization, Site Staging & Soil Testing', startDate: 'START', endDate: '30 Days', duration: 30, progress: 10, status: 'In Progress', isCritical: true, float: '0d', lead: manager },
+            { name: 'Foundation Works & Substructure', startDate: 'Day 31', endDate: `${Math.round(duration * 0.35)} Days`, duration: Math.round(duration * 0.35) - 30, progress: 0, status: 'Upcoming', isCritical: true, float: '0d', lead: manager },
+            { name: 'Superstructure Framing & Roofing Envelope', startDate: `${Math.round(duration * 0.35) + 1} Days`, endDate: `${Math.round(duration * 0.70)} Days`, duration: Math.round(duration * 0.35), progress: 0, status: 'Upcoming', isCritical: true, float: '0d', lead: manager },
+            { name: 'MEPFS Utility Systems & Architectural Finishes', startDate: `${Math.round(duration * 0.70) + 1} Days`, endDate: `${Math.round(duration * 0.90)} Days`, duration: Math.round(duration * 0.20), progress: 0, status: 'Upcoming', isCritical: false, float: '15d', lead: manager },
+            { name: 'Testing, Commissioning, Punchlisting & Handover', startDate: `${Math.round(duration * 0.90) + 1} Days`, endDate: `${duration} Days`, duration: Math.round(duration * 0.10), progress: 0, status: 'Pending', isCritical: true, float: '0d', lead: manager }
+          ],
+          lookahead: [
+            { task: 'Initial Geotechnical Boring & Topographic Survey Verification', engineer: manager, zone: 'Site Area', dueDate: 'First Week', critical: true },
+            { task: 'Submission of Detailed DUPA and BOQ Breakdown for Approval', engineer: 'Engr. Cost Engineer', zone: 'Project Office', dueDate: 'Within 10 Days', critical: true }
+          ]
+        },
+        documents: [
+          { id: `DOC-${code}-001`, title: 'Project Proposal & Initial Bill of Quantities', ref: `BOQ-${code}-INIT`, category: 'estimates', type: 'XLSX', size: '1.5 MB', version: 'Rev 1.0', status: 'Approved', date: 'CURRENT', summary: 'Baseline bill of quantities and preliminary unit rate allocation.' },
+          { id: `DOC-${code}-002`, title: 'Contract Notice to Proceed & Mobilization Clearance', ref: `NTP-${code}`, category: 'commercial', type: 'PDF', size: '1.2 MB', version: 'Rev 1.0', status: 'Approved', date: 'CURRENT', summary: 'Notice to proceed and initial mobilization transmittal.' }
+        ]
+      };
+
+      FCL_PROJECT_CATALOG.push(newProj);
+
+      try {
+        const customProjects = FCL_PROJECT_CATALOG.filter(p => !['PRJ-2026-001', 'HCC-2026-B1', 'MLH-2025-04', 'RTO-2026-C2'].includes(p.id));
+        localStorage.setItem('FCL_CUSTOM_PROJECTS', JSON.stringify(customProjects));
+      } catch (err) {
+        console.warn('Could not persist project', err);
+      }
+
+      populateProjectSelector();
       renderSidebarProjectList();
+      document.getElementById('newProjectForm')?.reset();
+      closeAddProjectModal();
 
-      // 4. Select initial project and tab
-      selectProject(currentProjectId, currentTabKey);
+      selectProject(newProj.id, 'information');
     }
 
     function renderSidebarProjectList() {
@@ -1875,7 +2353,7 @@
         
         html += `
           <div class="${cardClass}" id="sidebarProjCard_${p.id}">
-            <div class="project-entry-header" onclick="selectProject('${p.id}', 'overview')">
+            <div class="project-entry-header" onclick="selectProject('${p.id}', 'information')">
               <div class="project-entry-title">
                 <span>${escapeHtml(p.shortName || p.name)}</span>
                 <span style="font-size: 9px; padding: 1px 5px; border-radius: 4px; background: ${isCurrent ? '#2563eb' : '#e2e8f0'}; color: ${isCurrent ? '#ffffff' : '#475569'}; font-weight: 700;">${isCurrent ? 'ACTIVE' : p.badge}</span>
@@ -1884,6 +2362,10 @@
             </div>
             
             <div class="project-entry-sublinks">
+              <a href="javascript:void(0)" onclick="selectProject('${p.id}', 'information')" class="project-sublink-item ${isCurrent && currentTabKey === 'information' ? 'active' : ''}">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Project Information
+              </a>
               <a href="javascript:void(0)" onclick="selectProject('${p.id}', 'overview')" class="project-sublink-item ${isCurrent && currentTabKey === 'overview' ? 'active' : ''}">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 Project Overview
@@ -2439,16 +2921,19 @@
       currentTabKey = tabKey || 'overview';
 
       // Toggle main view containers
+      const viewInfo = document.getElementById('viewProjectInformation');
       const viewOverview = document.getElementById('viewProjectOverview');
       const viewTimeline = document.getElementById('viewProjectTimeline');
       const viewDocs = document.getElementById('viewProjectDocumentation');
 
+      if (viewInfo) viewInfo.style.display = currentTabKey === 'information' ? 'block' : 'none';
       if (viewOverview) viewOverview.style.display = currentTabKey === 'overview' ? 'block' : 'none';
       if (viewTimeline) viewTimeline.style.display = currentTabKey === 'timeline' ? 'block' : 'none';
       if (viewDocs) viewDocs.style.display = currentTabKey === 'documents' ? 'block' : 'none';
 
       // Navbar tab buttons
       const tabBtns = {
+        information: document.getElementById('tabBtnInfo'),
         overview: document.getElementById('tabBtnOverview'),
         timeline: document.getElementById('tabBtnTimeline'),
         documents: document.getElementById('tabBtnDocs')
@@ -2462,6 +2947,7 @@
 
       // Top navbar links
       const topNavLinks = {
+        information: document.getElementById('navItemInfo'),
         overview: document.getElementById('navItemOverview'),
         timeline: document.getElementById('navItemTimeline'),
         documents: document.getElementById('navItemDocs')
@@ -2482,12 +2968,78 @@
 
     function renderActiveView() {
       const proj = getProject(currentProjectId);
-      if (currentTabKey === 'overview') {
+      if (currentTabKey === 'information') {
+        renderProjectInfoView(proj);
+      } else if (currentTabKey === 'overview') {
         renderDashboard(currentProjectId);
       } else if (currentTabKey === 'timeline') {
         renderTimelineView(proj);
       } else if (currentTabKey === 'documents') {
         renderDocumentsView(proj, currentDocFilter);
+      }
+    }
+
+    function renderProjectInfoView(proj) {
+      if (!proj) return;
+
+      const titleEl = document.getElementById('infoProjectTitle');
+      const subEl = document.getElementById('infoProjectSub');
+      const statusEl = document.getElementById('infoStatusBadge');
+      const typeEl = document.getElementById('infoTypeBadge');
+      const budgetEl = document.getElementById('infoTotalBudget');
+      const durEl = document.getElementById('infoDuration');
+      const elapEl = document.getElementById('infoElapsed');
+      const targetEl = document.getElementById('infoTargetDate');
+      const progEl = document.getElementById('infoProgress');
+      const planProgEl = document.getElementById('infoPlannedProgress');
+      const critEl = document.getElementById('infoCriticalState');
+      const codeEl = document.getElementById('infoCode');
+      const clientEl = document.getElementById('infoClient');
+      const locEl = document.getElementById('infoLocation');
+      const contractTypeEl = document.getElementById('infoContractType');
+      const managerEl = document.getElementById('infoProjectManager');
+      const scopeEl = document.getElementById('infoScopeSummary');
+      const tableBody = document.getElementById('infoCategoriesTableBody');
+
+      if (titleEl) titleEl.textContent = proj.name;
+      if (subEl) subEl.textContent = `${proj.location} • ${proj.client} • Ref: ${proj.code}`;
+      if (statusEl) statusEl.textContent = `● ${proj.status.toUpperCase()}`;
+      if (typeEl) typeEl.textContent = (proj.projectType || 'GENERAL CONSTRUCTION').toUpperCase();
+      if (budgetEl) budgetEl.textContent = `₱ ${formatPeso(proj.totalBudget)}`;
+      if (durEl) durEl.textContent = `${proj.durationDays} Calendar Days`;
+      if (elapEl) elapEl.textContent = `${proj.elapsedDays} Days Elapsed (${((proj.elapsedDays / Math.max(1, proj.durationDays)) * 100).toFixed(1)}%)`;
+      if (targetEl) targetEl.textContent = proj.targetDate;
+      if (progEl) progEl.textContent = `${proj.actualProgress}%`;
+      if (planProgEl) planProgEl.textContent = `${proj.plannedProgress}% Planned`;
+      if (critEl) {
+        critEl.textContent = proj.timeline ? proj.timeline.criticalState : 'ACTIVE';
+        critEl.style.color = (proj.actualProgress >= proj.plannedProgress) ? '#16a34a' : '#dc2626';
+      }
+      if (codeEl) codeEl.textContent = proj.code;
+      if (clientEl) clientEl.textContent = proj.client;
+      if (locEl) locEl.textContent = proj.location;
+      if (contractTypeEl) contractTypeEl.textContent = proj.contractType || 'Itemized Unit Price / Turnkey EPC Contract';
+      if (managerEl) managerEl.textContent = proj.projectManager || 'Engr. V. Bumalang, PE (PRC #0093812)';
+      if (scopeEl) scopeEl.textContent = proj.scopeSummary || `${proj.name} execution under FCL Aranang Development Corporation.`;
+
+      if (tableBody && proj.categories) {
+        let thtml = '';
+        proj.categories.forEach(cat => {
+          const share = proj.totalBudget > 0 ? ((cat.planned / proj.totalBudget) * 100).toFixed(1) : '0.0';
+          const variance = cat.planned - cat.actual;
+          const isFavorable = variance >= 0;
+          thtml += `
+            <tr>
+              <td style="font-weight:600;">${escapeHtml(cat.name)}</td>
+              <td style="text-align:right; font-weight:700;">₱ ${formatPeso(cat.planned)}</td>
+              <td style="text-align:right; color:#2563eb; font-weight:700;">₱ ${formatPeso(cat.actual)}</td>
+              <td style="text-align:center;"><span style="background:#eff6ff; color:#1d4ed8; padding:2px 8px; border-radius:10px; font-weight:700; font-size:11px;">${share}%</span></td>
+              <td style="text-align:right; font-weight:700; color:${isFavorable ? '#059669' : '#dc2626'};">${isFavorable ? '+₱ ' : '-₱ '}${formatPeso(Math.abs(variance))}</td>
+              <td style="text-align:center;"><span class="status-pill ${cat.actual > 0 ? 'active' : 'warning'}">${cat.actual >= cat.planned ? 'COMPLETED' : cat.actual > 0 ? 'ACTIVE' : 'PLANNED'}</span></td>
+            </tr>
+          `;
+        });
+        tableBody.innerHTML = thtml;
       }
     }
 
