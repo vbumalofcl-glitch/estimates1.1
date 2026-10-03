@@ -34,15 +34,15 @@
  * =========================================================================================
  */
 
-// DEFAULT CONFIGURATION PLACEHOLDERS
-// Replace these values with your Firebase project credentials from the Firebase Console.
+// DEFAULT CONFIGURATION - PMCC ESTIMATES PROJECT
 const DEFAULT_FIREBASE_CONFIG = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyD5VwDFQ5qWT2iOTHCSiHH4d7wM_R4ibyw",
+  authDomain: "pmcc-2cb89.firebaseapp.com",
+  projectId: "pmcc-2cb89",
+  storageBucket: "pmcc-2cb89.firebasestorage.app",
+  messagingSenderId: "1016255912023",
+  appId: "1:1016255912023:web:6fe0c3573b89f7db3e2b12",
+  measurementId: "G-2Y0H01W1XB"
 };
 
 const FCLFirebaseSync = {
