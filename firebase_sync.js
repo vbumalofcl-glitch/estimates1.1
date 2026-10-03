@@ -634,7 +634,7 @@ const FCLFirebaseSync = {
   },
 
   /**
-   * Save config pasted in modal
+   * Save config pasted in modal (supports raw JS snippet, JSON, or key-value pairs)
    */
   async saveConfigFromModal() {
     const input = document.getElementById('fclFirebaseJsonInput');
@@ -647,18 +647,55 @@ const FCLFirebaseSync = {
 
     try {
       let configObj = null;
-      if (text.startsWith('{')) {
-        configObj = JSON.parse(text);
-      } else {
-        // Attempt parsing standard const firebaseConfig = { ... } JS snippet
+
+      // Strategy 1: Direct JSON.parse
+      try {
+        const p = JSON.parse(text);
+        if (p && p.projectId) configObj = p;
+      } catch (e) {}
+
+      // Strategy 2: Extract {...} block and evaluate JS object literal
+      if (!configObj) {
         const match = text.match(/\{[\s\S]*\}/);
         if (match) {
-          configObj = JSON.parse(match[0]);
+          try {
+            const fn = new Function('return (' + match[0] + ');');
+            const evaluated = fn();
+            if (evaluated && typeof evaluated === 'object' && evaluated.projectId) {
+              configObj = evaluated;
+            }
+          } catch (e) {}
+
+          // Strategy 3: Quote unquoted keys and parse as JSON
+          if (!configObj) {
+            try {
+              const jsonified = match[0]
+                .replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":')
+                .replace(/:\s*'([^']*)'/g, ': "$1"')
+                .replace(/,\s*([}\]])/g, '$1');
+              const p = JSON.parse(jsonified);
+              if (p && p.projectId) configObj = p;
+            } catch (e) {}
+          }
+        }
+      }
+
+      // Strategy 4: Direct regex key-value extraction for all standard Firebase keys
+      if (!configObj) {
+        const keys = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
+        const extracted = {};
+        keys.forEach(k => {
+          const re = new RegExp('["\']?' + k + '["\']?\\s*[:=]\\s*["\']([^"\'\\r\\n]+)["\']', 'i');
+          const m = text.match(re);
+          if (m && m[1]) extracted[k] = m[1].trim();
+        });
+        if (extracted.projectId && extracted.apiKey) {
+          configObj = extracted;
         }
       }
 
       if (!configObj || !configObj.projectId) {
-        throw new Error('Missing projectId field.');
+        throw new Error('Could not find a valid "projectId" or "apiKey" in the pasted configuration.');
       }
 
       localStorage.setItem('FCL_FIREBASE_CONFIG_OVERRIDE', JSON.stringify(configObj));
@@ -670,7 +707,7 @@ const FCLFirebaseSync = {
 
       this._showToast('✅ Cloud Firestore configuration saved and connected!', 'success');
     } catch (err) {
-      alert('Invalid Firebase configuration format: ' + err.message + '\n\nPlease ensure you paste a valid JSON object with apiKey and projectId.');
+      alert('Could not parse Firebase configuration: ' + err.message + '\n\nPlease ensure your configuration includes "apiKey" and "projectId".');
     }
   },
 
