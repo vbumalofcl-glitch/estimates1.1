@@ -140,30 +140,184 @@ const FCLStorage = {
   },
 
   // ==========================================
+  // MULTI-PROJECT STORAGE & SYNC METHODS
+  // ==========================================
+  getActiveProjectId() {
+    try {
+      return localStorage.getItem('FCL_ACTIVE_PROJECT_ID') || 'PRJ-2026-001';
+    } catch (e) {
+      return 'PRJ-2026-001';
+    }
+  },
+
+  setActiveProjectId(id) {
+    if (!id) return;
+    try {
+      localStorage.setItem('FCL_ACTIVE_PROJECT_ID', id);
+    } catch (e) {}
+  },
+
+  getProjectStorageKey(projectId, type) {
+    const safeId = String(projectId || 'PRJ-2026-001').replace(/[^a-zA-Z0-9_-]/g, '_');
+    return `cost_estimate_${type}_${safeId}`;
+  },
+
+  async saveProjectSection(projectId, section, data, isRemoteSync = false) {
+    const key = this.getProjectStorageKey(projectId, section);
+    await this.save(key, data);
+    // Mirror to default key if default project PRJ-2026-001
+    if ((projectId === 'PRJ-2026-001' || !projectId) && FCL_STORAGE_KEYS[section]) {
+      await this.save(FCL_STORAGE_KEYS[section], data);
+    }
+    // Real-Time Cloud Firestore Sync Trigger (prevent echo loop if this was a remote sync)
+    if (!isRemoteSync && typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured()) {
+      FCLFirebaseSync.queueSectionSync(projectId, section, data);
+    }
+    return true;
+  },
+
+  async loadProjectSection(projectId, section) {
+    const key = this.getProjectStorageKey(projectId, section);
+    let val = await this.load(key);
+    if (!val && (projectId === 'PRJ-2026-001' || !projectId) && FCL_STORAGE_KEYS[section]) {
+      val = await this.load(FCL_STORAGE_KEYS[section]);
+    }
+    return val;
+  },
+
+  readProjectSectionSync(projectId, section) {
+    const key = this.getProjectStorageKey(projectId, section);
+    let val = this.readSync(key);
+    if (!val && (projectId === 'PRJ-2026-001' || !projectId) && FCL_STORAGE_KEYS[section]) {
+      val = this.readSync(FCL_STORAGE_KEYS[section]);
+    }
+    return val;
+  },
+
+  saveProjectCatalog(catalog, isRemoteSync = false) {
+    try {
+      this.save('FCL_PROJECT_CATALOG_DATA', catalog);
+      if (!isRemoteSync && typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured()) {
+        FCLFirebaseSync.queueCatalogSync(catalog);
+      }
+    } catch (e) {}
+  },
+
+  loadProjectCatalogSync() {
+    return this.readSync('FCL_PROJECT_CATALOG_DATA');
+  },
+
+  // Save project-specific BOQ data and sync with catalog
+  async saveProjectBOQ(projectId, boqData, isRemoteSync = false) {
+    await this.saveProjectSection(projectId, 'boq', boqData, isRemoteSync);
+    try {
+      const catalog = this.readSync('FCL_PROJECT_CATALOG_DATA');
+      if (Array.isArray(catalog)) {
+        const p = catalog.find(x => x.id === projectId);
+        if (p) {
+          p.boq = boqData;
+          if (boqData.totalBudget) p.totalBudget = boqData.totalBudget;
+          if (boqData.actualProgress !== undefined) p.actualProgress = boqData.actualProgress;
+          this.save('FCL_PROJECT_CATALOG_DATA', catalog);
+        }
+      }
+    } catch (e) {}
+    if (!isRemoteSync && typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured()) {
+      FCLFirebaseSync.queueProjectSync(projectId, { boq: boqData });
+    }
+    return true;
+  },
+
+  // Load project-specific BOQ data
+  async loadProjectBOQ(projectId) {
+    let boq = await this.loadProjectSection(projectId, 'boq');
+    if (!boq) {
+      const catalog = this.readSync('FCL_PROJECT_CATALOG_DATA');
+      if (Array.isArray(catalog)) {
+        const p = catalog.find(x => x.id === projectId);
+        if (p && p.boq) boq = p.boq;
+      }
+    }
+    return boq;
+  },
+
+  // Save project-specific Gantt schedule
+  async saveProjectGantt(projectId, ganttData, isRemoteSync = false) {
+    await this.saveProjectSection(projectId, 'ganttSettings', ganttData, isRemoteSync);
+    try {
+      const catalog = this.readSync('FCL_PROJECT_CATALOG_DATA');
+      if (Array.isArray(catalog)) {
+        const p = catalog.find(x => x.id === projectId);
+        if (p) {
+          if (!p.timeline) p.timeline = {};
+          if (ganttData.phases) p.timeline.phases = ganttData.phases;
+          if (ganttData.ganttTasks) p.timeline.ganttTasks = ganttData.ganttTasks;
+          if (ganttData.criticalState) p.timeline.criticalState = ganttData.criticalState;
+          if (ganttData.progress !== undefined) p.actualProgress = ganttData.progress;
+          this.save('FCL_PROJECT_CATALOG_DATA', catalog);
+        }
+      }
+    } catch (e) {}
+    if (!isRemoteSync && typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured()) {
+      FCLFirebaseSync.queueProjectSync(projectId, { gantt: ganttData });
+    }
+    return true;
+  },
+
+  // Load project-specific Gantt schedule
+  async loadProjectGantt(projectId) {
+    let gantt = await this.loadProjectSection(projectId, 'ganttSettings');
+    if (!gantt) {
+      const catalog = this.readSync('FCL_PROJECT_CATALOG_DATA');
+      if (Array.isArray(catalog)) {
+        const p = catalog.find(x => x.id === projectId);
+        if (p && p.timeline) gantt = p.timeline;
+      }
+    }
+    return gantt;
+  },
+
+  // ==========================================
   // FEATURE 2: MASTER PROJECT FILE (.fclproj)
   // ==========================================
   async exportMasterProject() {
-    const boqData = (await this.load(FCL_STORAGE_KEYS.boq)) || this.readSync(FCL_STORAGE_KEYS.boq) || {};
+    const activeId = this.getActiveProjectId();
+    const boqData = (await this.loadProjectBOQ(activeId)) || (await this.load(FCL_STORAGE_KEYS.boq)) || this.readSync(FCL_STORAGE_KEYS.boq) || {};
     const dupaData = (await this.load(FCL_STORAGE_KEYS.dupa)) || this.readSync(FCL_STORAGE_KEYS.dupa) || {};
     const priceListData = (await this.load(FCL_STORAGE_KEYS.priceList)) || this.readSync(FCL_STORAGE_KEYS.priceList) || {};
     const coverData = (await this.load(FCL_STORAGE_KEYS.cover)) || this.readSync(FCL_STORAGE_KEYS.cover) || {};
-    const ganttSettings = (await this.load(FCL_STORAGE_KEYS.ganttSettings)) || this.readSync(FCL_STORAGE_KEYS.ganttSettings) || {};
+    const ganttSettings = (await this.loadProjectGantt(activeId)) || (await this.load(FCL_STORAGE_KEYS.ganttSettings)) || this.readSync(FCL_STORAGE_KEYS.ganttSettings) || {};
     const ganttStartDate = (await this.load(FCL_STORAGE_KEYS.ganttStartDate)) || this.readSync(FCL_STORAGE_KEYS.ganttStartDate) || '';
+    const catalog = this.readSync('FCL_PROJECT_CATALOG_DATA') || null;
 
     const projectName = (boqData.projectFields && boqData.projectFields.projectName) || 'Construction_Project';
-    const projectCode = (boqData.projectFields && boqData.projectFields.projectCode) || 'PRJ-' + new Date().getFullYear();
+    const projectCode = (boqData.projectFields && boqData.projectFields.projectCode) || activeId;
+
+    // Collect individual project BOQ and Gantt data
+    const projectsData = {};
+    if (Array.isArray(catalog)) {
+      for (const p of catalog) {
+        projectsData[p.id] = {
+          boq: (await this.loadProjectBOQ(p.id)) || p.boq || null,
+          gantt: (await this.loadProjectGantt(p.id)) || p.timeline || null
+        };
+      }
+    }
 
     const masterBundle = {
       app: 'FCLDC_Integrated_Project_Controls',
-      version: '1.2',
-      format: 'FCLPROJ_V1',
+      version: '2.0',
+      format: 'FCLPROJ_V2',
       exportedAt: new Date().toISOString(),
+      activeProjectId: activeId,
       metadata: {
         projectName,
         projectCode,
         clientName: (boqData.projectFields && boqData.projectFields.clientName) || '',
         location: (boqData.projectFields && boqData.projectFields.location) || ''
       },
+      catalog: catalog,
+      projectsData: projectsData,
       sections: {
         priceList: priceListData,
         dupa: dupaData,
@@ -181,7 +335,7 @@ const FCLStorage = {
     const safeTitle = projectName.replace(/[^a-zA-Z0-9_\-]/g, '_').substring(0, 40);
     const dateStr = new Date().toISOString().slice(0, 10);
     a.href = url;
-    a.download = `${projectCode}_${safeTitle}_${dateStr}.fclproj`;
+    a.download = `${projectCode}_${safeTitle}_Master_${dateStr}.fclproj`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -196,7 +350,7 @@ const FCLStorage = {
       try {
         const text = event.target.result;
         const bundle = JSON.parse(text);
-        if (!bundle || (!bundle.sections && !bundle.app)) {
+        if (!bundle || (!bundle.sections && !bundle.app && !bundle.catalog)) {
           throw new Error('Invalid project file format. Missing sections bundle.');
         }
 
@@ -221,8 +375,22 @@ const FCLStorage = {
           await this.save(FCL_STORAGE_KEYS.ganttStartDate, sections.ganttStartDate);
         }
 
-        const pName = (bundle.metadata && bundle.metadata.projectName) || 'Project';
-        alert(`Master Project "${pName}" successfully imported!\nAll modules (Price List, D.U.P.A., BOQ, Gantt Schedule, and Proposal) are updated.`);
+        // Restore Catalog and individual Project BOQs / Gantts if present
+        if (bundle.catalog && Array.isArray(bundle.catalog)) {
+          await this.save('FCL_PROJECT_CATALOG_DATA', bundle.catalog);
+        }
+        if (bundle.projectsData && typeof bundle.projectsData === 'object') {
+          for (const [pId, pData] of Object.entries(bundle.projectsData)) {
+            if (pData.boq) await this.saveProjectBOQ(pId, pData.boq);
+            if (pData.gantt) await this.saveProjectGantt(pId, pData.gantt);
+          }
+        }
+        if (bundle.activeProjectId) {
+          this.setActiveProjectId(bundle.activeProjectId);
+        }
+
+        const pName = (bundle.metadata && bundle.metadata.projectName) || 'Master Portfolio';
+        alert(`Master Project Suite "${pName}" successfully imported!\nAll projects, Bill of Quantities, Gantt Schedules, D.U.P.A., and Proposals are updated.`);
 
         if (typeof onSuccess === 'function') {
           onSuccess(bundle);
@@ -239,8 +407,9 @@ const FCLStorage = {
   // ==========================================
   // FEATURE 1: LIVE DASHBOARD METRICS CALCULATION
   // ==========================================
-  getLiveDashboardData() {
-    const boqSection = this.readSync(FCL_STORAGE_KEYS.boq);
+  getLiveDashboardData(projectId) {
+    const targetId = projectId || this.getActiveProjectId();
+    const boqSection = this.readProjectSectionSync(targetId, 'boq') || this.readSync(FCL_STORAGE_KEYS.boq);
     const dupaSection = this.readSync(FCL_STORAGE_KEYS.dupa);
     const priceListSection = this.readSync(FCL_STORAGE_KEYS.priceList);
 
@@ -490,4 +659,8 @@ if (typeof window !== 'undefined') {
   } else {
     FCLStorage.syncToLocalStorage();
   }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { FCLStorage, FCL_STORAGE_KEYS };
 }

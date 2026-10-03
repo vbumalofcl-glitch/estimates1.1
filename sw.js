@@ -3,10 +3,11 @@
  * Provides 100% offline capability for job sites and remote field engineers
  */
 
-const CACHE_NAME = 'fcl-project-controls-v1.1';
+const CACHE_NAME = 'fcl-project-controls-v1.3';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
+  './firebase_sync.js',
   './storage_manager.js',
   './manifest.json',
   './HOMEPAGE.png',
@@ -52,6 +53,11 @@ self.addEventListener('fetch', (event) => {
 
   // Only handle http and https requests
   if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+
+  // Let Firebase / Firestore network requests bypass service worker
+  if (url.hostname.includes('googleapis.com') || url.hostname.includes('firebaseio.com')) {
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {

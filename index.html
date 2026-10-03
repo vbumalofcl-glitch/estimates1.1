@@ -837,7 +837,289 @@
     .timeline-phase-card:hover {
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
-    .doc-vault-grid {
+
+    /* ===================================================
+       TIMELINE SUB-NAVIGATION, GANTT & BOQ SUITE STYLES
+       =================================================== */
+    .timeline-sub-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+      overflow-x: auto;
+    }
+    .timeline-sub-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .timeline-sub-btn:hover {
+      color: #1e40af;
+      background: #eff6ff;
+      border-color: #93c5fd;
+    }
+    .timeline-sub-btn.active {
+      color: #ffffff;
+      background: #2563eb;
+      border-color: #1d4ed8;
+      box-shadow: 0 2px 6px rgba(37,99,235,0.25);
+    }
+    .timeline-sub-btn svg {
+      flex-shrink: 0;
+    }
+
+    /* Gantt Chart Interactive Styles */
+    .gantt-studio-container {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .gantt-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .gantt-scale-btn-group {
+      display: inline-flex;
+      background: #f1f5f9;
+      border-radius: 6px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .gantt-scale-btn {
+      padding: 4px 10px;
+      border: none;
+      background: transparent;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .gantt-scale-btn.active {
+      background: #ffffff;
+      color: #2563eb;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .gantt-chart-wrapper {
+      display: flex;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ffffff;
+      min-height: 380px;
+    }
+    .gantt-left-pane {
+      width: 440px;
+      min-width: 320px;
+      flex-shrink: 0;
+      border-right: 2px solid #cbd5e1;
+      overflow-x: auto;
+      background: #fafbfc;
+    }
+    .gantt-right-pane {
+      flex: 1;
+      overflow-x: auto;
+      position: relative;
+      background: #ffffff;
+    }
+    .gantt-header-row {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-bottom: 2px solid #cbd5e1;
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+    }
+    .gantt-row {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.15s;
+    }
+    .gantt-row:hover {
+      background: #f8fafc;
+    }
+    .gantt-row.row-critical {
+      background: #fffbfb;
+    }
+    .gantt-row.row-critical:hover {
+      background: #fff5f5;
+    }
+    .gantt-bar-box {
+      position: absolute;
+      height: 26px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      user-select: none;
+    }
+    .gantt-bar-box:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+    }
+    .gantt-bar-normal {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      border: 1px solid #1e40af;
+    }
+    .gantt-bar-critical {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      border: 1px solid #991b1b;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+    }
+    .gantt-bar-completed {
+      background: linear-gradient(135deg, #10b981, #047857);
+      border: 1px solid #065f46;
+    }
+    .gantt-bar-fill {
+      height: 100%;
+      background: rgba(255, 255, 255, 0.28);
+      border-radius: 3px 0 0 3px;
+    }
+    .gantt-bar-text {
+      position: absolute;
+      left: 8px;
+      color: #ffffff;
+      font-size: 10.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      pointer-events: none;
+    }
+    .gantt-today-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #e11d48;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .gantt-today-badge {
+      position: absolute;
+      top: 2px;
+      background: #e11d48;
+      color: white;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 3px;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+
+    /* Bill of Quantity (BOQ) Styles */
+    .boq-studio-container {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+    .boq-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .boq-kpi-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .boq-kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: #2563eb;
+    }
+    .boq-kpi-card.kpi-accent-green::before { background: #10b981; }
+    .boq-kpi-card.kpi-accent-sky::before { background: #0284c7; }
+    .boq-kpi-card.kpi-accent-purple::before { background: #8b5cf6; }
+
+    .boq-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      background: #ffffff;
+    }
+    .boq-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: left;
+    }
+    .boq-table th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      padding: 10px 12px;
+      border-bottom: 2px solid #cbd5e1;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    .boq-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #1e293b;
+      vertical-align: middle;
+    }
+    .boq-table tr:hover td {
+      background: #f8fafc;
+    }
+    .boq-table tr.row-cpm td {
+      border-left: 3px solid #ef4444;
+    }
+    .boq-inline-input {
+      height: 28px;
+      padding: 2px 6px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-family: inherit;
+      background: #ffffff;
+      transition: border-color 0.15s;
+    }
+    .boq-inline-input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+    }
+
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 14px;
@@ -1025,6 +1307,10 @@
       </nav>
 
       <div class="nav-actions">
+        <button id="topNavCloudSyncBtn" class="fcl-cloud-badge ctrl-btn" type="button" onclick="FCLFirebaseSync.openConfigModal()" style="background:rgba(255,255,255,0.08); color:#cbd5e1; border:1px solid rgba(255,255,255,0.2); padding:6px 12px; font-weight:700; border-radius:20px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-size:11px;" title="Cloud Firestore Real-Time Synchronization Status. Click to configure.">
+          <span style="font-size:13px; line-height:1;">🟡</span>
+          <span>Local Mode</span>
+        </button>
         <button class="ctrl-btn" type="button" onclick="printExecutiveDashboard()" style="background:#2563eb; color:#fff; border:none; padding:7px 14px; font-weight:700; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow: 0 2px 8px rgba(37,99,235,0.3); font-size:12px;" title="Print / Export 1-Page High-Resolution Executive Dashboard PDF">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
           Executive PDF
@@ -1750,21 +2036,30 @@
         </section>
         </div> <!-- End viewProjectOverview -->
 
-        <!-- ================= VIEW 2: PROJECT TIMELINE ================= -->
+        <!-- ================= VIEW 2: PROJECT TIMELINE, GANTT & BOQ SUITE ================= -->
         <div id="viewProjectTimeline" class="project-main-view no-print" style="display: none;">
           <!-- Timeline Executive KPI Card -->
-          <section class="dashboard-card">
+          <section class="dashboard-card" style="margin-bottom: 18px;">
             <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
               <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <span style="font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase;">CPM Master Schedule &amp; Milestones</span>
+                  <span style="font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase;">CPM Master Schedule &amp; Cost Control</span>
                   <span id="timelineStatusBadge" class="brand-tag" style="background: rgba(16, 185, 129, 0.15); color: #059669; border-color: rgba(16, 185, 129, 0.4);">● ON TRACK</span>
                 </div>
-                <h2 class="card-title" id="timelineProjectTitle">Project Timeline &amp; CPM Phase Schedule</h2>
-                <div id="timelineProjectSub" style="font-size: 12px; font-weight: 500; color: var(--text-muted); margin-top: 2px;">Sports Club &amp; Recreation Facility &bull; PRJ-2026-001</div>
+                <h2 class="card-title" id="timelineProjectTitle">Project Timeline, Gantt Schedule &amp; BOQ</h2>
+                <div id="timelineProjectSub" style="font-size: 12px; font-weight: 500; color: var(--text-muted); margin-top: 2px;">Active Project Baseline • Controls &amp; Quantities</div>
               </div>
-              <div class="card-controls">
-                <a href="boq_schedule/index.html" class="ctrl-btn primary" style="text-decoration:none;" title="Open CPM Interactive Gantt Chart">Open Gantt Schedule &rarr;</a>
+              <div class="card-controls" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="ctrl-btn" onclick="openFullGanttStudio()" style="background: #0284c7; color: #fff; font-weight: 700; border: none; cursor: pointer;" title="Open Full-Screen CPM Gantt Chart Module">
+                  📊 Open Gantt Studio &rarr;
+                </button>
+                <button type="button" class="ctrl-btn" onclick="openFullBOQWorkbook()" style="background: #059669; color: #fff; font-weight: 700; border: none; cursor: pointer;" title="Open Dedicated Bill of Quantity Workbook">
+                  📑 Open BOQ Workbook &rarr;
+                </button>
+                <button type="button" class="ctrl-btn primary" onclick="saveProjectTimelineAndBOQ()" style="display: inline-flex; align-items: center; gap: 5px; cursor: pointer;" title="Persist schedule and BOQ changes across the entire web app">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  Save Timeline &amp; BOQ Data
+                </button>
               </div>
             </div>
 
@@ -1772,13 +2067,13 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid var(--line);">
               <div>
                 <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Timeline Completion</div>
-                <div id="timelineOverallProgress" style="font-size: 20px; font-weight: 800; color: #2563eb; margin-top: 2px;">62.4%</div>
-                <div style="font-size: 10.5px; color: #475569;">Weighted Progress</div>
+                <div id="timelineOverallProgress" style="font-size: 20px; font-weight: 800; color: #2563eb; margin-top: 2px;">0.0%</div>
+                <div id="timelineProgressSub" style="font-size: 10.5px; color: #475569;">Weighted Accomplishment</div>
               </div>
               <div>
                 <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Contract Duration</div>
                 <div id="timelineDuration" style="font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 2px;">240 Calendar Days</div>
-                <div id="timelineElapsed" style="font-size: 10.5px; color: #475569;">150 days elapsed (62.5%)</div>
+                <div id="timelineElapsed" style="font-size: 10.5px; color: #475569;">150 days elapsed</div>
               </div>
               <div>
                 <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Critical Path State</div>
@@ -1790,10 +2085,15 @@
                 <div id="timelineTargetDate" style="font-size: 20px; font-weight: 800; color: #0284c7; margin-top: 2px;">OCT 30, 2026</div>
                 <div style="font-size: 10.5px; color: #475569;">Substantial Completion</div>
               </div>
+              <div>
+                <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Total Project BOQ Budget</div>
+                <div id="timelineBOQBudget" style="font-size: 20px; font-weight: 800; color: #059669; margin-top: 2px;">₱ 0.00</div>
+                <div id="timelineBOQItemsCount" style="font-size: 10.5px; color: #475569;">Itemized Bill of Quantity</div>
+              </div>
             </div>
 
             <!-- Overall Progress Bar -->
-            <div style="margin-bottom: 24px;">
+            <div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <span style="font-size: 12px; font-weight: 700; color: #0f172a;">Overall Project Execution Progress</span>
                 <span id="timelineBarPercent" style="font-size: 12px; font-weight: 800; color: #2563eb;">62.4%</span>
@@ -1802,36 +2102,200 @@
                 <div id="timelineProgressBarFill" style="height: 100%; width: 62.4%; background: linear-gradient(90deg, #3b82f6, #1d4ed8); border-radius: 6px; transition: width 0.4s ease;"></div>
               </div>
             </div>
-
-            <!-- CPM Phase Breakdown List -->
-            <h3 style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              Work Breakdown &amp; Execution Phases
-            </h3>
-
-            <div id="timelinePhasesContainer">
-              <!-- Rendered dynamically -->
-            </div>
           </section>
 
-          <!-- 3-Week Lookahead Schedule Card -->
-          <section class="dashboard-card" style="margin-top: 16px;">
-            <div class="card-header">
-              <div>
-                <h3 class="card-title">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
-                  3-Week Lookahead &amp; Critical Immediate Milestones
-                </h3>
-                <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">Tasks scheduled for continuous monitoring &amp; field inspection</div>
+          <!-- Timeline Save Confirmation Alert -->
+          <div id="timelineSaveNotification" style="display: none; align-items: center; gap: 10px; background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 8px; padding: 12px 18px; margin-bottom: 18px; box-shadow: 0 4px 12px rgba(16,185,129,0.15);">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0;">✓</div>
+            <div style="flex: 1;">
+              <strong style="color: #065f46; font-size: 13px;">Project Timeline &amp; Bill of Quantity Successfully Saved!</strong>
+              <div style="color: #047857; font-size: 11.5px; margin-top: 2px;">Data has been synchronized across IndexedDB, browser storage, and the project catalog. Accessible anytime.</div>
+            </div>
+            <button type="button" onclick="document.getElementById('timelineSaveNotification').style.display='none'" style="background:none; border:none; color:#047857; font-size:18px; cursor:pointer;">&times;</button>
+          </div>
+
+          <!-- Timeline Sub-Navigation Switcher -->
+          <div class="timeline-sub-nav">
+            <button id="tlSubBtn_gantt" class="timeline-sub-btn active" type="button" onclick="switchTimelineSubTab('gantt')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              Interactive Gantt Chart Schedule
+            </button>
+            <button id="tlSubBtn_boq" class="timeline-sub-btn" type="button" onclick="switchTimelineSubTab('boq')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Project Bill of Quantity (BOQ)
+            </button>
+            <button id="tlSubBtn_phases" class="timeline-sub-btn" type="button" onclick="switchTimelineSubTab('phases')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              Work Breakdown Phases
+            </button>
+            <button id="tlSubBtn_lookahead" class="timeline-sub-btn" type="button" onclick="switchTimelineSubTab('lookahead')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+              3-Week Lookahead &amp; Milestones
+            </button>
+          </div>
+
+          <!-- ================= SUB-TAB 1: INTERACTIVE GANTT CHART ================= -->
+          <div id="timelineSubView_gantt" class="timeline-sub-view">
+            <div class="gantt-studio-container">
+              <!-- Toolbar -->
+              <div class="gantt-toolbar">
+                <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 11.5px; font-weight: 700; color: #475569;">Time Scale:</span>
+                    <div class="gantt-scale-btn-group">
+                      <button id="ganttScaleBtn_days" class="gantt-scale-btn" type="button" onclick="setTimelineGanttScale('days')">Days</button>
+                      <button id="ganttScaleBtn_weeks" class="gantt-scale-btn active" type="button" onclick="setTimelineGanttScale('weeks')">Weeks</button>
+                      <button id="ganttScaleBtn_months" class="gantt-scale-btn" type="button" onclick="setTimelineGanttScale('months')">Months</button>
+                    </div>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 11.5px; font-weight: 700; color: #475569;">Filter:</span>
+                    <select id="ganttTaskFilter" onchange="filterTimelineGanttTasks(this.value)" style="height: 28px; padding: 0 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #1e293b; background: white;">
+                      <option value="all">All Activities</option>
+                      <option value="critical">Critical Path Only</option>
+                      <option value="in_progress">In Progress</option>
+                      <option value="completed">Completed</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <button type="button" class="ctrl-btn" onclick="openAddGanttTaskModal()" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 700;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Add Schedule Activity
+                  </button>
+                  <button type="button" class="ctrl-btn primary" onclick="saveProjectTimelineSchedule()" style="display: inline-flex; align-items: center; gap: 5px; font-weight: 700;">
+                    💾 Save Schedule Changes
+                  </button>
+                </div>
               </div>
-              <div class="card-controls">
-                <span class="status-pill active" style="font-size: 11px;">Lookahead Sprint</span>
+
+              <!-- Interactive Visual Gantt Wrapper -->
+              <div id="interactiveGanttContainer">
+                <!-- Rendered dynamically by renderInteractiveGanttChart() -->
               </div>
             </div>
-            <div id="timelineLookaheadContainer">
-              <!-- Rendered dynamically -->
+          </div>
+
+          <!-- ================= SUB-TAB 2: BILL OF QUANTITY (BOQ) ================= -->
+          <div id="timelineSubView_boq" class="timeline-sub-view" style="display: none;">
+            <div class="boq-studio-container">
+              <!-- BOQ Executive KPI Cards -->
+              <div class="boq-kpi-grid">
+                <div class="boq-kpi-card">
+                  <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Total Contract BOQ Amount</div>
+                  <div id="boqKpiTotalAmount" style="font-size: 20px; font-weight: 800; color: #1e3a8a; margin-top: 3px;">₱ 0.00</div>
+                  <div id="boqKpiCount" style="font-size: 10.5px; color: #475569; margin-top: 2px;">0 Scope Items</div>
+                </div>
+                <div class="boq-kpi-card kpi-accent-sky">
+                  <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Direct Materials Cost</div>
+                  <div id="boqKpiMaterialCost" style="font-size: 20px; font-weight: 800; color: #0369a1; margin-top: 3px;">₱ 0.00</div>
+                  <div id="boqKpiMaterialShare" style="font-size: 10.5px; color: #475569; margin-top: 2px;">0.0% of Total Value</div>
+                </div>
+                <div class="boq-kpi-card kpi-accent-purple">
+                  <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Labor &amp; Equipment Cost</div>
+                  <div id="boqKpiLECost" style="font-size: 20px; font-weight: 800; color: #6d28d9; margin-top: 3px;">₱ 0.00</div>
+                  <div id="boqKpiLEShare" style="font-size: 10.5px; color: #475569; margin-top: 2px;">0.0% of Total Value</div>
+                </div>
+                <div class="boq-kpi-card kpi-accent-green">
+                  <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Earned Value Accomplished</div>
+                  <div id="boqKpiEarnedValue" style="font-size: 20px; font-weight: 800; color: #047857; margin-top: 3px;">₱ 0.00</div>
+                  <div id="boqKpiAccomplishedPercent" style="font-size: 10.5px; color: #047857; font-weight: 700; margin-top: 2px;">0.0% Accomplished</div>
+                </div>
+              </div>
+
+              <!-- BOQ Toolbar -->
+              <div class="gantt-toolbar" style="margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <input type="text" id="boqSearchInput" placeholder="Search item code or description..." oninput="filterProjectBOQ()" style="height: 30px; padding: 0 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; width: 220px; font-family: inherit;">
+                  <select id="boqCategoryFilter" onchange="filterProjectBOQ()" style="height: 30px; padding: 0 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; font-weight: 600; color: #334155; background: white;">
+                    <option value="all">All Work Divisions</option>
+                  </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <button type="button" class="ctrl-btn" onclick="openAddBOQItemModal()" style="display: inline-flex; align-items: center; gap: 5px; font-weight: 700;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Add BOQ Item
+                  </button>
+                  <button type="button" class="ctrl-btn" onclick="exportProjectBOQCSV()" style="display: inline-flex; align-items: center; gap: 5px;" title="Export BOQ as CSV Spreadsheet">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Export CSV
+                  </button>
+                  <button type="button" class="ctrl-btn primary" onclick="saveProjectBOQData()" style="display: inline-flex; align-items: center; gap: 5px; font-weight: 700;">
+                    💾 Save BOQ Changes
+                  </button>
+                </div>
+              </div>
+
+              <!-- Interactive BOQ Table -->
+              <div class="boq-table-wrapper">
+                <table class="boq-table" id="projectBOQTable">
+                  <thead>
+                    <tr>
+                      <th style="width: 70px;">Item Code</th>
+                      <th>Work Description</th>
+                      <th>Category / Division</th>
+                      <th style="width: 70px; text-align: right;">Qty</th>
+                      <th style="width: 50px; text-align: center;">Unit</th>
+                      <th style="width: 95px; text-align: right;">Mat Rate (₱)</th>
+                      <th style="width: 95px; text-align: right;">L&amp;E Rate (₱)</th>
+                      <th style="width: 100px; text-align: right;">Unit Cost (₱)</th>
+                      <th style="width: 115px; text-align: right;">Total Amount (₱)</th>
+                      <th style="width: 60px; text-align: center;">Weight</th>
+                      <th style="width: 80px; text-align: center;">% Done</th>
+                      <th style="width: 110px; text-align: right;">Earned Value (₱)</th>
+                      <th style="width: 65px; text-align: center;">CPM</th>
+                      <th style="width: 75px; text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="projectBOQTableBody">
+                    <!-- Populated dynamically -->
+                  </tbody>
+                  <tfoot id="projectBOQTableFoot" style="background: #f1f5f9; font-weight: 700;">
+                    <!-- Totals dynamically computed -->
+                  </tfoot>
+                </table>
+              </div>
             </div>
-          </section>
+          </div>
+
+          <!-- ================= SUB-TAB 3: CPM EXECUTION PHASES ================= -->
+          <div id="timelineSubView_phases" class="timeline-sub-view" style="display: none;">
+            <section class="dashboard-card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title" style="display: flex; align-items: center; gap: 6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    CPM Work Breakdown &amp; Execution Phases
+                  </h3>
+                  <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">Execution phases, durations, critical path and lead site engineers</div>
+                </div>
+              </div>
+              <div id="timelinePhasesContainer">
+                <!-- Rendered dynamically -->
+              </div>
+            </section>
+          </div>
+
+          <!-- ================= SUB-TAB 4: 3-WEEK LOOKAHEAD ================= -->
+          <div id="timelineSubView_lookahead" class="timeline-sub-view" style="display: none;">
+            <section class="dashboard-card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title" style="display: flex; align-items: center; gap: 6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+                    3-Week Lookahead &amp; Critical Immediate Milestones
+                  </h3>
+                  <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">Tasks scheduled for continuous monitoring &amp; field inspection</div>
+                </div>
+                <div class="card-controls">
+                  <span class="status-pill active" style="font-size: 11px;">Lookahead Sprint</span>
+                </div>
+              </div>
+              <div id="timelineLookaheadContainer">
+                <!-- Rendered dynamically -->
+              </div>
+            </section>
+          </div>
         </div>
 
         <!-- ================= VIEW 3: PROJECT DOCUMENTATION ================= -->
@@ -2036,6 +2500,193 @@
           </div>
         </div>
 
+        <!-- Timeline Gantt Activity Modal -->
+        <div id="timelineGanttTaskModal" class="modal-overlay no-print" style="display: none;" onclick="if(event.target===this) closeGanttTaskModal()">
+          <div class="modal-content" style="max-width: 620px;" onclick="event.stopPropagation()">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); background: #f8fafc;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px;">
+                  📊
+                </div>
+                <div>
+                  <div id="ganttModalTitle" style="font-size: 15px; font-weight: 700; color: #0f172a;">Schedule Activity Editor</div>
+                  <div style="font-size: 11.5px; font-weight: 500; color: #64748b;">Configure task timing, progress, float and critical path status</div>
+                </div>
+              </div>
+              <button type="button" onclick="closeGanttTaskModal()" style="background: none; border: none; font-size: 22px; line-height: 1; cursor: pointer; color: #94a3b8;" title="Close">&times;</button>
+            </div>
+
+            <form id="ganttTaskForm" onsubmit="saveGanttTaskFromModal(event)" style="margin: 0; display: flex; flex-direction: column; flex: 1;">
+              <input type="hidden" id="ganttEditTaskId" value="">
+              <div style="padding: 20px; display: flex; flex-direction: column; gap: 14px; max-height: calc(90vh - 140px); overflow-y: auto;">
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Activity ID / Code *</label>
+                    <input type="text" id="ganttTaskCode" required placeholder="e.g. T-105" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Activity Name / Scope *</label>
+                    <input type="text" id="ganttTaskName" required placeholder="e.g. Suspended Slab Rebar & Concrete Pouring" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Work Division / Category</label>
+                    <input type="text" id="ganttTaskCategory" placeholder="e.g. Concrete Works" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Lead Site Engineer</label>
+                    <input type="text" id="ganttTaskLead" placeholder="e.g. Engr. V. Bumalang" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Start Date *</label>
+                    <input type="date" id="ganttTaskStartDate" required onchange="calcGanttDates('start')" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Duration (Calendar Days) *</label>
+                    <input type="number" id="ganttTaskDuration" min="1" max="1000" required value="30" oninput="calcGanttDates('duration')" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">End Date *</label>
+                    <input type="date" id="ganttTaskEndDate" required onchange="calcGanttDates('end')" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Accomplishment (% Done)</label>
+                    <input type="number" id="ganttTaskProgress" min="0" max="100" step="0.5" value="0" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Predecessor Dependency</label>
+                    <input type="text" id="ganttTaskPredecessor" placeholder="e.g. T-101 (FS)" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 10px; background: #fff5f5; border: 1px solid #fed7d7; padding: 10px 14px; border-radius: 6px;">
+                  <input type="checkbox" id="ganttTaskCritical" style="width: 18px; height: 18px; cursor: pointer;">
+                  <label for="ganttTaskCritical" style="font-size: 12px; font-weight: 700; color: #c53030; cursor: pointer;">
+                    Critical Path Activity (Zero Total Float — delays directly impact substantial project completion)
+                  </label>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-top: 1px solid var(--line); background: #f8fafc;">
+                <button class="ctrl-btn" type="button" onclick="closeGanttTaskModal()">Cancel</button>
+                <button class="ctrl-btn primary" type="submit" style="display:inline-flex; align-items:center; gap:6px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  Save Schedule Activity
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Timeline BOQ Item Modal -->
+        <div id="timelineBoqItemModal" class="modal-overlay no-print" style="display: none;" onclick="if(event.target===this) closeBOQItemModal()">
+          <div class="modal-content" style="max-width: 680px;" onclick="event.stopPropagation()">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); background: #f8fafc;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #f0fdf4; color: #16a34a; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px;">
+                  📑
+                </div>
+                <div>
+                  <div id="boqModalTitle" style="font-size: 15px; font-weight: 700; color: #0f172a;">BOQ Line Item Editor</div>
+                  <div style="font-size: 11.5px; font-weight: 500; color: #64748b;">Specify quantity, rates, division, and physical accomplishment</div>
+                </div>
+              </div>
+              <button type="button" onclick="closeBOQItemModal()" style="background: none; border: none; font-size: 22px; line-height: 1; cursor: pointer; color: #94a3b8;" title="Close">&times;</button>
+            </div>
+
+            <form id="boqItemForm" onsubmit="saveBOQItemFromModal(event)" style="margin: 0; display: flex; flex-direction: column; flex: 1;">
+              <input type="hidden" id="boqEditItemId" value="">
+              <div style="padding: 20px; display: flex; flex-direction: column; gap: 14px; max-height: calc(90vh - 140px); overflow-y: auto;">
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Item Code *</label>
+                    <input type="text" id="boqItemCode" required placeholder="e.g. 2.04" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Work Scope / Description *</label>
+                    <input type="text" id="boqItemTitle" required placeholder="e.g. Reinforced Concrete Grade Beams" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Work Division / Category</label>
+                    <input type="text" id="boqItemCategory" placeholder="e.g. Concrete Works" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Contract Condition</label>
+                    <select id="boqItemCondition" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; background:white; box-sizing:border-box;">
+                      <option value="CPM">CPM (Main Contract Item)</option>
+                      <option value="OSM">OSM (Owner Supplied Material)</option>
+                      <option value="By other Contractor">By other Contractor</option>
+                      <option value="Not included in Work">Not included in Work</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Technical Specification / Remarks</label>
+                  <input type="text" id="boqItemSpec" placeholder="e.g. Class A 3000 PSI with Grade 60 deformed rebar" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Quantity *</label>
+                    <input type="number" id="boqItemQty" step="0.01" min="0" required value="1" oninput="calcBoqModalPreview()" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Unit of Measure *</label>
+                    <input type="text" id="boqItemUnit" required placeholder="cu.m / sq.m / lot" value="cu.m" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Accomplished (% Done)</label>
+                    <input type="number" id="boqItemPercentDone" min="0" max="100" step="0.5" value="0" oninput="calcBoqModalPreview()" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Material Unit Cost (₱)</label>
+                    <input type="number" id="boqItemMatCost" step="0.01" min="0" value="0" oninput="calcBoqModalPreview()" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">Labor &amp; Equipment Unit Cost (₱)</label>
+                    <input type="number" id="boqItemLECost" step="0.01" min="0" value="0" oninput="calcBoqModalPreview()" style="width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; box-sizing:border-box;">
+                  </div>
+                </div>
+
+                <!-- Live Calculation Preview in Modal -->
+                <div style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <div style="font-size: 11px; font-weight: 700; color: #475569;">Total Unit Cost: <span id="boqModalPreviewUnitCost" style="color: #0f172a;">₱ 0.00</span></div>
+                    <div style="font-size: 11px; font-weight: 700; color: #15803d; margin-top: 2px;">Earned Accomplished Value: <span id="boqModalPreviewEarned">₱ 0.00</span></div>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Total Item Amount</div>
+                    <div id="boqModalPreviewTotal" style="font-size: 18px; font-weight: 800; color: #1e40af;">₱ 0.00</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-top: 1px solid var(--line); background: #f8fafc;">
+                <button class="ctrl-btn" type="button" onclick="closeBOQItemModal()">Cancel</button>
+                <button class="ctrl-btn primary" type="submit" style="display:inline-flex; align-items:center; gap:6px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  Save BOQ Item
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
         <!-- Executive Signatures Block (Only shown in print / PDF report) -->
         <section id="executiveSignatures" class="executive-print-signatures" style="margin-top: 20px; padding-top: 16px; border-top: 1.5px solid #cbd5e1; justify-content: space-between; gap: 32px; page-break-inside: avoid;">
           <div style="flex: 1; text-align: center;">
@@ -2066,6 +2717,10 @@
 
   </div>
 
+  <!-- Firebase Compat v10 SDK for Cloud Firestore Real-Time Data Synchronization -->
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+  <script src="firebase_sync.js"></script>
   <script src="storage_manager.js"></script>
   <script>
     function formatPeso(val) {
@@ -2113,8 +2768,30 @@
           { avatar: 'RS', name: 'Engr. R. Santos', desc: 'Substation Transformer & LED Sports Luminaire', cat: 'Electrical Power', planned: 2300000, actual: 2150000, status: 'Pending' },
           { avatar: 'IT', name: 'Engr. I. Tan', desc: 'Perimeter Drainage, Swale & Site Pavement', cat: 'Site Civil Development', planned: 1200000, actual: 1180000, status: 'Completed' }
         ],
+        boq: {
+          projectName: 'Sports Club & Recreation Facility',
+          projectCode: 'PRJ-2026-001',
+          items: [
+            { id: 'boq_prj1_01', code: '1.01', title: 'Site Clearing, Layout & Mobilization Facilities', specification: 'Temporary bunkhouse, electrical connection & site fencing', category: 'Earthworks & Civil', qty: 1, unit: 'lot', materialUnitCost: 180000.00, leUnitCost: 220000.00, unitCost: 400000.00, grandTotalCost: 400000.00, weight: 2.69, percentDone: 100, earnedValue: 400000.00, condition: 'CPM', isCritical: false },
+            { id: 'boq_prj1_02', code: '2.01', title: 'Deep Excavation for Foundation & Swale Swales', specification: 'Machine excavation with backhoe & 10-wheeler dump trucks', category: 'Earthworks & Civil', qty: 1250, unit: 'cu.m', materialUnitCost: 0.00, leUnitCost: 720.00, unitCost: 720.00, grandTotalCost: 900000.00, weight: 6.06, percentDone: 100, earnedValue: 900000.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_prj1_03', code: '3.01', title: 'Reinforced Concrete Foundation Footings & Ring Beams (4000 PSI)', specification: 'Ready-mix 4000 PSI @ 28 days with Grade 60 rebar', category: 'Reinforced Concrete', qty: 340, unit: 'cu.m', materialUnitCost: 6500.00, leUnitCost: 3800.00, unitCost: 10300.00, grandTotalCost: 3502000.00, weight: 23.58, percentDone: 100, earnedValue: 3502000.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_prj1_04', code: '3.02', title: 'Suspended Concrete Columns, Beams & 1200-Seat Bleachers', specification: 'Formworks, scaffolding & 4000 PSI concrete casting', category: 'Reinforced Concrete', qty: 280, unit: 'cu.m', materialUnitCost: 7200.00, leUnitCost: 4200.00, unitCost: 11400.00, grandTotalCost: 3192000.00, weight: 21.50, percentDone: 88, earnedValue: 2808960.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_prj1_05', code: '4.01', title: 'Long-Span Structural Steel Roof Trusses & Polycarbonate Decking', specification: 'Wide-flange trusses A36 with zinc chromate primer & twin-wall sheets', category: 'Structural Steel', qty: 42500, unit: 'kg', materialUnitCost: 68.00, leUnitCost: 26.00, unitCost: 94.00, grandTotalCost: 3995000.00, weight: 26.90, percentDone: 55, earnedValue: 2197250.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_prj1_06', code: '5.01', title: 'FIBA Maple Hardwood Court Flooring System', specification: 'Subfloor sleeper shock-absorption pads & Robbins maple strips', category: 'Architectural & MEPFS', qty: 680, unit: 'sq.m', materialUnitCost: 2200.00, leUnitCost: 650.00, unitCost: 2850.00, grandTotalCost: 1938000.00, weight: 13.05, percentDone: 20, earnedValue: 387600.00, condition: 'CPM', isCritical: false },
+            { id: 'boq_prj1_07', code: '6.01', title: 'Substation Transformer, High-Bay Sports Lighting & MEPF Rough-ins', specification: '500 kVA pad-mounted transformer & 1000-lux arena fixtures', category: 'Architectural & MEPFS', qty: 1, unit: 'lot', materialUnitCost: 650000.00, leUnitCost: 273000.00, unitCost: 923000.00, grandTotalCost: 923000.00, weight: 6.22, percentDone: 15, earnedValue: 138450.00, condition: 'CPM', isCritical: false }
+          ]
+        },
         timeline: {
           criticalState: 'ON TRACK (+2.4%)',
+          ganttTasks: [
+            { id: 'task_prj1_01', code: 'T-101', name: 'Mobilization & Temporary Site Staging', category: 'Mobilization', startDate: '2026-03-01', endDate: '2026-03-20', duration: 20, progress: 100, isCritical: false, float: '15d', lead: 'Engr. J. Dela Cruz', predecessors: 'None' },
+            { id: 'task_prj1_02', code: 'T-102', name: 'Deep Excavation & Foundation Footings Casting', category: 'Civil Works', startDate: '2026-03-21', endDate: '2026-05-05', duration: 45, progress: 100, isCritical: true, float: '0d', lead: 'Engr. V. Bumalang', predecessors: 'T-101 (FS)' },
+            { id: 'task_prj1_03', code: 'T-103', name: 'Suspended Columns, Beams & 1200-Seat Bleachers', category: 'Concrete Frame', startDate: '2026-05-06', endDate: '2026-07-05', duration: 60, progress: 88, isCritical: true, float: '0d', lead: 'Engr. V. Bumalang', predecessors: 'T-102 (FS)' },
+            { id: 'task_prj1_04', code: 'T-104', name: 'Structural Steel Roof Truss Erection via 50T Crane', category: 'Structural Steel', startDate: '2026-06-15', endDate: '2026-07-25', duration: 40, progress: 55, isCritical: true, float: '0d', lead: 'Engr. J. Dela Cruz', predecessors: 'T-103 (SS+40d)' },
+            { id: 'task_prj1_05', code: 'T-105', name: 'Maple Wood Hardwood Flooring Installation', category: 'Architectural', startDate: '2026-07-26', endDate: '2026-09-10', duration: 45, progress: 25, isCritical: false, float: '12d', lead: 'Arch. A. Tolentino', predecessors: 'T-104 (FS)' },
+            { id: 'task_prj1_06', code: 'T-106', name: 'Substation, Sports Lighting & Olympic Pool Rough-in', category: 'MEPFS Utilities', startDate: '2026-08-01', endDate: '2026-09-20', duration: 50, progress: 18, isCritical: false, float: '8d', lead: 'Engr. M. Reyes', predecessors: 'T-104 (SS+45d)' },
+            { id: 'task_prj1_07', code: 'T-107', name: 'Testing, Commissioning & Final Handover', category: 'Closeout', startDate: '2026-09-21', endDate: '2026-10-30', duration: 40, progress: 0, isCritical: true, float: '0d', lead: 'Engr. V. Bumalang', predecessors: 'T-105, T-106 (FS)' }
+          ],
           phases: [
             { name: 'Mobilization, Temporary Utilities & Clearing', startDate: 'MAR 01, 2026', endDate: 'MAR 20, 2026', duration: 20, progress: 100, status: 'Completed', isCritical: false, float: '15d', lead: 'Engr. J. Dela Cruz' },
             { name: 'Deep Excavation & Isolated Footings Foundations', startDate: 'MAR 21, 2026', endDate: 'MAY 05, 2026', duration: 45, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. V. Bumalang' },
@@ -2174,8 +2851,29 @@
           { avatar: 'FP', name: 'Engr. F. Pascual', desc: 'Chiller Plant Installation & Variable Speed Pumps', cat: 'HVAC Mechanical', planned: 5200000, actual: 4400000, status: 'Pending' },
           { avatar: 'KM', name: 'Engr. K. Mendoza', desc: 'Medium Voltage Switchgear & Cable Trays', cat: 'Electrical System', planned: 3900000, actual: 3200000, status: 'Pending' }
         ],
+        boq: {
+          projectName: 'Highland Commercial Complex',
+          projectCode: 'HCC-2026-B1',
+          items: [
+            { id: 'boq_hcc_01', code: '1.01', title: 'Site Shoring, Secant Piling & Soil Nailing', specification: 'Secant contiguous piles with high-strength prestressed soil anchors', category: 'Earthworks & Shoring', qty: 420, unit: 'lin.m', materialUnitCost: 14500.00, leUnitCost: 9500.00, unitCost: 24000.00, grandTotalCost: 10080000.00, weight: 20.78, percentDone: 100, earnedValue: 10080000.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_hcc_02', code: '2.01', title: '1200mm Diameter Bored Piling to Bedrock (24m Depth)', specification: 'Bored piles with bentonite slurry stabilization and sonic logging tubes', category: 'Deep Piling & Substructure', qty: 84, unit: 'units', materialUnitCost: 95000.00, leUnitCost: 65000.00, unitCost: 160000.00, grandTotalCost: 13440000.00, weight: 27.71, percentDone: 100, earnedValue: 13440000.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_hcc_03', code: '2.02', title: 'Foundation Raft Slab & Basement 2/1 Retaining Walls', specification: 'Waterproof concrete mix 4000 PSI with integral crystalline waterproofing', category: 'Deep Piling & Substructure', qty: 850, unit: 'cu.m', materialUnitCost: 5800.00, leUnitCost: 3600.00, unitCost: 9400.00, grandTotalCost: 7990000.00, weight: 16.47, percentDone: 75, earnedValue: 5992500.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_hcc_04', code: '3.01', title: 'Reinforced Concrete Slipform Elevator Core & Shear Walls', specification: 'Continuous slipformed shear cores with Grade 60 dual layer rebar', category: 'Reinforced Concrete Core', qty: 680, unit: 'cu.m', materialUnitCost: 7500.00, leUnitCost: 4500.00, unitCost: 12000.00, grandTotalCost: 8160000.00, weight: 16.82, percentDone: 35, earnedValue: 2856000.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_hcc_05', code: '4.01', title: 'Double-Glazed Low-E Aluminum Curtain Wall Facade', specification: '28mm double glazed argon filled panels with thermal break framing', category: 'MEPFS & Facade Cladding', qty: 1600, unit: 'sq.m', materialUnitCost: 2800.00, leUnitCost: 750.00, unitCost: 3550.00, grandTotalCost: 5680000.00, weight: 11.71, percentDone: 10, earnedValue: 568000.00, condition: 'CPM', isCritical: false },
+            { id: 'boq_hcc_06', code: '4.02', title: 'Central Chiller Plant, Variable Pumps & Fire Sprinkler Mains', specification: 'Water-cooled centrifugal chiller 350TR & NFPA 13 sprinkler mains', category: 'MEPFS & Facade Cladding', qty: 1, unit: 'lot', materialUnitCost: 2450000.00, leUnitCost: 700000.00, unitCost: 3150000.00, grandTotalCost: 3150000.00, weight: 6.49, percentDone: 5, earnedValue: 157500.00, condition: 'CPM', isCritical: false }
+          ]
+        },
         timeline: {
           criticalState: 'SLIGHT SLIPPAGE (-2.5%)',
+          ganttTasks: [
+            { id: 'task_hcc_01', code: 'T-201', name: 'Site Clearing, Slope Stabilization & Secant Shoring', category: 'Substructure Civil', startDate: '2025-10-01', endDate: '2025-11-30', duration: 60, progress: 100, isCritical: true, float: '0d', lead: 'Engr. H. Bautista', predecessors: 'None' },
+            { id: 'task_hcc_02', code: 'T-202', name: 'Bored Piling (1.2m dia) & Foundation Raft Pouring', category: 'Foundation Piling', startDate: '2025-12-01', endDate: '2026-02-15', duration: 75, progress: 100, isCritical: true, float: '0d', lead: 'Engr. R. Corpuz', predecessors: 'T-201 (FS)' },
+            { id: 'task_hcc_03', code: 'T-203', name: 'Basement 1 & 2 Concrete Frame & Waterproofing', category: 'Substructure Concrete', startDate: '2026-02-16', endDate: '2026-05-15', duration: 90, progress: 75, isCritical: true, float: '0d', lead: 'Engr. R. Corpuz', predecessors: 'T-202 (FS)' },
+            { id: 'task_hcc_04', code: 'T-204', name: 'Tower Levels 1 to 4 Elevator Core & Superstructure', category: 'Superstructure Core', startDate: '2026-05-16', endDate: '2026-08-31', duration: 105, progress: 35, isCritical: true, float: '0d', lead: 'Engr. D. Lim', predecessors: 'T-203 (FS)' },
+            { id: 'task_hcc_05', code: 'T-205', name: 'Curtain Wall Mullions & Low-E Double Glazing', category: 'Facade Works', startDate: '2026-08-15', endDate: '2026-11-30', duration: 105, progress: 10, isCritical: false, float: '14d', lead: 'Arch. G. Villanueva', predecessors: 'T-204 (SS+90d)' },
+            { id: 'task_hcc_06', code: 'T-206', name: 'Central Chiller Plant & Fire Sprinkler Mains', category: 'HVAC Mechanical', startDate: '2026-09-01', endDate: '2026-12-31', duration: 120, progress: 5, isCritical: false, float: '10d', lead: 'Engr. F. Pascual', predecessors: 'T-204 (SS+105d)' },
+            { id: 'task_hcc_07', code: 'T-207', name: 'Fit-out, Tenant Handover & Testing/Commissioning', category: 'Closeout', startDate: '2027-01-01', endDate: '2027-03-15', duration: 75, progress: 0, isCritical: true, float: '0d', lead: 'Engr. H. Bautista', predecessors: 'T-205, T-206 (FS)' }
+          ],
           phases: [
             { name: 'Site Clearing, Slope Stabilization & Deep Shoring', startDate: 'OCT 01, 2025', endDate: 'NOV 30, 2025', duration: 60, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. H. Bautista' },
             { name: 'Bored Piling (1.2m dia) & Foundation Raft Pouring', startDate: 'DEC 01, 2025', endDate: 'FEB 15, 2026', duration: 75, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. R. Corpuz' },
@@ -2234,8 +2932,29 @@
           { avatar: 'CL', name: 'Engr. C. Luna', desc: 'Solar Ready Standing Seam Insulated Roof Panels', cat: 'Roofing Envelope', planned: 2900000, actual: 2850000, status: 'Completed' },
           { avatar: 'RT', name: 'Engr. R. Torres', desc: 'Heavy Duty Container Yard Concrete Apron', cat: 'Civil Paving', planned: 1800000, actual: 1900000, status: 'In Progress' }
         ],
+        boq: {
+          projectName: 'Metro Logistics Hub & Warehouse',
+          projectCode: 'MLH-2025-04',
+          items: [
+            { id: 'boq_mlh_01', code: '1.01', title: 'Site Grading, Heavy Container Staging Apron & Access Pavement', specification: 'Heavy duty 250mm thick concrete apron with welded wire mesh', category: 'Site Pavement & Access', qty: 3400, unit: 'sq.m', materialUnitCost: 1100.00, leUnitCost: 550.00, unitCost: 1650.00, grandTotalCost: 5610000.00, weight: 17.42, percentDone: 100, earnedValue: 5610000.00, condition: 'CPM', isCritical: false },
+            { id: 'boq_mlh_02', code: '2.01', title: '45m Clear-Span Pre-Engineered Building (PEB) Portal Frames', specification: 'ASTM A572 Grade 50 built-up tapered columns and rafters', category: 'Structural PEB Steel', qty: 165, unit: 'tons', materialUnitCost: 78000.00, leUnitCost: 22000.00, unitCost: 100000.00, grandTotalCost: 16500000.00, weight: 51.24, percentDone: 100, earnedValue: 16500000.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_mlh_03', code: '3.01', title: 'FF/FL 52 Superflat Laser-Screeded Post-Tensioned Concrete Slab', specification: 'Post-tensioned unbounded monostrand tendons with burnished hardener finish', category: 'Laser-Leveled Flooring', qty: 2800, unit: 'sq.m', materialUnitCost: 1350.00, leUnitCost: 480.00, unitCost: 1830.00, grandTotalCost: 5124000.00, weight: 15.91, percentDone: 100, earnedValue: 5124000.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_mlh_04', code: '4.01', title: 'ESFR High-Density Fire Sprinkler System & Deluge Pump Station', specification: 'UL/FM listed diesel fire pump 1500 GPM with K-17 high ceiling ESFR heads', category: 'High-Bay Fire Protection', qty: 1, unit: 'lot', materialUnitCost: 1850000.00, leUnitCost: 650000.00, unitCost: 2500000.00, grandTotalCost: 2500000.00, weight: 7.76, percentDone: 85, earnedValue: 2125000.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_mlh_05', code: '5.01', title: '12-Bay Automated Hydraulic Loading Dock Levelers & Overhead Doors', specification: '6x8 ft 40,000 lbs hydraulic dock levelers with inflatable weather seals', category: 'Special Equipment', qty: 12, unit: 'sets', materialUnitCost: 145000.00, leUnitCost: 25000.00, unitCost: 170000.00, grandTotalCost: 2040000.00, weight: 6.34, percentDone: 70, earnedValue: 1428000.00, condition: 'CPM', isCritical: false },
+            { id: 'boq_mlh_06', code: '6.01', title: 'Solar-Ready Standing Seam Insulated Roof Panels & Gutters', specification: '0.6mm PVDF galvalume standing seam sheets with 50mm PIR insulation core', category: 'Roofing Envelope', qty: 3200, unit: 'sq.m', materialUnitCost: 100.00, leUnitCost: 33.125, unitCost: 133.125, grandTotalCost: 426000.00, weight: 1.32, percentDone: 100, earnedValue: 426000.00, condition: 'CPM', isCritical: false }
+          ]
+        },
         timeline: {
           criticalState: 'AHEAD OF SCHEDULE (+2.2%)',
+          ganttTasks: [
+            { id: 'task_mlh_01', code: 'T-301', name: 'Geotechnical Soil Improvement & Pad Footings', category: 'Civil Foundation', startDate: '2026-01-15', endDate: '2026-03-01', duration: 45, progress: 100, isCritical: true, float: '0d', lead: 'Engr. T. Navarro', predecessors: 'None' },
+            { id: 'task_mlh_02', code: 'T-302', name: 'PEB High-Clearance Portal Steel Frame Erection', category: 'Structural Steel', startDate: '2026-03-02', endDate: '2026-05-15', duration: 75, progress: 100, isCritical: true, float: '0d', lead: 'Engr. E. Garcia', predecessors: 'T-301 (FS)' },
+            { id: 'task_mlh_03', code: 'T-303', name: 'Standing Seam Roofing & Thermal Insulation', category: 'Roofing Envelope', startDate: '2026-04-15', endDate: '2026-06-15', duration: 60, progress: 100, isCritical: false, float: '10d', lead: 'Engr. C. Luna', predecessors: 'T-302 (SS+45d)' },
+            { id: 'task_mlh_04', code: 'T-304', name: 'FF/FL 52 Laser-Guided Concrete Slab Casting', category: 'Concrete Paving', startDate: '2026-05-20', endDate: '2026-07-10', duration: 50, progress: 100, isCritical: true, float: '0d', lead: 'Engr. T. Navarro', predecessors: 'T-302 (FS+5d)' },
+            { id: 'task_mlh_05', code: 'T-305', name: 'ESFR Fire Protection Deluge Pumps & Piping', category: 'Fire Protection', startDate: '2026-06-20', endDate: '2026-08-20', duration: 60, progress: 85, isCritical: true, float: '0d', lead: 'Engr. S. Mercado', predecessors: 'T-304 (SS+30d)' },
+            { id: 'task_mlh_06', code: 'T-306', name: 'Hydraulic Dock Levelers & Overhead Doors', category: 'Special Equipment', startDate: '2026-07-15', endDate: '2026-09-15', duration: 60, progress: 70, isCritical: false, float: '12d', lead: 'Arch. A. Perez', predecessors: 'T-304 (FS+5d)' },
+            { id: 'task_mlh_07', code: 'T-307', name: 'BFP Clearance, Hydro Testing & Final Commissioning', category: 'Handover', startDate: '2026-09-16', endDate: '2026-11-20', duration: 65, progress: 15, isCritical: true, float: '0d', lead: 'Engr. E. Garcia', predecessors: 'T-305, T-306 (FS)' }
+          ],
           phases: [
             { name: 'Geotechnical Soil Improvement & Heavy Pad Footings', startDate: 'JAN 15, 2026', endDate: 'MAR 01, 2026', duration: 45, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. T. Navarro' },
             { name: 'PEB High-Clearance Portal Steel Frame Erection', startDate: 'MAR 02, 2026', endDate: 'MAY 15, 2026', duration: 75, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. E. Garcia' },
@@ -2294,8 +3013,29 @@
           { avatar: 'JO', name: 'Arch. J. Ocampo', desc: 'Architectural Pedestrian Barrier & Lighting Post Specs', cat: 'Bridge Finishes', planned: 2500000, actual: 2200000, status: 'Pending' },
           { avatar: 'CS', name: 'Engr. C. Soriano', desc: 'Traffic Management System & Temporary Detour Route', cat: 'Traffic Control', planned: 1200000, actual: 1100000, status: 'Completed' }
         ],
+        boq: {
+          projectName: 'Riverside Terraces & Residential Overpass',
+          projectCode: 'RTO-2026-C2',
+          items: [
+            { id: 'boq_rto_01', code: '1.01', title: 'Topographic Survey, ROW Clearance & Traffic Detour Setup', specification: 'Barangay coordination, high-intensity barricades & solar warning flasher lights', category: 'Topographic Survey & ROW', qty: 1, unit: 'lot', materialUnitCost: 650000.00, leUnitCost: 850000.00, unitCost: 1500000.00, grandTotalCost: 1500000.00, weight: 7.01, percentDone: 100, earnedValue: 1500000.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_rto_02', code: '2.01', title: 'Sheet Pile Cofferdams & Deep Well Dewatering System', specification: 'Type III steel sheet piles driven to 12m with submersible pumps', category: 'Topographic Survey & ROW', qty: 1, unit: 'lot', materialUnitCost: 550000.00, leUnitCost: 650000.00, unitCost: 1200000.00, grandTotalCost: 1200000.00, weight: 5.61, percentDone: 70, earnedValue: 840000.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_rto_03', code: '3.01', title: '1500mm Bored River Pier Foundations & Tremie Pouring', specification: 'Bored piles to 28m depth with C35 tremie underwater mix & sonic testing', category: 'Bored Piles & Pier Abutments', qty: 16, unit: 'piles', materialUnitCost: 310000.00, leUnitCost: 190000.00, unitCost: 500000.00, grandTotalCost: 8000000.00, weight: 37.38, percentDone: 20, earnedValue: 1600000.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_rto_04', code: '4.01', title: 'Precast Prestressed AASHTO Type IV Girder Fabrication', specification: '30-meter precast girders with 7-wire low relaxation prestressing strands', category: 'Precast AASHTO Girders', qty: 18, unit: 'girders', materialUnitCost: 240000.00, leUnitCost: 85000.00, unitCost: 325000.00, grandTotalCost: 5850000.00, weight: 27.34, percentDone: 5, earnedValue: 292500.00, condition: 'CPM', isCritical: false },
+            { id: 'boq_rto_05', code: '5.01', title: 'Reinforced Deck Slab (3000 PSI) & Elastomeric Bearings', specification: 'Composite reinforced concrete deck with laminated neoprene bearings', category: 'Bridge Deck & Safety Barriers', qty: 420, unit: 'cu.m', materialUnitCost: 5200.00, leUnitCost: 2800.00, unitCost: 8000.00, grandTotalCost: 3360000.00, weight: 15.70, percentDone: 0, earnedValue: 0.00, condition: 'CPM', isCritical: true },
+            { id: 'boq_rto_06', code: '6.01', title: 'Pedestrian Crash Barriers, Solar Lighting & Asphalt Course', specification: 'TL-4 crash tested concrete barriers & 50mm asphalt wearing course', category: 'Bridge Deck & Safety Barriers', qty: 1, unit: 'lot', materialUnitCost: 950000.00, leUnitCost: 540000.00, unitCost: 1490000.00, grandTotalCost: 1490000.00, weight: 6.96, percentDone: 0, earnedValue: 0.00, condition: 'CPM', isCritical: true }
+          ]
+        },
         timeline: {
           criticalState: 'MOBILIZATION (ON SCHEDULE)',
+          ganttTasks: [
+            { id: 'task_rto_01', code: 'T-401', name: 'ROW Clearance, Utility Relocation & Traffic Detour', category: 'Civil Preparation', startDate: '2026-05-01', endDate: '2026-06-15', duration: 45, progress: 100, isCritical: true, float: '0d', lead: 'Engr. C. Soriano', predecessors: 'None' },
+            { id: 'task_rto_02', code: 'T-402', name: 'Riverbed Sheet Pile Cofferdams & Dewatering', category: 'River Works', startDate: '2026-06-01', endDate: '2026-07-15', duration: 45, progress: 70, isCritical: true, float: '0d', lead: 'Engr. R. Domingo', predecessors: 'T-401 (SS+30d)' },
+            { id: 'task_rto_03', code: 'T-403', name: '1.5m Diameter Bored Piles & Pier Abutment Casting', category: 'Foundation Piles', startDate: '2026-07-01', endDate: '2026-09-30', duration: 90, progress: 20, isCritical: true, float: '0d', lead: 'Engr. P. Alcantara', predecessors: 'T-402 (SS+30d)' },
+            { id: 'task_rto_04', code: 'T-404', name: 'Precast AASHTO Type IV Girder Fabrication', category: 'Precast Civil', startDate: '2026-08-01', endDate: '2026-10-31', duration: 90, progress: 5, isCritical: false, float: '15d', lead: 'Engr. C. Navarro', predecessors: 'T-403 (SS+30d)' },
+            { id: 'task_rto_05', code: 'T-405', name: 'Girder Launching & Tandem Crane Installation', category: 'Superstructure', startDate: '2026-11-01', endDate: '2026-11-30', duration: 30, progress: 0, isCritical: true, float: '0d', lead: 'Engr. P. Alcantara', predecessors: 'T-403, T-404 (FS)' },
+            { id: 'task_rto_06', code: 'T-406', name: 'Cast-in-Place Deck Slab & Waterproofing', category: 'Bridge Deck', startDate: '2026-12-01', endDate: '2026-12-31', duration: 30, progress: 0, isCritical: true, float: '0d', lead: 'Engr. C. Navarro', predecessors: 'T-405 (FS)' },
+            { id: 'task_rto_07', code: 'T-407', name: 'Asphalt Wearing Course, Safety Barriers & Load Testing', category: 'Finishes & Commissioning', startDate: '2027-01-01', endDate: '2027-01-18', duration: 18, progress: 0, isCritical: true, float: '0d', lead: 'Engr. P. Alcantara', predecessors: 'T-406 (FS)' }
+          ],
           phases: [
             { name: 'ROW Clearance, Utility Relocation & Traffic Detour', startDate: 'MAY 01, 2026', endDate: 'JUN 15, 2026', duration: 45, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. C. Soriano' },
             { name: 'Riverbed Sheet Pile Cofferdams & Dewatering Wellpoints', startDate: 'JUN 01, 2026', endDate: 'JUL 15, 2026', duration: 45, progress: 70, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. R. Domingo' },
@@ -2331,7 +3071,12 @@
     }
 
     function initProjectCatalog() {
-      // 0. Load any saved catalog data / edits from localStorage
+      // 0. Check URL query params for projectId and tab (e.g. from BOQ Studio / Gantt Studio)
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramProjId = urlParams.get('projectId');
+      const paramTab = urlParams.get('tab');
+
+      // 1. Load any saved catalog data / edits from storage
       try {
         const savedCatalog = localStorage.getItem('FCL_PROJECT_CATALOG_DATA');
         if (savedCatalog) {
@@ -2363,13 +3108,50 @@
         console.warn('Could not load projects from storage', e);
       }
 
-      // 1. Populate mainProjectSelector dropdown
+      // 2. Check for project-scoped BOQ and Gantt data saved directly
+      FCL_PROJECT_CATALOG.forEach(p => {
+        try {
+          if (typeof FCLStorage !== 'undefined' && FCLStorage.readProjectSectionSync) {
+            const savedBoq = FCLStorage.readProjectSectionSync(p.id, 'boq');
+            if (savedBoq && savedBoq.items && savedBoq.items.length > 0) {
+              p.boq = savedBoq;
+            }
+            const savedGantt = FCLStorage.readProjectSectionSync(p.id, 'ganttSettings');
+            if (savedGantt && savedGantt.ganttTasks && savedGantt.ganttTasks.length > 0) {
+              if (!p.timeline) p.timeline = {};
+              p.timeline.ganttTasks = savedGantt.ganttTasks;
+              if (savedGantt.criticalState) p.timeline.criticalState = savedGantt.criticalState;
+            }
+          }
+        } catch (err) {
+          console.warn('Error syncing scoped project data for', p.id, err);
+        }
+      });
+
+      // 3. Resolve active project and active tab
+      if (paramProjId && FCL_PROJECT_CATALOG.some(p => p.id === paramProjId)) {
+        currentProjectId = paramProjId;
+      } else {
+        const lastActive = typeof FCLStorage !== 'undefined' ? FCLStorage.getActiveProjectId() : null;
+        if (lastActive && FCL_PROJECT_CATALOG.some(p => p.id === lastActive)) {
+          currentProjectId = lastActive;
+        }
+      }
+      if (typeof FCLStorage !== 'undefined') {
+        FCLStorage.setActiveProjectId(currentProjectId);
+      }
+
+      if (paramTab && ['information', 'overview', 'timeline', 'documents'].includes(paramTab)) {
+        currentTabKey = paramTab;
+      }
+
+      // 4. Populate mainProjectSelector dropdown
       populateProjectSelector();
 
-      // 2. Render sidebar project accordion
+      // 5. Render sidebar project accordion
       renderSidebarProjectList();
 
-      // 3. Select initial project and tab
+      // 6. Select initial project and tab
       selectProject(currentProjectId, currentTabKey);
     }
 
@@ -2440,6 +3222,11 @@
       const p3 = Math.round(budget * 0.28);
       const p4 = budget - (p1 + p2 + p3);
 
+      const todayStr = new Date().toISOString().split('T')[0];
+      const endDateObj = new Date();
+      endDateObj.setDate(endDateObj.getDate() + duration);
+      const endStr = endDateObj.toISOString().split('T')[0];
+
       const newProj = {
         id: id,
         name: name,
@@ -2471,8 +3258,25 @@
           { avatar: 'PM', name: manager, desc: 'Mobilization & Site Facilities Setup', cat: 'Site Civil', planned: Math.round(p1 * 0.3), actual: 0, status: 'In Progress' },
           { avatar: 'FA', name: 'Engr. FA Aranang', desc: 'Permits, Clearances & Engineering Submittals', cat: 'Administration', planned: Math.round(p1 * 0.2), actual: 0, status: 'In Progress' }
         ],
+        boq: {
+          projectName: name,
+          projectCode: code,
+          items: [
+            { id: `boq_${id}_01`, code: '1.01', title: 'Mobilization, Utilities, Staging & Safety Enclosures', specification: 'Site bunkhouses, perimeter fencing, power/water tap, and regulatory signage', category: 'Earthworks & Site Civil', qty: 1, unit: 'lot', materialUnitCost: Math.round(p1 * 0.4), leUnitCost: Math.round(p1 * 0.6), unitCost: p1, grandTotalCost: p1, weight: ((p1 / budget) * 100).toFixed(2), percentDone: 10, earnedValue: Math.round(p1 * 0.1), condition: 'CPM', isCritical: true },
+            { id: `boq_${id}_02`, code: '2.01', title: 'Foundation Footings, Raft Slab & Substructure Concrete', specification: 'Class A ready-mix concrete 4000 PSI with Grade 60 rebar and formworks', category: 'Substructure & Concrete Frame', qty: 1, unit: 'lot', materialUnitCost: Math.round(p2 * 0.65), leUnitCost: Math.round(p2 * 0.35), unitCost: p2, grandTotalCost: p2, weight: ((p2 / budget) * 100).toFixed(2), percentDone: 0, earnedValue: 0, condition: 'CPM', isCritical: true },
+            { id: `boq_${id}_03`, code: '3.01', title: 'Superstructure Framing, Structural Steel & Roofing Enclosure', specification: 'A36/A572 structural steel frames with insulated standing seam roofing', category: 'Structural Steel & Roofing', qty: 1, unit: 'lot', materialUnitCost: Math.round(p3 * 0.7), leUnitCost: Math.round(p3 * 0.3), unitCost: p3, grandTotalCost: p3, weight: ((p3 / budget) * 100).toFixed(2), percentDone: 0, earnedValue: 0, condition: 'CPM', isCritical: true },
+            { id: `boq_${id}_04`, code: '4.01', title: 'Architectural Finishes, MEPFS Utilities & Life Safety Systems', specification: 'Floor finishes, sanitary piping, lighting fixtures & fire protection systems', category: 'Architectural & MEPFS Utilities', qty: 1, unit: 'lot', materialUnitCost: Math.round(p4 * 0.6), leUnitCost: Math.round(p4 * 0.4), unitCost: p4, grandTotalCost: p4, weight: ((p4 / budget) * 100).toFixed(2), percentDone: 0, earnedValue: 0, condition: 'CPM', isCritical: false }
+          ]
+        },
         timeline: {
           criticalState: 'MOBILIZATION (INITIAL STAGE)',
+          ganttTasks: [
+            { id: `task_${id}_01`, code: 'T-101', name: 'Mobilization & Temporary Site Staging', category: 'Mobilization', startDate: todayStr, endDate: new Date(Date.now() + 30*86400000).toISOString().split('T')[0], duration: 30, progress: 10, isCritical: true, float: '0d', lead: manager, predecessors: 'None' },
+            { id: `task_${id}_02`, code: 'T-102', name: 'Foundation Works & Substructure Frame', category: 'Civil Works', startDate: new Date(Date.now() + 31*86400000).toISOString().split('T')[0], endDate: new Date(Date.now() + Math.round(duration * 0.35)*86400000).toISOString().split('T')[0], duration: Math.max(15, Math.round(duration * 0.35) - 30), progress: 0, isCritical: true, float: '0d', lead: manager, predecessors: 'T-101 (FS)' },
+            { id: `task_${id}_03`, code: 'T-103', name: 'Superstructure Framing & Roofing Envelope', category: 'Structural Steel', startDate: new Date(Date.now() + Math.round(duration * 0.35 + 1)*86400000).toISOString().split('T')[0], endDate: new Date(Date.now() + Math.round(duration * 0.70)*86400000).toISOString().split('T')[0], duration: Math.round(duration * 0.35), progress: 0, isCritical: true, float: '0d', lead: manager, predecessors: 'T-102 (FS)' },
+            { id: `task_${id}_04`, code: 'T-104', name: 'Architectural Finishes & MEPFS Utility Systems', category: 'Finishes & MEPFS', startDate: new Date(Date.now() + Math.round(duration * 0.70 + 1)*86400000).toISOString().split('T')[0], endDate: new Date(Date.now() + Math.round(duration * 0.90)*86400000).toISOString().split('T')[0], duration: Math.round(duration * 0.20), progress: 0, isCritical: false, float: '15d', lead: manager, predecessors: 'T-103 (FS)' },
+            { id: `task_${id}_05`, code: 'T-105', name: 'Testing, Commissioning, Punchlisting & Handover', category: 'Closeout', startDate: new Date(Date.now() + Math.round(duration * 0.90 + 1)*86400000).toISOString().split('T')[0], endDate: endStr, duration: Math.round(duration * 0.10), progress: 0, isCritical: true, float: '0d', lead: manager, predecessors: 'T-104 (FS)' }
+          ],
           phases: [
             { name: 'Mobilization, Site Staging & Soil Testing', startDate: 'START', endDate: '30 Days', duration: 30, progress: 10, status: 'In Progress', isCritical: true, float: '0d', lead: manager },
             { name: 'Foundation Works & Substructure', startDate: 'Day 31', endDate: `${Math.round(duration * 0.35)} Days`, duration: Math.round(duration * 0.35) - 30, progress: 0, status: 'Upcoming', isCritical: true, float: '0d', lead: manager },
@@ -2494,7 +3298,13 @@
       FCL_PROJECT_CATALOG.push(newProj);
 
       try {
-        localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
+        if (typeof FCLStorage !== 'undefined') {
+          FCLStorage.saveProjectCatalog(FCL_PROJECT_CATALOG);
+          FCLStorage.saveProjectBOQ(newProj.id, newProj.boq);
+          FCLStorage.saveProjectGantt(newProj.id, newProj.timeline);
+        } else {
+          localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
+        }
         const customProjects = FCL_PROJECT_CATALOG.filter(p => !['PRJ-2026-001', 'HCC-2026-B1', 'MLH-2025-04', 'RTO-2026-C2'].includes(p.id));
         localStorage.setItem('FCL_CUSTOM_PROJECTS', JSON.stringify(customProjects));
       } catch (err) {
@@ -2506,7 +3316,7 @@
       document.getElementById('newProjectForm')?.reset();
       closeAddProjectModal();
 
-      selectProject(newProj.id, 'information');
+      selectProject(newProj.id, 'timeline');
     }
 
     function renderSidebarProjectList() {
@@ -3049,6 +3859,9 @@
 
     function selectProject(projId, tabKey) {
       if (projId) currentProjectId = projId;
+      if (typeof FCLStorage !== 'undefined') {
+        FCLStorage.setActiveProjectId(currentProjectId);
+      }
       const proj = getProject(currentProjectId);
       
       // Sync dropdown selector
@@ -3583,11 +4396,111 @@
       }
     }
 
+    /* ==========================================================================
+       PROJECT TIMELINE, INTERACTIVE GANTT & BOQ SUITE (MULTI-PROJECT CAPABLE)
+       ========================================================================== */
+    let currentTimelineSubTab = 'gantt';
+    let currentGanttScale = 'weeks';
+    let currentGanttFilter = 'all';
+
+    function switchTimelineSubTab(subTabKey) {
+      currentTimelineSubTab = subTabKey || 'gantt';
+
+      const subBtns = {
+        gantt: document.getElementById('tlSubBtn_gantt'),
+        boq: document.getElementById('tlSubBtn_boq'),
+        phases: document.getElementById('tlSubBtn_phases'),
+        lookahead: document.getElementById('tlSubBtn_lookahead')
+      };
+      Object.keys(subBtns).forEach(k => {
+        if (subBtns[k]) {
+          if (k === currentTimelineSubTab) subBtns[k].classList.add('active');
+          else subBtns[k].classList.remove('active');
+        }
+      });
+
+      const subViews = {
+        gantt: document.getElementById('timelineSubView_gantt'),
+        boq: document.getElementById('timelineSubView_boq'),
+        phases: document.getElementById('timelineSubView_phases'),
+        lookahead: document.getElementById('timelineSubView_lookahead')
+      };
+      Object.keys(subViews).forEach(k => {
+        if (subViews[k]) {
+          subViews[k].style.display = (k === currentTimelineSubTab) ? 'block' : 'none';
+        }
+      });
+
+      const proj = getProject(currentProjectId);
+      if (currentTimelineSubTab === 'gantt') {
+        renderInteractiveGanttChart(proj);
+      } else if (currentTimelineSubTab === 'boq') {
+        renderProjectBOQTable(proj);
+      }
+    }
+
+    function setTimelineGanttScale(scale) {
+      currentGanttScale = scale;
+      ['days', 'weeks', 'months'].forEach(s => {
+        const btn = document.getElementById(`ganttScaleBtn_${s}`);
+        if (btn) {
+          if (s === scale) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+      });
+      const proj = getProject(currentProjectId);
+      renderInteractiveGanttChart(proj);
+    }
+
+    function filterTimelineGanttTasks(val) {
+      currentGanttFilter = val || 'all';
+      const proj = getProject(currentProjectId);
+      renderInteractiveGanttChart(proj);
+    }
+
     function renderTimelineView(proj) {
-      if (!proj || !proj.timeline) return;
+      if (!proj) return;
+      if (!proj.timeline) proj.timeline = {};
       const t = proj.timeline;
 
-      // Header info
+      // Ensure boq object exists
+      if (!proj.boq) {
+        proj.boq = {
+          projectName: proj.name,
+          projectCode: proj.code,
+          items: []
+        };
+      }
+
+      // Recompute project budget and accomplishment from its own BOQ
+      let boqTotal = 0;
+      let boqEarned = 0;
+      if (proj.boq.items && proj.boq.items.length > 0) {
+        proj.boq.items.forEach(it => {
+          const qty = Number(it.qty) || 0;
+          const uCost = Number(it.unitCost) || ((Number(it.materialUnitCost) || 0) + (Number(it.leUnitCost) || 0));
+          const gCost = Number(it.grandTotalCost) || (qty * uCost);
+          const pDone = Number(it.percentDone) || 0;
+          const eVal = Number(it.earnedValue) || (gCost * (pDone / 100));
+          it.unitCost = uCost;
+          it.grandTotalCost = gCost;
+          it.earnedValue = eVal;
+          boqTotal += gCost;
+          boqEarned += eVal;
+        });
+
+        if (boqTotal > 0) {
+          proj.totalBudget = boqTotal;
+          proj.actualProgress = parseFloat(((boqEarned / boqTotal) * 100).toFixed(1));
+          proj.boq.items.forEach(it => {
+            it.weight = parseFloat(((it.grandTotalCost / boqTotal) * 100).toFixed(2));
+          });
+        }
+      } else {
+        boqTotal = proj.totalBudget || 0;
+      }
+
+      // Header Executive KPIs
       const titleEl = document.getElementById('timelineProjectTitle');
       const subEl = document.getElementById('timelineProjectSub');
       const badgeEl = document.getElementById('timelineStatusBadge');
@@ -3598,86 +4511,1017 @@
       const targetEl = document.getElementById('timelineTargetDate');
       const barPctEl = document.getElementById('timelineBarPercent');
       const barFillEl = document.getElementById('timelineProgressBarFill');
+      const boqBudgetEl = document.getElementById('timelineBOQBudget');
+      const boqCountEl = document.getElementById('timelineBOQItemsCount');
 
-      if (titleEl) titleEl.textContent = `${proj.name} — Execution Timeline`;
+      if (titleEl) titleEl.textContent = `${proj.name} — Schedule & BOQ Controls`;
       if (subEl) subEl.textContent = `${proj.code} • ${proj.location || 'FCL Project Site'} • Duration: ${proj.durationDays || 240} CD`;
       if (badgeEl) badgeEl.textContent = `● ${t.criticalState || 'ON TRACK'}`;
-      if (progEl) progEl.textContent = `${proj.actualProgress.toFixed(1)}%`;
+      if (progEl) progEl.textContent = `${(proj.actualProgress || 0).toFixed(1)}%`;
       if (durEl) durEl.textContent = `${proj.durationDays || 240} Calendar Days`;
-      if (elapEl) elapEl.textContent = `${proj.elapsedDays || 150} days elapsed (${((proj.elapsedDays / proj.durationDays) * 100).toFixed(1)}%)`;
+      const durDays = Math.max(1, proj.durationDays || 240);
+      const elapDays = proj.elapsedDays || 0;
+      if (elapEl) elapEl.textContent = `${elapDays} days elapsed (${((elapDays / durDays) * 100).toFixed(1)}%)`;
       if (critEl) critEl.textContent = t.criticalState || 'ON TRACK';
       if (targetEl) targetEl.textContent = proj.targetDate || 'TBD';
-      if (barPctEl) barPctEl.textContent = `${proj.actualProgress.toFixed(1)}%`;
-      if (barFillEl) barFillEl.style.width = `${proj.actualProgress}%`;
+      if (barPctEl) barPctEl.textContent = `${(proj.actualProgress || 0).toFixed(1)}%`;
+      if (barFillEl) barFillEl.style.width = `${Math.min(100, Math.max(0, proj.actualProgress || 0))}%`;
+      if (boqBudgetEl) boqBudgetEl.textContent = `₱ ${formatPeso(boqTotal)}`;
+      if (boqCountEl) boqCountEl.textContent = `${proj.boq.items ? proj.boq.items.length : 0} Itemized Scope Lines`;
 
-      // Phases
+      // Render Active Sub-View Content
+      renderInteractiveGanttChart(proj);
+      renderProjectBOQTable(proj);
+      renderTimelinePhases(proj);
+      renderTimelineLookahead(proj);
+
+      switchTimelineSubTab(currentTimelineSubTab);
+    }
+
+    /* --------------------------------------------------------------------------
+       INTERACTIVE VISUAL GANTT CHART RENDERER
+       -------------------------------------------------------------------------- */
+    function renderInteractiveGanttChart(proj) {
+      const container = document.getElementById('interactiveGanttContainer');
+      if (!container) return;
+
+      if (!proj || !proj.timeline) {
+        container.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">No schedule data available.</div>';
+        return;
+      }
+
+      // Ensure tasks exist, fallback to phases if ganttTasks not set
+      if (!proj.timeline.ganttTasks || proj.timeline.ganttTasks.length === 0) {
+        if (proj.timeline.phases && proj.timeline.phases.length > 0) {
+          proj.timeline.ganttTasks = proj.timeline.phases.map((ph, idx) => ({
+            id: `task_${proj.id}_${idx+1}`,
+            code: `T-${(idx+1) * 100 + 1}`,
+            name: ph.name,
+            category: 'Construction Phase',
+            startDate: '2026-03-01',
+            endDate: '2026-04-15',
+            duration: ph.duration || 30,
+            progress: ph.progress || 0,
+            isCritical: ph.isCritical || false,
+            float: ph.float || '10d',
+            lead: ph.lead || proj.projectManager || 'Site Engineer',
+            predecessors: idx === 0 ? 'None' : `T-${idx * 100 + 1} (FS)`
+          }));
+        } else {
+          proj.timeline.ganttTasks = [];
+        }
+      }
+
+      let tasks = proj.timeline.ganttTasks || [];
+
+      // Filter tasks
+      if (currentGanttFilter === 'critical') {
+        tasks = tasks.filter(t => t.isCritical);
+      } else if (currentGanttFilter === 'in_progress') {
+        tasks = tasks.filter(t => t.progress > 0 && t.progress < 100);
+      } else if (currentGanttFilter === 'completed') {
+        tasks = tasks.filter(t => t.progress === 100);
+      }
+
+      if (tasks.length === 0) {
+        container.innerHTML = `
+          <div style="padding: 50px 20px; text-align: center; background: #f8fafc; border: 1px dashed var(--line); border-radius: 8px;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" style="margin-bottom: 8px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <div style="font-size: 14px; font-weight: 700; color: #334155;">No Activities Match Current Filter</div>
+            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Click "Add Schedule Activity" above or switch the filter to "All Activities".</div>
+          </div>
+        `;
+        return;
+      }
+
+      // Determine date boundary
+      let minDate = null;
+      let maxDate = null;
+
+      tasks.forEach(t => {
+        const s = new Date(t.startDate);
+        const e = new Date(t.endDate);
+        if (!isNaN(s.getTime())) {
+          if (!minDate || s < minDate) minDate = s;
+        }
+        if (!isNaN(e.getTime())) {
+          if (!maxDate || e > maxDate) maxDate = e;
+        }
+      });
+
+      if (!minDate) minDate = new Date('2026-03-01');
+      if (!maxDate || maxDate <= minDate) {
+        maxDate = new Date(minDate.getTime() + 180 * 86400000);
+      }
+
+      // Add 3-day buffer to both ends
+      const chartStart = new Date(minDate.getTime() - 3 * 86400000);
+      const chartEnd = new Date(maxDate.getTime() + 5 * 86400000);
+      const totalDays = Math.max(7, Math.round((chartEnd - chartStart) / 86400000));
+
+      // Calculate time columns
+      let columns = [];
+      let colWidth = 56;
+
+      if (currentGanttScale === 'days') {
+        colWidth = 34;
+        for (let d = 0; d < totalDays; d++) {
+          const colDate = new Date(chartStart.getTime() + d * 86400000);
+          const dayNum = colDate.getDate();
+          const mName = colDate.toLocaleDateString('en-US', { month: 'short' });
+          columns.push({
+            label: `${dayNum}`,
+            subLabel: mName,
+            date: colDate,
+            width: colWidth
+          });
+        }
+      } else if (currentGanttScale === 'weeks') {
+        colWidth = 68;
+        const weekCount = Math.ceil(totalDays / 7);
+        for (let w = 0; w < weekCount; w++) {
+          const wStart = new Date(chartStart.getTime() + w * 7 * 86400000);
+          const label = wStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          columns.push({
+            label: `W${w + 1}`,
+            subLabel: label,
+            date: wStart,
+            width: colWidth
+          });
+        }
+      } else if (currentGanttScale === 'months') {
+        colWidth = 110;
+        const monthCount = Math.ceil(totalDays / 30);
+        for (let m = 0; m < monthCount; m++) {
+          const mStart = new Date(chartStart.getTime() + m * 30 * 86400000);
+          const label = mStart.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+          columns.push({
+            label: label,
+            subLabel: `M+${m}`,
+            date: mStart,
+            width: colWidth
+          });
+        }
+      }
+
+      const totalTimelineWidth = columns.reduce((acc, c) => acc + c.width, 0);
+
+      // Today Marker calculation
+      const today = new Date();
+      let todayLeftPx = -1;
+      if (today >= chartStart && today <= chartEnd) {
+        const todayOffset = (today - chartStart) / 86400000;
+        todayLeftPx = (todayOffset / totalDays) * totalTimelineWidth;
+      }
+
+      // Generate Left Table HTML
+      let leftTableRows = '';
+      tasks.forEach((task, idx) => {
+        const isCritical = task.isCritical;
+        const prog = Math.min(100, Math.max(0, task.progress || 0));
+        const statusClass = prog === 100 ? 'success' : prog > 0 ? 'active' : 'warning';
+
+        leftTableRows += `
+          <div class="gantt-row" style="height: 48px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; padding: 0 10px; gap: 8px;">
+            <div style="width: 55px; font-weight: 700; color: #2563eb; font-size: 11px;">${escapeHtml(task.code)}</div>
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-weight: 700; color: #0f172a; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(task.name)}">
+                ${escapeHtml(task.name)}
+              </div>
+              <div style="font-size: 10px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                ${escapeHtml(task.lead || 'In-Charge')} &bull; ${escapeHtml(task.category || 'General')}
+              </div>
+            </div>
+            <div style="width: 50px; text-align: center; font-size: 11px; font-weight: 600; color: #475569;">${task.duration}d</div>
+            <div style="width: 50px; text-align: center;">
+              <span class="status-pill ${statusClass}" style="font-size: 10px; padding: 2px 6px;">${prog}%</span>
+            </div>
+            <div style="width: 55px; text-align: center;">
+              ${isCritical ? '<span style="font-size:9.5px; font-weight:800; color:#dc2626; background:#fee2e2; padding:2px 5px; border-radius:4px;">CPM</span>' : '<span style="font-size:9.5px; font-weight:700; color:#16a34a; background:#f0fdf4; padding:2px 5px; border-radius:4px;">FLOAT</span>'}
+            </div>
+            <div style="width: 55px; text-align: right; display: flex; gap: 4px; justify-content: flex-end;">
+              <button type="button" class="ctrl-btn" onclick="openAddGanttTaskModal('${task.id}')" title="Edit Activity" style="padding: 3px 6px; font-size: 11px;">✎</button>
+              <button type="button" class="ctrl-btn danger" onclick="deleteGanttTask('${task.id}')" title="Delete Activity" style="padding: 3px 6px; font-size: 11px;">&times;</button>
+            </div>
+          </div>
+        `;
+      });
+
+      // Generate Right Timeline Grid & Bars HTML
+      let timelineHeaderCols = '';
+      columns.forEach(col => {
+        timelineHeaderCols += `
+          <div style="width: ${col.width}px; min-width: ${col.width}px; text-align: center; border-right: 1px solid #e2e8f0; padding: 4px 2px; font-size: 10.5px; box-sizing: border-box;">
+            <div style="font-weight: 700; color: #1e293b;">${col.label}</div>
+            <div style="font-size: 9px; color: #64748b;">${col.subLabel}</div>
+          </div>
+        `;
+      });
+
+      let timelineRows = '';
+      tasks.forEach((task, idx) => {
+        const s = new Date(task.startDate);
+        const e = new Date(task.endDate);
+        const sTime = isNaN(s.getTime()) ? chartStart.getTime() : s.getTime();
+        const eTime = isNaN(e.getTime()) ? chartStart.getTime() + 30 * 86400000 : e.getTime();
+
+        const offsetDays = Math.max(0, (sTime - chartStart.getTime()) / 86400000);
+        const durDays = Math.max(1, (eTime - sTime) / 86400000);
+
+        const leftPx = (offsetDays / totalDays) * totalTimelineWidth;
+        const widthPx = Math.max(28, (durDays / totalDays) * totalTimelineWidth);
+
+        const prog = Math.min(100, Math.max(0, task.progress || 0));
+        let barClass = 'gantt-bar-normal';
+        if (prog === 100) barClass = 'gantt-bar-completed';
+        else if (task.isCritical) barClass = 'gantt-bar-critical';
+
+        timelineRows += `
+          <div class="gantt-row" style="height: 48px; position: relative; border-bottom: 1px solid #f1f5f9; width: ${totalTimelineWidth}px;">
+            <!-- Column Guidelines -->
+            <div style="position: absolute; top:0; bottom:0; left:0; right:0; display: flex; pointer-events: none;">
+              ${columns.map(c => `<div style="width:${c.width}px; min-width:${c.width}px; height:100%; border-right:1px dashed #f1f5f9; box-sizing:border-box;"></div>`).join('')}
+            </div>
+
+            <!-- Task Bar -->
+            <div class="gantt-bar ${barClass}" style="left: ${leftPx}px; width: ${widthPx}px; top: 10px; height: 28px;" onclick="openAddGanttTaskModal('${task.id}')" title="${escapeHtml(task.code)}: ${escapeHtml(task.name)} (${task.startDate} to ${task.endDate}, ${prog}% Accomplished)">
+              <div class="gantt-bar-progress" style="width: ${prog}%;"></div>
+              <span class="gantt-bar-label" style="font-size: 10.5px; z-index: 2; padding: 0 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">
+                ${escapeHtml(task.code)} • ${prog}%
+              </span>
+            </div>
+          </div>
+        `;
+      });
+
+      // Construct Entire Gantt Wrapper
+      container.innerHTML = `
+        <div class="gantt-chart-wrapper" style="border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; background: white;">
+          <!-- Left Table Pane (Pinned) -->
+          <div class="gantt-left-pane" style="width: 440px; min-width: 440px; border-right: 2px solid #cbd5e1; background: #ffffff; z-index: 5;">
+            <!-- Table Header -->
+            <div style="height: 42px; background: #f8fafc; border-bottom: 2px solid #cbd5e1; display: flex; align-items: center; padding: 0 10px; gap: 8px; font-size: 11px; font-weight: 700; color: #475569;">
+              <div style="width: 55px;">Code</div>
+              <div style="flex: 1;">Activity Scope &amp; Lead</div>
+              <div style="width: 50px; text-align: center;">Dur</div>
+              <div style="width: 50px; text-align: center;">Done</div>
+              <div style="width: 55px; text-align: center;">Path</div>
+              <div style="width: 55px; text-align: right;">Action</div>
+            </div>
+            <!-- Table Rows -->
+            <div style="overflow-y: hidden;">
+              ${leftTableRows}
+            </div>
+          </div>
+
+          <!-- Right Timeline Canvas (Scrollable) -->
+          <div class="gantt-right-pane" style="flex: 1; overflow-x: auto; background: #ffffff; position: relative;">
+            <!-- Timeline Column Headers -->
+            <div style="height: 42px; width: ${totalTimelineWidth}px; background: #f8fafc; border-bottom: 2px solid #cbd5e1; display: flex; align-items: center;">
+              ${timelineHeaderCols}
+            </div>
+            <!-- Timeline Canvas Rows with Today Marker -->
+            <div style="position: relative; width: ${totalTimelineWidth}px;">
+              ${todayLeftPx >= 0 ? `
+                <div class="gantt-today-marker" style="position: absolute; top: 0; bottom: 0; left: ${todayLeftPx}px; width: 2px; background: #dc2626; z-index: 10; pointer-events: none;" title="Current Date (Today)">
+                  <span style="position: absolute; top: 2px; left: -18px; font-size: 8.5px; font-weight: 800; background: #dc2626; color: white; padding: 1px 4px; border-radius: 3px;">TODAY</span>
+                </div>
+              ` : ''}
+              ${timelineRows}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* --------------------------------------------------------------------------
+       BILL OF QUANTITY (BOQ) TABLE & ESTIMATE RENDERER
+       -------------------------------------------------------------------------- */
+    function renderProjectBOQTable(proj) {
+      if (!proj) return;
+      if (!proj.boq) {
+        proj.boq = {
+          projectName: proj.name,
+          projectCode: proj.code,
+          items: []
+        };
+      }
+
+      const items = proj.boq.items || [];
+
+      // Calculate totals
+      let grandTotal = 0;
+      let totalMaterial = 0;
+      let totalLE = 0;
+      let totalEarned = 0;
+
+      items.forEach(it => {
+        const qty = Number(it.qty) || 0;
+        const uCost = Number(it.unitCost) || ((Number(it.materialUnitCost) || 0) + (Number(it.leUnitCost) || 0));
+        const itemTotal = Number(it.grandTotalCost) || (qty * uCost);
+        const pDone = Number(it.percentDone) || 0;
+        const eVal = Number(it.earnedValue) || (itemTotal * (pDone / 100));
+
+        it.unitCost = uCost;
+        it.grandTotalCost = itemTotal;
+        it.earnedValue = eVal;
+
+        grandTotal += itemTotal;
+        totalMaterial += (qty * (Number(it.materialUnitCost) || 0));
+        totalLE += (qty * (Number(it.leUnitCost) || 0));
+        totalEarned += eVal;
+      });
+
+      // Compute item weights
+      if (grandTotal > 0) {
+        items.forEach(it => {
+          it.weight = parseFloat(((it.grandTotalCost / grandTotal) * 100).toFixed(2));
+        });
+      }
+
+      const overallAccomplished = grandTotal > 0 ? ((totalEarned / grandTotal) * 100).toFixed(1) : '0.0';
+
+      // Update BOQ KPI Cards
+      const kpiTotalEl = document.getElementById('boqKpiTotalAmount');
+      const kpiCountEl = document.getElementById('boqKpiCount');
+      const kpiMatEl = document.getElementById('boqKpiMaterialCost');
+      const kpiMatShareEl = document.getElementById('boqKpiMaterialShare');
+      const kpiLEEl = document.getElementById('boqKpiLECost');
+      const kpiLEShareEl = document.getElementById('boqKpiLEShare');
+      const kpiEarnedEl = document.getElementById('boqKpiEarnedValue');
+      const kpiAccomplishedEl = document.getElementById('boqKpiAccomplishedPercent');
+
+      if (kpiTotalEl) kpiTotalEl.textContent = `₱ ${formatPeso(grandTotal)}`;
+      if (kpiCountEl) kpiCountEl.textContent = `${items.length} Detailed Scope Items`;
+      if (kpiMatEl) kpiMatEl.textContent = `₱ ${formatPeso(totalMaterial)}`;
+      if (kpiMatShareEl) kpiMatShareEl.textContent = `${grandTotal > 0 ? ((totalMaterial / grandTotal) * 100).toFixed(1) : '0.0'}% Direct Materials`;
+      if (kpiLEEl) kpiLEEl.textContent = `₱ ${formatPeso(totalLE)}`;
+      if (kpiLEShareEl) kpiLEShareEl.textContent = `${grandTotal > 0 ? ((totalLE / grandTotal) * 100).toFixed(1) : '0.0'}% Labor &amp; Equipment`;
+      if (kpiEarnedEl) kpiEarnedEl.textContent = `₱ ${formatPeso(totalEarned)}`;
+      if (kpiAccomplishedEl) kpiAccomplishedEl.textContent = `${overallAccomplished}% Cumulative Accomplishment`;
+
+      // Synchronize with Executive Header Card
+      const boqBudgetHeader = document.getElementById('timelineBOQBudget');
+      const boqCountHeader = document.getElementById('timelineBOQItemsCount');
+      const timelineOverall = document.getElementById('timelineOverallProgress');
+      const timelineBar = document.getElementById('timelineBarPercent');
+      const timelineFill = document.getElementById('timelineProgressBarFill');
+
+      if (boqBudgetHeader) boqBudgetHeader.textContent = `₱ ${formatPeso(grandTotal)}`;
+      if (boqCountHeader) boqCountHeader.textContent = `${items.length} Itemized Scope Lines`;
+      if (timelineOverall) timelineOverall.textContent = `${overallAccomplished}%`;
+      if (timelineBar) timelineBar.textContent = `${overallAccomplished}%`;
+      if (timelineFill) timelineFill.style.width = `${Math.min(100, Math.max(0, parseFloat(overallAccomplished)))}%`;
+
+      proj.totalBudget = grandTotal;
+      proj.actualProgress = parseFloat(overallAccomplished);
+
+      // Populate Category Filter dropdown
+      const catFilterEl = document.getElementById('boqCategoryFilter');
+      if (catFilterEl) {
+        const currentCat = catFilterEl.value || 'all';
+        const cats = Array.from(new Set(items.map(i => i.category || 'General Works'))).filter(Boolean);
+        catFilterEl.innerHTML = `<option value="all">All Work Divisions (${items.length})</option>` +
+          cats.map(c => `<option value="${escapeHtml(c)}" ${currentCat === c ? 'selected' : ''}>${escapeHtml(c)}</option>`).join('');
+      }
+
+      // Filter items
+      const searchStr = (document.getElementById('boqSearchInput')?.value || '').toLowerCase().trim();
+      const selectedCat = catFilterEl?.value || 'all';
+
+      const filteredItems = items.filter(it => {
+        const matchesCat = selectedCat === 'all' || (it.category || 'General Works') === selectedCat;
+        const matchesSearch = !searchStr ||
+          (it.code && it.code.toLowerCase().includes(searchStr)) ||
+          (it.title && it.title.toLowerCase().includes(searchStr)) ||
+          (it.specification && it.specification.toLowerCase().includes(searchStr)) ||
+          (it.category && it.category.toLowerCase().includes(searchStr));
+        return matchesCat && matchesSearch;
+      });
+
+      // Render Table Body
+      const tbody = document.getElementById('projectBOQTableBody');
+      if (!tbody) return;
+
+      if (filteredItems.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="14" style="text-align: center; padding: 40px; color: #64748b;">
+              <div style="font-weight: 700; font-size: 13px; color: #475569;">No BOQ Line Items Found</div>
+              <div style="font-size: 11.5px; margin-top: 4px;">Click "Add BOQ Item" to add bill of quantity line items for ${escapeHtml(proj.name)}.</div>
+            </td>
+          </tr>
+        `;
+      } else {
+        let rowsHtml = '';
+        filteredItems.forEach((it, idx) => {
+          const isCritical = it.isCritical || it.condition === 'CPM';
+          rowsHtml += `
+            <tr id="boq_row_${it.id}">
+              <td style="font-weight: 700; color: #2563eb; font-size: 11.5px;">${escapeHtml(it.code)}</td>
+              <td>
+                <div style="font-weight: 700; color: #0f172a; font-size: 12px;">${escapeHtml(it.title)}</div>
+                <div style="font-size: 11px; color: #64748b;">${escapeHtml(it.specification || '')}</div>
+              </td>
+              <td>
+                <span class="status-pill active" style="font-size: 10px; padding: 2px 6px; background: #f1f5f9; color: #475569;">
+                  ${escapeHtml(it.category || 'General Works')}
+                </span>
+              </td>
+              <td style="text-align: right; font-weight: 600;">${Number(it.qty).toLocaleString()}</td>
+              <td style="text-align: center; color: #64748b; font-size: 11px;">${escapeHtml(it.unit)}</td>
+              <td style="text-align: right; color: #0369a1;">₱ ${formatPeso(it.materialUnitCost || 0)}</td>
+              <td style="text-align: right; color: #6d28d9;">₱ ${formatPeso(it.leUnitCost || 0)}</td>
+              <td style="text-align: right; font-weight: 700; color: #0f172a;">₱ ${formatPeso(it.unitCost)}</td>
+              <td style="text-align: right; font-weight: 800; color: #1e3a8a;">₱ ${formatPeso(it.grandTotalCost)}</td>
+              <td style="text-align: center; font-weight: 700; color: #475569; font-size: 11px;">${it.weight || 0}%</td>
+              <td style="text-align: center;">
+                <input type="number" min="0" max="100" step="0.5" value="${it.percentDone || 0}" 
+                  onchange="updateBOQItemInline('${it.id}', 'percentDone', this.value)"
+                  style="width: 58px; text-align: center; font-weight: 700; font-size: 11.5px; padding: 3px 4px; border: 1px solid #cbd5e1; border-radius: 4px; color: #0f172a; background: white;">
+              </td>
+              <td style="text-align: right; font-weight: 700; color: #059669;">₱ ${formatPeso(it.earnedValue || 0)}</td>
+              <td style="text-align: center;">
+                ${isCritical ? '<span style="font-size:9.5px; font-weight:800; color:#dc2626; background:#fee2e2; padding:2px 5px; border-radius:4px;">CPM</span>' : '<span style="font-size:9.5px; font-weight:600; color:#475569; background:#f1f5f9; padding:2px 5px; border-radius:4px;">NON</span>'}
+              </td>
+              <td style="text-align: center;">
+                <div style="display: flex; gap: 4px; justify-content: center;">
+                  <button type="button" class="ctrl-btn" onclick="openAddBOQItemModal('${it.id}')" title="Edit BOQ Item" style="padding: 3px 6px; font-size: 11px;">✎</button>
+                  <button type="button" class="ctrl-btn danger" onclick="deleteBOQItem('${it.id}')" title="Delete BOQ Item" style="padding: 3px 6px; font-size: 11px;">&times;</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        });
+        tbody.innerHTML = rowsHtml;
+      }
+
+      // Render Table Foot Totals
+      const tfoot = document.getElementById('projectBOQTableFoot');
+      if (tfoot) {
+        tfoot.innerHTML = `
+          <tr>
+            <td colspan="7" style="font-weight: 800; font-size: 12px; color: #0f172a;">GRAND TOTAL ESTIMATED COST (${items.length} ITEMS)</td>
+            <td style="text-align: right; font-weight: 700; color: #64748b; font-size: 11px;">-</td>
+            <td style="text-align: right; font-weight: 800; font-size: 13px; color: #1e3a8a;">₱ ${formatPeso(grandTotal)}</td>
+            <td style="text-align: center; font-weight: 800; font-size: 11.5px; color: #0f172a;">100.00%</td>
+            <td style="text-align: center; font-weight: 800; font-size: 11.5px; color: #2563eb;">${overallAccomplished}%</td>
+            <td style="text-align: right; font-weight: 800; font-size: 13px; color: #059669;">₱ ${formatPeso(totalEarned)}</td>
+            <td colspan="2" style="text-align: center; font-size: 10.5px; color: #64748b;">Physical Accom.</td>
+          </tr>
+        `;
+      }
+    }
+
+    function filterProjectBOQ() {
+      const proj = getProject(currentProjectId);
+      renderProjectBOQTable(proj);
+    }
+
+    /* --------------------------------------------------------------------------
+       PHASES & LOOKAHEAD VIEW RENDERERS
+       -------------------------------------------------------------------------- */
+    function renderTimelinePhases(proj) {
       const phasesContainer = document.getElementById('timelinePhasesContainer');
-      if (phasesContainer && t.phases) {
-        let phtml = '';
-        t.phases.forEach((ph, idx) => {
-          let statusPillClass = 'active';
-          if (ph.status === 'Completed' || ph.progress === 100) statusPillClass = 'success';
-          else if (ph.status === 'Pending' || ph.progress === 0) statusPillClass = 'warning';
+      if (!phasesContainer || !proj.timeline) return;
+      const phases = proj.timeline.phases || [];
 
-          const isCritical = ph.isCritical;
-          const critBadge = isCritical
-            ? `<span style="font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">CRITICAL PATH</span>`
-            : `<span style="font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0;">FLOAT: ${ph.float || '10d'}</span>`;
-
-          phtml += `
-            <div class="timeline-phase-card">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
-                <div>
-                  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                    <span style="font-size: 11px; font-weight: 800; color: #2563eb; background: #eff6ff; padding: 2px 8px; border-radius: 4px;">PHASE ${idx + 1}</span>
-                    <strong style="font-size: 13px; color: #0f172a;">${escapeHtml(ph.name)}</strong>
-                    ${critBadge}
-                  </div>
-                  <div style="font-size: 11.5px; color: #64748b; margin-top: 3px;">
-                    <strong>Window:</strong> ${ph.startDate} &rarr; ${ph.endDate} (${ph.duration} Days) &bull; Lead: <strong>${escapeHtml(ph.lead || 'Site Engineer')}</strong>
-                  </div>
-                </div>
-                <div style="text-align: right;">
-                  <span class="status-pill ${statusPillClass}">${ph.status}</span>
-                  <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 4px;">${ph.progress}%</div>
-                </div>
-              </div>
-
-              <div style="width: 100%; height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; margin-top: 6px;">
-                <div style="height: 100%; width: ${ph.progress}%; background: ${ph.progress === 100 ? '#10b981' : isCritical ? '#2563eb' : '#0ea5e9'}; border-radius: 4px;"></div>
-              </div>
-            </div>
-          `;
-        });
-        phasesContainer.innerHTML = phtml;
+      if (phases.length === 0) {
+        phasesContainer.innerHTML = '<div style="padding:30px; text-align:center; color:#64748b;">No phase breakdown available.</div>';
+        return;
       }
 
-      // 3-Week Lookahead
+      let phtml = '';
+      phases.forEach((ph, idx) => {
+        let statusPillClass = 'active';
+        if (ph.status === 'Completed' || ph.progress === 100) statusPillClass = 'success';
+        else if (ph.status === 'Pending' || ph.progress === 0) statusPillClass = 'warning';
+
+        const isCritical = ph.isCritical;
+        const critBadge = isCritical
+          ? `<span style="font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">CRITICAL PATH</span>`
+          : `<span style="font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0;">FLOAT: ${ph.float || '10d'}</span>`;
+
+        phtml += `
+          <div class="timeline-phase-card" style="padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <span style="font-size: 11px; font-weight: 800; color: #2563eb; background: #eff6ff; padding: 2px 8px; border-radius: 4px;">PHASE ${idx + 1}</span>
+                  <strong style="font-size: 13px; color: #0f172a;">${escapeHtml(ph.name)}</strong>
+                  ${critBadge}
+                </div>
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 3px;">
+                  <strong>Window:</strong> ${ph.startDate} &rarr; ${ph.endDate} (${ph.duration} Days) &bull; Lead: <strong>${escapeHtml(ph.lead || 'Site Engineer')}</strong>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <span class="status-pill ${statusPillClass}">${ph.status}</span>
+                <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 4px;">${ph.progress}%</div>
+              </div>
+            </div>
+
+            <div style="width: 100%; height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; margin-top: 6px;">
+              <div style="height: 100%; width: ${ph.progress}%; background: ${ph.progress === 100 ? '#10b981' : isCritical ? '#2563eb' : '#0ea5e9'}; border-radius: 4px;"></div>
+            </div>
+          </div>
+        `;
+      });
+      phasesContainer.innerHTML = phtml;
+    }
+
+    function renderTimelineLookahead(proj) {
       const lookaheadContainer = document.getElementById('timelineLookaheadContainer');
-      if (lookaheadContainer && t.lookahead) {
-        let lhtml = '<div style="display: flex; flex-direction: column; gap: 8px;">';
-        t.lookahead.forEach((item, idx) => {
-          lhtml += `
-            <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f8fafc; border: 1px solid var(--line); border-radius: 6px; flex-wrap: wrap; gap: 8px;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="width: 26px; height: 26px; border-radius: 50%; background: ${item.critical ? '#fee2e2' : '#e0f2fe'}; color: ${item.critical ? '#dc2626' : '#0284c7'}; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px;">
-                  ${idx + 1}
-                </div>
-                <div>
-                  <div style="font-size: 12.5px; font-weight: 700; color: #0f172a;">${escapeHtml(item.task)}</div>
-                  <div style="font-size: 11px; color: #64748b;">In-Charge: <strong>${escapeHtml(item.engineer)}</strong> &bull; Location: ${escapeHtml(item.zone || 'Main Deck')}</div>
-                </div>
+      if (!lookaheadContainer || !proj.timeline) return;
+      const lookahead = proj.timeline.lookahead || [];
+
+      if (lookahead.length === 0) {
+        lookaheadContainer.innerHTML = '<div style="padding:30px; text-align:center; color:#64748b;">No 3-week lookahead items available.</div>';
+        return;
+      }
+
+      let lhtml = '<div style="display: flex; flex-direction: column; gap: 8px;">';
+      lookahead.forEach((item, idx) => {
+        lhtml += `
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f8fafc; border: 1px solid var(--line); border-radius: 6px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 26px; height: 26px; border-radius: 50%; background: ${item.critical ? '#fee2e2' : '#e0f2fe'}; color: ${item.critical ? '#dc2626' : '#0284c7'}; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px;">
+                ${idx + 1}
               </div>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 11.5px; font-weight: 700; color: #2563eb; background: #eff6ff; padding: 3px 8px; border-radius: 4px;">${item.dueDate}</span>
-                <span class="status-pill ${item.critical ? 'warning' : 'active'}">${item.critical ? 'High Priority' : 'Routine Inspection'}</span>
+              <div>
+                <div style="font-size: 12.5px; font-weight: 700; color: #0f172a;">${escapeHtml(item.task)}</div>
+                <div style="font-size: 11px; color: #64748b;">In-Charge: <strong>${escapeHtml(item.engineer)}</strong> &bull; Location: ${escapeHtml(item.zone || 'Main Deck')}</div>
               </div>
             </div>
-          `;
-        });
-        lhtml += '</div>';
-        lookaheadContainer.innerHTML = lhtml;
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 11.5px; font-weight: 700; color: #2563eb; background: #eff6ff; padding: 3px 8px; border-radius: 4px;">${item.dueDate}</span>
+              <span class="status-pill ${item.critical ? 'warning' : 'active'}">${item.critical ? 'High Priority' : 'Routine Inspection'}</span>
+            </div>
+          </div>
+        `;
+      });
+      lhtml += '</div>';
+      lookaheadContainer.innerHTML = lhtml;
+    }
+
+    /* --------------------------------------------------------------------------
+       INLINE BOQ EDITING & DYNAMIC SYNC
+       -------------------------------------------------------------------------- */
+    function updateBOQItemInline(itemId, field, val) {
+      const proj = getProject(currentProjectId);
+      if (!proj || !proj.boq || !proj.boq.items) return;
+
+      const item = proj.boq.items.find(x => x.id === itemId);
+      if (!item) return;
+
+      if (field === 'percentDone') {
+        const num = Math.min(100, Math.max(0, parseFloat(val) || 0));
+        item.percentDone = num;
+        item.earnedValue = (item.grandTotalCost || 0) * (num / 100);
+      } else if (field === 'qty') {
+        item.qty = Math.max(0, parseFloat(val) || 0);
+        item.grandTotalCost = item.qty * (item.unitCost || 0);
+        item.earnedValue = item.grandTotalCost * ((item.percentDone || 0) / 100);
       }
+
+      renderProjectBOQTable(proj);
+      saveProjectBOQData(true); // silent auto-save
+    }
+
+    /* --------------------------------------------------------------------------
+       GANTT ACTIVITY MODAL ACTIONS
+       -------------------------------------------------------------------------- */
+    function openAddGanttTaskModal(taskId) {
+      const modal = document.getElementById('timelineGanttTaskModal');
+      const form = document.getElementById('ganttTaskForm');
+      if (!modal || !form) return;
+
+      const proj = getProject(currentProjectId);
+      const titleEl = document.getElementById('ganttModalTitle');
+      const editIdEl = document.getElementById('ganttEditTaskId');
+
+      if (taskId) {
+        const t = (proj.timeline.ganttTasks || []).find(x => x.id === taskId);
+        if (t) {
+          if (titleEl) titleEl.textContent = `Edit Activity (${t.code})`;
+          if (editIdEl) editIdEl.value = t.id;
+          document.getElementById('ganttTaskCode').value = t.code || '';
+          document.getElementById('ganttTaskName').value = t.name || '';
+          document.getElementById('ganttTaskCategory').value = t.category || '';
+          document.getElementById('ganttTaskLead').value = t.lead || '';
+          document.getElementById('ganttTaskStartDate').value = t.startDate || '';
+          document.getElementById('ganttTaskDuration').value = t.duration || 30;
+          document.getElementById('ganttTaskEndDate').value = t.endDate || '';
+          document.getElementById('ganttTaskProgress').value = t.progress !== undefined ? t.progress : 0;
+          document.getElementById('ganttTaskPredecessor').value = t.predecessors || '';
+          document.getElementById('ganttTaskCritical').checked = !!t.isCritical;
+        }
+      } else {
+        if (titleEl) titleEl.textContent = 'Add Schedule Activity';
+        if (editIdEl) editIdEl.value = '';
+        form.reset();
+        const nextIdx = (proj.timeline.ganttTasks ? proj.timeline.ganttTasks.length : 0) + 1;
+        document.getElementById('ganttTaskCode').value = `T-${nextIdx * 100 + 1}`;
+        const todayStr = new Date().toISOString().split('T')[0];
+        document.getElementById('ganttTaskStartDate').value = todayStr;
+        document.getElementById('ganttTaskDuration').value = 30;
+        calcGanttDates('duration');
+        document.getElementById('ganttTaskLead').value = proj.projectManager || 'Site Engineer';
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function closeGanttTaskModal() {
+      const modal = document.getElementById('timelineGanttTaskModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function calcGanttDates(field) {
+      const sInp = document.getElementById('ganttTaskStartDate');
+      const dInp = document.getElementById('ganttTaskDuration');
+      const eInp = document.getElementById('ganttTaskEndDate');
+      if (!sInp || !dInp || !eInp) return;
+
+      if (field === 'start' || field === 'duration') {
+        const sVal = sInp.value;
+        const dur = parseInt(dInp.value, 10) || 1;
+        if (sVal) {
+          const sDate = new Date(sVal);
+          const eDate = new Date(sDate.getTime() + dur * 86400000);
+          eInp.value = eDate.toISOString().split('T')[0];
+        }
+      } else if (field === 'end') {
+        const sVal = sInp.value;
+        const eVal = eInp.value;
+        if (sVal && eVal) {
+          const sDate = new Date(sVal);
+          const eDate = new Date(eVal);
+          const diff = Math.max(1, Math.round((eDate - sDate) / 86400000));
+          dInp.value = diff;
+        }
+      }
+    }
+
+    function saveGanttTaskFromModal(e) {
+      if (e) e.preventDefault();
+      const proj = getProject(currentProjectId);
+      if (!proj || !proj.timeline) return;
+      if (!proj.timeline.ganttTasks) proj.timeline.ganttTasks = [];
+
+      const editId = document.getElementById('ganttEditTaskId')?.value;
+      const code = document.getElementById('ganttTaskCode')?.value.trim();
+      const name = document.getElementById('ganttTaskName')?.value.trim();
+      const category = document.getElementById('ganttTaskCategory')?.value.trim() || 'Civil Works';
+      const lead = document.getElementById('ganttTaskLead')?.value.trim() || 'Site Engineer';
+      const startDate = document.getElementById('ganttTaskStartDate')?.value;
+      const duration = parseInt(document.getElementById('ganttTaskDuration')?.value, 10) || 30;
+      const endDate = document.getElementById('ganttTaskEndDate')?.value;
+      const progress = Math.min(100, Math.max(0, parseFloat(document.getElementById('ganttTaskProgress')?.value) || 0));
+      const predecessors = document.getElementById('ganttTaskPredecessor')?.value.trim() || 'None';
+      const isCritical = document.getElementById('ganttTaskCritical')?.checked;
+
+      if (!code || !name || !startDate || !endDate) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      if (editId) {
+        const existing = proj.timeline.ganttTasks.find(x => x.id === editId);
+        if (existing) {
+          existing.code = code;
+          existing.name = name;
+          existing.category = category;
+          existing.lead = lead;
+          existing.startDate = startDate;
+          existing.duration = duration;
+          existing.endDate = endDate;
+          existing.progress = progress;
+          existing.predecessors = predecessors;
+          existing.isCritical = isCritical;
+          existing.float = isCritical ? '0d' : (existing.float || '10d');
+        }
+      } else {
+        const newTask = {
+          id: `task_${proj.id}_${Date.now()}`,
+          code: code,
+          name: name,
+          category: category,
+          lead: lead,
+          startDate: startDate,
+          duration: duration,
+          endDate: endDate,
+          progress: progress,
+          predecessors: predecessors,
+          isCritical: isCritical,
+          float: isCritical ? '0d' : '10d'
+        };
+        proj.timeline.ganttTasks.push(newTask);
+      }
+
+      closeGanttTaskModal();
+      renderInteractiveGanttChart(proj);
+      saveProjectTimelineSchedule();
+    }
+
+    function deleteGanttTask(taskId) {
+      const proj = getProject(currentProjectId);
+      if (!proj || !proj.timeline || !proj.timeline.ganttTasks) return;
+      const t = proj.timeline.ganttTasks.find(x => x.id === taskId);
+      if (!t) return;
+
+      if (confirm(`Are you sure you want to remove activity "${t.code} - ${t.name}" from this project's schedule?`)) {
+        proj.timeline.ganttTasks = proj.timeline.ganttTasks.filter(x => x.id !== taskId);
+        renderInteractiveGanttChart(proj);
+        saveProjectTimelineSchedule();
+      }
+    }
+
+    /* --------------------------------------------------------------------------
+       BOQ ITEM MODAL ACTIONS
+       -------------------------------------------------------------------------- */
+    function openAddBOQItemModal(itemId) {
+      const modal = document.getElementById('timelineBoqItemModal');
+      const form = document.getElementById('boqItemForm');
+      if (!modal || !form) return;
+
+      const proj = getProject(currentProjectId);
+      const titleEl = document.getElementById('boqModalTitle');
+      const editIdEl = document.getElementById('boqEditItemId');
+
+      if (itemId) {
+        const item = (proj.boq.items || []).find(x => x.id === itemId);
+        if (item) {
+          if (titleEl) titleEl.textContent = `Edit BOQ Item (${item.code})`;
+          if (editIdEl) editIdEl.value = item.id;
+          document.getElementById('boqItemCode').value = item.code || '';
+          document.getElementById('boqItemTitle').value = item.title || '';
+          document.getElementById('boqItemCategory').value = item.category || '';
+          document.getElementById('boqItemCondition').value = item.condition || 'CPM';
+          document.getElementById('boqItemSpec').value = item.specification || '';
+          document.getElementById('boqItemQty').value = item.qty || 1;
+          document.getElementById('boqItemUnit').value = item.unit || 'lot';
+          document.getElementById('boqItemPercentDone').value = item.percentDone || 0;
+          document.getElementById('boqItemMatCost').value = item.materialUnitCost || 0;
+          document.getElementById('boqItemLECost').value = item.leUnitCost || 0;
+        }
+      } else {
+        if (titleEl) titleEl.textContent = 'Add BOQ Line Item';
+        if (editIdEl) editIdEl.value = '';
+        form.reset();
+        const nextIdx = (proj.boq.items ? proj.boq.items.length : 0) + 1;
+        document.getElementById('boqItemCode').value = `${nextIdx}.01`;
+        document.getElementById('boqItemQty').value = 1;
+        document.getElementById('boqItemUnit').value = 'lot';
+        document.getElementById('boqItemCategory').value = 'Earthworks & Civil';
+      }
+
+      calcBoqModalPreview();
+      modal.style.display = 'flex';
+    }
+
+    function closeBOQItemModal() {
+      const modal = document.getElementById('timelineBoqItemModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function calcBoqModalPreview() {
+      const qty = parseFloat(document.getElementById('boqItemQty')?.value) || 0;
+      const mat = parseFloat(document.getElementById('boqItemMatCost')?.value) || 0;
+      const le = parseFloat(document.getElementById('boqItemLECost')?.value) || 0;
+      const pDone = parseFloat(document.getElementById('boqItemPercentDone')?.value) || 0;
+
+      const unitCost = mat + le;
+      const total = qty * unitCost;
+      const earned = total * (pDone / 100);
+
+      const uEl = document.getElementById('boqModalPreviewUnitCost');
+      const tEl = document.getElementById('boqModalPreviewTotal');
+      const eEl = document.getElementById('boqModalPreviewEarned');
+
+      if (uEl) uEl.textContent = `₱ ${formatPeso(unitCost)}`;
+      if (tEl) tEl.textContent = `₱ ${formatPeso(total)}`;
+      if (eEl) eEl.textContent = `₱ ${formatPeso(earned)}`;
+    }
+
+    function saveBOQItemFromModal(e) {
+      if (e) e.preventDefault();
+      const proj = getProject(currentProjectId);
+      if (!proj || !proj.boq) return;
+      if (!proj.boq.items) proj.boq.items = [];
+
+      const editId = document.getElementById('boqEditItemId')?.value;
+      const code = document.getElementById('boqItemCode')?.value.trim();
+      const title = document.getElementById('boqItemTitle')?.value.trim();
+      const category = document.getElementById('boqItemCategory')?.value.trim() || 'General Works';
+      const condition = document.getElementById('boqItemCondition')?.value || 'CPM';
+      const spec = document.getElementById('boqItemSpec')?.value.trim() || '';
+      const qty = Math.max(0, parseFloat(document.getElementById('boqItemQty')?.value) || 0);
+      const unit = document.getElementById('boqItemUnit')?.value.trim() || 'lot';
+      const pDone = Math.min(100, Math.max(0, parseFloat(document.getElementById('boqItemPercentDone')?.value) || 0));
+      const matCost = Math.max(0, parseFloat(document.getElementById('boqItemMatCost')?.value) || 0);
+      const leCost = Math.max(0, parseFloat(document.getElementById('boqItemLECost')?.value) || 0);
+
+      const unitCost = matCost + leCost;
+      const grandTotal = qty * unitCost;
+      const earnedValue = grandTotal * (pDone / 100);
+
+      if (!code || !title || !unit) {
+        alert('Please fill in Item Code, Description, and Unit of Measure.');
+        return;
+      }
+
+      if (editId) {
+        const item = proj.boq.items.find(x => x.id === editId);
+        if (item) {
+          item.code = code;
+          item.title = title;
+          item.category = category;
+          item.condition = condition;
+          item.specification = spec;
+          item.qty = qty;
+          item.unit = unit;
+          item.materialUnitCost = matCost;
+          item.leUnitCost = leCost;
+          item.unitCost = unitCost;
+          item.grandTotalCost = grandTotal;
+          item.percentDone = pDone;
+          item.earnedValue = earnedValue;
+          item.isCritical = condition === 'CPM';
+        }
+      } else {
+        const newItem = {
+          id: `boq_${proj.id}_${Date.now()}`,
+          code: code,
+          title: title,
+          category: category,
+          condition: condition,
+          specification: spec,
+          qty: qty,
+          unit: unit,
+          materialUnitCost: matCost,
+          leUnitCost: leCost,
+          unitCost: unitCost,
+          grandTotalCost: grandTotal,
+          percentDone: pDone,
+          earnedValue: earnedValue,
+          isCritical: condition === 'CPM'
+        };
+        proj.boq.items.push(newItem);
+      }
+
+      closeBOQItemModal();
+      renderProjectBOQTable(proj);
+      saveProjectBOQData();
+    }
+
+    function deleteBOQItem(itemId) {
+      const proj = getProject(currentProjectId);
+      if (!proj || !proj.boq || !proj.boq.items) return;
+      const item = proj.boq.items.find(x => x.id === itemId);
+      if (!item) return;
+
+      if (confirm(`Are you sure you want to remove item "${item.code} - ${item.title}" from this project's BOQ?`)) {
+        proj.boq.items = proj.boq.items.filter(x => x.id !== itemId);
+        renderProjectBOQTable(proj);
+        saveProjectBOQData();
+      }
+    }
+
+    /* --------------------------------------------------------------------------
+       STORAGE PERSISTENCE METHODS (ACROSS ALL APPS & INDEXEDDB)
+       -------------------------------------------------------------------------- */
+    function saveProjectTimelineAndBOQ() {
+      const proj = getProject(currentProjectId);
+      if (!proj) return;
+
+      try {
+        if (typeof FCLStorage !== 'undefined') {
+          FCLStorage.saveProjectBOQ(currentProjectId, proj.boq);
+          FCLStorage.saveProjectGantt(currentProjectId, proj.timeline);
+          FCLStorage.saveProjectCatalog(FCL_PROJECT_CATALOG);
+        } else {
+          localStorage.setItem(`cost_estimate_boq_${currentProjectId}`, JSON.stringify(proj.boq));
+          localStorage.setItem(`cost_estimate_ganttSettings_${currentProjectId}`, JSON.stringify(proj.timeline));
+          localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
+        }
+      } catch (err) {
+        console.warn('Error saving timeline & boq data:', err);
+      }
+
+      showTimelineSaveToast('Project Timeline & Bill of Quantity Successfully Saved!');
+    }
+
+    function saveProjectTimelineSchedule() {
+      const proj = getProject(currentProjectId);
+      if (!proj) return;
+
+      try {
+        if (typeof FCLStorage !== 'undefined') {
+          FCLStorage.saveProjectGantt(currentProjectId, proj.timeline);
+          FCLStorage.saveProjectCatalog(FCL_PROJECT_CATALOG);
+        } else {
+          localStorage.setItem(`cost_estimate_ganttSettings_${currentProjectId}`, JSON.stringify(proj.timeline));
+          localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
+        }
+      } catch (err) {
+        console.warn('Error saving schedule data:', err);
+      }
+
+      showTimelineSaveToast('Gantt Schedule Activities Successfully Saved!');
+    }
+
+    function saveProjectBOQData(silent) {
+      const proj = getProject(currentProjectId);
+      if (!proj) return;
+
+      try {
+        if (typeof FCLStorage !== 'undefined') {
+          FCLStorage.saveProjectBOQ(currentProjectId, proj.boq);
+          FCLStorage.saveProjectCatalog(FCL_PROJECT_CATALOG);
+        } else {
+          localStorage.setItem(`cost_estimate_boq_${currentProjectId}`, JSON.stringify(proj.boq));
+          localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
+        }
+      } catch (err) {
+        console.warn('Error saving BOQ data:', err);
+      }
+
+      if (!silent) {
+        showTimelineSaveToast('Project Bill of Quantity Successfully Saved!');
+      }
+    }
+
+    function showTimelineSaveToast(msg) {
+      const toast = document.getElementById('timelineSaveNotification');
+      if (toast) {
+        const strongEl = toast.querySelector('strong');
+        if (strongEl && msg) strongEl.textContent = msg;
+        toast.style.display = 'flex';
+        clearTimeout(window._timelineToastTimer);
+        window._timelineToastTimer = setTimeout(() => {
+          if (toast) toast.style.display = 'none';
+        }, 4000);
+      }
+    }
+
+    /* --------------------------------------------------------------------------
+       BOQ CSV EXPORT
+       -------------------------------------------------------------------------- */
+    function exportProjectBOQCSV() {
+      const proj = getProject(currentProjectId);
+      if (!proj || !proj.boq || !proj.boq.items) {
+        alert('No BOQ data found for this project.');
+        return;
+      }
+
+      const headers = ['Item Code', 'Scope Description', 'Category', 'Specification', 'Quantity', 'Unit', 'Material Rate (PHP)', 'L&E Rate (PHP)', 'Unit Cost (PHP)', 'Total Amount (PHP)', 'Weight (%)', 'Percent Done (%)', 'Earned Value (PHP)', 'Condition'];
+      const rows = [headers.join(',')];
+
+      proj.boq.items.forEach(it => {
+        const row = [
+          `"${(it.code || '').replace(/"/g, '""')}"`,
+          `"${(it.title || '').replace(/"/g, '""')}"`,
+          `"${(it.category || '').replace(/"/g, '""')}"`,
+          `"${(it.specification || '').replace(/"/g, '""')}"`,
+          it.qty || 0,
+          `"${(it.unit || '').replace(/"/g, '""')}"`,
+          (it.materialUnitCost || 0).toFixed(2),
+          (it.leUnitCost || 0).toFixed(2),
+          (it.unitCost || 0).toFixed(2),
+          (it.grandTotalCost || 0).toFixed(2),
+          it.weight || 0,
+          it.percentDone || 0,
+          (it.earnedValue || 0).toFixed(2),
+          `"${(it.condition || 'CPM').replace(/"/g, '""')}"`
+        ];
+        rows.push(row.join(','));
+      });
+
+      const csvContent = 'data:text/csv;charset=utf-8,' + encodeURIComponent(rows.join('\n'));
+      const link = document.createElement('a');
+      link.setAttribute('href', csvContent);
+      link.setAttribute('download', `${proj.code}_BOQ_Estimate_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    /* --------------------------------------------------------------------------
+       EXTERNAL STUDIO DIRECT LINKS
+       -------------------------------------------------------------------------- */
+    function openFullGanttStudio() {
+      if (typeof FCLStorage !== 'undefined') {
+        FCLStorage.setActiveProjectId(currentProjectId);
+      }
+      window.location.href = `boq_schedule/index.html?projectId=${encodeURIComponent(currentProjectId)}&sheet=schedule`;
+    }
+
+    function openFullBOQWorkbook() {
+      if (typeof FCLStorage !== 'undefined') {
+        FCLStorage.setActiveProjectId(currentProjectId);
+      }
+      window.location.href = `boq_schedule/index.html?projectId=${encodeURIComponent(currentProjectId)}&sheet=boq`;
     }
 
     function renderDocumentsView(proj, filterCat) {
@@ -4293,6 +6137,27 @@
       window.addEventListener('storage', () => {
         if (currentProjectId === 'PRJ-2026-001' && currentTabKey === 'overview') {
           renderDashboard('PRJ-2026-001');
+        }
+      });
+
+      // Real-Time Remote Update Listener from Cloud Firestore
+      window.addEventListener('fcl:remote-update', (e) => {
+        const detail = (e && e.detail) || {};
+        console.log('[FCL Main App] Real-Time Cloud update received:', detail);
+
+        if (detail.type === 'catalog' && Array.isArray(detail.catalog)) {
+          FCL_PROJECT_CATALOG = detail.catalog;
+          renderSidebarProjectList();
+        }
+
+        if (detail.projectId && detail.projectId === currentProjectId) {
+          const p = getProject(currentProjectId);
+          if (p && detail.data) {
+            if (detail.data.boq) p.boq = detail.data.boq;
+            if (detail.data.gantt) p.timeline = detail.data.gantt;
+            if (detail.data.metadata && detail.data.metadata.name) p.name = detail.data.metadata.name;
+          }
+          renderActiveView();
         }
       });
     });

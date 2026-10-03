@@ -1590,6 +1590,9 @@
 
     function saveGanttSettings() {
       localStorage.setItem('cost_estimate_gantt_settings_v1', JSON.stringify(ganttSettings));
+      if (typeof currentBoqProjectId !== 'undefined' && currentBoqProjectId && window.FCLStorage && typeof window.FCLStorage.saveProjectGantt === 'function') {
+        window.FCLStorage.saveProjectGantt(currentBoqProjectId, ganttSettings);
+      }
       applyGanttSettingsStyles();
     }
 
@@ -13633,6 +13636,80 @@
       }
     }
 
+    let currentBoqProjectId = 'PRJ-2026-001';
+
+    function initBoqProjectContext() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlProj = urlParams.get('projectId');
+        if (urlProj) {
+          currentBoqProjectId = urlProj;
+        } else if (window.FCLStorage && typeof window.FCLStorage.getActiveProjectId === 'function') {
+          currentBoqProjectId = window.FCLStorage.getActiveProjectId();
+        } else {
+          currentBoqProjectId = localStorage.getItem('FCL_ACTIVE_PROJECT_ID') || 'PRJ-2026-001';
+        }
+        if (window.FCLStorage && typeof window.FCLStorage.setActiveProjectId === 'function') {
+          window.FCLStorage.setActiveProjectId(currentBoqProjectId);
+        }
+        localStorage.setItem('FCL_ACTIVE_PROJECT_ID', currentBoqProjectId);
+      } catch (e) {
+        currentBoqProjectId = 'PRJ-2026-001';
+      }
+
+      populateBoqProjectSelector();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const requestedSheet = urlParams.get('sheet');
+      if (requestedSheet === 'gantt') {
+        setTimeout(() => { if (typeof showGanttSheet === 'function') showGanttSheet(); }, 50);
+      } else if (requestedSheet === 'boqSummary') {
+        setTimeout(() => { if (typeof showSheet === 'function') showSheet('boqSummarySheet'); }, 50);
+      }
+    }
+
+    function populateBoqProjectSelector() {
+      const selector = document.getElementById('boqActiveProjectSelector');
+      if (!selector) return;
+      let catalog = [];
+      try {
+        const raw = localStorage.getItem('FCL_PROJECT_CATALOG_DATA');
+        if (raw) catalog = JSON.parse(raw);
+      } catch (e) {}
+      if (!Array.isArray(catalog) || catalog.length === 0) {
+        catalog = [
+          { id: 'PRJ-2026-001', code: 'PRJ-2026-001', shortName: 'Sports Club & Recreation' },
+          { id: 'HCC-2026-B1', code: 'HCC-2026-B1', shortName: 'Highland Commercial' },
+          { id: 'MLH-2025-04', code: 'MLH-2025-04', shortName: 'Metro Logistics Hub' },
+          { id: 'RTO-2026-C2', code: 'RTO-2026-C2', shortName: 'Riverside Terraces' }
+        ];
+      }
+      selector.innerHTML = catalog.map(p =>
+        `<option value="${p.id}" ${p.id === currentBoqProjectId ? 'selected' : ''}>${p.code} — ${p.shortName || p.name}</option>`
+      ).join('');
+      selector.value = currentBoqProjectId;
+    }
+
+    function switchBoqProject(newId) {
+      if (!newId || newId === currentBoqProjectId) return;
+      try { saveBOQSection(true); } catch (e) {}
+      currentBoqProjectId = newId;
+      if (window.FCLStorage && typeof window.FCLStorage.setActiveProjectId === 'function') {
+        window.FCLStorage.setActiveProjectId(newId);
+      }
+      try { localStorage.setItem('FCL_ACTIVE_PROJECT_ID', newId); } catch (e) {}
+      const url = new URL(window.location.href);
+      url.searchParams.set('projectId', newId);
+      window.location.href = url.toString();
+    }
+
+    function returnToProjectTimeline() {
+      try { saveBOQSection(true); } catch (e) {}
+      window.location.href = '../index.html?projectId=' + encodeURIComponent(currentBoqProjectId) + '&tab=timeline';
+    }
+    window.switchBoqProject = switchBoqProject;
+    window.returnToProjectTimeline = returnToProjectTimeline;
+
     function savePriceListSection() {
       saveToBrowser(APP_STORAGE_KEYS.priceList, getPriceListPayload(), 'Price List');
     }
@@ -13642,7 +13719,39 @@
     }
 
     function saveBOQSection(silent = false) {
-      saveToBrowser(APP_STORAGE_KEYS.boq, getBOQPayload(), 'BOQ', silent);
+      const payload = getBOQPayload();
+      saveToBrowser(APP_STORAGE_KEYS.boq, payload, 'BOQ', silent);
+
+      // Scoped project saving
+      if (currentBoqProjectId) {
+        if (window.FCLStorage && typeof window.FCLStorage.saveProjectBOQ === 'function') {
+          window.FCLStorage.saveProjectBOQ(currentBoqProjectId, payload);
+        } else {
+          try {
+            localStorage.setItem('cost_estimate_boq_' + currentBoqProjectId, JSON.stringify(payload));
+          } catch (e) {}
+        }
+
+        // Update project catalog total budget and fields
+        try {
+          const catRaw = localStorage.getItem('FCL_PROJECT_CATALOG_DATA');
+          if (catRaw) {
+            const catalog = JSON.parse(catRaw);
+            const p = catalog.find(x => x.id === currentBoqProjectId);
+            if (p) {
+              p.boq = payload;
+              let calcBudget = 0;
+              if (Array.isArray(payload.boqData)) {
+                payload.boqData.forEach(r => {
+                  calcBudget += parseFloat(r.grandTotalCost || 0) || 0;
+                });
+              }
+              if (calcBudget > 0) p.totalBudget = calcBudget;
+              localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(catalog));
+            }
+          }
+        } catch (e) {}
+      }
     }
 
     function saveCoverLetterSection() {
@@ -13658,7 +13767,31 @@
       if (savedDUPA && Array.isArray(savedDUPA.analysisData)) {
         analysisData.splice(0, analysisData.length, ...savedDUPA.analysisData);
       }
-      const savedBOQ = readFromBrowser(APP_STORAGE_KEYS.boq);
+
+      // Check project-scoped BOQ first
+      let savedBOQ = null;
+      if (currentBoqProjectId) {
+        if (window.FCLStorage && typeof window.FCLStorage.readProjectSectionSync === 'function') {
+          savedBOQ = window.FCLStorage.readProjectSectionSync(currentBoqProjectId, 'boq');
+        }
+        if (!savedBOQ) {
+          savedBOQ = readFromBrowser('cost_estimate_boq_' + currentBoqProjectId);
+        }
+        if (!savedBOQ) {
+          try {
+            const catRaw = localStorage.getItem('FCL_PROJECT_CATALOG_DATA');
+            if (catRaw) {
+              const catalog = JSON.parse(catRaw);
+              const p = catalog.find(x => x.id === currentBoqProjectId);
+              if (p && p.boq) savedBOQ = p.boq;
+            }
+          } catch (e) {}
+        }
+      }
+      if (!savedBOQ) {
+        savedBOQ = readFromBrowser(APP_STORAGE_KEYS.boq);
+      }
+
       if (savedBOQ) {
         if (Array.isArray(savedBOQ.boqData)) boqData.splice(0, boqData.length, ...savedBOQ.boqData);
         applyValuesById(savedBOQ.projectFields);
@@ -13754,6 +13887,7 @@
     }, true);
 
     (() => {
+      initBoqProjectContext();
       const pDate = document.getElementById('proposalDate');
       if (pDate) pDate.valueAsDate = new Date();
       loadSavedSections();
