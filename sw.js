@@ -3,7 +3,7 @@
  * Provides 100% offline capability for job sites and remote field engineers
  */
 
-const CACHE_NAME = 'fcl-project-controls-v1.3';
+const CACHE_NAME = 'fcl-project-controls-v1.4';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
@@ -59,10 +59,31 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // 1. For HTML page navigations (opening app / reloading): Use Network-First
+  // This guarantees fresh index.html without stale redirects hijacking the load
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          return caches.match(event.request).then((cached) => cached || caches.match('./index.html'));
+        })
+    );
+    return;
+  }
+
+  // 2. For sub-resources (CSS, JS, images): Stale-While-Revalidate
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Fetch fresh copy in background to keep cache up to date
         fetch(event.request).then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
             caches.open(CACHE_NAME).then((cache) => {
@@ -81,10 +102,6 @@ self.addEventListener('fetch', (event) => {
           cache.put(event.request, responseToCache);
         });
         return networkResponse;
-      }).catch(() => {
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
       });
     })
   );
