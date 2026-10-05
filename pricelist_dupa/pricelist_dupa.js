@@ -10125,10 +10125,15 @@
 
     function showSheet(sheetId) {
       document.querySelectorAll('.sheet').forEach(sheet => sheet.classList.remove('active'));
-      document.getElementById(sheetId).classList.add('active');
-      document.getElementById('navPriceList').classList.toggle('active', sheetId === 'priceListSheet');
-      document.getElementById('navEstimate').classList.toggle('active', sheetId === 'estimateSheet');
-      document.getElementById('navBoq').classList.toggle('active', sheetId === 'boqSheet');
+      const targetSheet = document.getElementById(sheetId);
+      if (targetSheet) targetSheet.classList.add('active');
+
+      const navPriceList = document.getElementById('navPriceList');
+      if (navPriceList) navPriceList.classList.toggle('active', sheetId === 'priceListSheet');
+      const navEstimate = document.getElementById('navEstimate');
+      if (navEstimate) navEstimate.classList.toggle('active', sheetId === 'estimateSheet');
+      const navBoq = document.getElementById('navBoq');
+      if (navBoq) navBoq.classList.toggle('active', sheetId === 'boqSheet');
       const navBoqSummary = document.getElementById('navBoqSummary');
       if (navBoqSummary) navBoqSummary.classList.toggle('active', sheetId === 'boqSummarySheet');
       const navGantt = document.getElementById('navGantt');

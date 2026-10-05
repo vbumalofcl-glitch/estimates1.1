@@ -1,0 +1,913 @@
+/* ==========================================================================
+   FCLDC INTEGRATED PROJECT CONTROLS - MANPOWER UTILIZATION STYLESHEET
+   Authentic Excel Grid Layout, Dynamic Two-Tier Timeline, & Comparison Chart
+   ========================================================================== */
+
+:root {
+  --mp-excel-border: #cbd5e1;
+  --mp-excel-border-light: #e2e8f0;
+  --mp-excel-header-bg: #1e3a8a;
+  --mp-excel-header-bg2: #0f172a;
+  --mp-excel-header-text: #ffffff;
+  --mp-excel-row-hover: #f8fafc;
+  --mp-excel-cell-selected: #eff6ff;
+  --mp-excel-focus-ring: #2563eb;
+  --mp-excel-cat-bg: #f1f5f9;
+  --mp-excel-sub-bg: #f8fafc;
+  --mp-excel-subsub-bg: #ffffff;
+  --mp-cumul-bg: #ecfdf5;
+  --mp-cumul-text: #065f46;
+}
+
+/* Container */
+.mp-container {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid var(--mp-excel-border);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  margin-bottom: 20px;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #0f172a;
+}
+
+/* Ribbon Toolbar */
+.mp-ribbon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--mp-excel-border);
+}
+
+.mp-ribbon-left, .mp-ribbon-right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.mp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid var(--mp-excel-border);
+  background: #ffffff;
+  color: #334155;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.mp-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.mp-btn-primary {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.mp-btn-primary:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #ffffff;
+}
+
+.mp-btn-success {
+  background: #059669;
+  border-color: #059669;
+  color: #ffffff;
+}
+
+.mp-btn-success:hover {
+  background: #047857;
+  border-color: #047857;
+  color: #ffffff;
+}
+
+.mp-btn-group {
+  display: inline-flex;
+  border: 1px solid var(--mp-excel-border);
+  border-radius: 5px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.mp-btn-group .mp-btn-tab {
+  height: 26px;
+  padding: 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mp-btn-group .mp-btn-tab:not(:last-child) {
+  border-right: 1px solid var(--mp-excel-border);
+}
+
+.mp-btn-group .mp-btn-tab.active {
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* KPI Ribbon */
+.mp-kpi-ribbon {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+  padding: 12px 14px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--mp-excel-border-light);
+}
+
+.mp-kpi-card {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--mp-excel-border-light);
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.mp-kpi-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.5px;
+}
+
+.mp-kpi-value {
+  font-size: 17px;
+  font-weight: 800;
+  margin: 4px 0 2px 0;
+  color: #0f172a;
+}
+
+.mp-kpi-sub {
+  font-size: 10.5px;
+  color: #64748b;
+}
+
+/* Dynamic Interactive Chart Banner */
+.mp-chart-container {
+  padding: 12px 14px;
+  background: #fcfdfe;
+  border-bottom: 1px solid var(--mp-excel-border);
+  position: relative;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.mp-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.mp-chart-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e3a8a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mp-chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.mp-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.mp-chart-svg-wrap {
+  width: 100%;
+  height: 140px;
+  position: relative;
+}
+
+.mp-chart-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.mp-chart-tooltip {
+  position: absolute;
+  background: rgba(15, 23, 42, 0.92);
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: none;
+  line-height: 1.4;
+  min-width: 170px;
+}
+
+/* Split-Pane Layout (Just like Gantt Chart) */
+.mp-split-wrap {
+  display: flex;
+  height: calc(100vh - 350px);
+  min-height: 480px;
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.mp-left-pane {
+  width: 780px;
+  min-width: 320px;
+  max-width: 1400px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  overflow-x: auto;
+  border-right: 1px solid var(--mp-excel-border);
+  background: #ffffff;
+}
+
+.mp-splitter {
+  width: 6px;
+  cursor: col-resize;
+  background: #f1f5f9;
+  border-left: 1px solid #e2e8f0;
+  border-right: 1px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  z-index: 15;
+  user-select: none;
+}
+
+.mp-splitter:hover, .mp-splitter.dragging {
+  background: #2563eb;
+}
+
+.mp-splitter-handle {
+  width: 2px;
+  height: 24px;
+  background: #94a3b8;
+  border-radius: 1px;
+}
+
+.mp-right-pane {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  position: relative;
+  background: #ffffff;
+}
+
+/* Excel Spreadsheet Grid Styling */
+.mp-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-size: 11px;
+}
+
+.mp-table-left {
+  width: auto;
+  min-width: 100%;
+}
+
+.mp-th {
+  height: 38px;
+  background: #1e3a8a;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  border-right: 1px solid #2563eb;
+  border-bottom: 2px solid #1d4ed8;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 4px 6px;
+  box-sizing: border-box;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.mp-th-left {
+  text-align: left;
+  padding-left: 10px;
+}
+
+.mp-th-right {
+  text-align: right;
+  padding-right: 8px;
+}
+
+/* Column resizer handle matching Gantt Task Table */
+.mp-col-resizer {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 6px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 2;
+  user-select: none;
+  background: transparent;
+  transition: background 0.1s;
+}
+
+.mp-col-resizer:hover, .mp-col-resizer.resizing {
+  background: #60a5fa !important;
+}
+
+.mp-td {
+  height: 34px;
+  border-right: 1px solid var(--mp-excel-border-light);
+  border-bottom: 1px solid var(--mp-excel-border-light);
+  padding: 0;
+  vertical-align: middle;
+  background: #ffffff;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Hierarchy Rows */
+.mp-row-cat td {
+  background: #eff6ff !important;
+  font-weight: 700 !important;
+  color: #1e40af !important;
+  border-bottom: 1.5px solid #bfdbfe !important;
+}
+
+.mp-row-sub td {
+  background: #f8fafc !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.mp-row-subsub td {
+  background: #ffffff !important;
+  font-weight: normal !important;
+  color: #334155 !important;
+}
+
+.mp-row:hover td {
+  background-color: #f1f5f9 !important;
+}
+
+.mp-row-cat:hover td {
+  background-color: #dbeafe !important;
+}
+
+/* Fillable Excel Cells */
+.mp-cell-input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 2px 6px;
+  font-family: inherit;
+  font-size: 11px;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+.mp-cell-input:focus {
+  outline: 2px solid var(--mp-excel-focus-ring) !important;
+  outline-offset: -2px;
+  background: #eff6ff !important;
+  border-radius: 1px;
+  z-index: 5;
+}
+
+.mp-cell-center {
+  text-align: center;
+}
+
+.mp-cell-right {
+  text-align: right;
+  padding-right: 8px;
+}
+
+.mp-cell-desc {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  padding-right: 6px;
+}
+
+.mp-desc-indent-0 { padding-left: 8px; }
+.mp-desc-indent-1 { padding-left: 24px; }
+.mp-desc-indent-2 { padding-left: 40px; }
+
+.mp-tree-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.mp-tree-badge.cat { background: #bfdbfe; color: #1e40af; }
+.mp-tree-badge.sub { background: #e2e8f0; color: #475569; }
+.mp-tree-badge.subsub { background: #f1f5f9; color: #64748b; }
+
+.mp-action-btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 100%;
+}
+
+.mp-act-btn {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border-radius: 3px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  font-size: 11px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s ease;
+}
+
+.mp-act-btn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.mp-act-btn.danger:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+/* Two-Tier Timeline Header */
+.mp-tl-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #ffffff;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.mp-tl-tier1-row {
+  display: flex;
+  height: 24px;
+  background: #1e293b;
+  color: #ffffff;
+  border-bottom: 1px solid #334155;
+  box-sizing: border-box;
+}
+
+.mp-tl-tier1-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-right: 1px solid #334155;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mp-tl-tier2-row {
+  display: flex;
+  height: 24px;
+  background: #f8fafc;
+  color: #334155;
+  box-sizing: border-box;
+}
+
+.mp-tl-tier2-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 9.5px;
+  font-weight: 700;
+  border-right: 1px solid #e2e8f0;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mp-tl-tier2-cell.today {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+  font-weight: 800 !important;
+}
+
+/* Timeline Body */
+.mp-tl-body {
+  position: relative;
+}
+
+.mp-tl-row {
+  display: flex;
+  height: 34px;
+  border-bottom: 1px solid var(--mp-excel-border-light);
+  box-sizing: border-box;
+}
+
+.mp-tl-col-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--mp-excel-border-light);
+  box-sizing: border-box;
+  position: relative;
+  font-size: 10.5px;
+}
+
+.mp-tl-input {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #1e293b;
+  box-sizing: border-box;
+}
+
+.mp-tl-input:focus {
+  outline: 2px solid #2563eb !important;
+  outline-offset: -2px;
+  background: #eff6ff !important;
+  z-index: 5;
+}
+
+.mp-tl-input.actual {
+  color: #059669;
+}
+
+/* Today guideline marker */
+.mp-today-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #dc2626;
+  z-index: 8;
+  pointer-events: none;
+}
+
+/* Summary / Cumulative Cost Rows */
+.mp-summary-row {
+  background: #f8fafc;
+  font-weight: 700;
+}
+
+.mp-summary-row td {
+  border-top: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.mp-cumul-cost-row {
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+  font-weight: 800 !important;
+}
+
+.mp-cumul-cost-row td {
+  border-top: 2px solid #10b981 !important;
+  border-bottom: 3px double #047857 !important;
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+}
+
+.mp-cumul-cell-val {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #065f46;
+  text-align: center;
+  width: 100%;
+  white-space: nowrap;
+}
+
+/* Modal for logging actual manpower */
+.mp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(2px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.mp-modal-box {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2), 0 10px 10px -5px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 650px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--mp-excel-border);
+}
+
+.mp-modal-header {
+  padding: 14px 18px;
+  background: #1e3a8a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mp-modal-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.mp-modal-footer {
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-top: 1px solid var(--mp-excel-border);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Custom Context Menu (Right-Click Task Breakdown) */
+.mp-context-menu {
+  position: fixed;
+  z-index: 10002;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25), 0 8px 10px -6px rgba(15, 23, 42, 0.15);
+  padding: 4px 0;
+  min-width: 220px;
+  font-family: inherit;
+  font-size: 11.5px;
+  user-select: none;
+  animation: mpFadeIn 0.12s ease;
+}
+
+@keyframes mpFadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.mp-context-menu-header {
+  padding: 6px 14px 4px 14px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 2px;
+}
+
+.mp-context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  color: #1e293b;
+  font-weight: 500;
+  transition: background 0.12s, color 0.12s;
+}
+
+.mp-context-menu-item:hover {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.mp-context-menu-item.danger {
+  color: #dc2626;
+}
+
+.mp-context-menu-item.danger:hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.mp-context-menu-separator {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 4px 0;
+}
+
+
+
+
+/* Exact Row Height & Vertical Scroll Alignment Lock */
+.mp-table-left tr {
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  box-sizing: border-box !important;
+}
+
+.mp-table-left td {
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  vertical-align: middle !important;
+}
+
+.mp-th {
+  height: 50px !important;
+  min-height: 50px !important;
+  max-height: 50px !important;
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+.mp-tl-header {
+  height: 50px !important;
+  min-height: 50px !important;
+  max-height: 50px !important;
+  box-sizing: border-box !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+.mp-tl-tier1-row {
+  height: 25px !important;
+  min-height: 25px !important;
+  max-height: 25px !important;
+  box-sizing: border-box !important;
+}
+
+.mp-tl-tier2-row {
+  height: 25px !important;
+  min-height: 25px !important;
+  max-height: 25px !important;
+  box-sizing: border-box !important;
+}
+
+.mp-tl-row {
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.mp-tl-col-cell {
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Auto-expanding Timeline Container */
+.mp-right-pane {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  position: relative;
+  background: #ffffff;
+}
+
+.mp-right-pane > div {
+  min-width: 100% !important;
+  width: max-content;
+}
+
+/* Collapse / Expand Toggle Button */
+.mp-collapse-toggle-btn {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #1e40af;
+  border-radius: 3px;
+  font-size: 8.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 4px;
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+.mp-collapse-toggle-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.mp-collapse-placeholder {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+/* Trade Row & Badge Styling */
+.mp-row-trade td {
+  background: #f0fdf4 !important;
+  color: #166534 !important;
+}
+
+.mp-tree-badge.trade {
+  background: #bbf7d0 !important;
+  color: #15803d !important;
+  font-size: 8.5px;
+}
+
+.mp-desc-indent-3 {
+  padding-left: 56px;
+}
+
+.mp-trade-select {
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* Month Filter Dropdown Selection in Timeline Ribbon */
+.mp-month-select {
+  height: 24px;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e3a8a;
+  background: #ffffff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mp-month-select:hover {
+  background: #f0f7ff;
+  border-color: #3b82f6;
+}
+
+.mp-month-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+

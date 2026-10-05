@@ -13,7 +13,8 @@ const FCL_STORAGE_KEYS = {
   boq: 'cost_estimate_boq_section_v1',
   cover: 'cost_estimate_cover_letter_section_v1',
   ganttSettings: 'cost_estimate_gantt_settings_v1',
-  ganttStartDate: 'cost_estimate_gantt_start_v1'
+  ganttStartDate: 'cost_estimate_gantt_start_v1',
+  manpower: 'cost_estimate_manpower_section_v1'
 };
 
 const FCLStorage = {
@@ -207,6 +208,24 @@ const FCLStorage = {
     return this.readSync('FCL_PROJECT_CATALOG_DATA');
   },
 
+  deleteProject(projectId) {
+    try {
+      const catalog = this.readSync('FCL_PROJECT_CATALOG_DATA');
+      if (Array.isArray(catalog)) {
+        const filtered = catalog.filter(p => p.id !== projectId);
+        this.save('FCL_PROJECT_CATALOG_DATA', filtered);
+        if (typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured()) {
+          FCLFirebaseSync.queueCatalogSync(filtered);
+        }
+      }
+      localStorage.removeItem(`FCL_PROJ_${projectId}_boq`);
+      localStorage.removeItem(`FCL_PROJ_${projectId}_ganttSettings`);
+      localStorage.removeItem(`FCL_PROJ_${projectId}_info`);
+    } catch (e) {
+      console.warn('FCLStorage.deleteProject error:', e);
+    }
+  },
+
   // Save project-specific BOQ data and sync with catalog
   async saveProjectBOQ(projectId, boqData, isRemoteSync = false) {
     await this.saveProjectSection(projectId, 'boq', boqData, isRemoteSync);
@@ -275,6 +294,39 @@ const FCLStorage = {
       }
     }
     return gantt;
+  },
+
+  // Save project-specific Manpower data
+  async saveProjectManpower(projectId, manpowerData, isRemoteSync = false) {
+    await this.saveProjectSection(projectId, 'manpower', manpowerData, isRemoteSync);
+    try {
+      const catalog = this.readSync('FCL_PROJECT_CATALOG_DATA');
+      if (Array.isArray(catalog)) {
+        const p = catalog.find(x => x.id === projectId);
+        if (p) {
+          if (!p.manpower) p.manpower = {};
+          p.manpower = manpowerData;
+          this.save('FCL_PROJECT_CATALOG_DATA', catalog);
+        }
+      }
+    } catch (e) {}
+    if (!isRemoteSync && typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured()) {
+      FCLFirebaseSync.queueProjectSync(projectId, { manpower: manpowerData });
+    }
+    return true;
+  },
+
+  // Load project-specific Manpower data
+  async loadProjectManpower(projectId) {
+    let mp = await this.loadProjectSection(projectId, 'manpower');
+    if (!mp) {
+      const catalog = this.readSync('FCL_PROJECT_CATALOG_DATA');
+      if (Array.isArray(catalog)) {
+        const p = catalog.find(x => x.id === projectId);
+        if (p && p.manpower) mp = p.manpower;
+      }
+    }
+    return mp;
   },
 
   // ==========================================

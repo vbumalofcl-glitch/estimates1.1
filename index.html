@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="manpower_utilization.css?v=2.4" />
   <style>
     :root {
       --primary: #2563eb;
@@ -775,6 +776,33 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+    .btn-delete-proj-icon {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .btn-delete-proj-icon:hover {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    .ctrl-btn.danger-btn {
+      background: #fee2e2;
+      border-color: #fca5a5;
+      color: #b91c1c;
+      font-weight: 600;
+    }
+    .ctrl-btn.danger-btn:hover {
+      background: #fecaca;
+      border-color: #f87171;
+      color: #991b1b;
     }
     .project-entry-code {
       font-size: 10px;
@@ -1651,6 +1679,10 @@
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
                   Print Sheet
                 </button>
+                <button id="btnDeleteCurrentProject" class="ctrl-btn danger-btn" type="button" onclick="deleteCurrentProject()" style="display:inline-flex; align-items:center; gap:6px;" title="Delete this project from catalog">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  Delete Project
+                </button>
               </div>
             </div>
 
@@ -2218,6 +2250,10 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
               3-Week Lookahead &amp; Milestones
             </button>
+            <button id="tlSubBtn_manpower" class="timeline-sub-btn" type="button" onclick="switchTimelineSubTab('manpower')" style="font-weight: 700; color: #1e40af; background: #eff6ff; border: 1.5px solid #bfdbfe;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              👷 Manpower Utilization
+            </button>
           </div>
 
           <!-- ================= SUB-TAB 1: INTERACTIVE GANTT CHART ================= -->
@@ -2389,6 +2425,13 @@
                 <!-- Rendered dynamically -->
               </div>
             </section>
+          </div>
+
+          <!-- ================= SUB-TAB 5: MANPOWER UTILIZATION ================= -->
+          <div id="timelineSubView_manpower" class="timeline-sub-view" style="display: none; margin-top: 10px;">
+            <div id="homeManpowerContainer"></div>
+          </div>
+
           <!-- Hidden File Inputs for Excel / JSON BOQ and Schedule Import -->
           <input type="file" id="timelineBOQFileInput" accept=".xlsx,.xls,.xlsm,.xlsb,.csv,.tsv,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display:none" onchange="handleTimelineBOQFile(this.files[0])">
           <input type="file" id="timelineScheduleFileInput" accept=".xlsx,.xls,.xlsm,.xlsb,.csv,.tsv,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display:none" onchange="handleTimelineScheduleFile(this.files[0])">
@@ -2818,6 +2861,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
   <script src="firebase_sync.js"></script>
   <script src="storage_manager.js"></script>
+  <script src="manpower_utilization.js?v=2.4"></script>
   <script>
     function formatPeso(val) {
       return Number(val || 0).toLocaleString('en-PH', {
@@ -2912,250 +2956,11 @@
           { id: 'DOC-QA-001', title: '28-Day Concrete Cylinder Compressive Test Reports', ref: 'QA-LAB-CYL-BATCH3', category: 'qaqc', type: 'PDF', size: '890 KB', version: 'Rev 1.0', status: 'Approved', date: 'JUN 22, 2026', summary: 'Third-party material testing laboratory certification confirming 4000 PSI concrete compressive strength compliance.' },
           { id: 'DOC-SUB-002', title: 'Maple Hardwood Sports Flooring Submittal & Spec Sheet', ref: 'SUB-ARCH-FLR-02', category: 'qaqc', type: 'PDF', size: '3.2 MB', version: 'Rev 1.2', status: 'In Review', date: 'JUL 01, 2026', summary: 'FIBA-certified maple sprung hardwood sports flooring system sample and environmental resilience compliance datasheet.' }
         ]
-      },
-      {
-        id: 'HCC-2026-B1',
-        name: 'Highland Commercial Complex',
-        shortName: 'Highland Commercial',
-        code: 'HCC-2026-B1',
-        location: 'Highland Boulevard, Baguio City',
-        client: 'Highland Vista Holdings Inc.',
-        projectType: 'Commercial & Mixed-Use High-Rise',
-        contractType: 'Lump Sum EPC Contract with Escalation Clauses',
-        projectManager: 'Engr. H. Bautista, PE (PRC #0084519)',
-        scopeSummary: 'Multi-level commercial podium and office complex with deep secant pile shoring, 1.2m diameter bored foundation piling, dual basement parking, central slipformed reinforced concrete elevator shear cores, energy-efficient double-glazed curtain wall facades, and centralized high-efficiency chiller HVAC plant.',
-        status: 'In Progress',
-        badge: 'ACTIVE',
-        totalBudget: 48500000.00,
-        plannedProgress: 42.0,
-        actualProgress: 39.5,
-        durationDays: 365,
-        elapsedDays: 155,
-        targetDate: 'MAR 15, 2027',
-        donutShares: { target: 40, projection: 30, expense: 20, variance: 10 },
-        categories: [
-          { name: 'Earthworks & Shoring', planned: 11500000, actual: 11200000 },
-          { name: 'Deep Piling & Substructure', planned: 15800000, actual: 14900000 },
-          { name: 'Reinforced Concrete Core', planned: 13200000, actual: 12000000 },
-          { name: 'MEPFS & Facade Cladding', planned: 8000000, actual: 6500000 }
-        ],
-        items: [
-          { avatar: 'HB', name: 'Engr. H. Bautista', desc: 'Secant Pile Retaining Wall & Soil Nailing', cat: 'Substructure Civil', planned: 8500000, actual: 8300000, status: 'Completed' },
-          { avatar: 'RC', name: 'Engr. R. Corpuz', desc: 'Basement 1 & 2 Concrete Pouring & Slabs', cat: 'Substructure Concrete', planned: 7200000, actual: 6900000, status: 'In Progress' },
-          { avatar: 'DL', name: 'Engr. D. Lim', desc: 'Central Tower Elevator Core Wall Rebar & Slipform', cat: 'Superstructure Core', planned: 6800000, actual: 6100000, status: 'In Progress' },
-          { avatar: 'GV', name: 'Arch. G. Villanueva', desc: 'Curtain Wall Double Glazing Transmittal', cat: 'Facade Works', planned: 4500000, actual: 3800000, status: 'Review' },
-          { avatar: 'FP', name: 'Engr. F. Pascual', desc: 'Chiller Plant Installation & Variable Speed Pumps', cat: 'HVAC Mechanical', planned: 5200000, actual: 4400000, status: 'Pending' },
-          { avatar: 'KM', name: 'Engr. K. Mendoza', desc: 'Medium Voltage Switchgear & Cable Trays', cat: 'Electrical System', planned: 3900000, actual: 3200000, status: 'Pending' }
-        ],
-        boq: {
-          projectName: 'Highland Commercial Complex',
-          projectCode: 'HCC-2026-B1',
-          items: [
-            { id: 'boq_hcc_01', code: '1.01', title: 'Site Shoring, Secant Piling & Soil Nailing', specification: 'Secant contiguous piles with high-strength prestressed soil anchors', category: 'Earthworks & Shoring', qty: 420, unit: 'lin.m', materialUnitCost: 14500.00, leUnitCost: 9500.00, unitCost: 24000.00, grandTotalCost: 10080000.00, weight: 20.78, percentDone: 100, earnedValue: 10080000.00, condition: 'CPM', isCritical: true },
-            { id: 'boq_hcc_02', code: '2.01', title: '1200mm Diameter Bored Piling to Bedrock (24m Depth)', specification: 'Bored piles with bentonite slurry stabilization and sonic logging tubes', category: 'Deep Piling & Substructure', qty: 84, unit: 'units', materialUnitCost: 95000.00, leUnitCost: 65000.00, unitCost: 160000.00, grandTotalCost: 13440000.00, weight: 27.71, percentDone: 100, earnedValue: 13440000.00, condition: 'CPM', isCritical: true },
-            { id: 'boq_hcc_03', code: '2.02', title: 'Foundation Raft Slab & Basement 2/1 Retaining Walls', specification: 'Waterproof concrete mix 4000 PSI with integral crystalline waterproofing', category: 'Deep Piling & Substructure', qty: 850, unit: 'cu.m', materialUnitCost: 5800.00, leUnitCost: 3600.00, unitCost: 9400.00, grandTotalCost: 7990000.00, weight: 16.47, percentDone: 75, earnedValue: 5992500.00, condition: 'CPM', isCritical: true },
-            { id: 'boq_hcc_04', code: '3.01', title: 'Reinforced Concrete Slipform Elevator Core & Shear Walls', specification: 'Continuous slipformed shear cores with Grade 60 dual layer rebar', category: 'Reinforced Concrete Core', qty: 680, unit: 'cu.m', materialUnitCost: 7500.00, leUnitCost: 4500.00, unitCost: 12000.00, grandTotalCost: 8160000.00, weight: 16.82, percentDone: 35, earnedValue: 2856000.00, condition: 'CPM', isCritical: true },
-            { id: 'boq_hcc_05', code: '4.01', title: 'Double-Glazed Low-E Aluminum Curtain Wall Facade', specification: '28mm double glazed argon filled panels with thermal break framing', category: 'MEPFS & Facade Cladding', qty: 1600, unit: 'sq.m', materialUnitCost: 2800.00, leUnitCost: 750.00, unitCost: 3550.00, grandTotalCost: 5680000.00, weight: 11.71, percentDone: 10, earnedValue: 568000.00, condition: 'CPM', isCritical: false },
-            { id: 'boq_hcc_06', code: '4.02', title: 'Central Chiller Plant, Variable Pumps & Fire Sprinkler Mains', specification: 'Water-cooled centrifugal chiller 350TR & NFPA 13 sprinkler mains', category: 'MEPFS & Facade Cladding', qty: 1, unit: 'lot', materialUnitCost: 2450000.00, leUnitCost: 700000.00, unitCost: 3150000.00, grandTotalCost: 3150000.00, weight: 6.49, percentDone: 5, earnedValue: 157500.00, condition: 'CPM', isCritical: false }
-          ]
-        },
-        timeline: {
-          criticalState: 'SLIGHT SLIPPAGE (-2.5%)',
-          ganttTasks: [
-            { id: 'task_hcc_01', code: 'T-201', name: 'Site Clearing, Slope Stabilization & Secant Shoring', category: 'Substructure Civil', startDate: '2025-10-01', endDate: '2025-11-30', duration: 60, progress: 100, isCritical: true, float: '0d', lead: 'Engr. H. Bautista', predecessors: 'None' },
-            { id: 'task_hcc_02', code: 'T-202', name: 'Bored Piling (1.2m dia) & Foundation Raft Pouring', category: 'Foundation Piling', startDate: '2025-12-01', endDate: '2026-02-15', duration: 75, progress: 100, isCritical: true, float: '0d', lead: 'Engr. R. Corpuz', predecessors: 'T-201 (FS)' },
-            { id: 'task_hcc_03', code: 'T-203', name: 'Basement 1 & 2 Concrete Frame & Waterproofing', category: 'Substructure Concrete', startDate: '2026-02-16', endDate: '2026-05-15', duration: 90, progress: 75, isCritical: true, float: '0d', lead: 'Engr. R. Corpuz', predecessors: 'T-202 (FS)' },
-            { id: 'task_hcc_04', code: 'T-204', name: 'Tower Levels 1 to 4 Elevator Core & Superstructure', category: 'Superstructure Core', startDate: '2026-05-16', endDate: '2026-08-31', duration: 105, progress: 35, isCritical: true, float: '0d', lead: 'Engr. D. Lim', predecessors: 'T-203 (FS)' },
-            { id: 'task_hcc_05', code: 'T-205', name: 'Curtain Wall Mullions & Low-E Double Glazing', category: 'Facade Works', startDate: '2026-08-15', endDate: '2026-11-30', duration: 105, progress: 10, isCritical: false, float: '14d', lead: 'Arch. G. Villanueva', predecessors: 'T-204 (SS+90d)' },
-            { id: 'task_hcc_06', code: 'T-206', name: 'Central Chiller Plant & Fire Sprinkler Mains', category: 'HVAC Mechanical', startDate: '2026-09-01', endDate: '2026-12-31', duration: 120, progress: 5, isCritical: false, float: '10d', lead: 'Engr. F. Pascual', predecessors: 'T-204 (SS+105d)' },
-            { id: 'task_hcc_07', code: 'T-207', name: 'Fit-out, Tenant Handover & Testing/Commissioning', category: 'Closeout', startDate: '2027-01-01', endDate: '2027-03-15', duration: 75, progress: 0, isCritical: true, float: '0d', lead: 'Engr. H. Bautista', predecessors: 'T-205, T-206 (FS)' }
-          ],
-          phases: [
-            { name: 'Site Clearing, Slope Stabilization & Deep Shoring', startDate: 'OCT 01, 2025', endDate: 'NOV 30, 2025', duration: 60, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. H. Bautista' },
-            { name: 'Bored Piling (1.2m dia) & Foundation Raft Pouring', startDate: 'DEC 01, 2025', endDate: 'FEB 15, 2026', duration: 75, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. R. Corpuz' },
-            { name: 'Basement 1 & 2 Podium Structural Concrete Frame', startDate: 'FEB 16, 2026', endDate: 'MAY 15, 2026', duration: 90, progress: 75, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. R. Corpuz' },
-            { name: 'Tower Levels 1 to 4 Reinforced Concrete Superstructure', startDate: 'MAY 16, 2026', endDate: 'AUG 31, 2026', duration: 105, progress: 35, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. D. Lim' },
-            { name: 'Aluminum Composite Cladding & Low-E Double Glazing', startDate: 'AUG 15, 2026', endDate: 'NOV 30, 2026', duration: 105, progress: 10, status: 'Upcoming', isCritical: false, float: '14d', lead: 'Arch. G. Villanueva' },
-            { name: 'Central Chiller Plant & Fire Sprinkler Mains', startDate: 'SEP 01, 2026', endDate: 'DEC 31, 2026', duration: 120, progress: 5, status: 'Upcoming', isCritical: false, float: '10d', lead: 'Engr. F. Pascual' },
-            { name: 'Fit-out, Tenant Handover & Testing/Commissioning', startDate: 'JAN 01, 2027', endDate: 'MAR 15, 2027', duration: 75, progress: 0, status: 'Pending', isCritical: true, float: '0d', lead: 'Engr. H. Bautista' }
-          ],
-          lookahead: [
-            { task: 'Podium Level 2 concrete casting with superplasticizer mix', engineer: 'Engr. R. Corpuz', zone: 'Podium Sector 1', dueDate: 'Tomorrow', critical: true },
-            { task: 'Rebar inspection for Shear Wall SW-3 up to Level 3', engineer: 'Engr. D. Lim', zone: 'Core Shaft A', dueDate: 'Thursday', critical: true },
-            { task: 'Delivery of 800kVA Standby Generator Set to Basement 2', engineer: 'Engr. K. Mendoza', zone: 'Electrical Vault', dueDate: 'Next Week', critical: false }
-          ]
-        },
-        documents: [
-          { id: 'DOC-HCC-001', title: 'Highland Commercial BOQ & Price Breakdown (Rev 3)', ref: 'BOQ-HCC26-R3', category: 'estimates', type: 'XLSX', size: '3.6 MB', version: 'Rev 3.0', status: 'Approved', date: 'JAN 15, 2026', summary: 'Grand detailed bill of quantities covering deep shoring, podium frame, and MEPFS infrastructure.' },
-          { id: 'DOC-HCC-002', title: 'Master Unit Cost Analysis for Deep Bored Piling', ref: 'DUPA-HCC-PILING', category: 'estimates', type: 'PDF', size: '2.9 MB', version: 'Rev 2.0', status: 'Approved', date: 'JAN 20, 2026', summary: 'Unit price build-up for 1200mm diameter bored piles down to 24m bedrock with sonic logging.' },
-          { id: 'DOC-HCC-003', title: 'Lump Sum EPC Contract & Supplemental Addendum', ref: 'CONTR-HCC-LUMP26', category: 'commercial', type: 'PDF', size: '2.5 MB', version: 'Rev 1.0', status: 'Approved', date: 'NOV 10, 2025', summary: 'Comprehensive Engineering, Procurement & Construction executed contract with escalation clauses.' },
-          { id: 'DOC-HCC-004', title: 'Architectural Exterior Facade & Curtain Wall Blueprints', ref: 'DWG-HCC-FACADE-01', category: 'drawings', type: 'DWG', size: '24.2 MB', version: 'Rev 2.2', status: 'Approved', date: 'DEC 05, 2025', summary: 'Architectural structural detail sheets for curtain wall mullions and thermal break glass panels.' },
-          { id: 'DOC-HCC-005', title: 'Monthly Progress Certificate #05 (₱18.9M Cumulative)', ref: 'CERT-HCC-BILL-05', category: 'billing', type: 'PDF', size: '1.4 MB', version: 'Rev 1.0', status: 'Approved', date: 'JUN 15, 2026', summary: 'Verified accomplishment certificate for basement podium works signed by consultant PMC.' },
-          { id: 'DOC-HCC-006', title: 'Retaining Wall Inclinometer & Settlement Monitoring Transmittal', ref: 'QA-GEO-MON-08', category: 'qaqc', type: 'PDF', size: '1.7 MB', version: 'Rev 1.0', status: 'Approved', date: 'MAY 30, 2026', summary: 'Geotechnical instrumentation log indicating zero lateral displacement on shored slope.' }
-        ]
-      },
-      {
-        id: 'MLH-2025-04',
-        name: 'Metro Logistics Hub & Warehouse',
-        shortName: 'Metro Logistics Hub',
-        code: 'MLH-2025-04',
-        location: 'Clark Special Economic Zone, Pampanga',
-        client: 'Trans-Island Logistics Corp.',
-        projectType: 'Industrial & Logistics Warehouse',
-        contractType: 'Turnkey Design-Build Agreement with Early Completion Bonus',
-        projectManager: 'Engr. E. Garcia, PE (PRC #0119284)',
-        scopeSummary: 'Modern industrial logistics terminal featuring 45-meter clear-span pre-engineered steel frames (PEB), FM Global-compliant standing seam insulated roofing, FF/FL 52 superflat laser-screeded post-tensioned floor slab for VNA forklifts, ESFR high-density sprinkler system, and 12 automated hydraulic loading dock levelers.',
-        status: 'Near Completion',
-        badge: 'ACTIVE',
-        totalBudget: 32200000.00,
-        plannedProgress: 85.0,
-        actualProgress: 87.2,
-        durationDays: 210,
-        elapsedDays: 185,
-        targetDate: 'NOV 20, 2026',
-        donutShares: { target: 48, projection: 24, expense: 20, variance: 8 },
-        categories: [
-          { name: 'Site Pavement & Access', planned: 6200000, actual: 6400000 },
-          { name: 'Structural PEB Steel', planned: 16800000, actual: 16500000 },
-          { name: 'Laser-Leveled Flooring', planned: 5200000, actual: 5300000 },
-          { name: 'High-Bay Fire Protection', planned: 4000000, actual: 3900000 }
-        ],
-        items: [
-          { avatar: 'EG', name: 'Engr. E. Garcia', desc: 'Pre-Engineered Building (PEB) Clear Span Frame', cat: 'Structural Steel', planned: 14500000, actual: 14200000, status: 'Completed' },
-          { avatar: 'TN', name: 'Engr. T. Navarro', desc: 'Superflat Laser-Screed Post-Tensioned Floor Slab', cat: 'Concrete Pavement', planned: 5200000, actual: 5300000, status: 'Completed' },
-          { avatar: 'SM', name: 'Engr. S. Mercado', desc: 'ESFR High-Density Fire Sprinkler System & Water Tank', cat: 'Fire Protection', planned: 4000000, actual: 3900000, status: 'In Progress' },
-          { avatar: 'AP', name: 'Arch. A. Perez', desc: 'Automated Loading Dock Levelers & Overhead Doors', cat: 'Special Equipment', planned: 3800000, actual: 3750000, status: 'In Progress' },
-          { avatar: 'CL', name: 'Engr. C. Luna', desc: 'Solar Ready Standing Seam Insulated Roof Panels', cat: 'Roofing Envelope', planned: 2900000, actual: 2850000, status: 'Completed' },
-          { avatar: 'RT', name: 'Engr. R. Torres', desc: 'Heavy Duty Container Yard Concrete Apron', cat: 'Civil Paving', planned: 1800000, actual: 1900000, status: 'In Progress' }
-        ],
-        boq: {
-          projectName: 'Metro Logistics Hub & Warehouse',
-          projectCode: 'MLH-2025-04',
-          items: [
-            { id: 'boq_mlh_01', code: '1.01', title: 'Site Grading, Heavy Container Staging Apron & Access Pavement', specification: 'Heavy duty 250mm thick concrete apron with welded wire mesh', category: 'Site Pavement & Access', qty: 3400, unit: 'sq.m', materialUnitCost: 1100.00, leUnitCost: 550.00, unitCost: 1650.00, grandTotalCost: 5610000.00, weight: 17.42, percentDone: 100, earnedValue: 5610000.00, condition: 'CPM', isCritical: false },
-            { id: 'boq_mlh_02', code: '2.01', title: '45m Clear-Span Pre-Engineered Building (PEB) Portal Frames', specification: 'ASTM A572 Grade 50 built-up tapered columns and rafters', category: 'Structural PEB Steel', qty: 165, unit: 'tons', materialUnitCost: 78000.00, leUnitCost: 22000.00, unitCost: 100000.00, grandTotalCost: 16500000.00, weight: 51.24, percentDone: 100, earnedValue: 16500000.00, condition: 'CPM', isCritical: true },
-            { id: 'boq_mlh_03', code: '3.01', title: 'FF/FL 52 Superflat Laser-Screeded Post-Tensioned Concrete Slab', specification: 'Post-tensioned unbounded monostrand tendons with burnished hardener finish', category: 'Laser-Leveled Flooring', qty: 2800, unit: 'sq.m', materialUnitCost: 1350.00, leUnitCost: 480.00, unitCost: 1830.00, grandTotalCost: 5124000.00, weight: 15.91, percentDone: 100, earnedValue: 5124000.00, condition: 'CPM', isCritical: true },
-            { id: 'boq_mlh_04', code: '4.01', title: 'ESFR High-Density Fire Sprinkler System & Deluge Pump Station', specification: 'UL/FM listed diesel fire pump 1500 GPM with K-17 high ceiling ESFR heads', category: 'High-Bay Fire Protection', qty: 1, unit: 'lot', materialUnitCost: 1850000.00, leUnitCost: 650000.00, unitCost: 2500000.00, grandTotalCost: 2500000.00, weight: 7.76, percentDone: 85, earnedValue: 2125000.00, condition: 'CPM', isCritical: true },
-            { id: 'boq_mlh_05', code: '5.01', title: '12-Bay Automated Hydraulic Loading Dock Levelers & Overhead Doors', specification: '6x8 ft 40,000 lbs hydraulic dock levelers with inflatable weather seals', category: 'Special Equipment', qty: 12, unit: 'sets', materialUnitCost: 145000.00, leUnitCost: 25000.00, unitCost: 170000.00, grandTotalCost: 2040000.00, weight: 6.34, percentDone: 70, earnedValue: 1428000.00, condition: 'CPM', isCritical: false },
-            { id: 'boq_mlh_06', code: '6.01', title: 'Solar-Ready Standing Seam Insulated Roof Panels & Gutters', specification: '0.6mm PVDF galvalume standing seam sheets with 50mm PIR insulation core', category: 'Roofing Envelope', qty: 3200, unit: 'sq.m', materialUnitCost: 100.00, leUnitCost: 33.125, unitCost: 133.125, grandTotalCost: 426000.00, weight: 1.32, percentDone: 100, earnedValue: 426000.00, condition: 'CPM', isCritical: false }
-          ]
-        },
-        timeline: {
-          criticalState: 'AHEAD OF SCHEDULE (+2.2%)',
-          ganttTasks: [
-            { id: 'task_mlh_01', code: 'T-301', name: 'Geotechnical Soil Improvement & Pad Footings', category: 'Civil Foundation', startDate: '2026-01-15', endDate: '2026-03-01', duration: 45, progress: 100, isCritical: true, float: '0d', lead: 'Engr. T. Navarro', predecessors: 'None' },
-            { id: 'task_mlh_02', code: 'T-302', name: 'PEB High-Clearance Portal Steel Frame Erection', category: 'Structural Steel', startDate: '2026-03-02', endDate: '2026-05-15', duration: 75, progress: 100, isCritical: true, float: '0d', lead: 'Engr. E. Garcia', predecessors: 'T-301 (FS)' },
-            { id: 'task_mlh_03', code: 'T-303', name: 'Standing Seam Roofing & Thermal Insulation', category: 'Roofing Envelope', startDate: '2026-04-15', endDate: '2026-06-15', duration: 60, progress: 100, isCritical: false, float: '10d', lead: 'Engr. C. Luna', predecessors: 'T-302 (SS+45d)' },
-            { id: 'task_mlh_04', code: 'T-304', name: 'FF/FL 52 Laser-Guided Concrete Slab Casting', category: 'Concrete Paving', startDate: '2026-05-20', endDate: '2026-07-10', duration: 50, progress: 100, isCritical: true, float: '0d', lead: 'Engr. T. Navarro', predecessors: 'T-302 (FS+5d)' },
-            { id: 'task_mlh_05', code: 'T-305', name: 'ESFR Fire Protection Deluge Pumps & Piping', category: 'Fire Protection', startDate: '2026-06-20', endDate: '2026-08-20', duration: 60, progress: 85, isCritical: true, float: '0d', lead: 'Engr. S. Mercado', predecessors: 'T-304 (SS+30d)' },
-            { id: 'task_mlh_06', code: 'T-306', name: 'Hydraulic Dock Levelers & Overhead Doors', category: 'Special Equipment', startDate: '2026-07-15', endDate: '2026-09-15', duration: 60, progress: 70, isCritical: false, float: '12d', lead: 'Arch. A. Perez', predecessors: 'T-304 (FS+5d)' },
-            { id: 'task_mlh_07', code: 'T-307', name: 'BFP Clearance, Hydro Testing & Final Commissioning', category: 'Handover', startDate: '2026-09-16', endDate: '2026-11-20', duration: 65, progress: 15, isCritical: true, float: '0d', lead: 'Engr. E. Garcia', predecessors: 'T-305, T-306 (FS)' }
-          ],
-          phases: [
-            { name: 'Geotechnical Soil Improvement & Heavy Pad Footings', startDate: 'JAN 15, 2026', endDate: 'MAR 01, 2026', duration: 45, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. T. Navarro' },
-            { name: 'PEB High-Clearance Portal Steel Frame Erection', startDate: 'MAR 02, 2026', endDate: 'MAY 15, 2026', duration: 75, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. E. Garcia' },
-            { name: 'FM-Approved Standing Seam Roofing & Thermal Insulation', startDate: 'APR 15, 2026', endDate: 'JUN 15, 2026', duration: 60, progress: 100, status: 'Completed', isCritical: false, float: '10d', lead: 'Engr. C. Luna' },
-            { name: 'FF/FL 50 Laser-Guided Concrete Slab Casting', startDate: 'MAY 20, 2026', endDate: 'JUL 10, 2026', duration: 50, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. T. Navarro' },
-            { name: 'ESFR Fire Protection Deluge Pumps & Piping Installation', startDate: 'JUN 20, 2026', endDate: 'AUG 20, 2026', duration: 60, progress: 85, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. S. Mercado' },
-            { name: 'Hydraulic Dock Levelers & Sectional Industrial Doors', startDate: 'JUL 15, 2026', endDate: 'SEP 15, 2026', duration: 60, progress: 70, status: 'In Progress', isCritical: false, float: '12d', lead: 'Arch. A. Perez' },
-            { name: 'Fire Bureau Clearance, Testing & Commissioning Handover', startDate: 'SEP 16, 2026', endDate: 'OCT 15, 2026', duration: 30, progress: 15, status: 'Upcoming', isCritical: true, float: '0d', lead: 'Engr. E. Garcia' }
-          ],
-          lookahead: [
-            { task: 'Hydrostatic pressure testing of 8-inch main fire ring pipe', engineer: 'Engr. S. Mercado', zone: 'Warehouse Bay 1-6', dueDate: 'This Thursday', critical: true },
-            { task: 'Installation of high-speed overhead roll-up dock doors #7-#12', engineer: 'Arch. A. Perez', zone: 'South Loading Bay', dueDate: 'Next Tuesday', critical: false },
-            { task: 'Final joint sealant application on heavy apron pavement', engineer: 'Engr. R. Torres', zone: 'Trailer Staging Yard', dueDate: 'In 12 Days', critical: false }
-          ]
-        },
-        documents: [
-          { id: 'DOC-MLH-001', title: 'Complete BOQ & Schedule of Unit Rates (Final)', ref: 'BOQ-MLH25-FINAL', category: 'estimates', type: 'XLSX', size: '2.1 MB', version: 'Rev 2.0', status: 'Approved', date: 'DEC 28, 2025', summary: 'Approved bill of quantities with itemized pricing for warehouse portal structure and paving.' },
-          { id: 'DOC-MLH-002', title: 'PEB Manufacturer Structural Engineering Calculation Sheets', ref: 'CALC-PEB-SPAN45M', category: 'estimates', type: 'PDF', size: '5.2 MB', version: 'Rev 1.0', status: 'Approved', date: 'JAN 10, 2026', summary: 'Certified structural calculations for 45-meter clear span high-tensile steel frames.' },
-          { id: 'DOC-MLH-003', title: 'Logistics Facility Turnkey Construction Agreement', ref: 'CONTR-TRANS-MLH', category: 'commercial', type: 'PDF', size: '1.9 MB', version: 'Rev 1.0', status: 'Approved', date: 'DEC 15, 2025', summary: 'Full turnkey general construction contract with incentive bonus for early completion.' },
-          { id: 'DOC-MLH-004', title: 'Architectural Master Site & Warehouse IFC Blueprints', ref: 'DWG-MLH-IFC-FULL', category: 'drawings', type: 'DWG', size: '16.4 MB', version: 'Rev 1.3', status: 'Approved', date: 'JAN 08, 2026', summary: 'As-issued for construction warehouse floor layout, dock elevations, and roof plans.' },
-          { id: 'DOC-MLH-005', title: 'Monthly Progress Billing #06 (87.2% Accomplishment)', ref: 'CERT-MLH-BILL-06', category: 'billing', type: 'PDF', size: '1.2 MB', version: 'Rev 1.0', status: 'Approved', date: 'JUL 15, 2026', summary: 'Certified bill showing ₱28.1M disbursed out of ₱32.2M total contract value.' },
-          { id: 'DOC-MLH-006', title: 'Floor Flatness / Levelness (FF/FL 52) Certified Survey Report', ref: 'QA-SURV-FLAT-01', category: 'qaqc', type: 'PDF', size: '2.3 MB', version: 'Rev 1.0', status: 'Approved', date: 'JUN 28, 2026', summary: 'Laser profiling report verifying floor tolerances meet high-reach VNA forklift specifications.' }
-        ]
-      },
-      {
-        id: 'RTO-2026-C2',
-        name: 'Riverside Terraces & Residential Overpass',
-        shortName: 'Riverside Terraces',
-        code: 'RTO-2026-C2',
-        location: 'Riverside Drive, Marikina',
-        client: 'Metropolitan Public Works Division',
-        projectType: 'Civil Infrastructure & Bridge Engineering',
-        contractType: 'Government Infrastructure Contract (DPWH Standard Specifications)',
-        projectManager: 'Engr. P. Alcantara, PE (PRC #0076231)',
-        scopeSummary: 'Urban infrastructure connectivity project comprising heavy 1,500mm bored river pier foundations, dewatering cofferdams, precast AASHTO Type IV prestressed concrete bridge girders, reinforced deck slab, MSE approach retaining walls, pedestrian safety barriers, and solar highway illumination.',
-        status: 'Procurement & Mobilization',
-        badge: 'ACTIVE',
-        totalBudget: 21400000.00,
-        plannedProgress: 18.0,
-        actualProgress: 15.0,
-        durationDays: 300,
-        elapsedDays: 50,
-        targetDate: 'JAN 18, 2027',
-        donutShares: { target: 52, projection: 22, expense: 16, variance: 10 },
-        categories: [
-          { name: 'Topographic Survey & ROW', planned: 2800000, actual: 2600000 },
-          { name: 'Bored Piles & Pier Abutments', planned: 9200000, actual: 8400000 },
-          { name: 'Precast AASHTO Girders', planned: 6000000, actual: 5200000 },
-          { name: 'Bridge Deck & Safety Barriers', planned: 3400000, actual: 2800000 }
-        ],
-        items: [
-          { avatar: 'PA', name: 'Engr. P. Alcantara', desc: 'Bored Piling (1500mm dia) for River Piers', cat: 'Foundation Works', planned: 5400000, actual: 5100000, status: 'In Progress' },
-          { avatar: 'CN', name: 'Engr. C. Navarro', desc: 'Casting Yard Setup for Precast AASHTO Type IV Girders', cat: 'Precast Civil', planned: 3600000, actual: 3200000, status: 'In Progress' },
-          { avatar: 'RD', name: 'Engr. R. Domingo', desc: 'Sheet Piling Coffer Dam & Dewatering System', cat: 'River Works', planned: 2800000, actual: 2600000, status: 'Completed' },
-          { avatar: 'BL', name: 'Engr. B. Laurel', desc: 'Approach Embankment Retaining Walls & MSE Wire Mesh', cat: 'Civil Earthworks', planned: 4200000, actual: 3800000, status: 'Review' },
-          { avatar: 'JO', name: 'Arch. J. Ocampo', desc: 'Architectural Pedestrian Barrier & Lighting Post Specs', cat: 'Bridge Finishes', planned: 2500000, actual: 2200000, status: 'Pending' },
-          { avatar: 'CS', name: 'Engr. C. Soriano', desc: 'Traffic Management System & Temporary Detour Route', cat: 'Traffic Control', planned: 1200000, actual: 1100000, status: 'Completed' }
-        ],
-        boq: {
-          projectName: 'Riverside Terraces & Residential Overpass',
-          projectCode: 'RTO-2026-C2',
-          items: [
-            { id: 'boq_rto_01', code: '1.01', title: 'Topographic Survey, ROW Clearance & Traffic Detour Setup', specification: 'Barangay coordination, high-intensity barricades & solar warning flasher lights', category: 'Topographic Survey & ROW', qty: 1, unit: 'lot', materialUnitCost: 650000.00, leUnitCost: 850000.00, unitCost: 1500000.00, grandTotalCost: 1500000.00, weight: 7.01, percentDone: 100, earnedValue: 1500000.00, condition: 'CPM', isCritical: true },
-            { id: 'boq_rto_02', code: '2.01', title: 'Sheet Pile Cofferdams & Deep Well Dewatering System', specification: 'Type III steel sheet piles driven to 12m with submersible pumps', category: 'Topographic Survey & ROW', qty: 1, unit: 'lot', materialUnitCost: 550000.00, leUnitCost: 650000.00, unitCost: 1200000.00, grandTotalCost: 1200000.00, weight: 5.61, percentDone: 70, earnedValue: 840000.00, condition: 'CPM', isCritical: true },
-            { id: 'boq_rto_03', code: '3.01', title: '1500mm Bored River Pier Foundations & Tremie Pouring', specification: 'Bored piles to 28m depth with C35 tremie underwater mix & sonic testing', category: 'Bored Piles & Pier Abutments', qty: 16, unit: 'piles', materialUnitCost: 310000.00, leUnitCost: 190000.00, unitCost: 500000.00, grandTotalCost: 8000000.00, weight: 37.38, percentDone: 20, earnedValue: 1600000.00, condition: 'CPM', isCritical: true },
-            { id: 'boq_rto_04', code: '4.01', title: 'Precast Prestressed AASHTO Type IV Girder Fabrication', specification: '30-meter precast girders with 7-wire low relaxation prestressing strands', category: 'Precast AASHTO Girders', qty: 18, unit: 'girders', materialUnitCost: 240000.00, leUnitCost: 85000.00, unitCost: 325000.00, grandTotalCost: 5850000.00, weight: 27.34, percentDone: 5, earnedValue: 292500.00, condition: 'CPM', isCritical: false },
-            { id: 'boq_rto_05', code: '5.01', title: 'Reinforced Deck Slab (3000 PSI) & Elastomeric Bearings', specification: 'Composite reinforced concrete deck with laminated neoprene bearings', category: 'Bridge Deck & Safety Barriers', qty: 420, unit: 'cu.m', materialUnitCost: 5200.00, leUnitCost: 2800.00, unitCost: 8000.00, grandTotalCost: 3360000.00, weight: 15.70, percentDone: 0, earnedValue: 0.00, condition: 'CPM', isCritical: true },
-            { id: 'boq_rto_06', code: '6.01', title: 'Pedestrian Crash Barriers, Solar Lighting & Asphalt Course', specification: 'TL-4 crash tested concrete barriers & 50mm asphalt wearing course', category: 'Bridge Deck & Safety Barriers', qty: 1, unit: 'lot', materialUnitCost: 950000.00, leUnitCost: 540000.00, unitCost: 1490000.00, grandTotalCost: 1490000.00, weight: 6.96, percentDone: 0, earnedValue: 0.00, condition: 'CPM', isCritical: true }
-          ]
-        },
-        timeline: {
-          criticalState: 'MOBILIZATION (ON SCHEDULE)',
-          ganttTasks: [
-            { id: 'task_rto_01', code: 'T-401', name: 'ROW Clearance, Utility Relocation & Traffic Detour', category: 'Civil Preparation', startDate: '2026-05-01', endDate: '2026-06-15', duration: 45, progress: 100, isCritical: true, float: '0d', lead: 'Engr. C. Soriano', predecessors: 'None' },
-            { id: 'task_rto_02', code: 'T-402', name: 'Riverbed Sheet Pile Cofferdams & Dewatering', category: 'River Works', startDate: '2026-06-01', endDate: '2026-07-15', duration: 45, progress: 70, isCritical: true, float: '0d', lead: 'Engr. R. Domingo', predecessors: 'T-401 (SS+30d)' },
-            { id: 'task_rto_03', code: 'T-403', name: '1.5m Diameter Bored Piles & Pier Abutment Casting', category: 'Foundation Piles', startDate: '2026-07-01', endDate: '2026-09-30', duration: 90, progress: 20, isCritical: true, float: '0d', lead: 'Engr. P. Alcantara', predecessors: 'T-402 (SS+30d)' },
-            { id: 'task_rto_04', code: 'T-404', name: 'Precast AASHTO Type IV Girder Fabrication', category: 'Precast Civil', startDate: '2026-08-01', endDate: '2026-10-31', duration: 90, progress: 5, isCritical: false, float: '15d', lead: 'Engr. C. Navarro', predecessors: 'T-403 (SS+30d)' },
-            { id: 'task_rto_05', code: 'T-405', name: 'Girder Launching & Tandem Crane Installation', category: 'Superstructure', startDate: '2026-11-01', endDate: '2026-11-30', duration: 30, progress: 0, isCritical: true, float: '0d', lead: 'Engr. P. Alcantara', predecessors: 'T-403, T-404 (FS)' },
-            { id: 'task_rto_06', code: 'T-406', name: 'Cast-in-Place Deck Slab & Waterproofing', category: 'Bridge Deck', startDate: '2026-12-01', endDate: '2026-12-31', duration: 30, progress: 0, isCritical: true, float: '0d', lead: 'Engr. C. Navarro', predecessors: 'T-405 (FS)' },
-            { id: 'task_rto_07', code: 'T-407', name: 'Asphalt Wearing Course, Safety Barriers & Load Testing', category: 'Finishes & Commissioning', startDate: '2027-01-01', endDate: '2027-01-18', duration: 18, progress: 0, isCritical: true, float: '0d', lead: 'Engr. P. Alcantara', predecessors: 'T-406 (FS)' }
-          ],
-          phases: [
-            { name: 'ROW Clearance, Utility Relocation & Traffic Detour', startDate: 'MAY 01, 2026', endDate: 'JUN 15, 2026', duration: 45, progress: 100, status: 'Completed', isCritical: true, float: '0d', lead: 'Engr. C. Soriano' },
-            { name: 'Riverbed Sheet Pile Cofferdams & Dewatering Wellpoints', startDate: 'JUN 01, 2026', endDate: 'JUL 15, 2026', duration: 45, progress: 70, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. R. Domingo' },
-            { name: '1.5m Diameter Bored Piles & Pier Abutment Casting', startDate: 'JUL 01, 2026', endDate: 'SEP 30, 2026', duration: 90, progress: 20, status: 'In Progress', isCritical: true, float: '0d', lead: 'Engr. P. Alcantara' },
-            { name: 'Precast Prestressed AASHTO Type IV Girder Fabrication', startDate: 'AUG 01, 2026', endDate: 'OCT 31, 2026', duration: 90, progress: 5, status: 'Upcoming', isCritical: false, float: '15d', lead: 'Engr. C. Navarro' },
-            { name: 'Girder Launching & Bearings Installation via Tandem Crane', startDate: 'NOV 01, 2026', endDate: 'NOV 30, 2026', duration: 30, progress: 0, status: 'Pending', isCritical: true, float: '0d', lead: 'Engr. P. Alcantara' },
-            { name: 'Cast-in-Place Deck Slab, Expansion Joints & Waterproofing', startDate: 'DEC 01, 2026', endDate: 'DEC 31, 2026', duration: 30, progress: 0, status: 'Pending', isCritical: true, float: '0d', lead: 'Engr. C. Navarro' },
-            { name: 'Asphalt Wearing Course, Railings, Lighting & Load Testing', startDate: 'JAN 01, 2027', endDate: 'JAN 18, 2027', duration: 18, progress: 0, status: 'Pending', isCritical: true, float: '0d', lead: 'Engr. P. Alcantara' }
-          ],
-          lookahead: [
-            { task: 'River pier cofferdam seal concrete pouring (Tremie method)', engineer: 'Engr. R. Domingo', zone: 'River Pier 2', dueDate: 'This Friday', critical: true },
-            { task: 'Sonic logging test on test bored pile TP-01', engineer: 'Engr. P. Alcantara', zone: 'Abutment A', dueDate: 'Next Wednesday', critical: true },
-            { task: 'Tensioning calibration check for girder prestressing jacks', engineer: 'Engr. C. Navarro', zone: 'Offsite Casting Yard', dueDate: 'In 2 Weeks', critical: false }
-          ]
-        },
-        documents: [
-          { id: 'DOC-RTO-001', title: 'DPWH Formatted BOQ & Unit Price Schedule', ref: 'BOQ-DPWH-RTO26', category: 'estimates', type: 'XLSX', size: '1.9 MB', version: 'Rev 1.0', status: 'Approved', date: 'APR 15, 2026', summary: 'Standardized infrastructure bill of quantities adhering to DPWH Standard Specs 2013 edition.' },
-          { id: 'DOC-RTO-002', title: 'Hydraulic & Scour Analysis for Bridge Piers', ref: 'CALC-HYDR-SCOUR-02', category: 'estimates', type: 'PDF', size: '3.8 MB', version: 'Rev 1.0', status: 'Approved', date: 'MAR 22, 2026', summary: '50-year flood event hydrological study ensuring pier foundation depths exceed maximum scour depth.' },
-          { id: 'DOC-RTO-003', title: 'Notice to Proceed & Signed Bridge Works Agreement', ref: 'CONTR-MPW-RTO-01', category: 'commercial', type: 'PDF', size: '1.6 MB', version: 'Rev 1.0', status: 'Approved', date: 'APR 28, 2026', summary: 'Government public works infrastructure contract with compliance warranties.' },
-          { id: 'DOC-RTO-004', title: 'Structural Bridge General Plans & Girder Details', ref: 'DWG-BRDG-RTO-IFC', category: 'drawings', type: 'DWG', size: '14.8 MB', version: 'Rev 1.0', status: 'Approved', date: 'APR 10, 2026', summary: 'Civil 3D bridge alignments, superstructure longitudinal profiles, and rebar details.' },
-          { id: 'DOC-RTO-005', title: 'First Advance Mobilization Billing & Guarantee Bond', ref: 'CERT-MOB-BILL-01', category: 'billing', type: 'PDF', size: '1.1 MB', version: 'Rev 1.0', status: 'Approved', date: 'MAY 15, 2026', summary: '15% Advance payment billing accompanied by valid surety bond.' }
-        ]
       }
     ];
+
+    // Preserve default Sports Club template for resets
+    const FCL_DEFAULT_SAMPLE_PROJECT = JSON.parse(JSON.stringify(FCL_PROJECT_CATALOG[0]));
 
     let currentProjectId = 'PRJ-2026-001';
     let currentTabKey = 'home';
@@ -3178,7 +2983,9 @@
         if (savedCatalog) {
           const list = JSON.parse(savedCatalog);
           if (Array.isArray(list) && list.length > 0) {
-            list.forEach(savedProj => {
+            // Automatically clean out legacy sample projects that were deleted
+            const cleanedList = list.filter(p => !['HCC-2026-B1', 'MLH-2025-04', 'RTO-2026-C2'].includes(p.id));
+            cleanedList.forEach(savedProj => {
               const idx = FCL_PROJECT_CATALOG.findIndex(p => p.id === savedProj.id);
               if (idx !== -1) {
                 FCL_PROJECT_CATALOG[idx] = Object.assign({}, FCL_PROJECT_CATALOG[idx], savedProj);
@@ -3186,6 +2993,8 @@
                 FCL_PROJECT_CATALOG.push(savedProj);
               }
             });
+            // Update storage with cleaned catalog so deleted samples never return
+            localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
           }
         } else {
           const stored = localStorage.getItem('FCL_CUSTOM_PROJECTS');
@@ -3193,7 +3002,7 @@
             const list = JSON.parse(stored);
             if (Array.isArray(list)) {
               list.forEach(p => {
-                if (!FCL_PROJECT_CATALOG.some(ex => ex.id === p.id)) {
+                if (!['HCC-2026-B1', 'MLH-2025-04', 'RTO-2026-C2'].includes(p.id) && !FCL_PROJECT_CATALOG.some(ex => ex.id === p.id)) {
                   FCL_PROJECT_CATALOG.push(p);
                 }
               });
@@ -3403,7 +3212,7 @@
         } else {
           localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
         }
-        const customProjects = FCL_PROJECT_CATALOG.filter(p => !['PRJ-2026-001', 'HCC-2026-B1', 'MLH-2025-04', 'RTO-2026-C2'].includes(p.id));
+        const customProjects = FCL_PROJECT_CATALOG.filter(p => p.id !== 'PRJ-2026-001');
         localStorage.setItem('FCL_CUSTOM_PROJECTS', JSON.stringify(customProjects));
       } catch (err) {
         console.warn('Could not persist project', err);
@@ -3430,8 +3239,13 @@
           <div class="${cardClass}" id="sidebarProjCard_${p.id}">
             <div class="project-entry-header" onclick="selectProject('${p.id}', 'information')">
               <div class="project-entry-title">
-                <span>${escapeHtml(p.shortName || p.name)}</span>
-                <span style="font-size: 9px; padding: 1px 5px; border-radius: 4px; background: ${isCurrent ? '#2563eb' : '#e2e8f0'}; color: ${isCurrent ? '#ffffff' : '#475569'}; font-weight: 700;">${isCurrent ? 'ACTIVE' : p.badge}</span>
+                <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:130px;" title="${escapeHtml(p.shortName || p.name)}">${escapeHtml(p.shortName || p.name)}</span>
+                <div style="display:flex; align-items:center; gap:4px; flex-shrink:0;">
+                  <span style="font-size: 9px; padding: 1px 5px; border-radius: 4px; background: ${isCurrent ? '#2563eb' : '#e2e8f0'}; color: ${isCurrent ? '#ffffff' : '#475569'}; font-weight: 700;">${isCurrent ? 'ACTIVE' : p.badge}</span>
+                  <button class="btn-delete-proj-icon" type="button" title="Delete ${escapeHtml(p.shortName || p.name)}" onclick="event.stopPropagation(); deleteProject('${p.id}')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  </button>
+                </div>
               </div>
               <div class="project-entry-code">${escapeHtml(p.code)} • ${p.actualProgress}% Done</div>
             </div>
@@ -3459,6 +3273,89 @@
       });
       container.innerHTML = html;
     }
+
+    function deleteProject(projId) {
+      if (!projId) return;
+      const proj = FCL_PROJECT_CATALOG.find(p => p.id === projId);
+      if (!proj) {
+        alert('Project not found.');
+        return;
+      }
+
+      if (FCL_PROJECT_CATALOG.length <= 1) {
+        const resetConf = confirm(`"${proj.shortName || proj.name}" is the only project in your catalog.\n\nDeleting it will reset the catalog with a clean default template for "Sports Club & Recreation". Do you want to proceed?`);
+        if (!resetConf) return;
+        FCL_PROJECT_CATALOG = [ JSON.parse(JSON.stringify(FCL_DEFAULT_SAMPLE_PROJECT)) ];
+        currentProjectId = FCL_PROJECT_CATALOG[0].id;
+        try {
+          localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
+          localStorage.removeItem('FCL_CUSTOM_PROJECTS');
+          if (typeof FCLStorage !== 'undefined') {
+            FCLStorage.saveProjectCatalog(FCL_PROJECT_CATALOG);
+            FCLStorage.setActiveProjectId(currentProjectId);
+          }
+        } catch (e) {}
+        populateProjectSelector();
+        renderSidebarProjectList();
+        updateProjectCountBadge();
+        selectProject(currentProjectId, currentTabKey);
+        showTimelineSaveToast('Catalog reset to default template.');
+        return;
+      }
+
+      const confirmMsg = `Are you sure you want to delete "${proj.shortName || proj.name}" (${proj.code})?\n\nThis will permanently remove this project and its associated records.`;
+      if (!confirm(confirmMsg)) return;
+
+      // Remove from catalog
+      FCL_PROJECT_CATALOG = FCL_PROJECT_CATALOG.filter(p => p.id !== projId);
+
+      // Persist changes
+      try {
+        localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
+        const customProjects = FCL_PROJECT_CATALOG.filter(p => p.id !== 'PRJ-2026-001');
+        localStorage.setItem('FCL_CUSTOM_PROJECTS', JSON.stringify(customProjects));
+
+        // Clean up project-scoped storage items
+        localStorage.removeItem(`FCL_PROJ_${projId}_boq`);
+        localStorage.removeItem(`FCL_PROJ_${projId}_ganttSettings`);
+        localStorage.removeItem(`FCL_PROJ_${projId}_info`);
+
+        if (typeof FCLStorage !== 'undefined') {
+          if (typeof FCLStorage.deleteProject === 'function') {
+            FCLStorage.deleteProject(projId);
+          } else {
+            FCLStorage.saveProjectCatalog(FCL_PROJECT_CATALOG);
+          }
+        }
+
+        if (typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured()) {
+          FCLFirebaseSync.queueCatalogSync(FCL_PROJECT_CATALOG);
+        }
+      } catch (err) {
+        console.warn('Could not persist project deletion:', err);
+      }
+
+      // If active project was deleted, switch to the first remaining project
+      if (currentProjectId === projId) {
+        currentProjectId = FCL_PROJECT_CATALOG[0].id;
+        if (typeof FCLStorage !== 'undefined') {
+          FCLStorage.setActiveProjectId(currentProjectId);
+        }
+      }
+
+      populateProjectSelector();
+      renderSidebarProjectList();
+      updateProjectCountBadge();
+      selectProject(currentProjectId, currentTabKey);
+
+      showTimelineSaveToast(`🗑️ Project "${proj.shortName || proj.name}" was successfully deleted.`);
+    }
+    window.deleteProject = deleteProject;
+
+    function deleteCurrentProject() {
+      deleteProject(currentProjectId);
+    }
+    window.deleteCurrentProject = deleteCurrentProject;
 
     function toggleProjectListMenu() {
       const container = document.getElementById('projectListDropdownContainer');
@@ -3775,79 +3672,8 @@
         if (modal) modal.style.display = 'flex';
       }
       else if (actionKey === 'manpower') {
-        if (iconEl) iconEl.textContent = '👷';
-        if (titleEl) titleEl.textContent = 'Manpower Deployment & Labor Utilization';
-        if (subEl) subEl.textContent = `${proj.name} • Active Field Crews & Daily Force Account Log`;
-        if (bodyEl) {
-          bodyEl.innerHTML = `
-            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-bottom:16px;">
-              <div style="background:#eff6ff; padding:12px; border-radius:6px; border:1px solid #bfdbfe;">
-                <div style="font-size:10px; font-weight:700; color:#1e40af; text-transform:uppercase;">Active Labor Force</div>
-                <div style="font-size:18px; font-weight:800; color:#1d4ed8; margin-top:2px;">48 Workers</div>
-                <div style="font-size:10.5px; color:#2563eb;">On-site Today</div>
-              </div>
-              <div style="background:#f0fdf4; padding:12px; border-radius:6px; border:1px solid #bbf7d0;">
-                <div style="font-size:10px; font-weight:700; color:#166534; text-transform:uppercase;">Total Man-Hours</div>
-                <div style="font-size:18px; font-weight:800; color:#15803d; margin-top:2px;">18,450 Hrs</div>
-                <div style="font-size:10.5px; color:#16a34a;">Cumulative to date</div>
-              </div>
-              <div style="background:#fefce8; padding:12px; border-radius:6px; border:1px solid #fef08a;">
-                <div style="font-size:10px; font-weight:700; color:#854d0e; text-transform:uppercase;">Safety Record</div>
-                <div style="font-size:18px; font-weight:800; color:#a16207; margin-top:2px;">180 Days</div>
-                <div style="font-size:10.5px; color:#ca8a04;">Zero Lost-Time Injury</div>
-              </div>
-            </div>
-            <table style="width:100%; border-collapse:collapse; font-size:12px; border:1px solid var(--line); border-radius:6px; overflow:hidden;">
-              <thead style="background:#f8fafc; color:#475569; font-weight:700;">
-                <tr>
-                  <th style="padding:8px 12px; text-align:left; border-bottom:1px solid var(--line);">Trade Classification</th>
-                  <th style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--line);">Headcount</th>
-                  <th style="padding:8px 12px; text-align:right; border-bottom:1px solid var(--line);">Daily Wage Rate</th>
-                  <th style="padding:8px 12px; text-align:right; border-bottom:1px solid var(--line);">Daily Total (₱)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">General Foremen / In-Charge</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">4 Pax</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ 1,100.00</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700;">₱ 4,400.00</td>
-                </tr>
-                <tr>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Skilled Carpenters &amp; Formwork</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">12 Pax</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ 850.00</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700;">₱ 10,200.00</td>
-                </tr>
-                <tr>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Rebar Steelmen &amp; Cut/Bend Crew</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">10 Pax</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ 850.00</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700;">₱ 8,500.00</td>
-                </tr>
-                <tr>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">Masons &amp; Concrete Finishers</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">8 Pax</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ 800.00</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700;">₱ 6,400.00</td>
-                </tr>
-                <tr>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">MEPFS Electricians &amp; Plumbers</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">6 Pax</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ 850.00</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700;">₱ 5,100.00</td>
-                </tr>
-                <tr>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; font-weight:600;">General Civil Helpers &amp; Laborers</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center;">8 Pax</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right;">₱ 610.00</td>
-                  <td style="padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:right; font-weight:700;">₱ 4,880.00</td>
-                </tr>
-              </tbody>
-            </table>
-          `;
-        }
-        if (modal) modal.style.display = 'flex';
+        switchMainProjectTab('timeline');
+        switchTimelineSubTab('manpower');
       }
       else if (actionKey === 'equipment') {
         if (iconEl) iconEl.textContent = '🚜';
@@ -4481,7 +4307,7 @@
       // Persist to localStorage
       try {
         localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
-        const customProjects = FCL_PROJECT_CATALOG.filter(p => !['PRJ-2026-001', 'HCC-2026-B1', 'MLH-2025-04', 'RTO-2026-C2'].includes(p.id));
+        const customProjects = FCL_PROJECT_CATALOG.filter(p => p.id !== 'PRJ-2026-001');
         localStorage.setItem('FCL_CUSTOM_PROJECTS', JSON.stringify(customProjects));
       } catch (err) {
         console.warn('Could not persist project catalog', err);
@@ -4542,7 +4368,8 @@
         gantt: document.getElementById('tlSubBtn_gantt'),
         boq: document.getElementById('tlSubBtn_boq'),
         phases: document.getElementById('tlSubBtn_phases'),
-        lookahead: document.getElementById('tlSubBtn_lookahead')
+        lookahead: document.getElementById('tlSubBtn_lookahead'),
+        manpower: document.getElementById('tlSubBtn_manpower')
       };
       Object.keys(subBtns).forEach(k => {
         if (subBtns[k]) {
@@ -4555,7 +4382,8 @@
         gantt: document.getElementById('timelineSubView_gantt'),
         boq: document.getElementById('timelineSubView_boq'),
         phases: document.getElementById('timelineSubView_phases'),
-        lookahead: document.getElementById('timelineSubView_lookahead')
+        lookahead: document.getElementById('timelineSubView_lookahead'),
+        manpower: document.getElementById('timelineSubView_manpower')
       };
       Object.keys(subViews).forEach(k => {
         if (subViews[k]) {
@@ -4568,6 +4396,13 @@
         renderInteractiveGanttChart(proj);
       } else if (currentTimelineSubTab === 'boq') {
         renderProjectBOQTable(proj);
+      } else if (currentTimelineSubTab === 'manpower') {
+        if (window.ManpowerUtilization) {
+          if (typeof window.ManpowerUtilization.adaptAndSyncWithGanttTimeline === 'function') {
+            window.ManpowerUtilization.adaptAndSyncWithGanttTimeline(true);
+          }
+          window.ManpowerUtilization.render('homeManpowerContainer', currentProjectId);
+        }
       }
     }
 
@@ -4984,6 +4819,39 @@
       document.addEventListener('mouseup', onPointerUp);
       document.addEventListener('touchend', onPointerUp);
     }
+
+    function getGanttTimelineRange() {
+      const proj = getProject(currentProjectId);
+      if (!proj || !proj.timeline) return null;
+      let tasks = proj.timeline.ganttTasks || [];
+      let minDate = null;
+      let maxDate = null;
+      tasks.forEach(t => {
+        const s = new Date(t.startDate);
+        const e = new Date(t.endDate);
+        if (!isNaN(s.getTime())) {
+          if (!minDate || s < minDate) minDate = s;
+        }
+        if (!isNaN(e.getTime())) {
+          if (!maxDate || e > maxDate) maxDate = e;
+        }
+      });
+      if (!minDate) return null;
+      const fmt = (d) => {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+      };
+      return {
+        startDate: fmt(minDate),
+        endDate: maxDate ? fmt(maxDate) : fmt(minDate),
+        startDateObj: minDate,
+        endDateObj: maxDate,
+        scale: currentGanttScale || 'weeks'
+      };
+    }
+    window.getGanttTimelineRange = getGanttTimelineRange;
 
     /* --------------------------------------------------------------------------
        BILL OF QUANTITY (BOQ) TABLE & ESTIMATE RENDERER

@@ -268,6 +268,40 @@
     #ganttTaskTable, #qtyTaskTable {
       min-width: 0 !important;
     }
+    #ganttTaskTable thead tr:not(.gantt-coord-header-row) th,
+    #qtyTaskTable thead tr:not(.gantt-coord-header-row) th {
+      white-space: normal !important;
+      word-wrap: break-word !important;
+      overflow-wrap: anywhere !important;
+      word-break: break-word !important;
+      line-height: 1.25 !important;
+      vertical-align: middle !important;
+      padding: 2px 8px 2px 4px !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+      hyphens: auto !important;
+    }
+    #ganttTaskTable thead th .gantt-th-text,
+    #qtyTaskTable thead th .gantt-th-text {
+      display: block !important;
+      width: 100% !important;
+      white-space: normal !important;
+      word-wrap: break-word !important;
+      overflow-wrap: anywhere !important;
+      word-break: break-word !important;
+      line-height: 1.25 !important;
+      hyphens: auto !important;
+    }
+    .gantt-row td.gantt-wrap-cell,
+    #ganttTaskTable tbody td.gantt-wrap-cell,
+    #qtyTaskTable tbody td.gantt-wrap-cell {
+      white-space: normal !important;
+      word-wrap: break-word !important;
+      overflow-wrap: anywhere !important;
+      word-break: break-word !important;
+      line-height: 1.25 !important;
+      hyphens: auto !important;
+    }
     th, td {
       border: 1px solid var(--line);
       padding: 2px 4px;
@@ -432,6 +466,10 @@
     .boq-multiplier-field input { width: 2cm; height: 22px; border: 1px solid var(--line); border-radius: 4px; padding: 2px 18px 2px 4px; text-align: center; font-size: 11px; background: #fff; appearance: textfield; -moz-appearance: textfield; }
     .boq-multiplier-field input::-webkit-outer-spin-button,
     .boq-multiplier-field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .boq-cost-display-field input { width: auto !important; min-width: 110px; max-width: 140px; padding: 2px 6px !important; text-align: right; font-weight: 700; color: #0f172a; background: #f8fafc; border: 1px solid var(--line); cursor: default; }
+    .btn-cost-view { height: 22px; padding: 0 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; border: 1px solid var(--line, #cbd5e1); border-radius: 4px; background: #f1f5f9; color: var(--muted, #475569); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; transition: all 0.15s ease-in-out; }
+    .btn-cost-view:hover { background: #e2e8f0; color: #0f172a; border-color: #94a3b8; }
+    .btn-cost-view.active { background: #2563eb; color: #ffffff; border-color: #1d4ed8; box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2); }
 
     .boq-summary-btn { margin-left: auto; white-space: nowrap; }
     .summary-sheet-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
@@ -467,6 +505,7 @@
       background: var(--line, #cfd8e3);
       flex-shrink: 0;
       user-select: none;
+      touch-action: none;
       transition: background 0.15s;
       z-index: 25;
       display: flex;
@@ -493,8 +532,14 @@
       cursor: col-resize !important;
       user-select: none !important;
     }
+    .gantt-right-panel, .qty-right-panel {
+      margin-left: 5mm;
+      border-left: 1px solid var(--line, #cfd8e3);
+    }
     .gantt-row {
       height: 36px;
+      min-height: 36px;
+      max-height: 36px;
       box-sizing: border-box;
     }
     .gantt-container th, .gantt-container td,
@@ -504,6 +549,8 @@
     }
     .gantt-row td {
       height: 36px;
+      min-height: 36px;
+      max-height: 36px;
       padding: 0 4px !important;
       vertical-align: middle;
       font-size: 11px;
@@ -531,6 +578,8 @@
     }
     .gantt-timeline-row {
       height: 36px;
+      min-height: 36px;
+      max-height: 36px;
       box-sizing: border-box;
       border-bottom: 1px solid var(--line);
       position: relative;
@@ -538,6 +587,7 @@
       display: flex !important;
       flex-wrap: nowrap !important;
       min-width: 100% !important;
+      overflow: hidden !important;
     }
     .gantt-grid-days {
       background-image: linear-gradient(90deg, var(--line) 1px, transparent 1px);
@@ -2949,6 +2999,17 @@
       position: relative !important;
     }
 
+    #boqTable tbody td.copied-cell,
+    #analysisTable tbody td.copied-cell,
+    #priceListTable tbody td.copied-cell,
+    #boqSummaryTable tbody td.copied-cell,
+    #ganttTaskTable tbody td.copied-cell,
+    #qtyTaskTable tbody td.copied-cell {
+      outline: 2px dashed #0284c7 !important;
+      outline-offset: -2px;
+      position: relative !important;
+    }
+
     /* Ensure inputs inside selected cells have transparent background */
     #boqTable tbody td.selected-cell input,
     #analysisTable tbody td.selected-cell input,
@@ -2960,14 +3021,10 @@
     }
 
     /* Flat Seamless Excel Cell Inputs */
-    #ganttTaskTable tbody td input,
-    #qtyTaskTable tbody td input,
     #boqTable tbody td input,
     #analysisTable tbody td input,
     #priceListTable tbody td input,
     #boqSummaryTable tbody td input,
-    #ganttTaskTable tbody td select,
-    #qtyTaskTable tbody td select,
     #boqTable tbody td select,
     #analysisTable tbody td select,
     #priceListTable tbody td select,
@@ -2984,6 +3041,35 @@
       box-sizing: border-box !important;
       border-radius: 0 !important;
       box-shadow: none !important;
+    }
+
+    /* Gantt & Qty Table Inputs: height controlled dynamically by Gantt row height settings */
+    #ganttTaskTable tbody td input,
+    #ganttTaskTable tbody td select,
+    #qtyTaskTable tbody td input,
+    #qtyTaskTable tbody td select {
+      width: 100% !important;
+      border: none !important;
+      outline: none !important;
+      background: transparent !important;
+      padding: 2px 4px !important;
+      margin: 0 !important;
+      font-family: inherit !important;
+      font-size: 11px !important;
+      box-sizing: border-box !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+
+    /* Qty Modal Panels Scroll Styling */
+    #qtyLeftPanel {
+      overflow-y: auto !important;
+      overflow-x: auto !important;
+      scrollbar-width: thin;
+    }
+    #qtyLeftPanel::-webkit-scrollbar:vertical {
+      width: 0px !important;
+      display: none !important;
     }
 
     #ganttTaskTable tbody td input:focus,
@@ -3065,6 +3151,10 @@
       #analysisTable tbody td.selected-cell,
       #priceListTable tbody td.selected-cell,
       #boqSummaryTable tbody td.selected-cell,
+      #boqTable tbody td.copied-cell,
+      #analysisTable tbody td.copied-cell,
+      #priceListTable tbody td.copied-cell,
+      #boqSummaryTable tbody td.copied-cell,
       body.print-boq-pdf #boqTable tbody td.selected-cell {
         background-color: transparent !important;
         outline: none !important;

@@ -3,12 +3,14 @@
  * Provides 100% offline capability for job sites and remote field engineers
  */
 
-const CACHE_NAME = 'fcl-project-controls-v1.4';
+const CACHE_NAME = 'fcl-project-controls-v1.5';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './firebase_sync.js',
   './storage_manager.js',
+  './manpower_utilization.css',
+  './manpower_utilization.js',
   './manifest.json',
   './HOMEPAGE.png',
   './icon-192.png',

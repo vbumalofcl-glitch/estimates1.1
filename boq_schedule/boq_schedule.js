@@ -1,6 +1,7 @@
     const priceListData = [];
     const analysisData = [];
     const boqData = [];
+    window.boqData = boqData;
     
     let ganttVisibleIndices = [];
     let ganttRightRowHtmlCache = [];
@@ -12,21 +13,78 @@
     let lastSelectedAnalysisRowIndex = -1;
     let selectedPriceListRowIndices = new Set();
     let lastSelectedPriceListRowIndex = -1;
+    const DEFAULT_SPORTS_CLUB_BOQ_DATA = [{"type":"category","code":"01.00.00.00","title":"PRELIMINARY FOR CIVIL WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.01.00","title":"Project Management and Coordination","specification":"Site management and supervision (technical team)","qty":1,"unit":"lot","materialUnitCost":35260,"laborUnitCost":243333,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.02.00","title":"Facility Services Coordination","specification":"Service vehicle/ transportation","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":270371,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.03.00","title":"Construction Progress Reporting","specification":"Schedules/ reports","qty":1,"unit":"lot","materialUnitCost":25185,"laborUnitCost":27037,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.04.00","title":"Health and Safety provisions","specification":"Site supervision and safety equipments/ provisions","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":27037,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.05.00","title":"Site Security ","specification":"Security personnel","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":162222,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.06.00","title":"Building Permit, By Owner (Not included in Work) (Not included in Work)","specification":"Building Permit, By Owner To Be Assisted By The Gen Con","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":0,"condition":"Not included in Work","collapsed":false},{"type":"subsubcategory","code":"01.00.07.00","title":"DENR Permit, By Owner (Not included in Work) (Not included in Work)","specification":"DENR Permit, by owner","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":0,"condition":"Not included in Work","collapsed":false},{"type":"subsubcategory","code":"01.00.08.00","title":"Quality Control","specification":"Testing Laboratory Services","qty":1,"unit":"lot","materialUnitCost":35260,"laborUnitCost":135185,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.09.00","title":"Temporary Utilities","specification":"Temporary Electricity, by owner","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.10.00","title":"Temporary Utilities","specification":"Temporary Water, by owner","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.11.00","title":"Field Offices and Sheds","specification":"Construction Office","qty":1,"unit":"lot","materialUnitCost":50371,"laborUnitCost":54074,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.12.00","title":"Field Offices and Sheds","specification":"Barracks","qty":1,"unit":"lot","materialUnitCost":50371,"laborUnitCost":54074,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.13.00","title":"Sanitary Facilities","specification":"Temporary septic tank etc","qty":1,"unit":"lot","materialUnitCost":25185,"laborUnitCost":27037,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.14.00","title":"Temporary Barriers and Enclosures","specification":"Temporary Fencing","qty":1,"unit":"lot","materialUnitCost":22667,"laborUnitCost":24333,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.15.00","title":"Construction Waste Management ","specification":"Disposal of construction waste","qty":1,"unit":"lot","materialUnitCost":50371,"laborUnitCost":108148,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.16.00","title":"Closeout Submittals","specification":"As-built drawings ","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":47192,"condition":"CPM","collapsed":false},{"type":"category","code":"02.00.00.00","title":"Earth Works & Sub Structures","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"02.01.00.00","title":"RETAINING WALL","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.01.00","title":"Foundation Excavation","specification":"RW footing excavation","qty":152,"unit":"cu.m","materialUnitCost":0,"laborUnitCost":390,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.02.00","title":"Earth Disposal","specification":"Hauling And Disposal (foundation)","qty":259,"unit":"cu.m","materialUnitCost":85,"laborUnitCost":462,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.03.00","title":"RC Wall Concrete     ","specification":"4000 psi","qty":204,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2163,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.04.00","title":"Reinforcing Bar","specification":"Grade 60","qty":14571,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.05.00","title":"Reinforcing Bar","specification":"Grade 40","qty":3142,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.06.00","title":"G.I. Tie Wire","specification":"G16 G.I Tie wire","qty":457,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.07.00","title":"Form Works     ","specification":"Phenolic boards, bracing supports, shoring supports","qty":719,"unit":"sq.m","materialUnitCost":445,"laborUnitCost":444,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.08.00","title":"Riprap Near Stair","specification":"Boulders","qty":1,"unit":"Lot","materialUnitCost":73333,"laborUnitCost":78133,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.09.00","title":"Sheetpile Protection","specification":"Slope Protection ","qty":1,"unit":"Lot","materialUnitCost":88888,"laborUnitCost":74074,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.10.00","title":"100mm\u00d8 PVC Pipe","specification":"Retaining Wall Drain Pipe, Perforated","qty":35,"unit":"pcs","materialUnitCost":824,"laborUnitCost":409,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.11.00","title":"100mm\u00d8 PVC End Cap","specification":"Retaining Wall Drain Pipe","qty":146,"unit":"pcs","materialUnitCost":67,"laborUnitCost":31,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.12.00","title":"Filter Drain Geotextile 2m x 50m","specification":"Retaining Wall Drain Pipe Filter","qty":2,"unit":"roll","materialUnitCost":6222,"laborUnitCost":2962,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.13.00","title":"3/4\" Gravel","specification":"Retaining Wall Drain Pipe Filter Gravel And Foundation Base Coarse","qty":14,"unit":"cu.m","materialUnitCost":1555,"laborUnitCost":814,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"02.02.00.00","title":"Bored pile works","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.01.00","title":"Earth Excavation","specification":"Bored Pile Drilling and Excavation - D400mm\u00d8-hole, 9000mm-deep w/ equipment","qty":643,"unit":"lm","materialUnitCost":605,"laborUnitCost":2488,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.02.00","title":"Earth Disposal","specification":"Hauling and Disposal of wet soil on sacks","qty":242,"unit":"cu.m","materialUnitCost":605,"laborUnitCost":1406,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.03.00","title":"FDN-GF - Concrete works","specification":"Piles - 4,000psi; D400mm\u00d8 x \u00b19000mm","qty":101,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2163,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.04.00","title":"FDN-GF - Rebar works","specification":"Piles - Gr.60 \u00d816mm Main Vertical Bars","qty":13631,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.05.00","title":"FDN-GF - Rebar works","specification":"Piles - Gr.60 \u00d810mm Spiral Ties @ 100mm","qty":5401,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.06.00","title":"FDN-GF - Rebar works","specification":"Piles - G.I. Tie Wire","qty":572,"unit":"kgs","materialUnitCost":102,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.07.00","title":"Material Hauling works ","specification":"Gravel, sand, cement etc.","qty":1,"unit":"lot","materialUnitCost":66667,"laborUnitCost":194666,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"02.03.00.00","title":"Foundation Excavation","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.03.01.00","title":"Earth Excavation","specification":"Structural Excavation ","qty":420,"unit":"cu.m","materialUnitCost":0,"laborUnitCost":390,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.03.02.00","title":"Earth Disposal","specification":"Hauling and Disposal ","qty":1860,"unit":"cu.m","materialUnitCost":85,"laborUnitCost":462,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.03.03.00","title":"Backfilling and Compaction","specification":"Excavated Foundation  Compacted backfill in 0.30\u202fm lifts","qty":816,"unit":"sq.m","materialUnitCost":0,"laborUnitCost":217,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.03.04.00","title":"Gravel Bedding","specification":"Foundation and Slab-on-Fill - 3/4\" Gravel, 50mm-thick","qty":66,"unit":"cu.m","materialUnitCost":2015,"laborUnitCost":2163,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"02.04.00.00","title":"Earth Excavation/Grading (Rear)","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.04.01.00","title":"Earth Excavation","specification":"Elevated Earth Excavation","qty":960,"unit":"Cu.m","materialUnitCost":0,"laborUnitCost":390,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.04.02.00","title":"Earth Disposal and debris disposal","specification":"Hauling and Disposal ","qty":1560,"unit":"Cu.m","materialUnitCost":0,"laborUnitCost":462,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.04.03.00","title":"Demolition of Existing House","specification":"Demolition and jackhammer","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":248888,"condition":"CPM","collapsed":false},{"type":"category","code":"03.00.00.00","title":"STRUCTURAL WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"03.01.00.00","title":"CONCRETE WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.01.00","title":"FDN-GF - Concrete works","specification":"Pile Caps (Type A) - 4,000psi; Chamfered Equilateral Triangular Shape; 2630mm-sides x 800mm-depth","qty":41,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.02.00","title":"FDN-GF - Concrete works","specification":"Pile Caps (Type B) - 4,000psi; Chamfered Equilateral Triangular Shape; 2630mm-sides x 500mm-depth","qty":13,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.03.00","title":"FDN-GF - Concrete works","specification":"Concrete Pedestal - 4,000psi; 500mm x 500mm","qty":5,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.04.00","title":"Steel Structures (bolts, Plates, I Beams)  (By other Contractor) (By other Contractor)","specification":"Errection, Welding Works, Setting Of Bolts And All Metal Works  Such As Stairs, Purlins Etc.","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"By other Contractor","collapsed":false},{"type":"subsubcategory","code":"03.01.05.00","title":"GF-2F - Concrete works","specification":"Slab-on-fill - 3,500psi; 150mm-thick","qty":222,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.06.00","title":"2F-3F - Concrete works","specification":"Slab-on-Steel Deck - 4,000psi; 150mm-thk","qty":180,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.07.00","title":"3F-RF - Concrete works","specification":"Slab-on-Steel Deck - 4,000psi; 150mm-thk","qty":37,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"03.02.00.00","title":"REINFORCEMENT WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.01.00","title":"FDN-GF - Rebar works","specification":"Pile Caps (Type A) - Gr.60 \u00d816mm Top & Bot. B.W.","qty":4222,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.02.00","title":"FDN-GF - Rebar works","specification":"Pile Caps (Type A) - G.I. Tie Wire","qty":234,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.03.00","title":"FDN-GF - Rebar works","specification":"Pile Caps (Type B) - Gr.60 \u00d816mm Top & Bot. B.W.","qty":1607,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.04.00","title":"FDN-GF - Rebar works","specification":"Pile Caps (Type B) - G.I. Tie Wire","qty":90,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.05.00","title":"GF-2F - Rebar works","specification":"Concrete Pedestal - Gr.60 \u00d820mm Main Vertical Bars","qty":1166,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.06.00","title":"GF-2F - Rebar works","specification":"Concrete Pedestal - Gr.40 \u00d810mm Lat. Ties","qty":729,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.07.00","title":"GF-2F - Rebar works","specification":"Concrete Pedestal - G.I. Tie Wire","qty":105,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.08.00","title":"GF-2F - Rebar works","specification":"Slab-on-fill - Gr.40 \u00d810mm @ 200mm B.W.","qty":9822,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.09.00","title":"GF-2F - Rebar works","specification":"Slab-on-fill - G.I. Tie Wire","qty":541,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.10.00","title":"2F-3F - Rebar works","specification":"Slab-on-Steel Deck - Gr.40 \u00d810mm @ 200mm B.W. Top & Bottom","qty":16845,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.11.00","title":"2F-3F - Rebar works","specification":"Slab-on-Steel Deck - G.I. Tie Wire","qty":928,"unit":"kgs","materialUnitCost":101,"laborUnitCost":49,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.12.00","title":"3F-RF - Rebar works","specification":"Slab-on-Steel Deck - Gr.40 \u00d810mm @ 200mm B.W. Top & Bottom","qty":3443,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.13.00","title":"3F-RF - Rebar works","specification":"Slab-on-Steel Deck - G.I. Tie Wire","qty":191,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"03.03.00.00","title":"FORMS AND SHORING WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.01.00","title":"FDN-GF - Form works","specification":"Pile Caps (Type A) - Phenolic boards, bracing supports, shoring supports","qty":8,"unit":"sq.m","materialUnitCost":504,"laborUnitCost":541,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.02.00","title":"FDN-GF - Form works","specification":"Pile Caps (Type B) - Phenolic boards, bracing supports, shoring supports","qty":5,"unit":"sq.m","materialUnitCost":504,"laborUnitCost":541,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.03.00","title":"FDN-GF - Form works","specification":"Concrete Pedestal - Phenolic boards, bracing supports, shoring supports","qty":32,"unit":"sq.m","materialUnitCost":504,"laborUnitCost":541,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.04.00","title":"GF-2F - Form works","specification":"Slab-on-fill - Phenolic boards, blockout forms, bracing supports","qty":1634,"unit":"sq.m","materialUnitCost":51,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.05.00","title":"2F-3F - Form works","specification":"Slab-on-Steel Deck - Shoring Supports, Bracing Supports","qty":1397,"unit":"sq.m","materialUnitCost":252,"laborUnitCost":271,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.06.00","title":"3F-RF - Form works","specification":"Slab-on-Steel Deck - Shoring Supports, Bracing Supports","qty":261,"unit":"sq.m","materialUnitCost":252,"laborUnitCost":271,"condition":"CPM","collapsed":false}];
+    window.DEFAULT_SPORTS_CLUB_BOQ_DATA = DEFAULT_SPORTS_CLUB_BOQ_DATA;
+
+
     const DEFAULT_BOQ_COLUMNS = [
       { id: 'plus', name: '+', width: '40px', visible: true },
       { id: 'code', name: 'Item Code', width: '90px', visible: true },
       { id: 'title', name: 'Work Description', width: '260px', visible: true },
       { id: 'specification', name: 'Specification', width: '190px', visible: true },
       { id: 'qty', name: 'Qty', width: '60px', visible: true },
+      { id: 'directQty', name: 'DIRECT QTY', width: '75px', visible: false },
       { id: 'unit', name: 'Unit', width: '55px', visible: true },
       { id: 'materialUnitCost', name: 'Material Unit Cost', width: '95px', visible: true },
+      { id: 'directMaterialUnitCost', name: 'DIRECT MATERIAL UNIT COST', width: '115px', visible: false },
       { id: 'totalMaterialCost', name: 'Total Material Cost', width: '95px', visible: true },
+      { id: 'directTotalMaterialCost', name: 'DIRECT TOTAL MATERIAL COST', width: '120px', visible: false },
       { id: 'leUnitCost', name: 'LE Unit Cost', width: '95px', visible: true },
+      { id: 'directLEUnitCost', name: 'DIRECT LE UNIT COST', width: '115px', visible: false },
       { id: 'totalLEC', name: 'Total LEC', width: '120px', visible: true },
+      { id: 'directTotalLEC', name: 'DIRECT TOTAL LEC', width: '120px', visible: false },
       { id: 'grandTotalCost', name: 'Grand Total Cost', width: '100px', visible: true },
+      { id: 'directGrandTotalCost', name: 'DIRECT GRAND TOTAL COST', width: '120px', visible: false },
       { id: 'condition', name: 'Condition', width: '140px', visible: true },
       { id: 'action', name: 'Action', width: '70px', visible: true }
     ];
+
+    let currentBOQCostView = localStorage.getItem('cost_estimate_boq_cost_view_v1') || 'indirect';
+
+    function syncBOQColumnsWithCostView() {
+      const view = currentBOQCostView;
+      const indirectCols = ['qty', 'materialUnitCost', 'totalMaterialCost', 'leUnitCost', 'totalLEC', 'grandTotalCost'];
+      const directCols = ['directQty', 'directMaterialUnitCost', 'directTotalMaterialCost', 'directLEUnitCost', 'directTotalLEC', 'directGrandTotalCost'];
+
+      if (view === 'direct') {
+        indirectCols.forEach(id => {
+          const col = boqColumns.find(c => c.id === id);
+          if (col) col.visible = false;
+        });
+        directCols.forEach(id => {
+          const col = boqColumns.find(c => c.id === id);
+          if (col) col.visible = true;
+        });
+      } else {
+        directCols.forEach(id => {
+          const col = boqColumns.find(c => c.id === id);
+          if (col) col.visible = false;
+        });
+        indirectCols.forEach(id => {
+          const col = boqColumns.find(c => c.id === id);
+          if (col) col.visible = true;
+        });
+      }
+    }
+
+    function updateCostViewButtons() {
+      const btnIndirect = document.getElementById('btnViewIndirectCost');
+      const btnDirect = document.getElementById('btnViewDirectCost');
+      if (btnIndirect) btnIndirect.classList.toggle('active', currentBOQCostView === 'indirect');
+      if (btnDirect) btnDirect.classList.toggle('active', currentBOQCostView === 'direct');
+    }
+
+    function setBOQCostView(view) {
+      currentBOQCostView = view;
+      syncBOQColumnsWithCostView();
+      localStorage.setItem('cost_estimate_boq_cost_view_v1', view);
+      localStorage.setItem('cost_estimate_boq_columns_v1', JSON.stringify(boqColumns));
+      updateCostViewButtons();
+      renderBOQTable();
+    }
+    window.setBOQCostView = setBOQCostView;
+    window.updateCostViewButtons = updateCostViewButtons;
+
     let boqColumns = [];
     try {
       const savedCols = JSON.parse(localStorage.getItem('cost_estimate_boq_columns_v1'));
@@ -34,12 +92,26 @@
         const savedIds = savedCols.map(c => c.id);
         const missingDefaultCols = DEFAULT_BOQ_COLUMNS.filter(c => !savedIds.includes(c.id));
         const cleanedCols = savedCols.filter(c => DEFAULT_BOQ_COLUMNS.some(d => d.id === c.id));
-        const actionIdx = cleanedCols.findIndex(c => c.id === 'action');
-        if (actionIdx >= 0) {
-          cleanedCols.splice(actionIdx, 0, ...missingDefaultCols);
-        } else {
-          cleanedCols.push(...missingDefaultCols);
-        }
+        missingDefaultCols.forEach(missingCol => {
+          const defIdx = DEFAULT_BOQ_COLUMNS.findIndex(d => d.id === missingCol.id);
+          const prevDefCol = defIdx > 0 ? DEFAULT_BOQ_COLUMNS[defIdx - 1] : null;
+          let insertPos = -1;
+          if (prevDefCol) {
+            const prevIdx = cleanedCols.findIndex(c => c.id === prevDefCol.id);
+            if (prevIdx >= 0) insertPos = prevIdx + 1;
+          }
+          if (insertPos >= 0) {
+            cleanedCols.splice(insertPos, 0, missingCol);
+          } else {
+            const actionIdx = cleanedCols.findIndex(c => c.id === 'action');
+            if (actionIdx >= 0) cleanedCols.splice(actionIdx, 0, missingCol);
+            else cleanedCols.push(missingCol);
+          }
+        });
+        cleanedCols.forEach(col => {
+          const defCol = DEFAULT_BOQ_COLUMNS.find(d => d.id === col.id);
+          if (defCol) col.name = defCol.name;
+        });
         boqColumns = cleanedCols;
       } else {
         boqColumns = JSON.parse(JSON.stringify(DEFAULT_BOQ_COLUMNS));
@@ -47,15 +119,17 @@
     } catch (e) {
       boqColumns = JSON.parse(JSON.stringify(DEFAULT_BOQ_COLUMNS));
     }
+    syncBOQColumnsWithCostView();
 
     const DEFAULT_BOQ_SUMMARY_COLUMNS = [
       { id: 'code', name: 'Item Code', width: '10%', visible: true },
-      { id: 'title', name: 'Work Description', width: '35%', visible: true },
-      { id: 'overhead', name: 'Overhead Cost (\u20B1)', width: '11%', visible: true },
-      { id: 'profit', name: 'Profit (\u20B1)', width: '11%', visible: true },
-      { id: 'vat', name: 'VAT (\u20B1)', width: '11%', visible: true },
-      { id: 'total', name: 'Total Cost (\u20B1)', width: '11%', visible: true },
-      { id: 'costPerSqm', name: 'Cost per SQ.M. (\u20B1)', width: '11%', visible: true }
+      { id: 'title', name: 'Work Description', width: '30%', visible: true },
+      { id: 'overhead', name: 'Overhead Cost (\u20B1)', width: '10%', visible: true },
+      { id: 'profit', name: 'Profit (\u20B1)', width: '10%', visible: true },
+      { id: 'contingency', name: 'Contingency (\u20B1)', width: '10%', visible: true },
+      { id: 'vat', name: 'VAT (\u20B1)', width: '10%', visible: true },
+      { id: 'total', name: 'Total Cost (\u20B1)', width: '10%', visible: true },
+      { id: 'costPerSqm', name: 'Cost per SQ.M. (\u20B1)', width: '10%', visible: true }
     ];
     let boqSummaryColumns = [];
     try {
@@ -138,6 +212,18 @@
       return roundUpNearestOne(numberOrZero(value) * (1 + (numberOrZero(percent) / 100)));
     }
 
+    function applyBOQQtyMultiplier(baseQty, percent) {
+      const bQty = numberOrZero(baseQty);
+      const p = numberOrZero(percent);
+      if (p === 0 || bQty === 0) return bQty;
+      const rawQty = bQty * (1 + (p / 100));
+      const roundedUpQty = roundUpNearestOne(rawQty);
+      if (roundedUpQty > 7) {
+        return roundedUpQty;
+      }
+      return bQty;
+    }
+
     function getBOQMultipliers() {
       return {
         qty: getPercentInputValue('boqQtyMultiplier'),
@@ -145,6 +231,7 @@
         le: getPercentInputValue('boqLEMultiplier'),
         profit: getPercentInputValue('boqProfitMultiplier'),
         overhead: getPercentInputValue('boqOverheadMultiplier'),
+        contingency: getPercentInputValue('boqContingencyMultiplier'),
         tax: getPercentInputValue('boqTaxMultiplier')
       };
     }
@@ -176,15 +263,28 @@
       const linkedLEUnitCost = linkedDUPAMatch && linkedDUPAMatch.leUnitCost !== null ? linkedDUPAMatch.leUnitCost : null;
       const baseMaterialUnitCost = linkedMaterialUnitCost !== null ? linkedMaterialUnitCost : numberOrZero(row.materialUnitCost);
       const baseLEUnitCost = linkedLEUnitCost !== null ? linkedLEUnitCost : numberOrZero(row.laborUnitCost);
-      const qty = applyPercentMultiplier(baseQty, multipliers.qty);
-      const baseDisplayMaterialUnitCost = applyPercentMultiplier(baseMaterialUnitCost, multipliers.material);
-      const baseDisplayLEUnitCost = applyPercentMultiplier(baseLEUnitCost, multipliers.le);
-      const markupPercent = numberOrZero(multipliers.profit) + numberOrZero(multipliers.overhead) + numberOrZero(multipliers.tax);
-      const materialUnitCost = applyPercentMultiplier(baseDisplayMaterialUnitCost, markupPercent);
-      const leUnitCost = applyPercentMultiplier(baseDisplayLEUnitCost, markupPercent);
+
+      const directQty = baseQty;
+      const directMaterialUnitCost = roundUpNearestOne(baseMaterialUnitCost);
+      const directLEUnitCost = roundUpNearestOne(baseLEUnitCost);
+      const directTotalMaterialCost = directQty * directMaterialUnitCost;
+      const directTotalLEC = directQty * directLEUnitCost;
+      const directGrandTotalCost = roundUpNearestOne(directTotalMaterialCost + directTotalLEC);
+
+      const qty = applyBOQQtyMultiplier(directQty, multipliers.qty);
+      const markupPercent = numberOrZero(multipliers.profit) + numberOrZero(multipliers.overhead) + numberOrZero(multipliers.contingency) + numberOrZero(multipliers.tax);
+      const totalMaterialMarkupPercent = numberOrZero(multipliers.material) + markupPercent;
+      const totalLEMarkupPercent = numberOrZero(multipliers.le) + markupPercent;
+
+      const baseDisplayMaterialUnitCost = roundUpNearestOne(directMaterialUnitCost * (1 + (numberOrZero(multipliers.material) / 100)));
+      const baseDisplayLEUnitCost = roundUpNearestOne(directLEUnitCost * (1 + (numberOrZero(multipliers.le) / 100)));
+
+      const materialUnitCost = roundUpNearestOne(directMaterialUnitCost * (1 + (totalMaterialMarkupPercent / 100)));
+      const leUnitCost = roundUpNearestOne(directLEUnitCost * (1 + (totalLEMarkupPercent / 100)));
       const totalMaterialCost = qty * materialUnitCost;
       const totalLEC = qty * leUnitCost;
       const grandTotalCost = roundUpNearestOne(totalMaterialCost + totalLEC);
+
       const res = {
         baseQty,
         baseMaterialUnitCost,
@@ -200,24 +300,21 @@
         leUnitCost,
         totalMaterialCost,
         totalLEC,
-        grandTotalCost: grandTotalCost
+        grandTotalCost: grandTotalCost,
+        directQty,
+        directMaterialUnitCost,
+        directTotalMaterialCost,
+        directLEUnitCost,
+        directTotalLEC,
+        directGrandTotalCost
       };
       boqDisplayValuesCache.set(row, res);
       return res;
     }
 
     function computeBOQBaseCost(row) {
-      const multipliers = getBOQMultipliers();
-      const baseQty = numberOrZero(row.qty);
-      const linkedDUPAMatch = getLinkedDUPAMatch(row);
-      const linkedMaterialUnitCost = linkedDUPAMatch && linkedDUPAMatch.materialUnitCost !== null ? linkedDUPAMatch.materialUnitCost : null;
-      const linkedLEUnitCost = linkedDUPAMatch && linkedDUPAMatch.leUnitCost !== null ? linkedDUPAMatch.leUnitCost : null;
-      const baseMaterialUnitCost = linkedMaterialUnitCost !== null ? linkedMaterialUnitCost : numberOrZero(row.materialUnitCost);
-      const baseLEUnitCost = linkedLEUnitCost !== null ? linkedLEUnitCost : numberOrZero(row.laborUnitCost);
-      const qty = applyPercentMultiplier(baseQty, multipliers.qty);
-      const materialUnitCost = applyPercentMultiplier(baseMaterialUnitCost, multipliers.material);
-      const leUnitCost = applyPercentMultiplier(baseLEUnitCost, multipliers.le);
-      return (qty * materialUnitCost) + (qty * leUnitCost);
+      const values = computeBOQDisplayValues(row);
+      return values.directGrandTotalCost;
     }
 
     function computeBOQCategorySummary(categoryIndex) {
@@ -226,21 +323,27 @@
       }
       const row = boqData[categoryIndex];
       const multipliers = getBOQMultipliers();
-      let baseCost = 0;
+      let directBaseCost = 0;
+      let totalCategoryCost = 0;
       const categoryLevel = levelOf(row);
       let i = categoryIndex + 1;
       while (i < boqData.length && levelOf(boqData[i]) > categoryLevel) {
         const child = boqData[i];
         const childHasChildren = hasChildRow(boqData, i);
         const childEditable = child.type === 'subsubsubcategory' || (child.type === 'subsubcategory' && !childHasChildren) || (child.type === 'subcategory' && !childHasChildren);
-        if (childEditable) baseCost += computeBOQBaseCost(child);
+        if (childEditable) {
+          const childValues = computeBOQDisplayValues(child);
+          directBaseCost += childValues.directGrandTotalCost;
+          totalCategoryCost += childValues.grandTotalCost;
+        }
         i += 1;
       }
-      const overheadCost = roundUpNearestOne(baseCost * (numberOrZero(multipliers.overhead) / 100));
-      const profitCost = roundUpNearestOne(baseCost * (numberOrZero(multipliers.profit) / 100));
-      const vatCost = roundUpNearestOne(baseCost * (numberOrZero(multipliers.tax) / 100));
-      const totalCost = roundUpNearestOne(baseCost + overheadCost + profitCost + vatCost);
-      const res = { itemCode: row.code || '', workDescription: row.title || '', overheadCost, profitCost, vatCost, totalCost };
+      const overheadCost = roundUpNearestOne(directBaseCost * (numberOrZero(multipliers.overhead) / 100));
+      const profitCost = roundUpNearestOne(directBaseCost * (numberOrZero(multipliers.profit) / 100));
+      const contingencyCost = roundUpNearestOne(directBaseCost * (numberOrZero(multipliers.contingency) / 100));
+      const vatCost = roundUpNearestOne(directBaseCost * (numberOrZero(multipliers.tax) / 100));
+      const totalCost = totalCategoryCost;
+      const res = { itemCode: row.code || '', workDescription: row.title || '', directBaseCost, overheadCost, profitCost, contingencyCost, vatCost, totalCost };
       boqCategorySummaryCache.set(categoryIndex, res);
       return res;
     }
@@ -272,7 +375,7 @@
       if (!tbody) return;
       tbody.innerHTML = '';
       const area = numberOrZero(document.getElementById('boqSummaryArea')?.value || 0);
-      let totalOverhead = 0, totalProfit = 0, totalVat = 0, totalCost = 0;
+      let totalOverhead = 0, totalProfit = 0, totalContingency = 0, totalVat = 0, totalCost = 0;
       
       boqData.forEach((row, index) => {
         if (row.type !== 'category' && row.type !== 'subcategory') return;
@@ -280,6 +383,7 @@
         if (row.type === 'category') {
           totalOverhead += summary.overheadCost;
           totalProfit += summary.profitCost;
+          totalContingency += (summary.contingencyCost || 0);
           totalVat += summary.vatCost;
           totalCost += summary.totalCost;
         }
@@ -305,6 +409,9 @@
               break;
             case 'profit':
               rowHtml += `<td class="number">${peso(summary.profitCost)}</td>`;
+              break;
+            case 'contingency':
+              rowHtml += `<td class="number">${peso(summary.contingencyCost || 0)}</td>`;
               break;
             case 'vat':
               rowHtml += `<td class="number">${peso(summary.vatCost)}</td>`;
@@ -344,11 +451,15 @@
           case 'profit':
             totalRowHtml += `<td class="number">${peso(totalProfit)}</td>`;
             break;
+          case 'contingency':
+            totalRowHtml += `<td class="number">${peso(totalContingency)}</td>`;
+            break;
           case 'vat':
             totalRowHtml += `<td class="number">${peso(totalVat)}</td>`;
             break;
           case 'total':
             totalRowHtml += `<td class="number">${peso(totalCost)}</td>`;
+            break;
           case 'costPerSqm':
             totalRowHtml += `<td class="number">${totalCostPerSqm === '' ? '' : peso(totalCostPerSqm)}</td>`;
             break;
@@ -605,18 +716,23 @@
     }
 
     function getGanttProjectStartDate() {
+      const input = document.getElementById('ganttProjectStartInput');
+      if (input && input.value) return input.value;
+
       let saved = localStorage.getItem('cost_estimate_gantt_start_v1');
       if (saved) return saved;
       
       let earliest = null;
-      boqData.forEach(row => {
-        if (row.ganttStartDate) {
-          const d = new Date(row.ganttStartDate);
-          if (!isNaN(d.getTime())) {
-            if (!earliest || d < earliest) earliest = d;
+      if (Array.isArray(boqData)) {
+        boqData.forEach(row => {
+          if (row.ganttStartDate) {
+            const d = new Date(row.ganttStartDate);
+            if (!isNaN(d.getTime())) {
+              if (!earliest || d < earliest) earliest = d;
+            }
           }
-        }
-      });
+        });
+      }
       
       if (earliest) return formatDateString(earliest);
       
@@ -627,6 +743,55 @@
       
       return getTodayDateString();
     }
+    window.getGanttProjectStartDate = getGanttProjectStartDate;
+
+    function getGanttTimelineRange() {
+      const projStartStr = document.getElementById('ganttProjectStartInput')?.value || getGanttProjectStartDate();
+      const projStartDate = parseSafeDate(projStartStr);
+      
+      let maxTaskEndDate = null;
+      let minTaskStartDate = null;
+      if (Array.isArray(boqData) && boqData.length > 0) {
+        boqData.forEach((row, index) => {
+          const info = getGanttTaskTimeInfo(index);
+          if (info) {
+            if (info.startDate) {
+              const s = parseSafeDate(info.startDate, null);
+              if (s && (!minTaskStartDate || s < minTaskStartDate)) minTaskStartDate = s;
+            }
+            if (info.endDate) {
+              const d = parseSafeDate(info.endDate, null);
+              if (d && (!maxTaskEndDate || d > maxTaskEndDate)) maxTaskEndDate = new Date(d);
+            }
+          }
+        });
+      }
+
+      const finishDisplay = document.getElementById('ganttProjectFinishDisplay');
+      if (!maxTaskEndDate && finishDisplay && finishDisplay.textContent && finishDisplay.textContent.trim() !== '-') {
+        const parsedFinish = parseSafeDate(finishDisplay.textContent.trim(), null);
+        if (parsedFinish) maxTaskEndDate = parsedFinish;
+      }
+      
+      const timelineStartDate = projStartDate || minTaskStartDate || parseSafeDate(getTodayDateString());
+      let totalDays = 60;
+      if (maxTaskEndDate && timelineStartDate) {
+        totalDays = Math.round((maxTaskEndDate - timelineStartDate) / (1000 * 60 * 60 * 24)) + 1;
+        if (totalDays < 1) totalDays = 1;
+      }
+      const timelineEndDate = new Date(timelineStartDate);
+      timelineEndDate.setDate(timelineStartDate.getDate() + totalDays - 1);
+      
+      return {
+        startDate: formatDateString(timelineStartDate),
+        endDate: formatDateString(timelineEndDate),
+        startDateObj: timelineStartDate,
+        endDateObj: timelineEndDate,
+        totalDays: totalDays,
+        scale: typeof ganttScale !== 'undefined' ? ganttScale : 'weeks'
+      };
+    }
+    window.getGanttTimelineRange = getGanttTimelineRange;
 
     function updateGanttProjectStart() {
       const input = document.getElementById('ganttProjectStartInput');
@@ -635,6 +800,9 @@
         localStorage.setItem('cost_estimate_gantt_start_v1', input.value);
         markUnsaved();
         renderGanttChart();
+        if (window.ManpowerUtilization && typeof window.ManpowerUtilization.adaptAndSyncWithGanttTimeline === 'function') {
+          window.ManpowerUtilization.adaptAndSyncWithGanttTimeline(true);
+        }
       }
     }
 
@@ -1053,6 +1221,7 @@
         }
       }
     }
+    window.getGanttTaskTimeInfo = getGanttTaskTimeInfo;
 
     function ganttGetCoords(startDate, duration, projectStartDate, scale, colWidth) {
       let defaultColW = 28;
@@ -1312,33 +1481,29 @@
       const leftPanel = document.querySelector('.gantt-left-panel');
       const rightPanel = document.querySelector('.gantt-right-panel');
       if (!leftPanel || !rightPanel) return;
+      if (leftPanel.dataset.scrollListenerAttached === 'true') return;
+      leftPanel.dataset.scrollListenerAttached = 'true';
       
-      let activeScroll = null;
+      let isSyncing = false;
       
       leftPanel.addEventListener('scroll', () => {
-        if (activeScroll === 'right') {
-          window.requestAnimationFrame(updateGanttTimelineViewport);
-          return;
-        }
-        activeScroll = 'left';
-        window.requestAnimationFrame(() => {
+        if (isSyncing) return;
+        isSyncing = true;
+        if (Math.abs(rightPanel.scrollTop - leftPanel.scrollTop) >= 1) {
           rightPanel.scrollTop = leftPanel.scrollTop;
-          updateGanttTimelineViewport();
-          activeScroll = null;
-        });
+        }
+        isSyncing = false;
+        window.requestAnimationFrame(updateGanttTimelineViewport);
       }, { passive: true });
       
       rightPanel.addEventListener('scroll', () => {
-        if (activeScroll === 'left') {
-          window.requestAnimationFrame(updateGanttTimelineViewport);
-          return;
-        }
-        activeScroll = 'right';
-        window.requestAnimationFrame(() => {
+        if (isSyncing) return;
+        isSyncing = true;
+        if (Math.abs(leftPanel.scrollTop - rightPanel.scrollTop) >= 1) {
           leftPanel.scrollTop = rightPanel.scrollTop;
-          updateGanttTimelineViewport();
-          activeScroll = null;
-        });
+        }
+        isSyncing = false;
+        window.requestAnimationFrame(updateGanttTimelineViewport);
       }, { passive: true });
     }
 
@@ -1353,14 +1518,13 @@
         const leftPanel = container.querySelector('.gantt-left-panel');
         if (!leftPanel) return;
 
-        // Apply saved width if present
+        // Apply saved width if present or default
         const savedW = localStorage.getItem('cost_estimate_gantt_left_width_v1');
-        if (savedW) {
-          leftPanel.style.width = savedW;
-          leftPanel.style.minWidth = savedW;
-          leftPanel.style.maxWidth = savedW;
-          leftPanel.style.flexBasis = savedW;
-        }
+        const appliedW = savedW || (leftPanel.style.width || '750px');
+        leftPanel.style.width = appliedW;
+        leftPanel.style.minWidth = appliedW;
+        leftPanel.style.maxWidth = appliedW;
+        leftPanel.style.flexBasis = appliedW;
 
         if (divider.dataset.resizeInitialized) return;
         divider.dataset.resizeInitialized = 'true';
@@ -1369,26 +1533,25 @@
         let startX = 0;
         let startWidth = 0;
 
-        function onDividerDown(e) {
+        function startResize(clientX) {
           isDragging = true;
           divider.classList.add('dragging');
           document.body.classList.add('gantt-resizing');
           document.body.style.cursor = 'col-resize';
           document.body.style.userSelect = 'none';
-          startX = (e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX) ?? 0;
-          startWidth = leftPanel.getBoundingClientRect().width;
-          e.preventDefault();
+          startX = clientX;
+          const rect = leftPanel.getBoundingClientRect();
+          startWidth = (rect && rect.width > 0) ? rect.width : (parseFloat(leftPanel.style.width) || 750);
         }
 
-        function onDividerMove(e) {
+        function moveResize(clientX) {
           if (!isDragging) return;
-          const currentX = (e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX) ?? 0;
-          const dx = currentX - startX;
+          const dx = clientX - startX;
           const containerRect = container.getBoundingClientRect();
           const containerW = containerRect.width || window.innerWidth;
           const minW = 150;
           const maxW = Math.max(minW, containerW - 120);
-          let newWidth = Math.max(minW, Math.min(maxW, startWidth + dx));
+          let newWidth = Math.max(minW, Math.min(maxW, Math.round(startWidth + dx)));
           
           leftPanel.style.width = newWidth + 'px';
           leftPanel.style.minWidth = newWidth + 'px';
@@ -1400,26 +1563,78 @@
           }
         }
 
-        function onDividerUp() {
+        function endResize() {
           if (isDragging) {
             isDragging = false;
             divider.classList.remove('dragging');
             document.body.classList.remove('gantt-resizing');
             document.body.style.cursor = '';
             document.body.style.userSelect = '';
-            localStorage.setItem('cost_estimate_gantt_left_width_v1', leftPanel.style.width);
+            if (leftPanel.style.width) {
+              localStorage.setItem('cost_estimate_gantt_left_width_v1', leftPanel.style.width);
+            }
             if (typeof updateGanttTimelineViewport === 'function') {
               updateGanttTimelineViewport();
             }
           }
         }
 
-        divider.addEventListener('mousedown', onDividerDown);
-        divider.addEventListener('touchstart', onDividerDown, { passive: false });
-        window.addEventListener('mousemove', onDividerMove);
-        window.addEventListener('touchmove', onDividerMove, { passive: false });
-        window.addEventListener('mouseup', onDividerUp);
-        window.addEventListener('touchend', onDividerUp);
+        // Pointer event handling with pointer capture (smooth dragging even outside element)
+        divider.addEventListener('pointerdown', (e) => {
+          if (e.pointerType === 'mouse' && e.button !== 0) return;
+          startResize(e.clientX);
+          try { divider.setPointerCapture(e.pointerId); } catch (_) {}
+          e.preventDefault();
+        });
+
+        divider.addEventListener('pointermove', (e) => {
+          if (!isDragging) return;
+          moveResize(e.clientX);
+          e.preventDefault();
+        });
+
+        divider.addEventListener('pointerup', (e) => {
+          if (!isDragging) return;
+          try { divider.releasePointerCapture(e.pointerId); } catch (_) {}
+          endResize();
+        });
+
+        divider.addEventListener('pointercancel', (e) => {
+          if (!isDragging) return;
+          try { divider.releasePointerCapture(e.pointerId); } catch (_) {}
+          endResize();
+        });
+
+        // Window-level mouse & touch events as robust fallbacks
+        divider.addEventListener('mousedown', (e) => {
+          if (e.button !== 0) return;
+          startResize(e.clientX);
+          e.preventDefault();
+        });
+
+        divider.addEventListener('touchstart', (e) => {
+          if (e.touches && e.touches[0]) {
+            startResize(e.touches[0].clientX);
+          }
+        }, { passive: true });
+
+        window.addEventListener('mousemove', (e) => {
+          if (isDragging) moveResize(e.clientX);
+        });
+
+        window.addEventListener('touchmove', (e) => {
+          if (isDragging && e.touches && e.touches[0]) {
+            moveResize(e.touches[0].clientX);
+          }
+        }, { passive: true });
+
+        window.addEventListener('mouseup', () => {
+          if (isDragging) endResize();
+        });
+
+        window.addEventListener('touchend', () => {
+          if (isDragging) endResize();
+        });
       });
     }
  
@@ -1668,9 +1883,14 @@
       const coordHeaderColor = ganttSettings.coordHeaderColor || '#ffffff';
 
       const hHeight = ganttSettings.headerHeight !== undefined ? ganttSettings.headerHeight : 48;
+      const hrWeight = ganttSettings.gridHeaderRightWeight !== undefined ? ganttSettings.gridHeaderRightWeight : 1;
+      const hrStyle = ganttSettings.gridHeaderRightStyle || 'solid';
+      const hrColor = ganttSettings.gridHeaderRightColor || '#e2e8f0';
+
       const hTopHeight = Math.floor(hHeight / 2);
-      const hBottomHeight = hHeight - hTopHeight;
-      const hTotalHeight = hTopHeight + hBottomHeight + (ganttSettings.showCoordinates ? coordHeaderHeight : 0);
+      const hBottomHeight = (hHeight + hrWeight) - hTopHeight;
+      const coordRowTotalH = coordHeaderHeight + hrWeight;
+      const hTotalHeight = (ganttSettings.showCoordinates ? coordRowTotalH : 0) + (hHeight + hrWeight);
       const hFontSize = ganttSettings.headerFontSize !== undefined ? ganttSettings.headerFontSize : 11;
       const hLeftBg = ganttSettings.headerLeftBg || '#2563eb';
       const hLeftColor = ganttSettings.headerLeftColor || '#ffffff';
@@ -1680,38 +1900,55 @@
       const hlWeight = ganttSettings.gridHeaderLeftWeight !== undefined ? ganttSettings.gridHeaderLeftWeight : 1;
       const hlStyle = ganttSettings.gridHeaderLeftStyle || 'solid';
       const hlColor = ganttSettings.gridHeaderLeftColor || '#cbd5e1';
-      
-      const hrWeight = ganttSettings.gridHeaderRightWeight !== undefined ? ganttSettings.gridHeaderRightWeight : 1;
-      const hrStyle = ganttSettings.gridHeaderRightStyle || 'solid';
-      const hrColor = ganttSettings.gridHeaderRightColor || '#e2e8f0';
 
       const coordRowBg = ganttSettings.coordRowBg || '#f3f4f6';
       const coordRowColor = ganttSettings.coordRowColor || '#6b7280';
 
       styleTag.innerHTML = `
-        .gantt-row, .gantt-row td {
+        .gantt-row, .gantt-row td, #ganttTaskTable tbody tr, #ganttTaskTable tbody td {
           height: ${ganttSettings.rowHeight}px !important;
+          min-height: ${ganttSettings.rowHeight}px !important;
+          max-height: ${ganttSettings.rowHeight}px !important;
           line-height: 1.3 !important;
           box-sizing: border-box !important;
+          overflow: hidden !important;
+          white-space: nowrap !important;
+          text-overflow: ellipsis !important;
+        }
+        .gantt-row td.gantt-wrap-cell, #ganttTaskTable tbody td.gantt-wrap-cell, #qtyTaskTable tbody td.gantt-wrap-cell {
+          white-space: normal !important;
+          word-wrap: break-word !important;
+          overflow-wrap: anywhere !important;
+          word-break: break-word !important;
+          line-height: 1.25 !important;
+          hyphens: auto !important;
         }
         .gantt-timeline-row {
           height: ${ganttSettings.rowHeight}px !important;
+          min-height: ${ganttSettings.rowHeight}px !important;
+          max-height: ${ganttSettings.rowHeight}px !important;
           line-height: ${ganttSettings.rowHeight}px !important;
           box-sizing: border-box !important;
           display: flex !important;
           flex-wrap: nowrap !important;
           min-width: 100% !important;
+          overflow: hidden !important;
         }
-        .gantt-row td {
+        .gantt-row td, #ganttTaskTable tbody td {
           padding-top: 0 !important;
           padding-bottom: 0 !important;
           vertical-align: middle !important;
         }
-        .gantt-row td input {
-          height: ${ganttSettings.rowHeight - 6}px !important;
-          line-height: ${ganttSettings.rowHeight - 6}px !important;
+        #ganttTaskTable tbody td input,
+        #ganttTaskTable tbody td select,
+        .gantt-row td input,
+        .gantt-row td select {
+          height: ${Math.max(16, ganttSettings.rowHeight - 6)}px !important;
+          max-height: ${Math.max(16, ganttSettings.rowHeight - 6)}px !important;
+          line-height: ${Math.max(16, ganttSettings.rowHeight - 6)}px !important;
           box-sizing: border-box !important;
           margin: 0 !important;
+          padding: 2px 4px !important;
           vertical-align: middle !important;
         }
         #qtyTaskTable tbody tr {
@@ -1734,8 +1971,10 @@
         }
         #qtyTaskTable tbody td input[type="date"],
         #qtyTaskTable tbody td input[type="number"],
-        #qtyTaskTable tbody td input[type="text"]:not(.qty-summary-input) {
-          height: ${ganttSettings.rowHeight - 6}px !important;
+        #qtyTaskTable tbody td input[type="text"]:not(.qty-summary-input),
+        #qtyTaskTable tbody td select {
+          height: ${Math.max(16, ganttSettings.rowHeight - 6)}px !important;
+          max-height: ${Math.max(16, ganttSettings.rowHeight - 6)}px !important;
           line-height: normal !important;
           padding: 0 4px !important;
           margin: 0 !important;
@@ -1832,18 +2071,26 @@
         }
 
         /* Headers Height and Fonts */
-        #ganttTaskTable thead tr:not(.gantt-coord-header-row), #ganttTaskTable thead tr:not(.gantt-coord-header-row) th {
+        #ganttTaskTable thead tr:not(.gantt-coord-header-row), #ganttTaskTable thead tr:not(.gantt-coord-header-row) th,
+        #qtyTaskTable thead tr:not(.gantt-coord-header-row), #qtyTaskTable thead tr:not(.gantt-coord-header-row) th {
           height: ${hHeight}px !important;
           box-sizing: border-box !important;
         }
-        #ganttTaskTable thead tr:not(.gantt-coord-header-row) th {
-          padding-top: 0 !important;
-          padding-bottom: 0 !important;
-          line-height: ${hHeight}px !important;
+        #ganttTaskTable thead tr:not(.gantt-coord-header-row) th,
+        #qtyTaskTable thead tr:not(.gantt-coord-header-row) th {
+          padding-top: 2px !important;
+          padding-bottom: 2px !important;
+          padding-left: 4px !important;
+          padding-right: 8px !important;
+          line-height: 1.25 !important;
           vertical-align: middle !important;
-          white-space: nowrap !important;
+          white-space: normal !important;
+          word-wrap: break-word !important;
+          overflow-wrap: anywhere !important;
+          word-break: break-word !important;
           overflow: hidden !important;
           text-overflow: ellipsis !important;
+          hyphens: auto !important;
         }
         #ganttTimelineHeader, #qtyTimelineHeader {
           height: ${hTotalHeight}px !important;
@@ -1863,15 +2110,19 @@
         .gantt-header-cell {
           height: 100% !important;
         }
-        #ganttTaskTable thead tr:not(.gantt-coord-header-row) th, .gantt-header-cell {
+        #ganttTaskTable thead tr:not(.gantt-coord-header-row) th,
+        #qtyTaskTable thead tr:not(.gantt-coord-header-row) th,
+        .gantt-header-cell {
           font-size: ${hFontSize}px !important;
         }
         
         /* Left Header Colors */
-        #ganttTaskTable thead tr:not(.gantt-coord-header-row) {
+        #ganttTaskTable thead tr:not(.gantt-coord-header-row),
+        #qtyTaskTable thead tr:not(.gantt-coord-header-row) {
           background: ${hLeftBg} !important;
         }
-        #ganttTaskTable thead tr:not(.gantt-coord-header-row) th {
+        #ganttTaskTable thead tr:not(.gantt-coord-header-row) th,
+        #qtyTaskTable thead tr:not(.gantt-coord-header-row) th {
           color: ${hLeftColor} !important;
         }
         
@@ -1921,6 +2172,53 @@
           padding: 0 !important;
           border-bottom: ${hrWeight}px ${hrStyle} ${hrColor} !important;
           border-right: ${hrWeight}px ${hrStyle} ${hrColor} !important;
+          box-sizing: border-box !important;
+        }
+
+        #ganttTimelineHeader, #qtyTimelineHeader {
+          height: ${hTotalHeight}px !important;
+          min-height: ${hTotalHeight}px !important;
+          max-height: ${hTotalHeight}px !important;
+          box-sizing: border-box !important;
+        }
+        #ganttTaskTable thead tr:not(.gantt-coord-header-row),
+        #qtyTaskTable thead tr:not(.gantt-coord-header-row) {
+          height: ${hHeight}px !important;
+          min-height: ${hHeight}px !important;
+          max-height: ${hHeight}px !important;
+          box-sizing: border-box !important;
+        }
+        #ganttTaskTable thead tr:not(.gantt-coord-header-row) th,
+        #qtyTaskTable thead tr:not(.gantt-coord-header-row) th {
+          height: ${hHeight}px !important;
+          min-height: ${hHeight}px !important;
+          max-height: ${hHeight}px !important;
+          box-sizing: border-box !important;
+          vertical-align: middle !important;
+        }
+        .gantt-timeline-header-row.row-coord {
+          height: ${coordRowTotalH}px !important;
+          min-height: ${coordRowTotalH}px !important;
+          max-height: ${coordRowTotalH}px !important;
+          line-height: ${coordRowTotalH}px !important;
+          box-sizing: border-box !important;
+        }
+        .gantt-timeline-header-row.row-top {
+          height: ${hTopHeight}px !important;
+          min-height: ${hTopHeight}px !important;
+          max-height: ${hTopHeight}px !important;
+          line-height: ${hTopHeight}px !important;
+          box-sizing: border-box !important;
+        }
+        .gantt-timeline-header-row.row-bottom {
+          height: ${hBottomHeight}px !important;
+          min-height: ${hBottomHeight}px !important;
+          max-height: ${hBottomHeight}px !important;
+          line-height: ${hBottomHeight}px !important;
+          box-sizing: border-box !important;
+        }
+        .gantt-timeline-header-row .gantt-header-cell {
+          height: 100% !important;
           box-sizing: border-box !important;
         }
 
@@ -1996,108 +2294,130 @@
           border-right: ${hrWeight}px ${hrStyle} ${hrColor} !important;
           box-sizing: border-box !important;
         }
+
+        .gantt-right-panel, .qty-right-panel {
+          margin-left: 5mm !important;
+          border-left: ${hrWeight}px ${hrStyle} ${hrColor} !important;
+        }
+        body.print-gantt-pdf .gantt-container.gantt-print-clone .gantt-right-panel {
+          margin-left: 0 !important;
+          border-left: none !important;
+        }
       `;
     }
 
-    function openGanttStyleSettingsModal() {
+        function openGanttStyleSettingsModal() {
       const modal = document.getElementById('ganttStyleSettingsModal');
       if (!modal) return;
       
-      document.getElementById('ganttSetRowHeight').value = ganttSettings.rowHeight;
-      document.getElementById('ganttSetTaskBarHeight').value = ganttSettings.taskBarHeight;
-      document.getElementById('ganttSetSummaryBarHeight').value = ganttSettings.summaryBarHeight;
-      document.getElementById('ganttSetTaskColor').value = ganttSettings.taskBarColor;
-      document.getElementById('ganttSetTaskDayColor').value = ganttSettings.taskBarDayColor;
-      document.getElementById('ganttSetSummaryColor').value = ganttSettings.summaryBarColor;
-      document.getElementById('ganttSetSummaryDayColor').value = ganttSettings.summaryBarDayColor;
-      document.getElementById('ganttSetTaskBgColor').value = ganttSettings.taskBarBgColor || '#e5e7eb';
-      document.getElementById('ganttSetSummaryBgColor').value = ganttSettings.summaryBarBgColor || '#9ca3af';
-      
-      document.getElementById('ganttSetTaskActualColor').value = ganttSettings.taskBarActualColor || '#f59e0b';
-      document.getElementById('ganttSetSummaryActualColor').value = ganttSettings.summaryBarActualColor || '#b45309';
-      document.getElementById('ganttSetTaskActualBgColor').value = ganttSettings.taskBarActualBgColor || '#e5e7eb';
-      document.getElementById('ganttSetSummaryActualBgColor').value = ganttSettings.summaryBarActualBgColor || '#9ca3af';
-      document.getElementById('ganttSetBarArrangement').value = ganttSettings.barArrangement || 'planned_actual';
-      document.getElementById('ganttSetBarVerticalAlign').value = ganttSettings.barVerticalAlign || 'middle';
-      document.getElementById('ganttSetBarGap').value = ganttSettings.barGap !== undefined ? ganttSettings.barGap : 2;
-      document.getElementById('ganttSetShowCostLabel').checked = ganttSettings.showCostLabel !== false;
-      document.getElementById('ganttSetShowDayLabel').checked = ganttSettings.showDayLabel !== false;
-      document.getElementById('ganttSetShowActualLabel').checked = ganttSettings.showActualLabel !== false;
-      document.getElementById('ganttSetBarLabelLocation').value = ganttSettings.barLabelLocation || 'right';
-      document.getElementById('ganttSetBarLabelScope').value = ganttSettings.barLabelScope || 'all';
-      document.getElementById('ganttSetBarLabelSize').value = ganttSettings.barLabelSize !== undefined ? ganttSettings.barLabelSize : 8;
-      document.getElementById('ganttSetBarLabelDecimals').value = ganttSettings.barLabelDecimals !== undefined ? ganttSettings.barLabelDecimals : 0;
-      document.getElementById('ganttSetScurveLabelDecimals').value = ganttSettings.scurveLabelDecimals !== undefined ? ganttSettings.scurveLabelDecimals : 2;
-      document.getElementById('ganttSetShowScurveDayLabel').checked = ganttSettings.showScurveDayLabel === true;
-      document.getElementById('ganttSetShowScurveCostLabel').checked = ganttSettings.showScurveCostLabel === true;
-      document.getElementById('ganttSetScurveLabelSize').value = ganttSettings.scurveLabelSize !== undefined ? ganttSettings.scurveLabelSize : 8;
-      
-      document.getElementById('ganttSetGridRowWeight').value = ganttSettings.gridRowWeight !== undefined ? ganttSettings.gridRowWeight : 1;
-      document.getElementById('ganttSetGridRowStyle').value = ganttSettings.gridRowStyle || 'solid';
-      document.getElementById('ganttSetGridRowColor').value = ganttSettings.gridRowColor || '#e2e8f0';
-      
-      document.getElementById('ganttSetGridColWeight').value = ganttSettings.gridColWeight !== undefined ? ganttSettings.gridColWeight : 1;
-      document.getElementById('ganttSetGridColStyle').value = ganttSettings.gridColStyle || 'solid';
-      document.getElementById('ganttSetGridColColor').value = ganttSettings.gridColColor || '#e2e8f0';
-      
-      document.getElementById('ganttSetGridDayWeight').value = ganttSettings.gridDayWeight !== undefined ? ganttSettings.gridDayWeight : 1;
-      document.getElementById('ganttSetGridDayStyle').value = ganttSettings.gridDayStyle || 'solid';
-      document.getElementById('ganttSetGridDayColor').value = ganttSettings.gridDayColor || '#f1f5f9';
-      
-      document.getElementById('ganttSetGridWeekWeight').value = ganttSettings.gridWeekWeight !== undefined ? ganttSettings.gridWeekWeight : 1;
-      document.getElementById('ganttSetGridWeekStyle').value = ganttSettings.gridWeekStyle || 'solid';
-      document.getElementById('ganttSetGridWeekColor').value = ganttSettings.gridWeekColor || '#cbd5e1';
-      
-      document.getElementById('ganttSetGridMonthWeight').value = ganttSettings.gridMonthWeight !== undefined ? ganttSettings.gridMonthWeight : 1;
-      document.getElementById('ganttSetGridMonthStyle').value = ganttSettings.gridMonthStyle || 'solid';
-      document.getElementById('ganttSetGridMonthColor').value = ganttSettings.gridMonthColor || '#94a3b8';
-      
-      document.getElementById('ganttSetGridOuterWeight').value = ganttSettings.gridOuterWeight !== undefined ? ganttSettings.gridOuterWeight : 1;
-      document.getElementById('ganttSetGridOuterStyle').value = ganttSettings.gridOuterStyle || 'solid';
-      document.getElementById('ganttSetGridOuterColor').value = ganttSettings.gridOuterColor || '#cbd5e1';
-      
-      document.getElementById('ganttSetGridProjWeight').value = ganttSettings.gridProjWeight !== undefined ? ganttSettings.gridProjWeight : 2;
-      document.getElementById('ganttSetGridProjStyle').value = ganttSettings.gridProjStyle || 'dashed';
-      document.getElementById('ganttSetGridProjColor').value = ganttSettings.gridProjColor || '#ef4444';
-      
-      document.getElementById('ganttSetGridCurveWeight').value = ganttSettings.gridCurveWeight !== undefined ? ganttSettings.gridCurveWeight : 1;
-      document.getElementById('ganttSetGridCurveStyle').value = ganttSettings.gridCurveStyle || 'solid';
-      document.getElementById('ganttSetGridCurveColor').value = ganttSettings.gridCurveColor || '#cbd5e1';
+      if (!ganttSettings || Object.keys(ganttSettings).length === 0) {
+        initGanttSettings();
+      }
 
-      document.getElementById('ganttSetHeaderHeight').value = ganttSettings.headerHeight !== undefined ? ganttSettings.headerHeight : 48;
-      document.getElementById('ganttSetHeaderTopHeight').value = ganttSettings.headerTopHeight !== undefined ? ganttSettings.headerTopHeight : 24;
-      document.getElementById('ganttSetHeaderBottomHeight').value = ganttSettings.headerBottomHeight !== undefined ? ganttSettings.headerBottomHeight : 24;
-      document.getElementById('ganttSetHeaderFontSize').value = ganttSettings.headerFontSize !== undefined ? ganttSettings.headerFontSize : 11;
-      document.getElementById('ganttSetHeaderLeftBg').value = ganttSettings.headerLeftBg || '#2563eb';
-      document.getElementById('ganttSetHeaderLeftColor').value = ganttSettings.headerLeftColor || '#ffffff';
-      document.getElementById('ganttSetHeaderRightBg').value = ganttSettings.headerRightBg || '#ffffff';
-      document.getElementById('ganttSetHeaderRightColor').value = ganttSettings.headerRightColor || '#1f2937';
-      document.getElementById('ganttSetHeaderAltBg').value = ganttSettings.headerAltBgColor || '#dbeafe';
-      document.getElementById('ganttSetCoordRowBg').value = ganttSettings.coordRowBg || '#f3f4f6';
-      document.getElementById('ganttSetCoordRowColor').value = ganttSettings.coordRowColor || '#6b7280';
-      document.getElementById('ganttSetCoordHeaderBg').value = ganttSettings.coordHeaderBg || '#1e3a8a';
-      document.getElementById('ganttSetCoordHeaderColor').value = ganttSettings.coordHeaderColor || '#ffffff';
-      document.getElementById('ganttSetCoordHeaderHeight').value = ganttSettings.coordHeaderHeight !== undefined ? ganttSettings.coordHeaderHeight : 24;
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = (val !== undefined && val !== null) ? val : '';
+      };
+      const setChecked = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.checked = !!val;
+      };
 
-      document.getElementById('ganttSetGridHeaderLeftWeight').value = ganttSettings.gridHeaderLeftWeight !== undefined ? ganttSettings.gridHeaderLeftWeight : 1;
-      document.getElementById('ganttSetGridHeaderLeftStyle').value = ganttSettings.gridHeaderLeftStyle || 'solid';
-      document.getElementById('ganttSetGridHeaderLeftColor').value = ganttSettings.gridHeaderLeftColor || '#cbd5e1';
+      setVal('ganttSetRowHeight', ganttSettings.rowHeight);
+      setVal('ganttSetTaskBarHeight', ganttSettings.taskBarHeight);
+      setVal('ganttSetSummaryBarHeight', ganttSettings.summaryBarHeight);
+      setVal('ganttSetTaskColor', ganttSettings.taskBarColor);
+      setVal('ganttSetTaskDayColor', ganttSettings.taskBarDayColor);
+      setVal('ganttSetSummaryColor', ganttSettings.summaryBarColor);
+      setVal('ganttSetSummaryDayColor', ganttSettings.summaryBarDayColor);
+      setVal('ganttSetTaskBgColor', ganttSettings.taskBarBgColor || '#e5e7eb');
+      setVal('ganttSetSummaryBgColor', ganttSettings.summaryBarBgColor || '#9ca3af');
       
-      document.getElementById('ganttSetGridHeaderRightWeight').value = ganttSettings.gridHeaderRightWeight !== undefined ? ganttSettings.gridHeaderRightWeight : 1;
-      document.getElementById('ganttSetGridHeaderRightStyle').value = ganttSettings.gridHeaderRightStyle || 'solid';
-      document.getElementById('ganttSetGridHeaderRightColor').value = ganttSettings.gridHeaderRightColor || '#cbd5e1';
+      setVal('ganttSetTaskActualColor', ganttSettings.taskBarActualColor || '#f59e0b');
+      setVal('ganttSetSummaryActualColor', ganttSettings.summaryBarActualColor || '#b45309');
+      setVal('ganttSetTaskActualBgColor', ganttSettings.taskBarActualBgColor || '#e5e7eb');
+      setVal('ganttSetSummaryActualBgColor', ganttSettings.summaryBarActualBgColor || '#9ca3af');
+      setVal('ganttSetBarArrangement', ganttSettings.barArrangement || 'planned_actual');
+      setVal('ganttSetBarVerticalAlign', ganttSettings.barVerticalAlign || 'middle');
+      setVal('ganttSetBarGap', ganttSettings.barGap !== undefined ? ganttSettings.barGap : 2);
+      setChecked('ganttSetShowCostLabel', ganttSettings.showCostLabel !== false);
+      setChecked('ganttSetShowDayLabel', ganttSettings.showDayLabel !== false);
+      setChecked('ganttSetShowActualLabel', ganttSettings.showActualLabel !== false);
+      setVal('ganttSetBarLabelLocation', ganttSettings.barLabelLocation || 'right');
+      setVal('ganttSetBarLabelScope', ganttSettings.barLabelScope || 'all');
+      setVal('ganttSetBarLabelSize', ganttSettings.barLabelSize !== undefined ? ganttSettings.barLabelSize : 8);
+      setVal('ganttSetBarLabelDecimals', ganttSettings.barLabelDecimals !== undefined ? ganttSettings.barLabelDecimals : 0);
+      setVal('ganttSetScurveLabelDecimals', ganttSettings.scurveLabelDecimals !== undefined ? ganttSettings.scurveLabelDecimals : 2);
+      setChecked('ganttSetShowScurveDayLabel', ganttSettings.showScurveDayLabel === true);
+      setChecked('ganttSetShowScurveCostLabel', ganttSettings.showScurveCostLabel === true);
+      setVal('ganttSetScurveLabelSize', ganttSettings.scurveLabelSize !== undefined ? ganttSettings.scurveLabelSize : 8);
+      
+      setVal('ganttSetGridRowWeight', ganttSettings.gridRowWeight !== undefined ? ganttSettings.gridRowWeight : 1);
+      setVal('ganttSetGridRowStyle', ganttSettings.gridRowStyle || 'solid');
+      setVal('ganttSetGridRowColor', ganttSettings.gridRowColor || '#e2e8f0');
+      
+      setVal('ganttSetGridColWeight', ganttSettings.gridColWeight !== undefined ? ganttSettings.gridColWeight : 1);
+      setVal('ganttSetGridColStyle', ganttSettings.gridColStyle || 'solid');
+      setVal('ganttSetGridColColor', ganttSettings.gridColColor || '#e2e8f0');
+      
+      setVal('ganttSetGridDayWeight', ganttSettings.gridDayWeight !== undefined ? ganttSettings.gridDayWeight : 1);
+      setVal('ganttSetGridDayStyle', ganttSettings.gridDayStyle || 'solid');
+      setVal('ganttSetGridDayColor', ganttSettings.gridDayColor || '#f1f5f9');
+      
+      setVal('ganttSetGridWeekWeight', ganttSettings.gridWeekWeight !== undefined ? ganttSettings.gridWeekWeight : 1);
+      setVal('ganttSetGridWeekStyle', ganttSettings.gridWeekStyle || 'solid');
+      setVal('ganttSetGridWeekColor', ganttSettings.gridWeekColor || '#cbd5e1');
+      
+      setVal('ganttSetGridMonthWeight', ganttSettings.gridMonthWeight !== undefined ? ganttSettings.gridMonthWeight : 1);
+      setVal('ganttSetGridMonthStyle', ganttSettings.gridMonthStyle || 'solid');
+      setVal('ganttSetGridMonthColor', ganttSettings.gridMonthColor || '#94a3b8');
+      
+      setVal('ganttSetGridOuterWeight', ganttSettings.gridOuterWeight !== undefined ? ganttSettings.gridOuterWeight : 1);
+      setVal('ganttSetGridOuterStyle', ganttSettings.gridOuterStyle || 'solid');
+      setVal('ganttSetGridOuterColor', ganttSettings.gridOuterColor || '#cbd5e1');
+      
+      setVal('ganttSetGridProjWeight', ganttSettings.gridProjWeight !== undefined ? ganttSettings.gridProjWeight : 2);
+      setVal('ganttSetGridProjStyle', ganttSettings.gridProjStyle || 'dashed');
+      setVal('ganttSetGridProjColor', ganttSettings.gridProjColor || '#ef4444');
+      
+      setVal('ganttSetGridCurveWeight', ganttSettings.gridCurveWeight !== undefined ? ganttSettings.gridCurveWeight : 1);
+      setVal('ganttSetGridCurveStyle', ganttSettings.gridCurveStyle || 'solid');
+      setVal('ganttSetGridCurveColor', ganttSettings.gridCurveColor || '#cbd5e1');
 
-      document.getElementById('ganttSetColWidthDays').value = ganttSettings.colWidthDays !== undefined ? ganttSettings.colWidthDays : 28;
-      document.getElementById('ganttSetColWidthWeeks').value = ganttSettings.colWidthWeeks !== undefined ? ganttSettings.colWidthWeeks : 64;
-      document.getElementById('ganttSetColWidthMonths').value = ganttSettings.colWidthMonths !== undefined ? ganttSettings.colWidthMonths : 120;
-      document.getElementById('ganttSetColWidthQuarters').value = ganttSettings.colWidthQuarters !== undefined ? ganttSettings.colWidthQuarters : 180;
+      setVal('ganttSetHeaderHeight', ganttSettings.headerHeight !== undefined ? ganttSettings.headerHeight : 48);
+      setVal('ganttSetHeaderTopHeight', ganttSettings.headerTopHeight !== undefined ? ganttSettings.headerTopHeight : 24);
+      setVal('ganttSetHeaderBottomHeight', ganttSettings.headerBottomHeight !== undefined ? ganttSettings.headerBottomHeight : 24);
+      setVal('ganttSetHeaderFontSize', ganttSettings.headerFontSize !== undefined ? ganttSettings.headerFontSize : 11);
+      setVal('ganttSetHeaderLeftBg', ganttSettings.headerLeftBg || '#2563eb');
+      setVal('ganttSetHeaderLeftColor', ganttSettings.headerLeftColor || '#ffffff');
+      setVal('ganttSetHeaderRightBg', ganttSettings.headerRightBg || '#ffffff');
+      setVal('ganttSetHeaderRightColor', ganttSettings.headerRightColor || '#1f2937');
+      setVal('ganttSetHeaderAltBg', ganttSettings.headerAltBgColor || '#dbeafe');
+      setVal('ganttSetCoordRowBg', ganttSettings.coordRowBg || '#f3f4f6');
+      setVal('ganttSetCoordRowColor', ganttSettings.coordRowColor || '#6b7280');
+      setVal('ganttSetCoordHeaderBg', ganttSettings.coordHeaderBg || '#1e3a8a');
+      setVal('ganttSetCoordHeaderColor', ganttSettings.coordHeaderColor || '#ffffff');
+      setVal('ganttSetCoordHeaderHeight', ganttSettings.coordHeaderHeight !== undefined ? ganttSettings.coordHeaderHeight : 24);
+
+      setVal('ganttSetGridHeaderLeftWeight', ganttSettings.gridHeaderLeftWeight !== undefined ? ganttSettings.gridHeaderLeftWeight : 1);
+      setVal('ganttSetGridHeaderLeftStyle', ganttSettings.gridHeaderLeftStyle || 'solid');
+      setVal('ganttSetGridHeaderLeftColor', ganttSettings.gridHeaderLeftColor || '#cbd5e1');
       
-      document.getElementById('ganttSetConnectorWeight').value = ganttSettings.connectorWeight !== undefined ? ganttSettings.connectorWeight : 1.5;
-      document.getElementById('ganttSetConnectorStyle').value = ganttSettings.connectorStyle || 'solid';
-      document.getElementById('ganttSetConnectorColor').value = ganttSettings.connectorColor || '#6b7280';
-      document.getElementById('ganttSetConnectorStartHead').value = ganttSettings.connectorStartHead || 'none';
-      document.getElementById('ganttSetConnectorEndHead').value = ganttSettings.connectorEndHead || 'arrow';
-      document.getElementById('ganttSetConnectorHeadSize').value = ganttSettings.connectorHeadSize !== undefined ? ganttSettings.connectorHeadSize : 6;
+      setVal('ganttSetGridHeaderRightWeight', ganttSettings.gridHeaderRightWeight !== undefined ? ganttSettings.gridHeaderRightWeight : 1);
+      setVal('ganttSetGridHeaderRightStyle', ganttSettings.gridHeaderRightStyle || 'solid');
+      setVal('ganttSetGridHeaderRightColor', ganttSettings.gridHeaderRightColor || '#cbd5e1');
+
+      setVal('ganttSetColWidthDays', ganttSettings.colWidthDays !== undefined ? ganttSettings.colWidthDays : 28);
+      setVal('ganttSetColWidthWeeks', ganttSettings.colWidthWeeks !== undefined ? ganttSettings.colWidthWeeks : 64);
+      setVal('ganttSetColWidthMonths', ganttSettings.colWidthMonths !== undefined ? ganttSettings.colWidthMonths : 120);
+      setVal('ganttSetColWidthQuarters', ganttSettings.colWidthQuarters !== undefined ? ganttSettings.colWidthQuarters : 180);
+      
+      setVal('ganttSetConnectorWeight', ganttSettings.connectorWeight !== undefined ? ganttSettings.connectorWeight : 1.5);
+      setVal('ganttSetConnectorStyle', ganttSettings.connectorStyle || 'solid');
+      setVal('ganttSetConnectorColor', ganttSettings.connectorColor || '#6b7280');
+      setVal('ganttSetConnectorStartHead', ganttSettings.connectorStartHead || 'none');
+      setVal('ganttSetConnectorEndHead', ganttSettings.connectorEndHead || 'arrow');
+      setVal('ganttSetConnectorHeadSize', ganttSettings.connectorHeadSize !== undefined ? ganttSettings.connectorHeadSize : 6);
       
       modal.style.display = 'flex';
       hideGanttTimelineContextMenu();
@@ -2109,103 +2429,112 @@
     }
 
     function saveGanttStyleSettings() {
-      ganttSettings.rowHeight = parseInt(document.getElementById('ganttSetRowHeight').value, 10) || 40;
-      ganttSettings.taskBarHeight = parseInt(document.getElementById('ganttSetTaskBarHeight').value, 10) || 6;
-      ganttSettings.summaryBarHeight = parseInt(document.getElementById('ganttSetSummaryBarHeight').value, 10) || 5;
-      ganttSettings.taskBarColor = document.getElementById('ganttSetTaskColor').value;
-      ganttSettings.taskBarDayColor = document.getElementById('ganttSetTaskDayColor').value;
-      ganttSettings.summaryBarColor = document.getElementById('ganttSetSummaryColor').value;
-      ganttSettings.summaryBarDayColor = document.getElementById('ganttSetSummaryDayColor').value;
-      ganttSettings.taskBarBgColor = document.getElementById('ganttSetTaskBgColor').value;
-      ganttSettings.summaryBarBgColor = document.getElementById('ganttSetSummaryBgColor').value;
+      const getVal = (id, fallback) => {
+        const el = document.getElementById(id);
+        return el ? el.value : fallback;
+      };
+      const getChecked = (id, fallback) => {
+        const el = document.getElementById(id);
+        return el ? el.checked : fallback;
+      };
+
+      ganttSettings.rowHeight = parseInt(getVal('ganttSetRowHeight', 40), 10) || 40;
+      ganttSettings.taskBarHeight = parseInt(getVal('ganttSetTaskBarHeight', 6), 10) || 6;
+      ganttSettings.summaryBarHeight = parseInt(getVal('ganttSetSummaryBarHeight', 5), 10) || 5;
+      ganttSettings.taskBarColor = getVal('ganttSetTaskColor', '#2563eb');
+      ganttSettings.taskBarDayColor = getVal('ganttSetTaskDayColor', '#d97706');
+      ganttSettings.summaryBarColor = getVal('ganttSetSummaryColor', '#4b5563');
+      ganttSettings.summaryBarDayColor = getVal('ganttSetSummaryDayColor', '#d97706');
+      ganttSettings.taskBarBgColor = getVal('ganttSetTaskBgColor', '#e5e7eb');
+      ganttSettings.summaryBarBgColor = getVal('ganttSetSummaryBgColor', '#9ca3af');
       
-      ganttSettings.taskBarActualColor = document.getElementById('ganttSetTaskActualColor').value;
-      ganttSettings.summaryBarActualColor = document.getElementById('ganttSetSummaryActualColor').value;
-      ganttSettings.taskBarActualBgColor = document.getElementById('ganttSetTaskActualBgColor').value;
-      ganttSettings.summaryBarActualBgColor = document.getElementById('ganttSetSummaryActualBgColor').value;
-      ganttSettings.barArrangement = document.getElementById('ganttSetBarArrangement').value;
-      ganttSettings.barVerticalAlign = document.getElementById('ganttSetBarVerticalAlign').value;
-      ganttSettings.barGap = parseInt(document.getElementById('ganttSetBarGap').value, 10) || 0;
-      ganttSettings.showCostLabel = document.getElementById('ganttSetShowCostLabel').checked;
-      ganttSettings.showDayLabel = document.getElementById('ganttSetShowDayLabel').checked;
-      ganttSettings.showActualLabel = document.getElementById('ganttSetShowActualLabel').checked;
-      ganttSettings.barLabelLocation = document.getElementById('ganttSetBarLabelLocation').value || 'right';
-      ganttSettings.barLabelScope = document.getElementById('ganttSetBarLabelScope').value || 'all';
-      ganttSettings.barLabelSize = parseInt(document.getElementById('ganttSetBarLabelSize').value, 10) || 8;
-      ganttSettings.barLabelDecimals = parseInt(document.getElementById('ganttSetBarLabelDecimals').value, 10);
+      ganttSettings.taskBarActualColor = getVal('ganttSetTaskActualColor', '#f59e0b');
+      ganttSettings.summaryBarActualColor = getVal('ganttSetSummaryActualColor', '#b45309');
+      ganttSettings.taskBarActualBgColor = getVal('ganttSetTaskActualBgColor', '#e5e7eb');
+      ganttSettings.summaryBarActualBgColor = getVal('ganttSetSummaryActualBgColor', '#9ca3af');
+      ganttSettings.barArrangement = getVal('ganttSetBarArrangement', 'planned_actual');
+      ganttSettings.barVerticalAlign = getVal('ganttSetBarVerticalAlign', 'middle');
+      ganttSettings.barGap = parseInt(getVal('ganttSetBarGap', 0), 10) || 0;
+      ganttSettings.showCostLabel = getChecked('ganttSetShowCostLabel', true);
+      ganttSettings.showDayLabel = getChecked('ganttSetShowDayLabel', true);
+      ganttSettings.showActualLabel = getChecked('ganttSetShowActualLabel', true);
+      ganttSettings.barLabelLocation = getVal('ganttSetBarLabelLocation', 'right') || 'right';
+      ganttSettings.barLabelScope = getVal('ganttSetBarLabelScope', 'all') || 'all';
+      ganttSettings.barLabelSize = parseInt(getVal('ganttSetBarLabelSize', 8), 10) || 8;
+      ganttSettings.barLabelDecimals = parseInt(getVal('ganttSetBarLabelDecimals', 0), 10);
       if (isNaN(ganttSettings.barLabelDecimals)) ganttSettings.barLabelDecimals = 0;
-      ganttSettings.scurveLabelDecimals = parseInt(document.getElementById('ganttSetScurveLabelDecimals').value, 10);
+      ganttSettings.scurveLabelDecimals = parseInt(getVal('ganttSetScurveLabelDecimals', 2), 10);
       if (isNaN(ganttSettings.scurveLabelDecimals)) ganttSettings.scurveLabelDecimals = 2;
-      ganttSettings.showScurveDayLabel = document.getElementById('ganttSetShowScurveDayLabel').checked;
-      ganttSettings.showScurveCostLabel = document.getElementById('ganttSetShowScurveCostLabel').checked;
-      ganttSettings.scurveLabelSize = parseInt(document.getElementById('ganttSetScurveLabelSize').value, 10) || 8;
+      ganttSettings.showScurveDayLabel = getChecked('ganttSetShowScurveDayLabel', false);
+      ganttSettings.showScurveCostLabel = getChecked('ganttSetShowScurveCostLabel', false);
+      ganttSettings.scurveLabelSize = parseInt(getVal('ganttSetScurveLabelSize', 8), 10) || 8;
       
-      ganttSettings.gridRowWeight = parseFloat(document.getElementById('ganttSetGridRowWeight').value) || 0;
-      ganttSettings.gridRowStyle = document.getElementById('ganttSetGridRowStyle').value || 'solid';
-      ganttSettings.gridRowColor = document.getElementById('ganttSetGridRowColor').value;
+      ganttSettings.gridRowWeight = parseFloat(getVal('ganttSetGridRowWeight', 0)) || 0;
+      ganttSettings.gridRowStyle = getVal('ganttSetGridRowStyle', 'solid') || 'solid';
+      ganttSettings.gridRowColor = getVal('ganttSetGridRowColor', '#e2e8f0');
       
-      ganttSettings.gridColWeight = parseFloat(document.getElementById('ganttSetGridColWeight').value) || 0;
-      ganttSettings.gridColStyle = document.getElementById('ganttSetGridColStyle').value || 'solid';
-      ganttSettings.gridColColor = document.getElementById('ganttSetGridColColor').value;
+      ganttSettings.gridColWeight = parseFloat(getVal('ganttSetGridColWeight', 0)) || 0;
+      ganttSettings.gridColStyle = getVal('ganttSetGridColStyle', 'solid') || 'solid';
+      ganttSettings.gridColColor = getVal('ganttSetGridColColor', '#e2e8f0');
       
-      ganttSettings.gridDayWeight = parseFloat(document.getElementById('ganttSetGridDayWeight').value) || 0;
-      ganttSettings.gridDayStyle = document.getElementById('ganttSetGridDayStyle').value || 'solid';
-      ganttSettings.gridDayColor = document.getElementById('ganttSetGridDayColor').value;
+      ganttSettings.gridDayWeight = parseFloat(getVal('ganttSetGridDayWeight', 0)) || 0;
+      ganttSettings.gridDayStyle = getVal('ganttSetGridDayStyle', 'solid') || 'solid';
+      ganttSettings.gridDayColor = getVal('ganttSetGridDayColor', '#f1f5f9');
       
-      ganttSettings.gridWeekWeight = parseFloat(document.getElementById('ganttSetGridWeekWeight').value) || 0;
-      ganttSettings.gridWeekStyle = document.getElementById('ganttSetGridWeekStyle').value || 'solid';
-      ganttSettings.gridWeekColor = document.getElementById('ganttSetGridWeekColor').value;
+      ganttSettings.gridWeekWeight = parseFloat(getVal('ganttSetGridWeekWeight', 0)) || 0;
+      ganttSettings.gridWeekStyle = getVal('ganttSetGridWeekStyle', 'solid') || 'solid';
+      ganttSettings.gridWeekColor = getVal('ganttSetGridWeekColor', '#cbd5e1');
       
-      ganttSettings.gridMonthWeight = parseFloat(document.getElementById('ganttSetGridMonthWeight').value) || 0;
-      ganttSettings.gridMonthStyle = document.getElementById('ganttSetGridMonthStyle').value || 'solid';
-      ganttSettings.gridMonthColor = document.getElementById('ganttSetGridMonthColor').value;
+      ganttSettings.gridMonthWeight = parseFloat(getVal('ganttSetGridMonthWeight', 0)) || 0;
+      ganttSettings.gridMonthStyle = getVal('ganttSetGridMonthStyle', 'solid') || 'solid';
+      ganttSettings.gridMonthColor = getVal('ganttSetGridMonthColor', '#94a3b8');
       
-      ganttSettings.gridOuterWeight = parseFloat(document.getElementById('ganttSetGridOuterWeight').value) || 0;
-      ganttSettings.gridOuterStyle = document.getElementById('ganttSetGridOuterStyle').value || 'solid';
-      ganttSettings.gridOuterColor = document.getElementById('ganttSetGridOuterColor').value;
+      ganttSettings.gridOuterWeight = parseFloat(getVal('ganttSetGridOuterWeight', 0)) || 0;
+      ganttSettings.gridOuterStyle = getVal('ganttSetGridOuterStyle', 'solid') || 'solid';
+      ganttSettings.gridOuterColor = getVal('ganttSetGridOuterColor', '#cbd5e1');
       
-      ganttSettings.gridProjWeight = parseFloat(document.getElementById('ganttSetGridProjWeight').value) || 0;
-      ganttSettings.gridProjStyle = document.getElementById('ganttSetGridProjStyle').value || 'solid';
-      ganttSettings.gridProjColor = document.getElementById('ganttSetGridProjColor').value;
+      ganttSettings.gridProjWeight = parseFloat(getVal('ganttSetGridProjWeight', 0)) || 0;
+      ganttSettings.gridProjStyle = getVal('ganttSetGridProjStyle', 'dashed') || 'dashed';
+      ganttSettings.gridProjColor = getVal('ganttSetGridProjColor', '#ef4444');
       
-      ganttSettings.gridCurveWeight = parseFloat(document.getElementById('ganttSetGridCurveWeight').value) || 0;
-      ganttSettings.gridCurveStyle = document.getElementById('ganttSetGridCurveStyle').value || 'solid';
-      ganttSettings.gridCurveColor = document.getElementById('ganttSetGridCurveColor').value;
+      ganttSettings.gridCurveWeight = parseFloat(getVal('ganttSetGridCurveWeight', 0)) || 0;
+      ganttSettings.gridCurveStyle = getVal('ganttSetGridCurveStyle', 'solid') || 'solid';
+      ganttSettings.gridCurveColor = getVal('ganttSetGridCurveColor', '#cbd5e1');
 
-      ganttSettings.headerHeight = parseInt(document.getElementById('ganttSetHeaderHeight').value, 10) || 48;
-      ganttSettings.headerTopHeight = parseInt(document.getElementById('ganttSetHeaderTopHeight').value, 10) || 24;
-      ganttSettings.headerBottomHeight = parseInt(document.getElementById('ganttSetHeaderBottomHeight').value, 10) || 24;
-      ganttSettings.headerFontSize = parseInt(document.getElementById('ganttSetHeaderFontSize').value, 10) || 11;
-      ganttSettings.headerLeftBg = document.getElementById('ganttSetHeaderLeftBg').value;
-      ganttSettings.headerLeftColor = document.getElementById('ganttSetHeaderLeftColor').value;
-      ganttSettings.headerRightBg = document.getElementById('ganttSetHeaderRightBg').value;
-      ganttSettings.headerRightColor = document.getElementById('ganttSetHeaderRightColor').value;
-      ganttSettings.headerAltBgColor = document.getElementById('ganttSetHeaderAltBg').value;
-      ganttSettings.coordRowBg = document.getElementById('ganttSetCoordRowBg').value;
-      ganttSettings.coordRowColor = document.getElementById('ganttSetCoordRowColor').value;
-      ganttSettings.coordHeaderBg = document.getElementById('ganttSetCoordHeaderBg').value;
-      ganttSettings.coordHeaderColor = document.getElementById('ganttSetCoordHeaderColor').value;
-      ganttSettings.coordHeaderHeight = parseInt(document.getElementById('ganttSetCoordHeaderHeight').value, 10) || 24;
+      ganttSettings.headerHeight = parseInt(getVal('ganttSetHeaderHeight', 48), 10) || 48;
+      ganttSettings.headerTopHeight = parseInt(getVal('ganttSetHeaderTopHeight', 24), 10) || 24;
+      ganttSettings.headerBottomHeight = parseInt(getVal('ganttSetHeaderBottomHeight', 24), 10) || 24;
+      ganttSettings.headerFontSize = parseInt(getVal('ganttSetHeaderFontSize', 11), 10) || 11;
+      ganttSettings.headerLeftBg = getVal('ganttSetHeaderLeftBg', '#2563eb');
+      ganttSettings.headerLeftColor = getVal('ganttSetHeaderLeftColor', '#ffffff');
+      ganttSettings.headerRightBg = getVal('ganttSetHeaderRightBg', '#ffffff');
+      ganttSettings.headerRightColor = getVal('ganttSetHeaderRightColor', '#1f2937');
+      ganttSettings.headerAltBgColor = getVal('ganttSetHeaderAltBg', '#dbeafe');
+      ganttSettings.coordRowBg = getVal('ganttSetCoordRowBg', '#f3f4f6');
+      ganttSettings.coordRowColor = getVal('ganttSetCoordRowColor', '#6b7280');
+      ganttSettings.coordHeaderBg = getVal('ganttSetCoordHeaderBg', '#1e3a8a');
+      ganttSettings.coordHeaderColor = getVal('ganttSetCoordHeaderColor', '#ffffff');
+      ganttSettings.coordHeaderHeight = parseInt(getVal('ganttSetCoordHeaderHeight', 24), 10) || 24;
 
-      ganttSettings.gridHeaderLeftWeight = parseFloat(document.getElementById('ganttSetGridHeaderLeftWeight').value) || 0;
-      ganttSettings.gridHeaderLeftStyle = document.getElementById('ganttSetGridHeaderLeftStyle').value || 'solid';
-      ganttSettings.gridHeaderLeftColor = document.getElementById('ganttSetGridHeaderLeftColor').value;
+      ganttSettings.gridHeaderLeftWeight = parseFloat(getVal('ganttSetGridHeaderLeftWeight', 0)) || 0;
+      ganttSettings.gridHeaderLeftStyle = getVal('ganttSetGridHeaderLeftStyle', 'solid') || 'solid';
+      ganttSettings.gridHeaderLeftColor = getVal('ganttSetGridHeaderLeftColor', '#cbd5e1');
       
-      ganttSettings.gridHeaderRightWeight = parseFloat(document.getElementById('ganttSetGridHeaderRightWeight').value) || 0;
-      ganttSettings.gridHeaderRightStyle = document.getElementById('ganttSetGridHeaderRightStyle').value || 'solid';
-      ganttSettings.gridHeaderRightColor = document.getElementById('ganttSetGridHeaderRightColor').value;
+      ganttSettings.gridHeaderRightWeight = parseFloat(getVal('ganttSetGridHeaderRightWeight', 0)) || 0;
+      ganttSettings.gridHeaderRightStyle = getVal('ganttSetGridHeaderRightStyle', 'solid') || 'solid';
+      ganttSettings.gridHeaderRightColor = getVal('ganttSetGridHeaderRightColor', '#cbd5e1');
 
-      ganttSettings.colWidthDays = parseInt(document.getElementById('ganttSetColWidthDays').value, 10) || 28;
-      ganttSettings.colWidthWeeks = parseInt(document.getElementById('ganttSetColWidthWeeks').value, 10) || 64;
-      ganttSettings.colWidthMonths = parseInt(document.getElementById('ganttSetColWidthMonths').value, 10) || 120;
-      ganttSettings.colWidthQuarters = parseInt(document.getElementById('ganttSetColWidthQuarters').value, 10) || 180;
+      ganttSettings.colWidthDays = parseInt(getVal('ganttSetColWidthDays', 28), 10) || 28;
+      ganttSettings.colWidthWeeks = parseInt(getVal('ganttSetColWidthWeeks', 64), 10) || 64;
+      ganttSettings.colWidthMonths = parseInt(getVal('ganttSetColWidthMonths', 120), 10) || 120;
+      ganttSettings.colWidthQuarters = parseInt(getVal('ganttSetColWidthQuarters', 180), 10) || 180;
       
-      ganttSettings.connectorWeight = parseFloat(document.getElementById('ganttSetConnectorWeight').value) || 1.5;
-      ganttSettings.connectorStyle = document.getElementById('ganttSetConnectorStyle').value || 'solid';
-      ganttSettings.connectorColor = document.getElementById('ganttSetConnectorColor').value || '#6b7280';
-      ganttSettings.connectorStartHead = document.getElementById('ganttSetConnectorStartHead').value || 'none';
-      ganttSettings.connectorEndHead = document.getElementById('ganttSetConnectorEndHead').value || 'arrow';
-      ganttSettings.connectorHeadSize = parseInt(document.getElementById('ganttSetConnectorHeadSize').value, 10) || 6;
+      ganttSettings.connectorWeight = parseFloat(getVal('ganttSetConnectorWeight', 1.5)) || 1.5;
+      ganttSettings.connectorStyle = getVal('ganttSetConnectorStyle', 'solid') || 'solid';
+      ganttSettings.connectorColor = getVal('ganttSetConnectorColor', '#6b7280') || '#6b7280';
+      ganttSettings.connectorStartHead = getVal('ganttSetConnectorStartHead', 'none') || 'none';
+      ganttSettings.connectorEndHead = getVal('ganttSetConnectorEndHead', 'arrow') || 'arrow';
+      ganttSettings.connectorHeadSize = parseInt(getVal('ganttSetConnectorHeadSize', 6), 10) || 6;
       
       saveGanttSettings();
       closeGanttStyleSettingsModal();
@@ -2870,6 +3199,12 @@
          
          const coordH = ganttSettings.coordHeaderHeight !== undefined ? ganttSettings.coordHeaderHeight : 24;
          const rowH = ganttSettings.rowHeight || 40;
+         const hHeight = ganttSettings.headerHeight !== undefined ? ganttSettings.headerHeight : 48;
+         const hrWeight = ganttSettings.gridHeaderRightWeight !== undefined ? ganttSettings.gridHeaderRightWeight : 1;
+         const hTopHeight = Math.floor(hHeight / 2);
+         const hBottomHeight = (hHeight + hrWeight) - hTopHeight;
+         const coordRowTotalH = coordH + hrWeight;
+         const totalHeaderH = (ganttSettings.showCoordinates ? coordRowTotalH : 0) + (hHeight + hrWeight);
          ganttCoordinateValues = {};
          const barLabelDecimals = ganttSettings.barLabelDecimals !== undefined ? ganttSettings.barLabelDecimals : 0;
          const scurveLabelDecimals = ganttSettings.scurveLabelDecimals !== undefined ? ganttSettings.scurveLabelDecimals : 2;
@@ -2918,7 +3253,7 @@
       const savedScrollY = window.scrollY;
       const savedScrollX = window.scrollX;
       const leftPanel = document.querySelector('.gantt-left-panel');
-      const savedLeftScrollTop = leftPanel ? leftPanel.scrollTop : 0;
+      const savedScrollTop = rightPanel ? rightPanel.scrollTop : (leftPanel ? leftPanel.scrollTop : 0);
       const savedLeftScrollLeft = leftPanel ? leftPanel.scrollLeft : 0;
       const savedRightScrollTop = rightPanel.scrollTop;
       const savedRightScrollLeft = rightPanel.scrollLeft;
@@ -2935,29 +3270,29 @@
       if (taskTableHead) {
         let theadHtml = '';
         if (ganttSettings.showCoordinates) {
-          theadHtml += '<tr class="gantt-coord-header-row" style="position: sticky; top: 0; z-index: 10;">';
-          theadHtml += '<th style="width: 40px; border-right: 1px solid var(--accent);"></th>'; // Blank cell for coordinate column
+          theadHtml += `<tr class="gantt-coord-header-row" style="position: sticky; top: 0; z-index: 10; height: ${coordH}px; min-height: ${coordH}px; max-height: ${coordH}px; line-height: ${coordH}px; box-sizing: border-box;">`;
+          theadHtml += `<th style="width: 40px; height: ${coordH}px; line-height: ${coordH}px; padding: 0 4px; box-sizing: border-box; border-right: 1px solid var(--accent);"></th>`; // Blank cell for coordinate column
           activeCols.forEach((col, idx) => {
             const borderStyle = idx < activeCols.length - 1 ? 'border-right: 1px solid var(--accent);' : '';
             const colIdxInFull = ganttColumns.indexOf(col);
-            theadHtml += `<th style="width: ${col.width}px; ${borderStyle}">${getColLetter(colIdxInFull)}</th>`;
+            theadHtml += `<th style="width: ${col.width}px; height: ${coordH}px; line-height: ${coordH}px; padding: 0 4px; box-sizing: border-box; text-align: center; ${borderStyle}">${getColLetter(colIdxInFull)}</th>`;
           });
           theadHtml += '</tr>';
         }
 
         const topOffset = ganttSettings.showCoordinates ? `${coordH}px` : '0px';
-        theadHtml += `<tr style="height: 48px; border-bottom: 1px solid var(--line); background: var(--accent); position: sticky; top: ${topOffset}; z-index: 10;">`;
+        theadHtml += `<tr class="gantt-main-header-row" style="height: ${hHeight}px; min-height: ${hHeight}px; max-height: ${hHeight}px; line-height: normal; border-bottom: 1px solid var(--line); background: var(--accent); position: sticky; top: ${topOffset}; z-index: 10; box-sizing: border-box;">`;
         if (ganttSettings.showCoordinates) {
-          theadHtml += '<th class="gantt-coord-th" style="width: 40px; color: white; text-align: center; font-size: 10px; font-weight: bold; text-transform: uppercase; border-right: 1px solid var(--accent-dark);">#</th>';
+          theadHtml += `<th class="gantt-coord-th" style="width: 40px; height: ${hHeight}px; box-sizing: border-box; vertical-align: middle; color: white; text-align: center; font-size: 10px; font-weight: bold; text-transform: uppercase; border-right: 1px solid var(--accent-dark);">#</th>`;
         }
         activeCols.forEach((col, idx) => {
           const borderStyle = idx < activeCols.length - 1 ? 'border-right: 1px solid var(--accent-dark);' : '';
-          const alignStyle = (col.id === 'title' || col.id === 'specification') ? 'text-align: left; padding-left: 8px;' : 'text-align: center;';
+          const alignStyle = (col.id === 'title' || col.id === 'specification') ? 'text-align: left; padding-left: 8px; padding-right: 8px;' : 'text-align: center; padding-left: 4px; padding-right: 8px;';
           const isDragging = (window.activeGanttDragColId === col.id);
           const dragStyle = isDragging ? 'opacity: 0.6; background: #3b82f6 !important; border: 1px dashed white !important;' : '';
           const cursorStyle = isDragging ? 'cursor: grabbing;' : 'cursor: grab;';
-          theadHtml += `<th style="width: ${col.width}px; position: relative; color: white; ${alignStyle} font-size: 10px; font-weight: bold; text-transform: uppercase; ${borderStyle} ${dragStyle} ${cursorStyle}" data-col-id="${col.id}">
-            ${escapeHtml(col.name)}
+          theadHtml += `<th style="width: ${col.width}px; height: ${hHeight}px; box-sizing: border-box; vertical-align: middle; position: relative; color: white; ${alignStyle} font-size: 10px; font-weight: bold; text-transform: uppercase; white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word; line-height: 1.25; hyphens: auto; ${borderStyle} ${dragStyle} ${cursorStyle}" data-col-id="${col.id}">
+            <span class="gantt-th-text" style="display: block; width: 100%; white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word; line-height: 1.25; hyphens: auto;">${escapeHtml(col.name)}</span>
             <div class="gantt-col-resizer" style="position: absolute; right: 0; top: 0; width: 6px; height: 100%; cursor: col-resize; z-index: 2;"></div>
           </th>`;
         });
@@ -2997,6 +3332,15 @@
                 col.width = newWidth;
                 
                 th.style.width = newWidth + 'px';
+                th.style.minWidth = newWidth + 'px';
+                th.style.maxWidth = newWidth + 'px';
+                const colIdx = Array.from(th.parentNode.children).indexOf(th);
+                const coordTh = taskTableHead.querySelector(`.gantt-coord-header-row th:nth-child(${colIdx + 1})`);
+                if (coordTh) {
+                  coordTh.style.width = newWidth + 'px';
+                  coordTh.style.minWidth = newWidth + 'px';
+                  coordTh.style.maxWidth = newWidth + 'px';
+                }
                 
                 const activeCols = ganttColumns.filter(c => c.visible);
                 const extraWidthForCoords = ganttSettings.showCoordinates ? 40 : 0;
@@ -3071,7 +3415,7 @@
         document.getElementById('ganttTaskTable').style.width = totalW + 'px';
         if (leftPanel) {
           const savedW = localStorage.getItem('cost_estimate_gantt_left_width_v1');
-          const appliedW = savedW || (totalW + 'px');
+          const appliedW = savedW || '750px';
           leftPanel.style.width = appliedW;
           leftPanel.style.minWidth = appliedW;
           leftPanel.style.maxWidth = appliedW;
@@ -3372,10 +3716,6 @@
       headerRow1Html += `<div class="gantt-header-cell gantt-curve-cell" style="width: 80px; flex-shrink: 0; font-weight: bold; justify-content: center; border-bottom: 1px solid var(--line);">% Curve</div>`;
       headerRow2Html += `<div class="gantt-header-cell gantt-curve-cell" style="width: 80px; flex-shrink: 0; justify-content: center;"></div>`;
       
-      const hHeight = ganttSettings.headerHeight !== undefined ? ganttSettings.headerHeight : 48;
-      const hTopHeight = Math.floor(hHeight / 2);
-      const hBottomHeight = hHeight - hTopHeight;
-      
       let headerRowCoordHtml = '';
       if (ganttSettings.showCoordinates) {
         const startIdx = activeCols.length;
@@ -3391,16 +3731,21 @@
         headerRowCoordHtml += `<div class="gantt-header-cell gantt-curve-cell" style="width: 80px; flex-shrink: 0; justify-content: center; border-bottom: 1px solid var(--line); font-weight: bold; font-size: 10px;">${curveLetter}</div>`;
       }
 
+      timelineHeader.style.height = `${totalHeaderH}px`;
+      timelineHeader.style.minHeight = `${totalHeaderH}px`;
+      timelineHeader.style.maxHeight = `${totalHeaderH}px`;
+      timelineHeader.style.boxSizing = 'border-box';
+
       if (ganttSettings.showCoordinates) {
         timelineHeader.innerHTML = `
-          <div class="gantt-timeline-header-row row-coord" style="height: ${coordH}px; line-height: ${coordH}px;">${headerRowCoordHtml}</div>
-          <div class="gantt-timeline-header-row row-top" style="height: ${hTopHeight}px; line-height: ${hTopHeight}px;">${headerRow1Html}</div>
-          <div class="gantt-timeline-header-row row-bottom" style="height: ${hBottomHeight}px; line-height: ${hBottomHeight}px;">${headerRow2Html}</div>
+          <div class="gantt-timeline-header-row row-coord" style="height: ${coordRowTotalH}px; min-height: ${coordRowTotalH}px; max-height: ${coordRowTotalH}px; line-height: ${coordRowTotalH}px; box-sizing: border-box;">${headerRowCoordHtml}</div>
+          <div class="gantt-timeline-header-row row-top" style="height: ${hTopHeight}px; min-height: ${hTopHeight}px; max-height: ${hTopHeight}px; line-height: ${hTopHeight}px; box-sizing: border-box;">${headerRow1Html}</div>
+          <div class="gantt-timeline-header-row row-bottom" style="height: ${hBottomHeight}px; min-height: ${hBottomHeight}px; max-height: ${hBottomHeight}px; line-height: ${hBottomHeight}px; box-sizing: border-box;">${headerRow2Html}</div>
         `;
       } else {
         timelineHeader.innerHTML = `
-          <div class="gantt-timeline-header-row row-top" style="height: ${hTopHeight}px; line-height: ${hTopHeight}px;">${headerRow1Html}</div>
-          <div class="gantt-timeline-header-row row-bottom" style="height: ${hBottomHeight}px; line-height: ${hBottomHeight}px;">${headerRow2Html}</div>
+          <div class="gantt-timeline-header-row row-top" style="height: ${hTopHeight}px; min-height: ${hTopHeight}px; max-height: ${hTopHeight}px; line-height: ${hTopHeight}px; box-sizing: border-box;">${headerRow1Html}</div>
+          <div class="gantt-timeline-header-row row-bottom" style="height: ${hBottomHeight}px; min-height: ${hBottomHeight}px; max-height: ${hBottomHeight}px; line-height: ${hBottomHeight}px; box-sizing: border-box;">${headerRow2Html}</div>
         `;
       }
       
@@ -3476,6 +3821,10 @@
         tr.className = rowClass;
         tr.id = `ganttLeftRow-${index}`;
         tr.dataset.index = index;
+        tr.style.height = `${rowH}px`;
+        tr.style.minHeight = `${rowH}px`;
+        tr.style.maxHeight = `${rowH}px`;
+        tr.style.boxSizing = 'border-box';
         tr.onclick = (e) => {
           highlightGanttRow(index, e);
         };
@@ -3494,11 +3843,11 @@
             const toggleBtnHtml = isParent && (row.type === 'category' || row.type === 'subcategory' || row.type === 'subsubcategory')
               ? `<button class="toggle-btn ${row.ganttCollapsed ? 'collapsed' : ''}" type="button" onclick="toggleGanttRowCollapse(${index})" aria-label="Toggle row" style="margin-right: 6px; vertical-align: middle;"></button>`
               : '<span style="display: inline-block; width: 18px;"></span>';
-            cellsHtml += `<td style="${indentStyle} font-weight: bold; border-right: 1px solid var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(row.title || '')}${coordTooltip ? ' (' + coordTooltip + ')' : ''}">${toggleBtnHtml}<span style="vertical-align: middle;">${escapeHtml(row.title || '')}</span></td>`;
+            cellsHtml += `<td class="gantt-wrap-cell" style="${indentStyle} font-weight: bold; border-right: 1px solid var(--line); white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word; line-height: 1.25; overflow: hidden;" title="${escapeHtml(row.title || '')}${coordTooltip ? ' (' + coordTooltip + ')' : ''}">${toggleBtnHtml}<span style="vertical-align: middle;">${escapeHtml(row.title || '')}</span></td>`;
           } else if (col.id === 'specification') {
             const specVal = row.specification || '';
             const weightStyle = isParent ? 'font-weight: bold; color: var(--muted);' : 'font-size: 11px;';
-            cellsHtml += `<td title="${escapeHtml(specVal)}${coordTooltip ? ' (' + coordTooltip + ')' : ''}" style="text-align: left; border-right: 1px solid var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; ${weightStyle}">${escapeHtml(specVal)}</td>`;
+            cellsHtml += `<td class="gantt-wrap-cell" title="${escapeHtml(specVal)}${coordTooltip ? ' (' + coordTooltip + ')' : ''}" style="text-align: left; border-right: 1px solid var(--line); white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word; line-height: 1.25; overflow: hidden; ${weightStyle}">${escapeHtml(specVal)}</td>`;
           } else if (isParent) {
             if (col.id === 'startDate') {
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-weight: bold; color: var(--muted);">${taskInfo ? formatDateString(taskInfo.startDate) : ''}</td>`;
@@ -3519,7 +3868,7 @@
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-weight: bold; color: var(--muted);"></td>`;
             } else if (col.id === 'cost') {
               const parentSummary = computeBOQCategorySummary(index);
-              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-weight: bold; color: var(--muted);">${parentSummary && parentSummary.totalCost ? peso(parentSummary.totalCost) : ''}</td>`;
+              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-weight: bold; color: var(--muted);">${parentSummary && parentSummary.totalCost ? peso(parentSummary.totalCost) : peso(0)}</td>`;
             } else if (col.id === 'estQty') {
               const estQtyVal = getParentEstQty(index);
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-weight: bold; color: var(--muted);">${estQtyVal > 0 ? estQtyVal : ''}</td>`;
@@ -3528,7 +3877,7 @@
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-weight: bold; color: var(--muted);">${instQtyVal > 0 ? instQtyVal.toFixed(2) : ''}</td>`;
             } else if (col.id === 'qtyAccmpCost') {
               const accmpCost = getGanttTaskAccomplishedCost(index);
-              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-weight: bold; color: var(--muted);">${accmpCost ? peso(accmpCost) : 'â‚±0.00'}</td>`;
+              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-weight: bold; color: var(--muted);">${accmpCost ? peso(accmpCost) : peso(0)}</td>`;
             } else if (col.id === 'progress') {
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; font-weight: bold; color: var(--muted);">${taskInfo ? taskInfo.progress : 0}%</td>`;
             } else if (col.id === 'progressDay') {
@@ -3536,7 +3885,7 @@
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; font-weight: bold; color: var(--muted);">${progressDay}%</td>`;
             } else if (col.isCustom) {
               const customVal = (row.ganttCustomValues && row.ganttCustomValues[col.id]) || '';
-              cellsHtml += `<td title="${coordTooltip}" style="text-align: left; border-right: 1px solid var(--line); font-weight: bold; color: var(--muted);">${escapeHtml(customVal)}</td>`;
+              cellsHtml += `<td class="gantt-wrap-cell" title="${coordTooltip}" style="text-align: left; border-right: 1px solid var(--line); white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word; line-height: 1.25; overflow: hidden; font-weight: bold; color: var(--muted);">${escapeHtml(customVal)}</td>`;
             }
           } else {
             const startVal = taskInfo ? taskInfo.startStr : projStartStr;
@@ -3568,7 +3917,7 @@
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line);"><input type="text" value="${predVal}" placeholder="e.g. 1" style="text-align: left; padding: 2px 6px;" onchange="updateGanttTask(${index}, 'ganttPredecessors', this.value)"></td>`;
             } else if (col.id === 'cost') {
               const leafValues = computeBOQDisplayValues(row);
-              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-size: 11px; font-weight: bold; color: var(--text);">${leafValues && leafValues.grandTotalCost ? peso(leafValues.grandTotalCost) : 'â‚±0.00'}</td>`;
+              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-size: 11px; font-weight: bold; color: var(--text);">${leafValues && leafValues.grandTotalCost ? peso(leafValues.grandTotalCost) : peso(0)}</td>`;
             } else if (col.id === 'estQty') {
               const displayValues = computeBOQDisplayValues(row);
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-size: 11px; font-weight: bold; color: var(--text);">${displayValues ? displayValues.qty : 0}</td>`;
@@ -3580,7 +3929,7 @@
              cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line);"><input type="number" min="0" step="any" value="${instQtyVal}" onchange="updateGanttTask(${index}, 'ganttInstalledQty', this.value)"></td>`;
             } else if (col.id === 'qtyAccmpCost') {
               const accmpCost = getGanttTaskAccomplishedCost(index);
-              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-size: 11px; font-weight: bold; color: var(--text);">${accmpCost ? peso(accmpCost) : 'â‚±0.00'}</td>`;
+              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-size: 11px; font-weight: bold; color: var(--text);">${accmpCost ? peso(accmpCost) : peso(0)}</td>`;
             } else if (col.id === 'progress') {
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-size: 11px; font-weight: bold; color: var(--text);">${progressVal.toFixed(2)}%</td>`;
             } else if (col.id === 'progressDay') {
@@ -3665,8 +4014,9 @@
 
           if (isParent) {
             const progressDay = getGanttTaskDayProgress(index);
+            const parentCost = (computeBOQCategorySummary(index) || {}).totalCost || 0;
             barHtml = `
-              <div class="gantt-bar-wrapper" style="position: absolute; left: ${coords.left}px; width: ${coords.width}px; flex-direction: column; gap: ${gapVal}px; align-items: stretch; justify-content: space-between; height: ${2 * hVal + gapVal}px; top: ${plannedTop}px;" title="${escapeHtml(row.title)}: ${taskInfo.duration} days (${formatDateString(taskInfo.startDate)} to ${formatDateString(taskInfo.endDate)})\nProgress (Cost): ${percent.toFixed(barLabelDecimals)}%\nProgress (Day): ${progressDay.toFixed(barLabelDecimals)}%">
+              <div class="gantt-bar-wrapper" style="position: absolute; left: ${coords.left}px; width: ${coords.width}px; flex-direction: column; gap: ${gapVal}px; align-items: stretch; justify-content: space-between; height: ${2 * hVal + gapVal}px; top: ${plannedTop}px;" title="${escapeHtml(row.title)}: ${taskInfo.duration} days (${formatDateString(taskInfo.startDate)} to ${formatDateString(taskInfo.endDate)})\nCost: ${peso(parentCost)}\nProgress (Cost): ${percent.toFixed(barLabelDecimals)}%\nProgress (Day): ${progressDay.toFixed(barLabelDecimals)}%">
                 <!-- Cost Summary Bar -->
                 <div class="gantt-summary-bar-bg" style="width: 100%; height: ${hVal}px; position: relative; border-radius: 1px;">
                   <div class="gantt-summary-bar-cost" style="width: ${percent}%; height: 100%; border-radius: 1px 0 0 1px;"></div>
@@ -3693,9 +4043,10 @@
             }
           } else {
             const progressDay = getGanttTaskDayProgress(index);
+            const leafCost = (computeBOQDisplayValues(row) || {}).grandTotalCost || 0;
             const handleTop = Math.max(0, Math.floor(((2 * hVal + gapVal) - 12) / 2));
             barHtml = `
-              <div class="gantt-bar-wrapper" style="position: absolute; left: ${coords.left}px; width: ${coords.width}px; flex-direction: column; gap: ${gapVal}px; align-items: stretch; justify-content: space-between; height: ${2 * hVal + gapVal}px; top: ${plannedTop}px;" title="${escapeHtml(row.title)}: ${taskInfo.duration} days (${formatDateString(taskInfo.startDate)} to ${formatDateString(taskInfo.endDate)})\nProgress (Cost): ${percent.toFixed(barLabelDecimals)}%\nProgress (Day): ${progressDay.toFixed(barLabelDecimals)}%">
+              <div class="gantt-bar-wrapper" style="position: absolute; left: ${coords.left}px; width: ${coords.width}px; flex-direction: column; gap: ${gapVal}px; align-items: stretch; justify-content: space-between; height: ${2 * hVal + gapVal}px; top: ${plannedTop}px;" title="${escapeHtml(row.title)}: ${taskInfo.duration} days (${formatDateString(taskInfo.startDate)} to ${formatDateString(taskInfo.endDate)})\nCost: ${peso(leafCost)}\nProgress (Cost): ${percent.toFixed(barLabelDecimals)}%\nProgress (Day): ${progressDay.toFixed(barLabelDecimals)}%">
                 <!-- Cost Bar -->
                 <div class="gantt-bar-bg-task" style="width: 100%; height: ${hVal}px; position: relative; border-radius: 2px; overflow: visible; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);">
                   <div class="gantt-bar-cost" style="width: ${percent}%; height: 100%; border-radius: 2px 0 0 2px;"></div>
@@ -3738,7 +4089,7 @@
         `;
         
         ganttRightRowHtmlCache[index] = barHtml;
-        timelineHtml += `<div class="gantt-timeline-row" id="ganttRightRow-${index}" onclick="highlightGanttRow(${index}, event)" style="height: ${rowH}px; display: flex; position: relative;"></div>`;
+        timelineHtml += `<div class="gantt-timeline-row" id="ganttRightRow-${index}" onclick="highlightGanttRow(${index}, event)" style="height: ${rowH}px; min-height: ${rowH}px; max-height: ${rowH}px; box-sizing: border-box; display: flex; position: relative;"></div>`;
       });
       
       const totalVisibleTaskRows = visibleRowIndex;
@@ -3770,6 +4121,10 @@
         const tr = document.createElement('tr');
         tr.className = 'gantt-row gantt-accomplishment-row';
         tr.id = `ganttLeftRow-${boqData.length + i}`;
+        tr.style.height = `${rowH}px`;
+        tr.style.minHeight = `${rowH}px`;
+        tr.style.maxHeight = `${rowH}px`;
+        tr.style.boxSizing = 'border-box';
         tr.onclick = (e) => {
           highlightGanttRow(boqData.length + i, e);
         };
@@ -4083,7 +4438,7 @@
           </div>
         `;
         ganttRightRowHtmlCache[boqData.length + i] = `${periodCellsHtml}${curveHtml}`;
-        timelineHtml += `<div class="gantt-timeline-row gantt-accomplishment-timeline-row" id="ganttRightRow-${boqData.length + i}" onclick="highlightGanttRow(${boqData.length + i}, event)" style="position: relative; height: ${rowH}px; display: flex; background: transparent;"></div>`;
+        timelineHtml += `<div class="gantt-timeline-row gantt-accomplishment-timeline-row" id="ganttRightRow-${boqData.length + i}" onclick="highlightGanttRow(${boqData.length + i}, event)" style="position: relative; height: ${rowH}px; min-height: ${rowH}px; max-height: ${rowH}px; box-sizing: border-box; display: flex; background: transparent;"></div>`;
       }
       taskTableBody.appendChild(taskTableFragment);
       
@@ -4525,11 +4880,11 @@
 
       // Restore scroll positions to prevent jumping
       if (leftPanel) {
-        leftPanel.scrollTop = savedLeftScrollTop;
+        leftPanel.scrollTop = savedScrollTop;
         leftPanel.scrollLeft = savedLeftScrollLeft;
       }
       if (rightPanel) {
-        rightPanel.scrollTop = savedRightScrollTop;
+        rightPanel.scrollTop = savedScrollTop;
         rightPanel.scrollLeft = savedRightScrollLeft;
       }
       
@@ -5102,7 +5457,7 @@
       const label = document.getElementById('coverZoomLabel');
       if (wrapper) {
         // Use CSS zoom instead of transform:scale so the browser's hit-test
-        // coordinate system is also scaled â€” this is essential for HTML5
+        // coordinate system is also scaled — this is essential for HTML5
         // drag-and-drop to correctly register dragover/drop events on targets
         // at all zoom levels. transform:scale only scales visually but leaves
         // the event grid unscaled, causing drops to miss their targets.
@@ -7493,7 +7848,7 @@
       const oStyle = ganttSettings.gridOuterStyle || 'solid';
       const oColor = ganttSettings.gridOuterColor || '#cbd5e1';
 
-      const totalGanttW = printedW + rightW;
+      const totalGanttW = printedW + rightW + 19; // includes 5mm gap (~19px) between divider and timeline panel
       
       let actualFitOption = fitOption;
       let clone = null;
@@ -7574,6 +7929,8 @@
             flex-grow: 0 !important;
             flex-shrink: 0 !important;
             overflow: hidden !important;
+            margin-left: 0 !important;
+            border-left: none !important;
           }
           body.print-gantt-pdf .gantt-container.gantt-print-clone #ganttTimelineHeader,
           body.print-gantt-pdf .gantt-container.gantt-print-clone #ganttTimelineBody {
@@ -7937,36 +8294,51 @@
       qtyModalActiveView = 'quantity';
       updateQtyModalViewTabs();
       
-      // Sync scrolling between left and right panels
+      // Sync scrolling between left and right panels & handle mouse wheel scrolling
       const qtyLeftPanel = document.getElementById('qtyLeftPanel');
       const qtyRightPanel = document.getElementById('qtyRightPanel');
       if (qtyLeftPanel && qtyRightPanel && !qtyRightPanel.dataset.scrollListenerAttached) {
         qtyRightPanel.dataset.scrollListenerAttached = 'true';
-        let activeQtyScroll = null;
-        qtyRightPanel.addEventListener('scroll', () => {
-          if (activeQtyScroll === 'left') {
-            window.requestAnimationFrame(updateQtyTimelineViewport);
-            return;
-          }
-          activeQtyScroll = 'right';
-          window.requestAnimationFrame(() => {
+        let isSyncingQty = false;
+
+        const syncFromRight = () => {
+          if (isSyncingQty) return;
+          isSyncingQty = true;
+          if (Math.abs(qtyLeftPanel.scrollTop - qtyRightPanel.scrollTop) >= 1) {
             qtyLeftPanel.scrollTop = qtyRightPanel.scrollTop;
-            updateQtyTimelineViewport();
-            activeQtyScroll = null;
-          });
-        }, { passive: true });
-        qtyLeftPanel.addEventListener('scroll', () => {
-          if (activeQtyScroll === 'right') {
-            window.requestAnimationFrame(updateQtyTimelineViewport);
-            return;
           }
-          activeQtyScroll = 'left';
-          window.requestAnimationFrame(() => {
+          isSyncingQty = false;
+          window.requestAnimationFrame(updateQtyTimelineViewport);
+        };
+
+        const syncFromLeft = () => {
+          if (isSyncingQty) return;
+          isSyncingQty = true;
+          if (Math.abs(qtyRightPanel.scrollTop - qtyLeftPanel.scrollTop) >= 1) {
             qtyRightPanel.scrollTop = qtyLeftPanel.scrollTop;
-            updateQtyTimelineViewport();
-            activeQtyScroll = null;
-          });
-        }, { passive: true });
+          }
+          isSyncingQty = false;
+          window.requestAnimationFrame(updateQtyTimelineViewport);
+        };
+
+        qtyRightPanel.addEventListener('scroll', syncFromRight, { passive: true });
+        qtyLeftPanel.addEventListener('scroll', syncFromLeft, { passive: true });
+
+        // Wheel event support for mouse wheel scrolling anywhere in the modal
+        const onQtyWheel = (e) => {
+          if (Math.abs(e.deltaY) >= Math.abs(e.deltaX) && e.deltaY !== 0) {
+            e.preventDefault();
+            qtyRightPanel.scrollTop += e.deltaY;
+            qtyLeftPanel.scrollTop = qtyRightPanel.scrollTop;
+            window.requestAnimationFrame(updateQtyTimelineViewport);
+          }
+        };
+
+        qtyLeftPanel.addEventListener('wheel', onQtyWheel, { passive: false });
+        const qtyDivider = document.getElementById('qtyModalDivider');
+        if (qtyDivider) {
+          qtyDivider.addEventListener('wheel', onQtyWheel, { passive: false });
+        }
       }
       
       renderQtyModalTable();
@@ -8222,8 +8594,11 @@
       ganttCoordinateValues = {};
       const coordH = ganttSettings.coordHeaderHeight !== undefined ? ganttSettings.coordHeaderHeight : 24;
       const hHeight = ganttSettings.headerHeight !== undefined ? ganttSettings.headerHeight : 48;
+      const hrWeight = ganttSettings.gridHeaderRightWeight !== undefined ? ganttSettings.gridHeaderRightWeight : 1;
       const hTopHeight = Math.floor(hHeight / 2);
-      const hBottomHeight = hHeight - hTopHeight;
+      const hBottomHeight = (hHeight + hrWeight) - hTopHeight;
+      const coordRowTotalH = coordH + hrWeight;
+      const totalHeaderH = (ganttSettings.showCoordinates ? coordRowTotalH : 0) + (hHeight + hrWeight);
       
       const leftPanel = document.getElementById('qtyLeftPanel');
       const savedLeftScrollTop = leftPanel ? leftPanel.scrollTop : 0;
@@ -8309,43 +8684,31 @@
       if (taskTableHead) {
         let theadHtml = '';
         if (ganttSettings.showCoordinates) {
-          theadHtml += '<tr class="gantt-coord-header-row" style="position: sticky; top: 0; z-index: 10; background: var(--bg);">';
-          theadHtml += '<th style="width: 40px; border-right: 1px solid var(--accent);"></th>';
+          theadHtml += `<tr class="gantt-coord-header-row" style="position: sticky; top: 0; z-index: 10; height: ${coordRowTotalH}px; min-height: ${coordRowTotalH}px; max-height: ${coordRowTotalH}px; line-height: ${coordRowTotalH}px; box-sizing: border-box; background: var(--bg);">`;
+          theadHtml += `<th style="width: 40px; height: ${coordH}px; line-height: ${coordH}px; padding: 0 4px; box-sizing: border-box; border-right: 1px solid var(--accent);"></th>`;
           activeCols.forEach((col, idx) => {
             const borderStyle = idx < activeCols.length - 1 ? 'border-right: 1px solid var(--accent);' : '';
             const colIdxInFull = ganttColumns.indexOf(col);
-            theadHtml += `<th style="width: ${col.width}px; ${borderStyle}">${getColLetter(colIdxInFull)}</th>`;
+            theadHtml += `<th style="width: ${col.width}px; height: ${coordH}px; line-height: ${coordH}px; padding: 0 4px; box-sizing: border-box; text-align: center; ${borderStyle}">${getColLetter(colIdxInFull)}</th>`;
           });
           theadHtml += '</tr>';
         }
 
-        const topOffset = ganttSettings.showCoordinates ? `${coordH}px` : '0px';
-        theadHtml += `<tr style="height: ${hTopHeight}px; border-bottom: 1px solid var(--line); background: var(--accent); position: sticky; top: ${topOffset}; z-index: 10; color: white;">`;
+        const topOffset = ganttSettings.showCoordinates ? `${coordRowTotalH}px` : '0px';
+        theadHtml += `<tr class="gantt-main-header-row" style="height: ${hHeight}px; min-height: ${hHeight}px; max-height: ${hHeight}px; line-height: normal; border-bottom: 1px solid var(--line); background: var(--accent); position: sticky; top: ${topOffset}; z-index: 10; color: white; box-sizing: border-box;">`;
         if (ganttSettings.showCoordinates) {
-          theadHtml += '<th class="gantt-coord-th" style="width: 40px; color: white; text-align: center; font-size: 10px; font-weight: bold; text-transform: uppercase; border-right: 1px solid var(--accent-dark);">#</th>';
+          theadHtml += `<th class="gantt-coord-th" style="width: 40px; height: ${hHeight}px; box-sizing: border-box; vertical-align: middle; color: white; text-align: center; font-size: 10px; font-weight: bold; text-transform: uppercase; border-right: 1px solid var(--accent-dark);">#</th>`;
         }
         activeCols.forEach((col, idx) => {
           const borderStyle = idx < activeCols.length - 1 ? 'border-right: 1px solid var(--accent-dark);' : '';
-          const alignStyle = (col.id === 'title' || col.id === 'specification') ? 'text-align: left; padding-left: 8px;' : 'text-align: center;';
+          const alignStyle = (col.id === 'title' || col.id === 'specification') ? 'text-align: left; padding-left: 8px; padding-right: 8px;' : 'text-align: center; padding-left: 4px; padding-right: 8px;';
           const isDragging = (window.activeGanttDragColId === col.id);
           const dragStyle = isDragging ? 'opacity: 0.6; background: #3b82f6 !important; border: 1px dashed white !important;' : '';
           const cursorStyle = isDragging ? 'cursor: grabbing;' : 'cursor: grab;';
-          theadHtml += `<th style="width: ${col.width}px; position: relative; color: white; ${alignStyle} font-size: 10px; font-weight: bold; text-transform: uppercase; ${borderStyle} ${dragStyle} ${cursorStyle}" data-col-id="${col.id}">
-            ${escapeHtml(col.name)}
+          theadHtml += `<th style="width: ${col.width}px; height: ${hHeight}px; box-sizing: border-box; vertical-align: middle; position: relative; color: white; ${alignStyle} font-size: 10px; font-weight: bold; text-transform: uppercase; white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word; line-height: 1.25; hyphens: auto; ${borderStyle} ${dragStyle} ${cursorStyle}" data-col-id="${col.id}">
+            <span class="gantt-th-text" style="display: block; width: 100%; white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word; line-height: 1.25; hyphens: auto;">${escapeHtml(col.name)}</span>
             <div class="gantt-col-resizer" style="position: absolute; right: 0; top: 0; width: 6px; height: 100%; cursor: col-resize; z-index: 2;"></div>
           </th>`;
-        });
-        theadHtml += '</tr>';
-
-        // Add blank row below the main header row to align with the timeline's date rows
-        const blankRowTopOffset = ganttSettings.showCoordinates ? `${coordH + hTopHeight}px` : `${hTopHeight}px`;
-        theadHtml += `<tr style="height: ${hBottomHeight}px; border-bottom: 1px solid var(--line); background: var(--accent); position: sticky; top: ${blankRowTopOffset}; z-index: 10;">`;
-        if (ganttSettings.showCoordinates) {
-          theadHtml += '<th style="width: 40px; border-right: 1px solid var(--accent-dark);"></th>';
-        }
-        activeCols.forEach((col, idx) => {
-          const borderStyle = idx < activeCols.length - 1 ? 'border-right: 1px solid var(--accent-dark);' : '';
-          theadHtml += `<th style="width: ${col.width}px; ${borderStyle}"></th>`;
         });
         theadHtml += '</tr>';
         taskTableHead.innerHTML = theadHtml;
@@ -8383,6 +8746,15 @@
                 col.width = newWidth;
                 
                 th.style.width = newWidth + 'px';
+                th.style.minWidth = newWidth + 'px';
+                th.style.maxWidth = newWidth + 'px';
+                const colIdx = Array.from(th.parentNode.children).indexOf(th);
+                const coordTh = taskTableHead.querySelector(`.gantt-coord-header-row th:nth-child(${colIdx + 1})`);
+                if (coordTh) {
+                  coordTh.style.width = newWidth + 'px';
+                  coordTh.style.minWidth = newWidth + 'px';
+                  coordTh.style.maxWidth = newWidth + 'px';
+                }
                 
                 const activeCols2 = ganttColumns.filter(c => c.visible);
                 const extraWidthForCoords2 = ganttSettings.showCoordinates ? 40 : 0;
@@ -8685,18 +9057,23 @@
           headerRowCoordHtml += `<div class="gantt-header-cell" style="width: ${activeColW}px; flex-shrink: 0; text-align: center; border-right: 1px solid var(--line); font-size: 10px; font-weight: bold; justify-content: center; height: ${coordH}px; line-height: ${coordH}px;">${colLetter}</div>`;
         }
         timelineHeader.innerHTML = `
-          <div class="gantt-timeline-header-row row-coord" style="height: ${coordH}px; line-height: ${coordH}px; display: flex; background: var(--bg); border-bottom: 1px solid var(--line);">${headerRowCoordHtml}</div>
-          <div class="gantt-timeline-header-row row-top" style="height: ${hTopHeight}px; line-height: ${hTopHeight}px; display: flex;">${headerRow1Html}</div>
-          <div class="gantt-timeline-header-row row-bottom" style="height: ${hBottomHeight}px; line-height: ${hBottomHeight}px; display: flex;">${headerRow2Html}</div>
+          <div class="gantt-timeline-header-row row-coord" style="height: ${coordRowTotalH}px; min-height: ${coordRowTotalH}px; max-height: ${coordRowTotalH}px; line-height: ${coordRowTotalH}px; box-sizing: border-box; display: flex; background: var(--bg); border-bottom: 1px solid var(--line);">${headerRowCoordHtml}</div>
+          <div class="gantt-timeline-header-row row-top" style="height: ${hTopHeight}px; min-height: ${hTopHeight}px; max-height: ${hTopHeight}px; line-height: ${hTopHeight}px; box-sizing: border-box; display: flex;">${headerRow1Html}</div>
+          <div class="gantt-timeline-header-row row-bottom" style="height: ${hBottomHeight}px; min-height: ${hBottomHeight}px; max-height: ${hBottomHeight}px; line-height: ${hBottomHeight}px; box-sizing: border-box; display: flex;">${headerRow2Html}</div>
         `;
-        timelineHeader.style.height = (coordH + hHeight) + 'px';
+        timelineHeader.style.height = `${totalHeaderH}px`;
+        timelineHeader.style.minHeight = `${totalHeaderH}px`;
+        timelineHeader.style.maxHeight = `${totalHeaderH}px`;
       } else {
         timelineHeader.innerHTML = `
-          <div class="gantt-timeline-header-row row-top" style="height: ${hTopHeight}px; line-height: ${hTopHeight}px; display: flex;">${headerRow1Html}</div>
-          <div class="gantt-timeline-header-row row-bottom" style="height: ${hBottomHeight}px; line-height: ${hBottomHeight}px; display: flex;">${headerRow2Html}</div>
+          <div class="gantt-timeline-header-row row-top" style="height: ${hTopHeight}px; min-height: ${hTopHeight}px; max-height: ${hTopHeight}px; line-height: ${hTopHeight}px; box-sizing: border-box; display: flex;">${headerRow1Html}</div>
+          <div class="gantt-timeline-header-row row-bottom" style="height: ${hBottomHeight}px; min-height: ${hBottomHeight}px; max-height: ${hBottomHeight}px; line-height: ${hBottomHeight}px; box-sizing: border-box; display: flex;">${headerRow2Html}</div>
         `;
-        timelineHeader.style.height = hHeight + 'px';
+        timelineHeader.style.height = `${totalHeaderH}px`;
+        timelineHeader.style.minHeight = `${totalHeaderH}px`;
+        timelineHeader.style.maxHeight = `${totalHeaderH}px`;
       }
+      timelineHeader.style.boxSizing = 'border-box';
       
       const widthStr = (periods.length * activeColW) + 'px';
       timelineBody.style.width = widthStr;
@@ -8760,11 +9137,11 @@
             const toggleBtnHtml = isParent && (row.type === 'category' || row.type === 'subcategory' || row.type === 'subsubcategory')
               ? `<button class="toggle-btn ${row.qtyCollapsed ? 'collapsed' : ''}" type="button" onclick="toggleQtyRowCollapse(${index})" aria-label="Toggle row" style="margin-right: 6px; vertical-align: middle;"></button>`
               : '<span style="display: inline-block; width: 18px;"></span>';
-            cellsHtml += `<td style="${indentStyle} font-weight: bold; border-right: 1px solid var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(row.title || '')}${coordTooltip ? ' (' + coordTooltip + ')' : ''}">${toggleBtnHtml}<span style="vertical-align: middle;">${escapeHtml(row.title || '')}</span></td>`;
+            cellsHtml += `<td class="gantt-wrap-cell" style="${indentStyle} font-weight: bold; border-right: 1px solid var(--line); white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word; line-height: 1.25; overflow: hidden;" title="${escapeHtml(row.title || '')}${coordTooltip ? ' (' + coordTooltip + ')' : ''}">${toggleBtnHtml}<span style="vertical-align: middle;">${escapeHtml(row.title || '')}</span></td>`;
           } else if (col.id === 'specification') {
             const specVal = row.specification || '';
             const weightStyle = isParent ? 'font-weight: bold; color: var(--muted);' : 'font-size: 11px;';
-            cellsHtml += `<td title="${escapeHtml(specVal)}${coordTooltip ? ' (' + coordTooltip + ')' : ''}" style="text-align: left; border-right: 1px solid var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; ${weightStyle}">${escapeHtml(specVal)}</td>`;
+            cellsHtml += `<td class="gantt-wrap-cell" title="${escapeHtml(specVal)}${coordTooltip ? ' (' + coordTooltip + ')' : ''}" style="text-align: left; border-right: 1px solid var(--line); white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word; line-height: 1.25; overflow: hidden; ${weightStyle}">${escapeHtml(specVal)}</td>`;
           } else if (isParent) {
             if (col.id === 'startDate') {
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-weight: bold; color: var(--muted);">${taskInfo ? formatDateString(taskInfo.startDate) : ''}</td>`;
@@ -8785,7 +9162,7 @@
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-weight: bold; color: var(--muted);"></td>`;
             } else if (col.id === 'cost') {
               const parentSummary = computeBOQCategorySummary(index);
-              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-weight: bold; color: var(--muted);">${parentSummary && parentSummary.totalCost ? peso(parentSummary.totalCost) : ''}</td>`;
+              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-weight: bold; color: var(--muted);">${parentSummary && parentSummary.totalCost ? peso(parentSummary.totalCost) : peso(0)}</td>`;
             } else if (col.id === 'estQty') {
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-weight: bold; color: var(--muted);"></td>`;
             } else if (col.id === 'instQty') {
@@ -8793,7 +9170,7 @@
               cellsHtml += `<td id="qtyInstTotal-${index}" title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-weight: bold; color: var(--muted);">${instQtyVal > 0 ? instQtyVal.toFixed(2) : ''}</td>`;
             } else if (col.id === 'qtyAccmpCost') {
               const accmpCost = getGanttTaskAccomplishedCost(index);
-              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-weight: bold; color: var(--muted);">${accmpCost ? peso(accmpCost) : 'â‚±0.00'}</td>`;
+              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-weight: bold; color: var(--muted);">${accmpCost ? peso(accmpCost) : peso(0)}</td>`;
             } else if (col.id === 'progress') {
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; font-weight: bold; color: var(--muted);">${taskInfo ? taskInfo.progress : 0}%</td>`;
             } else if (col.id === 'progressDay') {
@@ -8801,7 +9178,7 @@
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; font-weight: bold; color: var(--muted);">${progressDay}%</td>`;
             } else if (col.isCustom) {
               const customVal = (row.ganttCustomValues && row.ganttCustomValues[col.id]) || '';
-              cellsHtml += `<td title="${coordTooltip}" style="text-align: left; border-right: 1px solid var(--line); font-weight: bold; color: var(--muted);">${escapeHtml(customVal)}</td>`;
+              cellsHtml += `<td class="gantt-wrap-cell" title="${coordTooltip}" style="text-align: left; border-right: 1px solid var(--line); white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word; line-height: 1.25; overflow: hidden; font-weight: bold; color: var(--muted);">${escapeHtml(customVal)}</td>`;
             }
           } else {
             const startVal = taskInfo ? taskInfo.startStr : projStartStr;
@@ -8833,7 +9210,7 @@
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line);"><input type="text" value="${predVal}" placeholder="e.g. 1" style="text-align: left; padding: 2px 6px;" onchange="updateQtyModalTask(${index}, 'ganttPredecessors', this.value)"></td>`;
             } else if (col.id === 'cost') {
               const leafValues = computeBOQDisplayValues(row);
-              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-size: 11px; font-weight: bold; color: var(--text);">${leafValues && leafValues.grandTotalCost ? peso(leafValues.grandTotalCost) : 'â‚±0.00'}</td>`;
+              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-size: 11px; font-weight: bold; color: var(--text);">${leafValues && leafValues.grandTotalCost ? peso(leafValues.grandTotalCost) : peso(0)}</td>`;
             } else if (col.id === 'estQty') {
               const displayValues = computeBOQDisplayValues(row);
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-size: 11px; font-weight: bold; color: var(--text);">${displayValues ? displayValues.qty : 0}</td>`;
@@ -8842,7 +9219,7 @@
               cellsHtml += `<td id="qtyInstTotal-${index}" title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-size: 11px; font-weight: bold; color: var(--text);">${instQtyVal > 0 ? instQtyVal.toFixed(2) : '0.00'}</td>`;
             } else if (col.id === 'qtyAccmpCost') {
               const accmpCost = getGanttTaskAccomplishedCost(index);
-              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-size: 11px; font-weight: bold; color: var(--text);">${accmpCost ? peso(accmpCost) : 'â‚±0.00'}</td>`;
+              cellsHtml += `<td title="${coordTooltip}" style="text-align: right; border-right: 1px solid var(--line); padding-right: 8px; font-size: 11px; font-weight: bold; color: var(--text);">${accmpCost ? peso(accmpCost) : peso(0)}</td>`;
             } else if (col.id === 'progress') {
               cellsHtml += `<td title="${coordTooltip}" style="text-align: center; border-right: 1px solid var(--line); font-size: 11px; font-weight: bold; color: var(--text);">${progressVal.toFixed(2)}%</td>`;
             } else if (col.id === 'progressDay') {
@@ -9135,7 +9512,7 @@
             });
             computedVal = aggregateSummaryValues(leafValues, func);
             if (func !== 'none') {
-              if (label === 'Cash Flow (Estimated)') {
+              if (label === 'Summary of Accomplishment' || label === 'Cash Flow (Estimated)') {
                 displayVal = peso(computedVal);
               } else if (label === 'Cash Flow (Day)') {
                 displayVal = computedVal.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 1 });
@@ -9266,7 +9643,13 @@
 
     function initBillingCycles() {
       try {
-        const saved = localStorage.getItem('fcl_billing_periods');
+        let saved = null;
+        if (typeof currentBoqProjectId !== 'undefined' && currentBoqProjectId) {
+          saved = localStorage.getItem('fcl_billing_periods_' + currentBoqProjectId);
+        }
+        if (!saved) {
+          saved = localStorage.getItem('fcl_billing_periods');
+        }
         if (saved) {
           fclBillingPeriods = JSON.parse(saved);
         }
@@ -9342,7 +9725,14 @@
       fclBillingPeriods.push(newCycle);
       try {
         localStorage.setItem('fcl_billing_periods', JSON.stringify(fclBillingPeriods));
+        if (typeof currentBoqProjectId !== 'undefined' && currentBoqProjectId) {
+          localStorage.setItem('fcl_billing_periods_' + currentBoqProjectId, JSON.stringify(fclBillingPeriods));
+        }
       } catch (e) {}
+
+      if (typeof saveScheduleSection === 'function') {
+        saveScheduleSection(true);
+      }
 
       populateBillingSelect(nextId);
       recalculateBillingTable();
@@ -9361,6 +9751,12 @@
 
       try {
         localStorage.setItem('fcl_billing_periods', JSON.stringify(fclBillingPeriods));
+        if (typeof currentBoqProjectId !== 'undefined' && currentBoqProjectId) {
+          localStorage.setItem('fcl_billing_periods_' + currentBoqProjectId, JSON.stringify(fclBillingPeriods));
+        }
+        if (typeof saveScheduleSection === 'function') {
+          saveScheduleSection(true);
+        }
         alert(`${cycle.name} saved successfully!`);
       } catch (e) {
         console.warn('Error saving billing cycle:', e);
@@ -10386,18 +10782,27 @@
 
     function showSheet(sheetId) {
       document.querySelectorAll('.sheet').forEach(sheet => sheet.classList.remove('active'));
-      document.getElementById(sheetId).classList.add('active');
-      document.getElementById('navPriceList').classList.toggle('active', sheetId === 'priceListSheet');
-      document.getElementById('navEstimate').classList.toggle('active', sheetId === 'estimateSheet');
-      document.getElementById('navBoq').classList.toggle('active', sheetId === 'boqSheet');
+      const targetSheet = document.getElementById(sheetId);
+      if (targetSheet) targetSheet.classList.add('active');
+
+      const navPriceList = document.getElementById('navPriceList');
+      if (navPriceList) navPriceList.classList.toggle('active', sheetId === 'priceListSheet');
+      const navEstimate = document.getElementById('navEstimate');
+      if (navEstimate) navEstimate.classList.toggle('active', sheetId === 'estimateSheet');
+      const navBoq = document.getElementById('navBoq');
+      if (navBoq) navBoq.classList.toggle('active', sheetId === 'boqSheet');
       const navBoqSummary = document.getElementById('navBoqSummary');
       if (navBoqSummary) navBoqSummary.classList.toggle('active', sheetId === 'boqSummarySheet');
       const navGantt = document.getElementById('navGantt');
       if (navGantt) navGantt.classList.toggle('active', sheetId === 'ganttSheet');
+      const navManpower = document.getElementById('navManpower');
+      if (navManpower) navManpower.classList.toggle('active', sheetId === 'manpowerSheet');
       const navCoverLetter = document.getElementById('navCoverLetter');
       if (navCoverLetter) navCoverLetter.classList.toggle('active', sheetId === 'coverLetterSheet');
+
       if (sheetId === 'boqSummarySheet') renderBOQSummaryTable();
       if (sheetId === 'boqSheet') {
+        renderBOQTable();
         resizeAllBOQSpecificationTextareas();
         setTimeout(resizeAllBOQSpecificationTextareas, 50);
       }
@@ -10406,10 +10811,29 @@
         setupGanttScrollSync();
         setupGanttDividerResize();
       }
+      if (sheetId === 'manpowerSheet') {
+        if (window.ManpowerUtilization) {
+          if (typeof window.ManpowerUtilization.adaptAndSyncWithGanttTimeline === 'function') {
+            window.ManpowerUtilization.adaptAndSyncWithGanttTimeline(true);
+          }
+          window.ManpowerUtilization.render('boqManpowerContainer', currentBoqProjectId);
+        }
+      }
       if (sheetId === 'coverLetterSheet') renderCoverLetter();
       updateHeaderSaveButtons(sheetId);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    function showManpowerSheet() {
+      showSheet('manpowerSheet');
+      if (window.ManpowerUtilization) {
+        if (typeof window.ManpowerUtilization.adaptAndSyncWithGanttTimeline === 'function') {
+          window.ManpowerUtilization.adaptAndSyncWithGanttTimeline(true);
+        }
+        window.ManpowerUtilization.render('boqManpowerContainer', currentBoqProjectId);
+      }
+    }
+    window.showManpowerSheet = showManpowerSheet;
 
     function levelOf(rowOrType) {
       if (!rowOrType) return 4;
@@ -10910,7 +11334,7 @@
     });
 
     document.addEventListener('selectstart', function(e) {
-      if (isDragging) {
+      if (isDragging || (isMouseDown && window.activeDragTable)) {
         e.preventDefault();
       }
     });
@@ -11148,6 +11572,17 @@
           }
         }
         window.selectionEnd.row = targetR;
+      } else if (targetR < srcMinR) {
+        const fillHeight = srcMaxR - srcMinR + 1;
+        for (let r = srcMinR - 1; r >= targetR; r--) {
+          const offsetR = (srcMinR - 1 - r) % fillHeight;
+          const sourceRowIdx = srcMaxR - offsetR;
+
+          for (let c = srcMinC; c <= srcMaxC; c++) {
+            autofillAppCell(tableId, sourceRowIdx, c, r, c, 0);
+          }
+        }
+        window.selectionStart.row = targetR;
       } else if (targetC > srcMaxC) {
         // Fill Rightwards across columns
         const fillWidth = srcMaxC - srcMinC + 1;
@@ -11160,10 +11595,22 @@
           }
         }
         window.selectionEnd.col = targetC;
+      } else if (targetC < srcMinC) {
+        const fillWidth = srcMaxC - srcMinC + 1;
+        for (let c = srcMinC - 1; c >= targetC; c--) {
+          const offsetC = (srcMinC - 1 - c) % fillWidth;
+          const sourceColIdx = srcMaxC - offsetC;
+
+          for (let r = srcMinR; r <= srcMaxR; r++) {
+            autofillAppCell(tableId, r, sourceColIdx, r, c, 0);
+          }
+        }
+        window.selectionStart.col = targetC;
       }
 
       // Refresh corresponding table model
       if (tableId === 'boqTable') {
+        clearBOQCaches();
         recomputeCodes(boqData);
         renderBOQTable();
       } else if (tableId === 'analysisTable') {
@@ -11173,8 +11620,10 @@
       } else if (tableId === 'boqSummaryTable') {
         renderBOQSummaryTable();
       } else if (tableId === 'ganttTaskTable') {
+        clearBOQCaches();
         renderGanttChart();
       } else if (tableId === 'qtyTaskTable') {
+        clearBOQCaches();
         renderQtyModalTable();
       }
 
@@ -11187,17 +11636,16 @@
         const destRow = boqData[destR];
         if (!srcRow || !destRow) return;
 
-        const colFieldMap = ['plus', 'code', 'title', 'specification', 'qty', 'unit', 'materialUnitCost', 'totalMaterialCost', 'laborUnitCost', 'totalLEC', 'grandTotalCost', 'condition', 'action'];
-        const field = colFieldMap[srcC];
+        const visibleCols = boqColumns.filter(c => c.visible);
+        const colObj = visibleCols[srcC];
+        const field = colObj ? colObj.id : null;
 
-        if (field && ['title', 'specification', 'qty', 'unit', 'materialUnitCost', 'laborUnitCost'].includes(field)) {
-          let srcVal = srcRow[field];
-          if (typeof srcVal === 'number') {
-            const nextVal = srcVal + (typeof srcVal === 'number' ? rowOffset : 0);
-            destRow[field] = nextVal;
-          } else if (typeof srcVal === 'string') {
-            destRow[field] = srcVal;
-          }
+        if (field && ['title', 'specification', 'qty', 'directQty', 'unit', 'materialUnitCost', 'directMaterialUnitCost', 'laborUnitCost', 'leUnitCost', 'directLEUnitCost', 'condition'].includes(field)) {
+          const targetField = (field === 'directQty') ? 'qty'
+                            : (field === 'directMaterialUnitCost') ? 'materialUnitCost'
+                            : (field === 'directLEUnitCost' || field === 'leUnitCost') ? 'laborUnitCost'
+                            : field;
+          destRow[targetField] = srcRow[targetField];
         }
       } else if (tableId === 'analysisTable') {
         const srcRow = analysisData[srcR];
@@ -11226,32 +11674,109 @@
         if (!srcRow || !destRow) return;
 
         const activeCols = ganttColumns.filter(c => c.visible);
-        const colObj = activeCols[srcC];
+        let actualColIdx = srcC;
+        if (ganttSettings && ganttSettings.showCoordinates) {
+          actualColIdx = srcC - 1;
+        }
+        if (actualColIdx < 0 || actualColIdx >= activeCols.length) return;
+
+        const colObj = activeCols[actualColIdx];
         if (!colObj) return;
 
         const colId = colObj.id;
+
         if (colId === 'startDate') {
-          const srcVal = srcRow.ganttStartDate || srcRow.startDate;
+          const srcTaskInfo = getGanttTaskTimeInfo(srcR);
+          const srcVal = srcRow.ganttStartDate || (srcTaskInfo ? srcTaskInfo.startStr : '') || srcRow.startDate;
           if (srcVal) {
-            const srcDate = parseSafeDate(srcVal);
-            const nextDate = new Date(srcDate);
-            nextDate.setDate(srcDate.getDate() + rowOffset);
-            updateGanttTaskStartDate(destR, formatDateString(nextDate));
+            destRow.ganttStartDate = srcVal;
           }
-        } else if (colId === 'duration') {
-          const tInfo = (typeof taskInfos !== 'undefined' && taskInfos[srcR]) ? taskInfos[srcR] : null;
-          const srcVal = tInfo ? tInfo.duration : (srcRow.ganttDuration || 1);
-          updateGanttTaskDuration(destR, srcVal);
-        } else if (colId === 'predecessor') {
-          const srcVal = srcRow.ganttPredecessor || '';
-          updateGanttTaskPredecessor(destR, srcVal);
-        } else if (['title', 'specification', 'qty', 'unit', 'materialUnitCost', 'laborUnitCost'].includes(colId)) {
-          let srcVal = srcRow[colId];
-          if (typeof srcVal === 'number') {
-            destRow[colId] = srcVal + rowOffset;
+        } else if (colId === 'finishDate') {
+          const srcTaskInfo = getGanttTaskTimeInfo(srcR);
+          const srcFinish = (srcTaskInfo && srcTaskInfo.endDate) ? formatDateString(srcTaskInfo.endDate) : (srcRow.ganttFinishDate || '');
+          if (srcFinish) {
+            const destTaskInfo = getGanttTaskTimeInfo(destR);
+            const destStartStr = (destTaskInfo && destTaskInfo.startDate) ? formatDateString(destTaskInfo.startDate) : (destRow.ganttStartDate || getGanttProjectStartDate());
+            const dStart = parseSafeDate(destStartStr);
+            const dFinish = parseSafeDate(srcFinish);
+            if (dStart && dFinish) {
+              dStart.setHours(12, 0, 0, 0);
+              dFinish.setHours(12, 0, 0, 0);
+              let diffDays = Math.round((dFinish - dStart) / (1000 * 60 * 60 * 24)) + 1;
+              if (diffDays < 1) diffDays = 1;
+              destRow.ganttDuration = diffDays;
+            }
+          }
+        } else if (colId === 'actualStartDate') {
+          destRow.ganttActualStartDate = srcRow.ganttActualStartDate || '';
+        } else if (colId === 'actualFinishDate') {
+          destRow.ganttActualFinishDate = srcRow.ganttActualFinishDate || '';
+        } else if (colId === 'days' || colId === 'duration') {
+          const srcTaskInfo = getGanttTaskTimeInfo(srcR);
+          const srcVal = srcRow.ganttDuration || (srcTaskInfo ? srcTaskInfo.duration : 5);
+          destRow.ganttDuration = parseInt(srcVal, 10) || 1;
+        } else if (colId === 'predecessors' || colId === 'predecessor') {
+          const srcVal = srcRow.ganttPredecessors || srcRow.ganttPredecessor || '';
+          destRow.ganttPredecessors = srcVal;
+        } else if (colId === 'instQty') {
+          const srcInstQty = getInstalledQty(srcR);
+          destRow.ganttInstalledQty = srcInstQty;
+          const destDisplay = computeBOQDisplayValues(destRow);
+          const destEstQty = destDisplay ? destDisplay.qty : 0;
+          if (destEstQty > 0) {
+            destRow.ganttProgress = Math.min(100, Math.max(0, Math.round((srcInstQty / destEstQty) * 100)));
+          }
+        } else if (colId === 'estQty' || colId === 'qty') {
+          const srcDisplay = computeBOQDisplayValues(srcRow);
+          const srcQty = srcDisplay ? srcDisplay.qty : (srcRow.qty || 0);
+          destRow.qty = srcQty;
+        } else if (colId === 'cost') {
+          const srcDisplay = computeBOQDisplayValues(srcRow);
+          const targetCost = srcDisplay ? (srcDisplay.grandTotalCost || 0) : 0;
+          if (targetCost > 0) {
+            if (!destRow.qty || destRow.qty <= 0) {
+              destRow.qty = srcRow.qty || 1;
+              destRow.materialUnitCost = srcRow.materialUnitCost;
+              destRow.laborUnitCost = srcRow.laborUnitCost;
+            } else {
+              const srcMat = numberOrZero(srcRow.materialUnitCost);
+              const srcLE = numberOrZero(srcRow.laborUnitCost);
+              const scale = (srcRow.qty && destRow.qty) ? (srcRow.qty / destRow.qty) : 1;
+              destRow.materialUnitCost = roundUpNearestOne(srcMat * scale);
+              destRow.laborUnitCost = roundUpNearestOne(srcLE * scale);
+            }
           } else {
-            destRow[colId] = srcVal;
+            destRow.materialUnitCost = 0;
+            destRow.laborUnitCost = 0;
           }
+          clearBOQCaches();
+        } else if (colId === 'qtyAccmpCost') {
+          const srcAccmp = getGanttTaskAccomplishedCost(srcR) || 0;
+          const destDisplay = computeBOQDisplayValues(destRow);
+          const destUnitCost = (destDisplay && destDisplay.qty > 0) ? (destDisplay.grandTotalCost / destDisplay.qty) : 0;
+          if (destUnitCost > 0) {
+            destRow.ganttInstalledQty = parseFloat((srcAccmp / destUnitCost).toFixed(2));
+          } else {
+            destRow.ganttInstalledQty = srcRow.ganttInstalledQty || 0;
+          }
+          const destEstQty = destDisplay ? destDisplay.qty : 0;
+          if (destEstQty > 0) {
+            destRow.ganttProgress = Math.min(100, Math.max(0, Math.round(((destRow.ganttInstalledQty || 0) / destEstQty) * 100)));
+          }
+        } else if (colId === 'progress') {
+          const srcProg = srcRow.ganttProgress !== undefined ? srcRow.ganttProgress : 0;
+          destRow.ganttProgress = srcProg;
+          const destDisplay = computeBOQDisplayValues(destRow);
+          const destEstQty = destDisplay ? destDisplay.qty : 0;
+          destRow.ganttInstalledQty = parseFloat(((srcProg / 100) * destEstQty).toFixed(2));
+        } else if (colId === 'progressDay') {
+          destRow.ganttActualStartDate = srcRow.ganttActualStartDate || '';
+          destRow.ganttActualFinishDate = srcRow.ganttActualFinishDate || '';
+        } else if (['title', 'specification', 'code', 'unit', 'materialUnitCost', 'laborUnitCost'].includes(colId)) {
+          destRow[colId] = srcRow[colId];
+        } else if (colObj.isCustom) {
+          if (!destRow.ganttCustomValues) destRow.ganttCustomValues = {};
+          destRow.ganttCustomValues[colId] = (srcRow.ganttCustomValues && srcRow.ganttCustomValues[colId]) || '';
         }
       }
     }
@@ -11274,30 +11799,62 @@
       const maxRows = tbodyTrs.length;
       const maxCols = tbodyTrs[0] ? tbodyTrs[0].children.length : 0;
 
+      // Grid Shortcuts: Ctrl+C (Copy) and Ctrl+V (Paste)
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C')) {
+        if (!isInputActive || (window.selectedCells && window.selectedCells.size > 1)) {
+          e.preventDefault();
+          window.handleContextMenuCopy();
+          return;
+        }
+      }
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'v' || e.key === 'V')) {
+        if (!isInputActive) {
+          e.preventDefault();
+          window.handleContextMenuPaste();
+          return;
+        }
+      }
+
       if (!isInputActive) {
         if (e.key === 'ArrowUp') {
           e.preventDefault();
-          r = Math.max(0, r - 1);
-          window.selectionStart = { row: r, col: c };
-          window.selectionEnd = { row: r, col: c };
+          if (e.shiftKey && window.selectionEnd) {
+            window.selectionEnd.row = Math.max(0, window.selectionEnd.row - 1);
+          } else {
+            r = Math.max(0, r - 1);
+            window.selectionStart = { row: r, col: c };
+            window.selectionEnd = { row: r, col: c };
+          }
           updateCellSelectionVisuals();
         } else if (e.key === 'ArrowDown') {
           e.preventDefault();
-          r = Math.min(maxRows - 1, r + 1);
-          window.selectionStart = { row: r, col: c };
-          window.selectionEnd = { row: r, col: c };
+          if (e.shiftKey && window.selectionEnd) {
+            window.selectionEnd.row = Math.min(maxRows - 1, window.selectionEnd.row + 1);
+          } else {
+            r = Math.min(maxRows - 1, r + 1);
+            window.selectionStart = { row: r, col: c };
+            window.selectionEnd = { row: r, col: c };
+          }
           updateCellSelectionVisuals();
         } else if (e.key === 'ArrowLeft') {
           e.preventDefault();
-          c = Math.max(0, c - 1);
-          window.selectionStart = { row: r, col: c };
-          window.selectionEnd = { row: r, col: c };
+          if (e.shiftKey && window.selectionEnd) {
+            window.selectionEnd.col = Math.max(0, window.selectionEnd.col - 1);
+          } else {
+            c = Math.max(0, c - 1);
+            window.selectionStart = { row: r, col: c };
+            window.selectionEnd = { row: r, col: c };
+          }
           updateCellSelectionVisuals();
         } else if (e.key === 'ArrowRight') {
           e.preventDefault();
-          c = Math.min(maxCols - 1, c + 1);
-          window.selectionStart = { row: r, col: c };
-          window.selectionEnd = { row: r, col: c };
+          if (e.shiftKey && window.selectionEnd) {
+            window.selectionEnd.col = Math.min(maxCols - 1, window.selectionEnd.col + 1);
+          } else {
+            c = Math.min(maxCols - 1, c + 1);
+            window.selectionStart = { row: r, col: c };
+            window.selectionEnd = { row: r, col: c };
+          }
           updateCellSelectionVisuals();
         } else if (e.key === 'Tab') {
           e.preventDefault();
@@ -11331,6 +11888,9 @@
             updateCellSelectionVisuals();
           }
         } else if (e.key === 'Escape') {
+          document.querySelectorAll('.copied-cell').forEach(el => el.classList.remove('copied-cell'));
+          window.copiedCellsGrid = null;
+          window.copiedRawGrid = null;
           window.selectionStart = null;
           window.selectionEnd = null;
           window.selectionTable = null;
@@ -11373,6 +11933,14 @@
       let indexAttr = tr.getAttribute('data-index');
       let index = indexAttr !== null ? parseInt(indexAttr, 10) : Array.from(tr.parentNode.children).indexOf(tr);
       const colIndex = Array.from(tr.children).indexOf(td);
+
+      // Handle Shift+Click range expansion (Excel style)
+      if (e.shiftKey && window.selectionStart && window.selectionTable === table.id) {
+        e.preventDefault();
+        window.selectionEnd = { row: index, col: colIndex };
+        updateCellSelectionVisuals();
+        return;
+      }
 
       isMouseDown = true;
       isDragging = false;
@@ -12205,7 +12773,11 @@
     }
 
 
-    function computeRowCost(row, useBOQMultipliers = false) {
+    function computeRowCost(row, useBOQMultipliers = false, useDirectCost = false) {
+      if (useDirectCost) {
+        const values = computeBOQDisplayValues(row);
+        return { material: values.directTotalMaterialCost, lec: values.directTotalLEC, grand: values.directGrandTotalCost };
+      }
       if (useBOQMultipliers) {
         const values = computeBOQDisplayValues(row);
         return { material: values.totalMaterialCost, lec: values.totalLEC, grand: values.grandTotalCost };
@@ -12219,7 +12791,7 @@
       return { material: totalMaterialCost, lec: totalLEC, grand: totalMaterialCost + totalLEC };
     }
 
-    function computeGroupTotals(rows, parentIndex, useBOQMultipliers = false) {
+    function computeGroupTotals(rows, parentIndex, useBOQMultipliers = false, useDirectCost = false) {
       const parentLevel = levelOf(rows[parentIndex].type);
       let material = 0, lec = 0, grand = 0;
       let i = parentIndex + 1;
@@ -12228,7 +12800,7 @@
         const childHasChildren = hasChildRow(rows, i);
         const childEditable = child.type === 'subsubsubcategory' || (child.type === 'subsubcategory' && !childHasChildren) || (child.type === 'subcategory' && !childHasChildren);
         if (childEditable) {
-          const cost = computeRowCost(child, useBOQMultipliers);
+          const cost = computeRowCost(child, useBOQMultipliers, useDirectCost);
           material += cost.material;
           lec += cost.lec;
           grand += cost.grand;
@@ -12259,11 +12831,11 @@
           if (!col.visible) return;
           if (col.id === 'title') {
             cellsHtml += `<td class="total-label">${escapeHtml(label)}</td>`;
-          } else if (col.id === 'totalMaterialCost') {
+          } else if (col.id === 'totalMaterialCost' || col.id === 'directTotalMaterialCost') {
             cellsHtml += `<td class="number">${peso(totals.material)}</td>`;
-          } else if (col.id === 'totalLEC') {
+          } else if (col.id === 'totalLEC' || col.id === 'directTotalLEC') {
             cellsHtml += `<td class="number">${peso(totals.lec)}</td>`;
-          } else if (col.id === 'grandTotalCost') {
+          } else if (col.id === 'grandTotalCost' || col.id === 'directGrandTotalCost') {
             cellsHtml += `<td class="number">${peso(totals.grand)}</td>`;
           } else {
             cellsHtml += '<td></td>';
@@ -12297,11 +12869,11 @@
         if (!col.visible) return;
         if (col.id === 'title') {
           cellsHtml += `<td class="total-label">Grand Total Cost</td>`;
-        } else if (col.id === 'totalMaterialCost') {
+        } else if (col.id === 'totalMaterialCost' || col.id === 'directTotalMaterialCost') {
           cellsHtml += `<td class="number">${peso(totals.material)}</td>`;
-        } else if (col.id === 'totalLEC') {
+        } else if (col.id === 'totalLEC' || col.id === 'directTotalLEC') {
           cellsHtml += `<td class="number">${peso(totals.lec)}</td>`;
-        } else if (col.id === 'grandTotalCost') {
+        } else if (col.id === 'grandTotalCost' || col.id === 'directGrandTotalCost') {
           cellsHtml += `<td class="number">${peso(totals.grand)}</td>`;
         } else {
           cellsHtml += '<td></td>';
@@ -12336,7 +12908,8 @@
         .forEach(parentIndex => {
           const parent = rows[parentIndex];
           const labelPrefix = parent.type === 'subsubcategory' ? 'Sub Total for' : 'Total Cost for';
-          appendTotalCostRow(tbody, `${labelPrefix} ${parent.title || ''}`, computeGroupTotals(rows, parentIndex, rows === boqData), rows === boqData);
+          const isDirect = (rows === boqData && currentBOQCostView === 'direct');
+          appendTotalCostRow(tbody, `${labelPrefix} ${parent.title || ''}`, computeGroupTotals(rows, parentIndex, rows === boqData && !isDirect, isDirect), rows === boqData);
           
           const columnCount = rows === priceListData ? 9 : (rows === boqData ? boqColumns.filter(c => c.visible).length : 12);
           appendSpacerRow(tbody, columnCount);
@@ -12449,14 +13022,18 @@
     function addBOQSubSubSubCategoryRow(parentIndex, name = '') { markUnsaved(); const insertIndex = findInsertIndex(boqData, parentIndex); boqData.splice(insertIndex, 0, { type: 'subsubsubcategory', title: name || '', qty: 0, unit: '', materialUnitCost: 0, laborUnitCost: 0, code: '', collapsed: false, condition: 'CPM' }); recomputeCodes(boqData); renderBOQTable(); }
     function addBOQSubSubSubCategoryRowAfter(index, name = '') { markUnsaved(); const insertIndex = findInsertIndex(boqData, index); boqData.splice(insertIndex, 0, { type: 'subsubsubcategory', title: name || '', qty: 0, unit: '', materialUnitCost: 0, laborUnitCost: 0, code: '', collapsed: false, condition: 'CPM' }); recomputeCodes(boqData); renderBOQTable(); }
     function updateBOQField(index, field, value) {
-      markUnsaved();
       if (!boqData[index]) return;
+      if (boqData[index][field] === value) return;
+      markUnsaved();
       boqData[index][field] = value;
 
       // Do not re-render while typing in the BOQ Specification textarea.
       // Re-rendering replaces the active textarea node and causes the cursor
       // to lose focus after each character, forcing repeated clicks.
       if (field === 'specification') {
+        return;
+      }
+      if (isMouseDown || isDragging) {
         return;
       }
 
@@ -12617,8 +13194,24 @@
       tbody.innerHTML = '';
       const fragment = document.createDocumentFragment();
       let sumMaterialCost = 0, sumLEC = 0, sumGrandTotal = 0;
+      let sumDirectMaterialCost = 0, sumDirectLEC = 0, sumDirectCost = 0;
       let boqCategorySeen = false;
       let previousVisibleBOQRowType = '';
+
+      boqData.forEach((row, index) => {
+        const childExists = hasChildRow(boqData, index);
+        const rowEditable = row.type === 'subsubsubcategory' || (row.type === 'subsubcategory' && !childExists) || (row.type === 'subcategory' && !childExists);
+        if (rowEditable) {
+          const boqValues = computeBOQDisplayValues(row);
+          sumMaterialCost += boqValues.totalMaterialCost;
+          sumLEC += boqValues.totalLEC;
+          sumGrandTotal += boqValues.grandTotalCost;
+          sumDirectMaterialCost += boqValues.directTotalMaterialCost;
+          sumDirectLEC += boqValues.directTotalLEC;
+          sumDirectCost += boqValues.directGrandTotalCost;
+        }
+      });
+
       boqData.forEach((row, index) => {
         if (shouldHideHierarchyRow(boqData, index)) return;
         const boqValues = computeBOQDisplayValues(row);
@@ -12632,7 +13225,6 @@
         const childExists = hasChildRow(boqData, index);
         const currentCondition = row.condition || 'CPM';
         const rowEditable = row.type === 'subsubsubcategory' || (row.type === 'subsubcategory' && !childExists) || (row.type === 'subcategory' && !childExists);
-        if (rowEditable) { sumMaterialCost += totalMaterialCost; sumLEC += totalLEC; sumGrandTotal += grandTotalCost; }
 
         const tr = document.createElement('tr');
         tr.dataset.index = index;
@@ -12679,6 +13271,10 @@
             case 'qty':
               rowHtml += `<td>${(row.type === 'category' || ((row.type === 'subcategory' || row.type === 'subsubcategory') && childExists)) ? '' : `<input type="text" value="${qty}" style="text-align:center;" onfocus="this.value = numberOrZero(boqData[${index}].qty)" onblur="updateBOQField(${index}, 'qty', numberOrZero(this.value))">`}</td>`;
               break;
+
+            case 'directQty':
+              rowHtml += `<td>${(row.type === 'category' || ((row.type === 'subcategory' || row.type === 'subsubcategory') && childExists)) ? '' : `<input type="text" value="${boqValues.directQty}" style="text-align:center;" onfocus="this.value = numberOrZero(boqData[${index}].qty)" onblur="updateBOQField(${index}, 'qty', numberOrZero(this.value))">`}</td>`;
+              break;
               
             case 'unit':
               rowHtml += `<td style="position: relative;">${rowEditable ? `${!boqValues.linkedUnit ? '<span class="manual-indicator">*</span>' : ''}<input value="${escapeHtml(boqValues.linkedUnit || row.unit)}" onchange="updateBOQField(${index}, 'unit', this.value)" placeholder="Unit" ${boqValues.linkedUnit ? 'readonly title="Linked from D.U.P.A."' : ''}>` : ''}</td>`;
@@ -12687,21 +13283,41 @@
             case 'materialUnitCost':
               rowHtml += `<td class="number" style="position: relative;">${rowEditable ? `${linkedMaterialUnitCost === null ? '<span class="manual-indicator">*</span>' : ''}<input class="number" type="text" value="${peso(materialUnitCost)}" onfocus="this.value = numberOrZero(boqData[${index}].materialUnitCost)" onblur="updateBOQField(${index}, 'materialUnitCost', numberOrZero(this.value))" ${linkedMaterialUnitCost !== null ? 'readonly title="Linked from D.U.P.A. Material Unit Cost"' : ''}>` : ''}</td>`;
               break;
+
+            case 'directMaterialUnitCost':
+              rowHtml += `<td class="number" style="position: relative;">${rowEditable ? `${linkedMaterialUnitCost === null ? '<span class="manual-indicator">*</span>' : ''}<input class="number" type="text" value="${peso(boqValues.directMaterialUnitCost)}" onfocus="this.value = numberOrZero(boqData[${index}].materialUnitCost)" onblur="updateBOQField(${index}, 'materialUnitCost', numberOrZero(this.value))" ${linkedMaterialUnitCost !== null ? 'readonly title="Linked from D.U.P.A. Material Unit Cost"' : ''}>` : ''}</td>`;
+              break;
               
             case 'totalMaterialCost':
               rowHtml += `<td class="number">${rowEditable ? peso(totalMaterialCost) : ''}</td>`;
+              break;
+
+            case 'directTotalMaterialCost':
+              rowHtml += `<td class="number">${rowEditable ? peso(boqValues.directTotalMaterialCost) : ''}</td>`;
               break;
               
             case 'leUnitCost':
               rowHtml += `<td class="number" style="position: relative;">${rowEditable ? `${boqValues.linkedLEUnitCost === null ? '<span class="manual-indicator">*</span>' : ''}<input class="number" type="text" value="${peso(leUnitCost)}" onfocus="this.value = numberOrZero(boqData[${index}].laborUnitCost)" onblur="updateBOQField(${index}, 'laborUnitCost', numberOrZero(this.value))" ${boqValues.linkedLEUnitCost !== null ? 'readonly title="Linked from D.U.P.A. LE Unit Cost"' : ''}>` : ''}</td>`;
               break;
+
+            case 'directLEUnitCost':
+              rowHtml += `<td class="number" style="position: relative;">${rowEditable ? `${boqValues.linkedLEUnitCost === null ? '<span class="manual-indicator">*</span>' : ''}<input class="number" type="text" value="${peso(boqValues.directLEUnitCost)}" onfocus="this.value = numberOrZero(boqData[${index}].laborUnitCost)" onblur="updateBOQField(${index}, 'laborUnitCost', numberOrZero(this.value))" ${boqValues.linkedLEUnitCost !== null ? 'readonly title="Linked from D.U.P.A. LE Unit Cost"' : ''}>` : ''}</td>`;
+              break;
               
             case 'totalLEC':
               rowHtml += `<td class="number">${rowEditable ? peso(totalLEC) : ''}</td>`;
               break;
+
+            case 'directTotalLEC':
+              rowHtml += `<td class="number">${rowEditable ? peso(boqValues.directTotalLEC) : ''}</td>`;
+              break;
               
             case 'grandTotalCost':
               rowHtml += `<td class="number">${rowEditable ? peso(grandTotalCost) : ''}</td>`;
+              break;
+
+            case 'directGrandTotalCost':
+              rowHtml += `<td class="number">${rowEditable ? peso(boqValues.directGrandTotalCost) : ''}</td>`;
               break;
               
             case 'condition':
@@ -12726,7 +13342,12 @@
 
         appendEndingTotalRows(boqData, index, fragment, ['category', 'subcategory', 'subsubcategory']);
       });
-      appendBOQGrandTotalRow(fragment, { material: sumMaterialCost, lec: sumLEC, grand: sumGrandTotal });
+      const isDirectView = (currentBOQCostView === 'direct');
+      appendBOQGrandTotalRow(fragment, {
+        material: isDirectView ? sumDirectMaterialCost : sumMaterialCost,
+        lec: isDirectView ? sumDirectLEC : sumLEC,
+        grand: isDirectView ? sumDirectCost : sumGrandTotal
+      });
       tbody.appendChild(fragment);
       const sumMaterialCostEl = document.getElementById('sumMaterialCost');
       if (sumMaterialCostEl) sumMaterialCostEl.textContent = peso(sumMaterialCost);
@@ -12740,6 +13361,11 @@
       if (summaryMaterialEl) summaryMaterialEl.textContent = peso(sumMaterialCost);
       const summaryGrandEl = document.getElementById('summaryGrand');
       if (summaryGrandEl) summaryGrandEl.textContent = peso(sumGrandTotal);
+      const indirectCostEl = document.getElementById('boqIndirectCostDisplay');
+      if (indirectCostEl) indirectCostEl.value = peso(sumGrandTotal);
+      const directCostEl = document.getElementById('boqDirectCostDisplay');
+      if (directCostEl) directCostEl.value = peso(sumDirectCost);
+      updateCostViewButtons();
       document.querySelectorAll('#boqTable textarea.boq-specification-input').forEach(autoResizeTextarea);
       updateBOQMasterToggleButton();
       renderBOQSummaryTable();
@@ -12864,7 +13490,7 @@
       return {
         boqData: cloneData(boqData),
         projectFields: collectValuesById(['projectName', 'projectLocation', 'documentNo', 'clientName', 'preparedBy', 'proposalDate', 'projectSubject']),
-        multiplierFields: collectValuesById(['boqQtyMultiplier', 'boqMaterialMultiplier', 'boqLEMultiplier', 'boqProfitMultiplier', 'boqOverheadMultiplier', 'boqTaxMultiplier']),
+        multiplierFields: collectValuesById(['boqQtyMultiplier', 'boqMaterialMultiplier', 'boqLEMultiplier', 'boqProfitMultiplier', 'boqOverheadMultiplier', 'boqContingencyMultiplier', 'boqTaxMultiplier']),
         summaryFields: collectValuesById(['boqSummaryArea']),
         signatureFields: collectValuesById(['submittedBySignatureName', 'submittedByPosition', 'acceptedBySignatureName', 'acceptedByPosition']),
         signatureEdited: {
@@ -12873,7 +13499,8 @@
         },
         reviewTable: collectReviewTableValues(),
         ganttSummaryCellFunctions: ganttSummaryCellFunctions,
-        ganttSummaryFormulas: ganttSummaryFormulas
+        ganttSummaryFormulas: ganttSummaryFormulas,
+        billingPeriods: Array.isArray(fclBillingPeriods) ? cloneData(fclBillingPeriods) : []
       };
     }
 
@@ -12934,7 +13561,7 @@
     }
 
     function parseExcelNumber(value) {
-      const cleaned = String(value ?? '').replace(/[â‚±,\s]/g, '').replace(/[^0-9.\-]/g, '');
+      const cleaned = String(value ?? '').replace(/[\u20B1\u20A0-\u20CF\s,]/g, '').replace(/[^0-9.\-]/g, '');
       const parsed = parseFloat(cleaned);
       return Number.isFinite(parsed) ? parsed : 0;
     }
@@ -13724,10 +14351,12 @@
 
       const urlParams = new URLSearchParams(window.location.search);
       const requestedSheet = urlParams.get('sheet');
-      if (requestedSheet === 'gantt') {
+      if (requestedSheet === 'gantt' || requestedSheet === 'schedule') {
         setTimeout(() => { if (typeof showGanttSheet === 'function') showGanttSheet(); }, 50);
       } else if (requestedSheet === 'boqSummary') {
         setTimeout(() => { if (typeof showSheet === 'function') showSheet('boqSummarySheet'); }, 50);
+      } else if (requestedSheet === 'manpower') {
+        setTimeout(() => { if (typeof showManpowerSheet === 'function') showManpowerSheet(); }, 50);
       }
     }
 
@@ -13737,15 +14366,20 @@
       let catalog = [];
       try {
         const raw = localStorage.getItem('FCL_PROJECT_CATALOG_DATA');
-        if (raw) catalog = JSON.parse(raw);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            catalog = parsed.filter(p => !['HCC-2026-B1', 'MLH-2025-04', 'RTO-2026-C2'].includes(p.id));
+          }
+        }
       } catch (e) {}
       if (!Array.isArray(catalog) || catalog.length === 0) {
         catalog = [
-          { id: 'PRJ-2026-001', code: 'PRJ-2026-001', shortName: 'Sports Club & Recreation' },
-          { id: 'HCC-2026-B1', code: 'HCC-2026-B1', shortName: 'Highland Commercial' },
-          { id: 'MLH-2025-04', code: 'MLH-2025-04', shortName: 'Metro Logistics Hub' },
-          { id: 'RTO-2026-C2', code: 'RTO-2026-C2', shortName: 'Riverside Terraces' }
+          { id: 'PRJ-2026-001', code: 'PRJ-2026-001', shortName: 'Sports Club & Recreation' }
         ];
+      }
+      if (!catalog.some(p => p.id === currentBoqProjectId)) {
+        currentBoqProjectId = catalog[0].id;
       }
       selector.innerHTML = catalog.map(p =>
         `<option value="${p.id}" ${p.id === currentBoqProjectId ? 'selected' : ''}>${p.code} — ${p.shortName || p.name}</option>`
@@ -13899,8 +14533,28 @@
     }
 
     function saveScheduleSection(silent = false) {
-      // 1. Save BOQ payload (which holds all schedule dates, durations, actuals, progress)
+      // 1. Calculate project budget & earned value / actual progress from schedule & quantities
+      let calcBudget = 0;
+      let earnedValueSum = 0;
+      if (Array.isArray(boqData)) {
+        boqData.forEach(r => {
+          const displayValues = typeof computeBOQDisplayValues === 'function' ? (computeBOQDisplayValues(r) || {}) : {};
+          const rowTotal = parseFloat(displayValues.grandTotalCost !== undefined ? displayValues.grandTotalCost : (r.grandTotalCost || 0)) || 0;
+          calcBudget += rowTotal;
+          const progress = parseFloat(r.ganttProgress !== undefined ? r.ganttProgress : (r.percentDone || 0)) || 0;
+          earnedValueSum += (rowTotal * (progress / 100));
+        });
+      }
+      const actualProgress = calcBudget > 0 ? parseFloat(((earnedValueSum / calcBudget) * 100).toFixed(1)) : 0;
+
+      // 2. Save BOQ payload (which holds all schedule dates, durations, actuals, progress, period quantities, and billing cycles)
       const boqPayload = getBOQPayload();
+      if (calcBudget > 0) {
+        boqPayload.totalBudget = calcBudget;
+        boqPayload.actualProgress = actualProgress;
+      }
+      boqPayload.billingPeriods = Array.isArray(fclBillingPeriods) ? cloneData(fclBillingPeriods) : [];
+
       boqPayload.items = (boqData || []).map((r, idx) => ({
         id: r.id || `boq_${idx}`,
         code: r.code || `${idx + 1}.00`,
@@ -13913,14 +14567,14 @@
         leUnitCost: parseFloat(r.leUnitCost) || 0,
         unitCost: parseFloat(r.unitCost) || ((parseFloat(r.materialUnitCost) || 0) + (parseFloat(r.leUnitCost) || 0)),
         grandTotalCost: parseFloat(r.grandTotalCost) || ((parseFloat(r.qty) || 1) * (parseFloat(r.unitCost) || 0)),
-        weight: 0,
+        weight: calcBudget > 0 ? parseFloat((((parseFloat(r.grandTotalCost) || 0) / calcBudget) * 100).toFixed(2)) : 0,
         percentDone: Math.min(100, Math.max(0, parseFloat(r.ganttProgress !== undefined ? r.ganttProgress : (r.percentDone || 0)) || 0)),
         earnedValue: parseFloat(r.earnedValue) || 0,
         isCritical: Boolean(r.isCritical)
       }));
       saveToBrowser(APP_STORAGE_KEYS.boq, boqPayload, 'Schedule', true);
 
-      // 2. Extract Gantt Tasks for master project timeline
+      // 3. Extract Gantt Tasks for master project timeline
       const ganttTasks = (boqData || []).filter(r => r.type === 'task' || !hasChildRow(boqData, boqData.indexOf(r))).map((r, idx) => {
         const start = r.ganttStartDate || r.startDate || '2026-03-01';
         const dur = parseInt(r.ganttDuration || r.days || 10, 10) || 10;
@@ -13941,6 +14595,9 @@
           progress: Math.min(100, Math.max(0, parseFloat(r.ganttProgress !== undefined ? r.ganttProgress : (r.percentDone || 0)) || 0)),
           actualStartDate: r.ganttActualStartDate || '',
           actualFinishDate: r.ganttActualFinishDate || '',
+          actualDuration: r.ganttActualDuration || 0,
+          periodQty: r.ganttPeriodQty || {},
+          installedQty: r.ganttInstalledQty || 0,
           predecessors: r.ganttPredecessors || '',
           isCritical: Boolean(r.isCritical),
           lead: 'Project Engineer'
@@ -13950,10 +14607,12 @@
       const timelineData = {
         ganttTasks: ganttTasks,
         settings: ganttSettings,
+        billingPeriods: Array.isArray(fclBillingPeriods) ? cloneData(fclBillingPeriods) : [],
+        progress: actualProgress,
         lastUpdated: new Date().toISOString()
       };
 
-      // 3. Save scoped project data
+      // 4. Save scoped project data
       if (currentBoqProjectId) {
         if (window.FCLStorage && typeof window.FCLStorage.saveProjectBOQ === 'function') {
           window.FCLStorage.saveProjectBOQ(currentBoqProjectId, boqPayload);
@@ -13961,6 +14620,13 @@
         if (window.FCLStorage && typeof window.FCLStorage.saveProjectGantt === 'function') {
           window.FCLStorage.saveProjectGantt(currentBoqProjectId, timelineData);
         }
+        // Persist scoped billing periods
+        try {
+          if (Array.isArray(fclBillingPeriods) && fclBillingPeriods.length > 0) {
+            localStorage.setItem('fcl_billing_periods_' + currentBoqProjectId, JSON.stringify(fclBillingPeriods));
+          }
+        } catch (e) {}
+
         // Update catalog
         try {
           const catRaw = localStorage.getItem('FCL_PROJECT_CATALOG_DATA');
@@ -13969,8 +14635,13 @@
             const p = catalog.find(x => x.id === currentBoqProjectId);
             if (p) {
               p.boq = boqPayload;
+              if (calcBudget > 0) p.totalBudget = calcBudget;
+              p.actualProgress = actualProgress;
               if (!p.timeline) p.timeline = {};
               p.timeline.ganttTasks = ganttTasks;
+              if (Array.isArray(fclBillingPeriods) && fclBillingPeriods.length > 0) {
+                p.timeline.billingPeriods = cloneData(fclBillingPeriods);
+              }
               localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(catalog));
               if (window.FCLStorage && typeof window.FCLStorage.saveProjectCatalog === 'function') {
                 window.FCLStorage.saveProjectCatalog(catalog);
@@ -13986,7 +14657,7 @@
       if (!silent) {
         const isCloud = typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured();
         const msg = isCloud
-          ? `✅ Gantt Schedule Saved & Synced to Cloud Firestore!\n\n• Active Project: ${currentBoqProjectId}\n• Other users connected to this Firebase project will see these schedule activities and timeline updates on their computers in real-time.\n• Offline / External users: You can also use "📦 Export Master Project (.fclproj)" to share the project file directly.`
+          ? `✅ Gantt Schedule Saved & Synced to Cloud Firestore!\n\n• Active Project: ${currentBoqProjectId}\n• Other users connected to this Firebase project will see these schedule activities, quantity accomplishments, and timeline updates on their computers in real-time.\n• Offline / External users: You can also use "📦 Export Master Project (.fclproj)" to share the project file directly.`
           : `✅ Gantt Schedule Saved Locally!\n\n• Active Project: ${currentBoqProjectId}\n• Cloud Status: Local Mode.\n• To share with other users on their computers, click "📦 Export Master Project (.fclproj)" or configure Cloud Firestore sync.`;
         alert(msg);
       }
@@ -14055,8 +14726,29 @@
 
       if (savedBOQ) {
         if (Array.isArray(savedBOQ.boqData)) boqData.splice(0, boqData.length, ...savedBOQ.boqData);
+        if (Array.isArray(savedBOQ.billingPeriods) && savedBOQ.billingPeriods.length > 0) {
+          fclBillingPeriods = cloneData(savedBOQ.billingPeriods);
+          try {
+            localStorage.setItem('fcl_billing_periods', JSON.stringify(fclBillingPeriods));
+            if (currentBoqProjectId) {
+              localStorage.setItem('fcl_billing_periods_' + currentBoqProjectId, JSON.stringify(fclBillingPeriods));
+            }
+          } catch (e) {}
+        }
         applyValuesById(savedBOQ.projectFields);
         applyValuesById(savedBOQ.multiplierFields);
+        const curMultipliers = getBOQMultipliers();
+        if (Object.values(curMultipliers).every(v => v === 0)) {
+          applyValuesById({
+            boqQtyMultiplier: '5',
+            boqMaterialMultiplier: '5',
+            boqLEMultiplier: '5',
+            boqProfitMultiplier: '15',
+            boqOverheadMultiplier: '10',
+            boqContingencyMultiplier: '5',
+            boqTaxMultiplier: '0'
+          });
+        }
         applyValuesById(savedBOQ.summaryFields);
         applyValuesById(savedBOQ.signatureFields);
         if (savedBOQ.signatureEdited) {
@@ -14154,7 +14846,15 @@
       loadSavedSections();
       if (document.getElementById('priceListTable') && !priceListData.length) addPriceListRow();
       if (document.getElementById('analysisTable') && !analysisData.length) addAnalysisCategoryRow();
-      if (document.getElementById('boqTable') && !boqData.length) addBOQCategoryRow();
+      if (document.getElementById('boqTable') && !boqData.length) {
+        if (typeof DEFAULT_SPORTS_CLUB_BOQ_DATA !== 'undefined' && Array.isArray(DEFAULT_SPORTS_CLUB_BOQ_DATA) && DEFAULT_SPORTS_CLUB_BOQ_DATA.length) {
+          boqData.splice(0, boqData.length, ...JSON.parse(JSON.stringify(DEFAULT_SPORTS_CLUB_BOQ_DATA)));
+          const pNameEl = document.getElementById('projectName');
+          if (pNameEl && !pNameEl.value) pNameEl.value = 'Two Storey with Mezzanine Sports Club Building';
+        } else {
+          addBOQCategoryRow();
+        }
+      }
       recomputePriceListCodes();
       recomputeAnalysisCodes();
       recomputeCodes(boqData);
@@ -14998,7 +15698,25 @@
       const deleteText = count > 1 ? 'Delete Rows' : 'Delete Row';
       const tableId = window.contextMenuTargetTable;
       
+      const hasCopied = !!(window.copiedCellsGrid && window.copiedCellsGrid.length > 0);
+      const pasteStyle = hasCopied ? '' : 'style="opacity: 0.5; pointer-events: none;"';
+
       let itemsHtml = `
+        <div class="custom-context-menu-item" onclick="window.handleContextMenuCopy()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          Copy
+        </div>
+        <div class="custom-context-menu-item" ${pasteStyle} onclick="window.handleContextMenuPaste()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+          </svg>
+          Paste
+        </div>
+        <div style="border-top: 1px solid var(--line, #e2e8f0); margin: 4px 0;"></div>
         <div class="custom-context-menu-item" onclick="window.handleContextMenuAddRow()">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -15020,28 +15738,6 @@
       }
       
       itemsHtml += `
-        <div class="custom-context-menu-item" onclick="window.handleContextMenuCopy()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          Copy
-        </div>
-      `;
-
-      const hasCopied = !!(window.copiedCellsGrid && window.copiedCellsGrid.length > 0);
-      const pasteStyle = hasCopied ? '' : 'style="opacity: 0.5; pointer-events: none;"';
-      itemsHtml += `
-        <div class="custom-context-menu-item" ${pasteStyle} onclick="window.handleContextMenuPaste()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-          </svg>
-          Paste
-        </div>
-      `;
-      
-      itemsHtml += `
         <div class="custom-context-menu-item" onclick="window.handleContextMenuDeleteRow()">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -15055,8 +15751,8 @@
       
       const winWidth = window.innerWidth;
       const winHeight = window.innerHeight;
-      const menuWidth = 130;
-      const menuHeight = tableId === 'boqTable' ? 160 : 135;
+      const menuWidth = 140;
+      const menuHeight = tableId === 'boqTable' ? 170 : 145;
       
       let left = x;
       let top = y;
@@ -15092,9 +15788,12 @@
           case 'title': return 'title';
           case 'specification': return 'specification';
           case 'qty': return 'qty';
+          case 'directQty': return 'qty';
           case 'unit': return 'unit';
           case 'materialUnitCost': return 'materialUnitCost';
+          case 'directMaterialUnitCost': return 'materialUnitCost';
           case 'leUnitCost': return 'laborUnitCost';
+          case 'directLEUnitCost': return 'laborUnitCost';
           case 'condition': return 'condition';
           default: return null;
         }
@@ -15117,6 +15816,32 @@
           case 5: return 'pricePerUnit';
           case 6: return 'rentalPerUnit';
           default: return null;
+        }
+      } else if (tableId === 'ganttTaskTable' || tableId === 'qtyTaskTable') {
+        const activeCols = ganttColumns.filter(c => c.visible);
+        let actualColIdx = colIndex;
+        if (ganttSettings && ganttSettings.showCoordinates) {
+          actualColIdx = colIndex - 1;
+        }
+        if (actualColIdx < 0 || actualColIdx >= activeCols.length) return null;
+        const colId = activeCols[actualColIdx].id;
+        switch(colId) {
+          case 'title': return 'title';
+          case 'specification': return 'specification';
+          case 'code': return 'code';
+          case 'startDate': return 'ganttStartDate';
+          case 'finishDate': return 'ganttFinishDate';
+          case 'actualStartDate': return 'ganttActualStartDate';
+          case 'actualFinishDate': return 'ganttActualFinishDate';
+          case 'days': return 'ganttDuration';
+          case 'duration': return 'ganttDuration';
+          case 'predecessors': return 'ganttPredecessors';
+          case 'predecessor': return 'ganttPredecessors';
+          case 'estQty': return 'qty';
+          case 'instQty': return 'ganttInstalledQty';
+          case 'cost': return 'cost';
+          case 'progress': return 'ganttProgress';
+          default: return colId;
         }
       }
       return null;
@@ -15343,11 +16068,30 @@
     window.insertBOQSummaryColumn = insertBOQSummaryColumn;
 
     window.copiedCellsGrid = null;
+    window.copiedRawGrid = null;
     window.copiedCellsTable = null;
 
     function handleContextMenuCopy() {
       hideContextMenu();
-      const tableId = window.contextMenuTargetTable;
+      const tableId = window.contextMenuTargetTable || window.selectionTable || 'boqTable';
+
+      // If selectedCells is empty but whole rows are selected via work cell:
+      if ((!window.selectedCells || window.selectedCells.size === 0) && window.selectedBOQRowIndices && window.selectedBOQRowIndices.size > 0 && tableId === 'boqTable') {
+        const table = document.getElementById(tableId);
+        if (table) {
+          const visibleCols = boqColumns.filter(c => c.visible);
+          window.selectedCells = new Set();
+          window.selectedBOQRowIndices.forEach(r => {
+            for (let c = 0; c < visibleCols.length; c++) {
+              window.selectedCells.add(`${r},${c}`);
+            }
+          });
+          const sorted = Array.from(window.selectedBOQRowIndices).sort((a,b)=>a-b);
+          window.selectionStart = { row: sorted[0], col: 0 };
+          window.selectionEnd = { row: sorted[sorted.length - 1], col: visibleCols.length - 1 };
+          window.selectionTable = tableId;
+        }
+      }
 
       if (!window.selectedCells || window.selectedCells.size === 0) {
         return;
@@ -15367,89 +16111,287 @@
       const table = document.getElementById(tableId);
       if (!table) return;
 
+      // Clear previous copied cell visual indicators
+      document.querySelectorAll('.copied-cell').forEach(el => el.classList.remove('copied-cell'));
+
       const grid = [];
+      const rawGrid = [];
+
       for (let r = minRow; r <= maxRow; r++) {
         const tr = table.querySelector(`tbody tr[data-index="${r}"]`);
         const rowData = [];
+        const rawRowData = [];
+        const dataObj = (tableId === 'boqTable' && boqData[r]) ? boqData[r]
+                      : (tableId === 'analysisTable' && analysisData[r]) ? analysisData[r]
+                      : (tableId === 'priceListTable' && priceListData[r]) ? priceListData[r]
+                      : ((tableId === 'ganttTaskTable' || tableId === 'qtyTaskTable') && boqData[r]) ? boqData[r]
+                      : null;
+
         for (let c = minCol; c <= maxCol; c++) {
           if (tr && tr.children[c]) {
-            rowData.push(getCellValue(tr.children[c]));
+            const td = tr.children[c];
+            td.classList.add('copied-cell');
+            const displayVal = getCellValue(td);
+            rowData.push(displayVal);
+
+            const field = getFieldNameByColIndex(tableId, c, dataObj ? dataObj.type : null);
+            if (dataObj && field && dataObj[field] !== undefined) {
+              rawRowData.push(dataObj[field]);
+            } else {
+              rawRowData.push(displayVal);
+            }
           } else {
             rowData.push('');
+            rawRowData.push('');
           }
         }
         grid.push(rowData);
+        rawGrid.push(rawRowData);
       }
 
       window.copiedCellsGrid = grid;
+      window.copiedRawGrid = rawGrid;
       window.copiedCellsTable = tableId;
 
-      if (window.selectedCells) window.selectedCells.clear();
-      window.selectionStart = null;
-      window.selectionEnd = null;
-      updateCellSelectionVisuals();
+      // Copy to clipboard as TSV for native Excel compatibility
+      try {
+        const tsv = grid.map(row => row.join('\t')).join('\r\n');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(tsv).catch(() => {});
+        }
+      } catch (err) {}
     }
     window.handleContextMenuCopy = handleContextMenuCopy;
 
+    function pasteValueIntoRowField(tableId, rowObj, colIndex, displayVal, rawVal) {
+      if (!rowObj) return;
+      const field = getFieldNameByColIndex(tableId, colIndex, rowObj.type);
+      if (!field) return;
+
+      // Protect category/subcategory rows from receiving item-only attributes (qty, costs, unit, etc.)
+      if ((rowObj.type === 'category' || rowObj.type === 'subcategory') && field !== 'title') {
+        return;
+      }
+
+      // If BOQ item is linked to DUPA, keep readonly linked fields locked
+      if (tableId === 'boqTable') {
+        const dupaMatch = getLinkedDUPAMatch(rowObj);
+        if (dupaMatch) {
+          if (field === 'materialUnitCost' && dupaMatch.materialUnitCost !== null) return;
+          if (field === 'laborUnitCost' && dupaMatch.leUnitCost !== null) return;
+          if (field === 'unit' && dupaMatch.unit) return;
+        }
+      }
+
+      const effectiveVal = (rawVal !== undefined && rawVal !== null && rawVal !== '') ? rawVal : displayVal;
+
+      if (tableId === 'ganttTaskTable' || tableId === 'qtyTaskTable') {
+        if (field === 'ganttStartDate') {
+          rowObj.ganttStartDate = String(effectiveVal).trim();
+        } else if (field === 'ganttFinishDate') {
+          const newFinish = new Date(effectiveVal);
+          const startStr = rowObj.ganttStartDate || getGanttProjectStartDate();
+          const start = new Date(startStr);
+          if (!isNaN(newFinish.getTime()) && !isNaN(start.getTime())) {
+            newFinish.setHours(12, 0, 0, 0);
+            start.setHours(12, 0, 0, 0);
+            let diffDays = Math.round((newFinish - start) / (1000 * 60 * 60 * 24)) + 1;
+            if (diffDays < 1) diffDays = 1;
+            rowObj.ganttDuration = diffDays;
+          }
+        } else if (field === 'ganttActualStartDate') {
+          rowObj.ganttActualStartDate = String(effectiveVal).trim();
+        } else if (field === 'ganttActualFinishDate') {
+          rowObj.ganttActualFinishDate = String(effectiveVal).trim();
+        } else if (field === 'ganttDuration') {
+          let val = parseInt(effectiveVal, 10);
+          if (isNaN(val) || val < 1) val = 1;
+          rowObj.ganttDuration = val;
+        } else if (field === 'ganttPredecessors') {
+          rowObj.ganttPredecessors = String(effectiveVal).trim();
+        } else if (field === 'ganttInstalledQty') {
+          let val = numberOrZero(effectiveVal);
+          rowObj.ganttInstalledQty = val;
+          const displayValues = computeBOQDisplayValues(rowObj);
+          const estQty = displayValues ? displayValues.qty : 0;
+          if (estQty > 0) {
+            rowObj.ganttProgress = Math.min(100, Math.max(0, Math.round((val / estQty) * 100)));
+          }
+        } else if (field === 'cost') {
+          const targetCost = numberOrZero(effectiveVal);
+          if (targetCost > 0) {
+            if (!rowObj.qty || rowObj.qty <= 0) {
+              rowObj.qty = 1;
+              rowObj.materialUnitCost = targetCost;
+              rowObj.laborUnitCost = 0;
+            } else {
+              const currentTotal = (numberOrZero(rowObj.materialUnitCost) + numberOrZero(rowObj.laborUnitCost)) * rowObj.qty;
+              if (currentTotal > 0) {
+                const ratio = targetCost / currentTotal;
+                rowObj.materialUnitCost = roundUpNearestOne(numberOrZero(rowObj.materialUnitCost) * ratio);
+                rowObj.laborUnitCost = roundUpNearestOne(numberOrZero(rowObj.laborUnitCost) * ratio);
+              } else {
+                rowObj.materialUnitCost = roundUpNearestOne(targetCost / rowObj.qty);
+                rowObj.laborUnitCost = 0;
+              }
+            }
+          }
+          clearBOQCaches();
+        } else if (field === 'qty') {
+          rowObj.qty = numberOrZero(effectiveVal);
+        } else {
+          rowObj[field] = String(effectiveVal);
+        }
+        return;
+      }
+
+      if (field === 'qty' || field === 'materialUnitCost' || field === 'laborUnitCost' || field === 'pricePerUnit' || field === 'rentalPerUnit') {
+        rowObj[field] = numberOrZero(effectiveVal);
+      } else {
+        rowObj[field] = String(effectiveVal);
+      }
+    }
+
     function handleContextMenuPaste() {
       hideContextMenu();
-      const tableId = window.contextMenuTargetTable;
-      const targetRow = window.contextMenuTargetIndex;
-      const targetCol = window.contextMenuTargetCol;
+      const tableId = window.contextMenuTargetTable || window.selectionTable || 'boqTable';
+      let targetRow = window.contextMenuTargetIndex;
+      let targetCol = window.contextMenuTargetCol;
 
+      if (targetRow === undefined || targetRow === null || targetRow < 0) {
+        if (window.selectionStart) {
+          targetRow = window.selectionStart.row;
+          targetCol = window.selectionStart.col;
+        }
+      }
       if (targetRow === undefined || targetRow === null || targetRow < 0) return;
       if (targetCol === undefined || targetCol === null || targetCol < 0) return;
 
-      if (!window.copiedCellsGrid || window.copiedCellsGrid.length === 0) {
+      let grid = window.copiedCellsGrid;
+      let rawGrid = window.copiedRawGrid;
+
+      if (!grid || grid.length === 0) {
         alert('No copied cells to paste.');
         return;
       }
 
-      if (window.copiedCellsTable !== tableId) {
+      if (window.copiedCellsTable && window.copiedCellsTable !== tableId) {
         if (!confirmAction('Pasting values from a different table. Proceed?')) return;
       }
 
       markUnsaved();
+      const table = document.getElementById(tableId);
+      if (!table) return;
+
+      const targetTr = table.querySelector(`tbody tr[data-index="${targetRow}"]`);
+      if (!targetTr) return;
+
       let dataList = null;
-      let recomputeFn = null;
-      let renderFn = null;
-
-      if (tableId === 'boqTable') {
-        dataList = boqData;
-        recomputeFn = () => recomputeCodes(boqData);
-        renderFn = renderBOQTable;
-      } else if (tableId === 'analysisTable') {
-        dataList = analysisData;
-        recomputeFn = recomputeAnalysisCodes;
-        renderFn = renderAnalysisTable;
-      } else if (tableId === 'priceListTable') {
-        dataList = priceListData;
-        recomputeFn = recomputePriceListCodes;
-        renderFn = renderPriceListTable;
-      }
-
+      if (tableId === 'boqTable') dataList = boqData;
+      else if (tableId === 'analysisTable') dataList = analysisData;
+      else if (tableId === 'priceListTable') dataList = priceListData;
+      else if (tableId === 'ganttTaskTable' || tableId === 'qtyTaskTable') dataList = boqData;
       if (!dataList) return;
 
-      window.copiedCellsGrid.forEach((rowValues, rOffset) => {
-        const r = targetRow + rOffset;
-        if (r >= dataList.length) return;
-        const rowObj = dataList[r];
+      // Excel behavior: Check if copying a 1x1 cell into a larger multi-cell selection
+      let isSingleCellToRange = false;
+      let selMinR = targetRow, selMaxR = targetRow, selMinC = targetCol, selMaxC = targetCol;
+      if (grid.length === 1 && grid[0].length === 1 && window.selectionStart && window.selectionEnd) {
+        selMinR = Math.min(window.selectionStart.row, window.selectionEnd.row);
+        selMaxR = Math.max(window.selectionStart.row, window.selectionEnd.row);
+        selMinC = Math.min(window.selectionStart.col, window.selectionEnd.col);
+        selMaxC = Math.max(window.selectionStart.col, window.selectionEnd.col);
+        if (selMaxR > selMinR || selMaxC > selMinC) {
+          isSingleCellToRange = true;
+        }
+      }
 
-        rowValues.forEach((val, cOffset) => {
-          const c = targetCol + cOffset;
-          const field = getFieldNameByColIndex(tableId, c, rowObj.type);
-          if (field) {
-            if (field === 'qty' || field === 'materialUnitCost' || field === 'laborUnitCost' || field === 'pricePerUnit' || field === 'rentalPerUnit') {
-              rowObj[field] = numberOrZero(val);
-            } else {
-              rowObj[field] = val;
+      const pastedDataIndices = [];
+
+      if (isSingleCellToRange) {
+        const singleVal = grid[0][0];
+        const singleRaw = rawGrid && rawGrid[0] ? rawGrid[0][0] : singleVal;
+        
+        let curTr = table.querySelector(`tbody tr[data-index="${selMinR}"]`) || targetTr;
+        while (curTr) {
+          const dIdxAttr = curTr.getAttribute('data-index');
+          if (dIdxAttr !== null) {
+            const dIdx = parseInt(dIdxAttr, 10);
+            if (dIdx > selMaxR) break;
+            const rowObj = dataList[dIdx];
+            if (rowObj) {
+              for (let c = selMinC; c <= selMaxC; c++) {
+                pasteValueIntoRowField(tableId, rowObj, c, singleVal, singleRaw);
+              }
+              pastedDataIndices.push(dIdx);
             }
           }
-        });
-      });
+          curTr = curTr.nextElementSibling;
+        }
+      } else {
+        // Multi-cell grid paste across consecutive visible rows
+        let curTr = targetTr;
+        let rOffset = 0;
+        while (curTr && rOffset < grid.length) {
+          const dIdxAttr = curTr.getAttribute('data-index');
+          if (dIdxAttr !== null) {
+            const dIdx = parseInt(dIdxAttr, 10);
+            const rowObj = dataList[dIdx];
+            const rowValues = grid[rOffset];
+            const rawRowValues = rawGrid ? rawGrid[rOffset] : null;
 
-      if (recomputeFn) recomputeFn();
-      if (renderFn) renderFn();
+            if (rowObj && rowValues) {
+              rowValues.forEach((val, cOffset) => {
+                const c = targetCol + cOffset;
+                const rawVal = rawRowValues ? rawRowValues[cOffset] : val;
+                pasteValueIntoRowField(tableId, rowObj, c, val, rawVal);
+              });
+              pastedDataIndices.push(dIdx);
+            }
+            rOffset++;
+          }
+          curTr = curTr.nextElementSibling;
+        }
+      }
+
+      // Recompute and update all views
+      if (tableId === 'boqTable') {
+        recomputeCodes(boqData);
+        clearBOQCaches();
+        renderBOQTable();
+        renderBOQSummaryTable();
+        renderCoverLetter();
+        if (typeof renderGanttChart === 'function') renderGanttChart();
+      } else if (tableId === 'analysisTable') {
+        recomputeAnalysisCodes();
+        renderAnalysisTable();
+        renderBOQTable();
+        renderBOQSummaryTable();
+      } else if (tableId === 'priceListTable') {
+        recomputePriceListCodes();
+        renderPriceListTable();
+      } else if (tableId === 'ganttTaskTable') {
+        clearBOQCaches();
+        renderGanttChart();
+      } else if (tableId === 'qtyTaskTable') {
+        clearBOQCaches();
+        renderQtyModalTable();
+      }
+
+      // Select newly pasted range (Excel behavior)
+      if (pastedDataIndices.length > 0) {
+        const startR = pastedDataIndices[0];
+        const endR = pastedDataIndices[pastedDataIndices.length - 1];
+        const numCols = isSingleCellToRange ? (selMaxC - selMinC + 1) : grid[0].length;
+        const endC = (isSingleCellToRange ? selMinC : targetCol) + numCols - 1;
+        window.selectionTable = tableId;
+        window.selectionStart = { row: startR, col: isSingleCellToRange ? selMinC : targetCol };
+        window.selectionEnd = { row: endR, col: endC };
+        updateCellSelectionVisuals();
+      }
+
+      // Remove copied cell dashed border
+      document.querySelectorAll('.copied-cell').forEach(el => el.classList.remove('copied-cell'));
     }
     window.handleContextMenuPaste = handleContextMenuPaste;
 
@@ -15507,7 +16449,7 @@
         updateCellSelectionVisuals();
       }
 
-      showContextMenu(e.clientX, e.clientY, 1);
+      showContextMenu(e.clientX, e.clientY, (window.selectedCells && window.selectedCells.size > 0 ? window.selectedCells.size : 1));
     });
 
     document.addEventListener('click', function(e) {

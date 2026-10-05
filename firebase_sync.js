@@ -357,6 +357,9 @@ const FCLFirebaseSync = {
     if (ganttVal) {
       FCLStorage.saveProjectSection(projectId, 'ganttSettings', ganttVal, true);
     }
+    if (cleanData.manpower) {
+      FCLStorage.saveProjectSection(projectId, 'manpower', cleanData.manpower, true);
+    }
 
     // Also update catalog item if present
     try {
@@ -544,6 +547,8 @@ const FCLFirebaseSync = {
       this.queueProjectSync(projectId, { gantt: data });
     } else if (section === 'cover') {
       this.queueProjectSync(projectId, { cover: data });
+    } else if (section === 'manpower') {
+      this.queueProjectSync(projectId, { manpower: data });
     }
   },
 
