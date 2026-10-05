@@ -403,7 +403,7 @@
 
         <div class="gantt-container" style="display: flex; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--card); height: calc(100vh - 220px); min-height: 500px;">
           <!-- Left side: Task list table -->
-          <div class="gantt-left-panel" style="width: 750px; flex-shrink: 0; overflow-y: auto; overflow-x: auto; background: var(--bg);">
+          <div class="gantt-left-panel" style="width: 750px; flex-shrink: 0; min-width: 150px; overflow-y: auto; overflow-x: auto; background: var(--bg);">
             <table id="ganttTaskTable" style="width: 750px; border-collapse: separate; border-spacing: 0; table-layout: fixed;">
               <thead>
                 <tr style="height: 48px; border-bottom: 1px solid var(--line); background: var(--accent); position: sticky; top: 0; z-index: 10;">
@@ -423,10 +423,10 @@
           </div>
 
           <!-- Divider: resizable splitter -->
-          <div class="gantt-divider" title="Drag to resize panels"></div>
+          <div class="gantt-divider" title="Drag horizontally to resize Task Table and Timeline panels"><div style="width: 2px; height: 32px; background: #64748b; border-radius: 1px; pointer-events: none;"></div></div>
 
           <!-- Right side: Gantt chart timeline -->
-          <div class="gantt-right-panel" id="ganttRightPanel" style="flex-grow: 1; overflow: auto; position: relative;">
+          <div class="gantt-right-panel" id="ganttRightPanel" style="flex-grow: 1; flex-shrink: 1; min-width: 0; overflow: auto; position: relative;">
             <div id="ganttTimelineHeader" style="position: sticky; top: 0; z-index: 20; background: var(--card); border-bottom: 1px solid var(--line); height: 48px;"></div>
             <div id="ganttTimelineBody" style="position: relative;"></div>
           </div>

@@ -58,17 +58,20 @@
       </div>
       <div class="toolbar header-save-toolbar">
         <button class="btn-primary" type="button" style="background:#059669; border-color:#059669;" onclick="FCLStorage.exportMasterProject()" title="Export all modules (Price List, DUPA, BOQ, Gantt, Proposal) into a single .fclproj file">📦 Export Master Project (.fclproj)</button>
-        <button class="btn-secondary" type="button" onclick="document.getElementById('masterProjFileInput').click()" title="Open and restore a master .fclproj project bundle">📂 Open Master Project</button>
-        <input id="masterProjFileInput" type="file" accept=".fclproj,application/json,.json" style="display:none" onchange="FCLStorage.importMasterProjectFile(this.files[0])">
-        <button id="saveBOQBtn" class="btn-primary header-save-btn" type="button" onclick="saveBOQSection()">Save BOQ</button>
+        <button class="btn-secondary" type="button" onclick="document.getElementById('masterProjFileInput').click()" title="Open and restore master project (.fclproj, .xlsx, .xls, .json)">📂 Open Master Project</button>
+        <input id="masterProjFileInput" type="file" accept=".fclproj,.xlsx,.xls,.xlsm,.xlsb,.csv,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display:none" onchange="FCLStorage.importMasterProjectFile(this.files[0])">
+        <button id="saveBOQBtn" class="btn-primary header-save-btn" type="button" style="background:#059669; border-color:#059669; font-weight:700;" onclick="saveBOQSection()" title="Save BOQ &amp; sync to Cloud Firestore so other users can view on their computer">💾 Save BOQ &amp; Sync</button>
+        <button id="saveScheduleBtn" class="btn-primary header-save-btn" type="button" style="background:#0284c7; border-color:#0284c7; font-weight:700;" onclick="saveScheduleSection()" title="Save Schedule &amp; sync to Cloud Firestore so other users can view on their computer">💾 Save Schedule &amp; Sync</button>
         <button id="saveCoverLetterBtn" class="btn-primary header-save-btn" type="button" onclick="saveCoverLetterSection()">Save Cover Letter</button>
         <button id="exportBOQJsonBtn" class="btn-secondary header-json-btn" type="button" onclick="exportSectionJson('boq')">Save BOQ JSON</button>
         <button id="loadBOQJsonBtn" class="btn-secondary header-json-btn" type="button" onclick="openSectionJsonFile('boq')">Load BOQ JSON</button>
         <button id="exportBOQExcelBtn" class="btn-secondary header-excel-btn" type="button" onclick="exportSectionToExcel('boq')">Export to Excel</button>
         <button id="loadBOQExcelBtn" class="btn-secondary header-excel-btn" type="button" onclick="openBOQExcelFile()">Load Excel</button>
+        <button id="loadBOQUnifiedBtn" class="btn-secondary header-excel-btn active-save" type="button" style="background:#059669; color:#fff; border-color:#059669; font-weight:700;" onclick="triggerBOQExcelOrJsonImport()" title="Load BOQ from Excel (.xlsx, .xls, .csv) or JSON (.json)">📂 Load Excel/JSON BOQ</button>
         <button id="exportBOQFormattedExcelBtn" class="btn-secondary header-excel-btn" type="button" onclick="exportSectionToExcel('boq', true)">Export Formatted Excel</button>
         <button id="printBOQPdfBtn" class="btn-secondary header-proposal-action" type="button" onclick="printBOQWithSummaryPdf()">Print BOQ + Summary to PDF</button>
         <button id="openBillingBtn" class="btn-primary header-proposal-action" type="button" style="background:#2563eb; border-color:#2563eb; color:white; font-weight:700;" onclick="showBillingRecord(event)" title="Interactive Multi-Period Progress Billing &amp; Payment Certificate">💳 Progress Billing</button>
+        <button id="loadScheduleUnifiedBtn" class="btn-secondary header-proposal-action active-save" type="button" style="background:#0284c7; color:#fff; border-color:#0284c7; font-weight:700;" onclick="triggerScheduleExcelOrJsonImport()" title="Load Schedule from Excel (.xlsx, .xls, .csv) or JSON (.json)">📂 Load Excel/JSON Schedule</button>
         <div class="gantt-publish-dropdown" style="position: relative; display: inline-block;">
           <button id="publishGanttBtn" class="btn-secondary header-proposal-action" type="button" onclick="togglePublishDropdown(event)">Publish &#9662;</button>
           <div id="publishDropdownMenu" class="dropdown-content" style="display: none; position: absolute; right: 0; background-color: white; min-width: 180px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; border: 1px solid var(--line); border-radius: 4px; padding: 4px 0;">
@@ -84,6 +87,8 @@
         <input id="sectionJsonFileInput" type="file" accept="application/json,.json" style="display:none" onchange="loadSectionJsonFromFile(this)">
         <input id="boqExcelFileInput" data-section="boq" type="file" accept=".xlsx,.xls,.xlsm,.xlsb,.html,.htm,.csv,.tsv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/html,text/csv" style="display:none" onchange="loadBOQExcelFromFile(this)">
         <input id="sectionExcelFileInput" type="file" accept=".xlsx,.xls,.xlsm,.xlsb,.html,.htm,.csv,.tsv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/html,text/csv" style="display:none" onchange="loadSectionExcelFromFile(this)">
+        <input id="unifiedBOQFileInput" type="file" accept=".xlsx,.xls,.xlsm,.xlsb,.csv,.tsv,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display:none" onchange="handleUnifiedBOQFile(this)">
+        <input id="unifiedScheduleFileInput" type="file" accept=".xlsx,.xls,.xlsm,.xlsb,.csv,.tsv,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display:none" onchange="handleUnifiedScheduleFile(this)">
         <button class="btn-danger" onclick="clearAllData()">Clear All</button>
       </div>
     </div>
@@ -95,6 +100,8 @@
       <button id="navBoqSummary" class="btn-tab" onclick="showSheet('boqSummarySheet')">BOQ Summary</button>
       <button id="navGantt" class="btn-tab" onclick="showGanttSheet()">Gantt-chart Schedule</button>
       <button id="navCoverLetter" class="btn-tab" onclick="showCoverLetterSheet()">Cover Letter</button>
+      <button id="navLoadBOQ" class="btn-tab" type="button" onclick="triggerBOQExcelOrJsonImport()" style="background:#ecfdf5; color:#065f46; font-weight:700; border:1px solid #a7f3d0;" title="Load BOQ from Excel (.xlsx, .xls, .csv) or JSON (.json)">📂 Load Excel/JSON BOQ</button>
+      <button id="navLoadSchedule" class="btn-tab" type="button" onclick="triggerScheduleExcelOrJsonImport()" style="background:#f0f9ff; color:#0369a1; font-weight:700; border:1px solid #bae6fd;" title="Load Schedule from Excel (.xlsx, .xls, .csv) or JSON (.json)">📂 Load Excel/JSON Schedule</button>
       <div class="boq-project-switch-wrapper" style="margin-left: auto; display: inline-flex; align-items: center; gap: 8px;">
         <button id="boqCloudSyncBtn" class="fcl-cloud-badge btn-tab" type="button" onclick="FCLFirebaseSync.openConfigModal()" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; padding:4px 10px; font-weight:700; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; font-size:11px;" title="Cloud Firestore Real-Time Synchronization Status">
           <span>🟡</span>
@@ -340,6 +347,8 @@
 
 
               <button class="btn-secondary" id="printBOQPdfInlineBtn" type="button" onclick="printBOQWithSummaryPdf()">Print BOQ + Summary to PDF</button>
+              <button class="btn-primary" id="saveBOQInlineBtn" type="button" style="background:#059669; border-color:#059669; font-weight:700; color:#fff;" onclick="saveBOQSection()" title="Save BOQ &amp; sync to Cloud Firestore so other users can view on their computer">💾 Save BOQ &amp; Sync</button>
+              <button class="btn-secondary" id="loadBOQInlineBtn" type="button" style="background:#ecfdf5; color:#065f46; font-weight:700; border:1px solid #a7f3d0;" onclick="triggerBOQExcelOrJsonImport()" title="Load BOQ from Excel or JSON">📂 Load Excel/JSON BOQ</button>
 
 
             </div>
@@ -741,6 +750,8 @@
 
 
                 <button class="btn-secondary" id="updatePercentDayBtn" type="button" style="padding: 4px 10px; font-size: 11px; font-weight: bold; height: 24px; display: inline-flex; align-items: center;" onclick="recalculateProgressPercentDay()">Update Percent (Day)</button>
+                <button class="btn-secondary" id="ganttLoadScheduleUnifiedBtn" type="button" style="padding: 4px 10px; font-size: 11px; font-weight: bold; height: 24px; display: inline-flex; align-items: center; gap: 4px; background: #0284c7; color: #fff; border-color: #0284c7;" onclick="triggerScheduleExcelOrJsonImport()" title="Load Schedule from Excel or JSON">📂 Load Schedule</button>
+                <button class="btn-primary" id="ganttSaveScheduleBtn" type="button" style="padding: 4px 10px; font-size: 11px; font-weight: bold; height: 24px; display: inline-flex; align-items: center; gap: 4px; background: #059669; border-color: #059669; color: #fff;" onclick="saveScheduleSection()" title="Save Schedule &amp; sync to Cloud Firestore so other users can view on their computer">💾 Save Schedule &amp; Sync</button>
 
 
                 <div class="dropdown" style="display: inline-block; position: relative;">
@@ -902,7 +913,7 @@
           <!-- Left side: Task list table -->
 
 
-          <div class="gantt-left-panel" style="width: 750px; flex-shrink: 0; overflow-y: auto; overflow-x: auto; background: var(--bg);">
+          <div class="gantt-left-panel" style="width: 750px; flex-shrink: 0; min-width: 150px; overflow-y: auto; overflow-x: auto; background: var(--bg);">
 
 
             <table id="ganttTaskTable" style="width: 750px; border-collapse: separate; border-spacing: 0; table-layout: fixed;">
@@ -962,7 +973,7 @@
           <!-- Divider: resizable splitter -->
 
 
-          <div class="gantt-divider" title="Drag to resize panels"></div>
+          <div class="gantt-divider" title="Drag horizontally to resize Task Table and Timeline panels"><div style="width: 2px; height: 32px; background: #64748b; border-radius: 1px; pointer-events: none;"></div></div>
 
 
 
@@ -971,7 +982,7 @@
           <!-- Right side: Gantt chart timeline -->
 
 
-          <div class="gantt-right-panel" id="ganttRightPanel" style="flex-grow: 1; overflow: auto; position: relative;">
+          <div class="gantt-right-panel" id="ganttRightPanel" style="flex-grow: 1; flex-shrink: 1; min-width: 0; overflow: auto; position: relative;">
 
 
             <div id="ganttTimelineHeader" style="position: sticky; top: 0; z-index: 20; background: var(--card); border-bottom: 1px solid var(--line); height: 48px;"></div>
@@ -4096,7 +4107,7 @@
           <!-- Left side: Task list table -->
 
 
-          <div class="gantt-left-panel" style="width: 750px; flex-shrink: 0; overflow-y: auto; overflow-x: auto; background: var(--bg);">
+          <div class="gantt-left-panel" style="width: 750px; flex-shrink: 0; min-width: 150px; overflow-y: auto; overflow-x: auto; background: var(--bg);">
 
 
             <table id="ganttTaskTable" style="width: 750px; border-collapse: separate; border-spacing: 0; table-layout: fixed;">
@@ -4156,7 +4167,7 @@
           <!-- Divider: resizable splitter -->
 
 
-          <div class="gantt-divider" title="Drag to resize panels"></div>
+          <div class="gantt-divider" title="Drag horizontally to resize Task Table and Timeline panels"><div style="width: 2px; height: 32px; background: #64748b; border-radius: 1px; pointer-events: none;"></div></div>
 
 
 
@@ -4165,7 +4176,7 @@
           <!-- Right side: Gantt chart timeline -->
 
 
-          <div class="gantt-right-panel" id="ganttRightPanel" style="flex-grow: 1; overflow: auto; position: relative;">
+          <div class="gantt-right-panel" id="ganttRightPanel" style="flex-grow: 1; flex-shrink: 1; min-width: 0; overflow: auto; position: relative;">
 
 
             <div id="ganttTimelineHeader" style="position: sticky; top: 0; z-index: 20; background: var(--card); border-bottom: 1px solid var(--line); height: 48px;"></div>
@@ -6669,6 +6680,384 @@
         }
       }
     });
+
+    // ==========================================
+    // Unified Excel / JSON BOQ & Schedule Import
+    // ==========================================
+    function triggerBOQExcelOrJsonImport() {
+      const input = document.getElementById('unifiedBOQFileInput');
+      if (input) {
+        input.value = '';
+        input.click();
+      }
+    }
+
+    async function handleUnifiedBOQFile(input) {
+      const file = input && input.files && input.files[0];
+      if (!file) return;
+      const fileName = file.name || '';
+      const isJson = /\.json$/i.test(fileName) || file.type === 'application/json';
+
+      if (isJson) {
+        try {
+          const text = await file.text();
+          const parsed = JSON.parse(text);
+          let payload = parsed && parsed.data ? parsed.data : parsed;
+          let boqRows = null;
+          if (Array.isArray(payload)) {
+            boqRows = payload;
+          } else if (Array.isArray(payload.boqData)) {
+            boqRows = payload.boqData;
+          } else if (Array.isArray(payload.items)) {
+            boqRows = payload.items;
+          } else if (payload.boq && Array.isArray(payload.boq.items)) {
+            boqRows = payload.boq.items;
+          }
+
+          if (boqRows && Array.isArray(boqRows)) {
+            if (typeof applyBOQPayload === 'function') {
+              const fullPayload = (payload && Array.isArray(payload.boqData)) ? payload : {
+                boqData: boqRows,
+                projectFields: payload.projectFields || {},
+                multiplierFields: payload.multiplierFields || {},
+                summaryFields: payload.summaryFields || {},
+                signatureFields: payload.signatureFields || {},
+                reviewTable: payload.reviewTable || []
+              };
+              applyBOQPayload(fullPayload);
+            } else {
+              boqData.splice(0, boqData.length, ...boqRows);
+              if (typeof recomputeCodes === 'function') recomputeCodes(boqData);
+              if (typeof renderBOQTable === 'function') renderBOQTable();
+              if (typeof renderBOQSummaryTable === 'function') renderBOQSummaryTable();
+            }
+            if (typeof renderGanttChart === 'function') renderGanttChart();
+            if (typeof saveBOQSection === 'function') {
+              saveBOQSection(true);
+            } else if (typeof markUnsaved === 'function') {
+              markUnsaved();
+            }
+            if (typeof showSheet === 'function') showSheet('boqSheet');
+            const isCloud = typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured();
+            const cloudMsg = isCloud
+              ? '• Synchronized to Cloud Firestore: Other users can now view this BOQ on their computers in real-time.'
+              : '• Saved to project: To share with other users in Local Mode, click "📦 Export Master Project (.fclproj)".';
+            alert(`✅ Bill of Quantity successfully loaded & saved from "${fileName}"!\n\n• Loaded ${boqRows.length} item(s).\n• Active Project: ${currentBoqProjectId}\n${cloudMsg}`);
+          } else {
+            throw new Error('Unrecognized BOQ JSON structure. Expected an array of BOQ items or an exported BOQ data object.');
+          }
+        } catch (err) {
+          alert('❌ Error loading BOQ JSON: ' + (err.message || 'Invalid format'));
+        } finally {
+          input.value = '';
+        }
+      } else {
+        // Excel or CSV file - delegate to loadBOQExcelFromFile
+        if (typeof loadBOQExcelFromFile === 'function') {
+          loadBOQExcelFromFile(input);
+        } else {
+          alert('BOQ Excel parser is not available.');
+        }
+      }
+    }
+
+    function triggerScheduleExcelOrJsonImport() {
+      const input = document.getElementById('unifiedScheduleFileInput');
+      if (input) {
+        input.value = '';
+        input.click();
+      }
+    }
+
+    function parseScheduleDateHelper(val) {
+      if (!val) return '';
+      if (val instanceof Date) {
+        if (isNaN(val.getTime())) return '';
+        const y = val.getFullYear();
+        const m = String(val.getMonth() + 1).padStart(2, '0');
+        const d = String(val.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+      }
+      if (typeof val === 'number') {
+        const date = new Date(Math.round((val - 25569) * 86400 * 1000));
+        if (!isNaN(date.getTime())) {
+          const y = date.getUTCFullYear();
+          const m = String(date.getUTCMonth() + 1).padStart(2, '0');
+          const d = String(date.getUTCDate()).padStart(2, '0');
+          return `${y}-${m}-${d}`;
+        }
+      }
+      const s = String(val).trim();
+      const isoMatch = s.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})/);
+      if (isoMatch) {
+        return `${isoMatch[1]}-${String(isoMatch[2]).padStart(2, '0')}-${String(isoMatch[3]).padStart(2, '0')}`;
+      }
+      const usMatch = s.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})/);
+      if (usMatch) {
+        return `${usMatch[3]}-${String(usMatch[1]).padStart(2, '0')}-${String(usMatch[2]).padStart(2, '0')}`;
+      }
+      const d = new Date(s);
+      if (!isNaN(d.getTime())) {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+      }
+      return '';
+    }
+
+    async function handleUnifiedScheduleFile(input) {
+      const file = input && input.files && input.files[0];
+      if (!file) return;
+      const fileName = file.name || '';
+      const isJson = /\.json$/i.test(fileName) || file.type === 'application/json';
+      const isExcel = /\.(xlsx|xls|xlsm|xlsb|csv|tsv)$/i.test(fileName);
+
+      try {
+        let tasks = [];
+        if (isJson) {
+          const text = await file.text();
+          const parsed = JSON.parse(text);
+          let rawTasks = [];
+          if (Array.isArray(parsed)) {
+            rawTasks = parsed;
+          } else if (parsed.timeline && Array.isArray(parsed.timeline.ganttTasks)) {
+            rawTasks = parsed.timeline.ganttTasks;
+          } else if (Array.isArray(parsed.ganttTasks)) {
+            rawTasks = parsed.ganttTasks;
+          } else if (Array.isArray(parsed.tasks)) {
+            rawTasks = parsed.tasks;
+          } else if (Array.isArray(parsed.schedule)) {
+            rawTasks = parsed.schedule;
+          } else if (parsed.data && Array.isArray(parsed.data.ganttTasks)) {
+            rawTasks = parsed.data.ganttTasks;
+          } else if (parsed.data && Array.isArray(parsed.data.boqData)) {
+            rawTasks = parsed.data.boqData;
+          } else if (parsed.boqData && Array.isArray(parsed.boqData)) {
+            rawTasks = parsed.boqData;
+          } else {
+            throw new Error('Unrecognized Schedule JSON structure. Expected an array of tasks or schedule object.');
+          }
+
+          tasks = rawTasks.map((t, idx) => {
+            const start = parseScheduleDateHelper(t.ganttStartDate || t.startDate || t.start || '2026-03-01');
+            const dur = Number(t.ganttDuration || t.duration || t.days || 10);
+            let end = parseScheduleDateHelper(t.ganttFinishDate || t.endDate || t.finishDate || t.finish || t.end);
+            if (!end && start) {
+              const dObj = new Date(start);
+              dObj.setDate(dObj.getDate() + dur);
+              end = parseScheduleDateHelper(dObj);
+            }
+            return {
+              code: String(t.code || t.taskId || t.id || `T-${101 + idx}`).trim(),
+              title: String(t.title || t.name || t.activity || t.desc || `Activity ${idx + 1}`).trim(),
+              specification: String(t.specification || '').trim(),
+              startDate: start,
+              finishDate: end,
+              duration: dur,
+              actualStartDate: parseScheduleDateHelper(t.ganttActualStartDate || t.actualStartDate || ''),
+              actualFinishDate: parseScheduleDateHelper(t.ganttActualFinishDate || t.actualFinishDate || ''),
+              progress: Math.min(100, Math.max(0, Number(t.ganttProgress !== undefined ? t.ganttProgress : (t.progress !== undefined ? t.progress : (t.percentDone || 0))))),
+              predecessors: String(t.ganttPredecessors || t.predecessors || t.depends || '').trim(),
+              qty: Number(t.qty || 1),
+              unit: String(t.unit || 'lot').trim(),
+              cost: Number(t.grandTotalCost || t.cost || 0)
+            };
+          });
+        } else if (isExcel) {
+          if (typeof XLSX === 'undefined') {
+            throw new Error('SheetJS XLSX library is not loaded. Please verify your network connection.');
+          }
+          const buffer = await file.arrayBuffer();
+          const wb = XLSX.read(new Uint8Array(buffer), { type: 'array' });
+          const sheetName = wb.SheetNames.find(n => /schedule|gantt|timeline|task/i.test(n)) || wb.SheetNames[0];
+          const ws = wb.Sheets[sheetName];
+          const rawRows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+          if (!rawRows || rawRows.length === 0) {
+            throw new Error('Excel sheet is empty.');
+          }
+
+          let headerIdx = -1;
+          let colMap = { code: -1, title: -1, start: -1, finish: -1, duration: -1, progress: -1, actStart: -1, actFinish: -1, pred: -1, qty: -1, unit: -1, cost: -1 };
+
+          for (let r = 0; r < Math.min(rawRows.length, 25); r++) {
+            const row = rawRows[r] || [];
+            const strRow = row.map(c => String(c || '').toLowerCase().trim());
+            let matches = 0;
+            strRow.forEach((col, cIdx) => {
+              if (/(task\s*id|activity\s*id|wbs|^code$|^task$|^id$)/.test(col)) { colMap.code = cIdx; matches++; }
+              else if (/(activity|work\s*item|task\s*name|activity\s*name|^title$|^name$|^description$)/.test(col)) { colMap.title = cIdx; matches++; }
+              else if (/(actual\s*start)/.test(col)) { colMap.actStart = cIdx; }
+              else if (/(actual\s*finish|actual\s*end)/.test(col)) { colMap.actFinish = cIdx; }
+              else if (/(start\s*date|early\s*start|^start$)/.test(col)) { colMap.start = cIdx; matches++; }
+              else if (/(finish\s*date|end\s*date|early\s*finish|^finish$|^end$)/.test(col)) { colMap.finish = cIdx; matches++; }
+              else if (/(duration|calendar\s*days|^days$)/.test(col)) { colMap.duration = cIdx; matches++; }
+              else if (/(progress|percent|%)/.test(col)) { colMap.progress = cIdx; }
+              else if (/(pred|predecessors|depends)/.test(col)) { colMap.pred = cIdx; }
+              else if (/^qty$|^quantity$/i.test(col)) { colMap.qty = cIdx; }
+              else if (/^unit$/i.test(col)) { colMap.unit = cIdx; }
+              else if (/(total\s*cost|amount|grand\s*total|^cost$)/.test(col)) { colMap.cost = cIdx; }
+            });
+            if (matches >= 2) {
+              headerIdx = r;
+              break;
+            }
+          }
+
+          if (headerIdx === -1) {
+            headerIdx = 0;
+            colMap = { code: 0, title: 1, start: 2, finish: 3, duration: 4, progress: 5, actStart: -1, actFinish: -1, pred: -1, qty: -1, unit: -1, cost: -1 };
+          }
+
+          for (let r = headerIdx + 1; r < rawRows.length; r++) {
+            const row = rawRows[r] || [];
+            if (!row.length || row.every(c => c === undefined || c === null || String(c).trim() === '')) continue;
+
+            const codeVal = colMap.code !== -1 ? String(row[colMap.code] || '').trim() : '';
+            const titleVal = colMap.title !== -1 ? String(row[colMap.title] || '').trim() : '';
+            if (!titleVal && !codeVal) continue;
+            if (/^(total|project\s*duration|summary)/i.test(titleVal) || /^(total|summary)/i.test(codeVal)) continue;
+
+            let startVal = colMap.start !== -1 ? parseScheduleDateHelper(row[colMap.start]) : '2026-03-01';
+            let finishVal = colMap.finish !== -1 ? parseScheduleDateHelper(row[colMap.finish]) : '';
+            let durVal = colMap.duration !== -1 ? parseInt(row[colMap.duration]) : 0;
+
+            if (!durVal && startVal && finishVal) {
+              const sD = new Date(startVal);
+              const fD = new Date(finishVal);
+              durVal = Math.max(1, Math.round((fD - sD) / 86400000));
+            } else if (durVal > 0 && startVal && !finishVal) {
+              const sD = new Date(startVal);
+              sD.setDate(sD.getDate() + durVal);
+              finishVal = parseScheduleDateHelper(sD);
+            }
+            if (!durVal) durVal = 10;
+            if (!finishVal && startVal) {
+              const sD = new Date(startVal);
+              sD.setDate(sD.getDate() + durVal);
+              finishVal = parseScheduleDateHelper(sD);
+            }
+
+            const progVal = colMap.progress !== -1 ? Math.min(100, Math.max(0, parseFloat(row[colMap.progress]) || 0)) : 0;
+            const actStartVal = colMap.actStart !== -1 ? parseScheduleDateHelper(row[colMap.actStart]) : '';
+            const actFinishVal = colMap.actFinish !== -1 ? parseScheduleDateHelper(row[colMap.actFinish]) : '';
+            const predVal = colMap.pred !== -1 ? String(row[colMap.pred] || '').trim() : '';
+            const qtyVal = colMap.qty !== -1 ? (parseFloat(row[colMap.qty]) || 1) : 1;
+            const unitVal = colMap.unit !== -1 ? String(row[colMap.unit] || 'lot').trim() : 'lot';
+            const costVal = colMap.cost !== -1 ? (parseFloat(row[colMap.cost]) || 0) : 0;
+
+            tasks.push({
+              code: codeVal || `T-${101 + tasks.length}`,
+              title: titleVal || `Activity ${tasks.length + 1}`,
+              specification: '',
+              startDate: startVal,
+              finishDate: finishVal,
+              duration: durVal,
+              actualStartDate: actStartVal,
+              actualFinishDate: actFinishVal,
+              progress: progVal,
+              predecessors: predVal,
+              qty: qtyVal,
+              unit: unitVal,
+              cost: costVal
+            });
+          }
+        } else {
+          throw new Error('Unsupported file format. Please upload an Excel (.xlsx, .xls, .csv) or JSON (.json) file.');
+        }
+
+        if (tasks.length === 0) {
+          throw new Error('No valid Schedule activities could be extracted from this file.');
+        }
+
+        let matchedCount = 0;
+        if (Array.isArray(boqData) && boqData.length > 0) {
+          tasks.forEach(t => {
+            const existingRow = boqData.find(r => {
+              if (t.code && r.code && String(r.code).trim().toLowerCase() === String(t.code).trim().toLowerCase()) return true;
+              if (t.title && r.title && String(r.title).trim().toLowerCase() === String(t.title).trim().toLowerCase()) return true;
+              return false;
+            });
+            if (existingRow) {
+              matchedCount++;
+              if (t.startDate) {
+                existingRow.ganttStartDate = t.startDate;
+                existingRow.startDate = t.startDate;
+              }
+              if (t.duration) {
+                existingRow.ganttDuration = t.duration;
+                existingRow.days = t.duration;
+              }
+              if (t.finishDate) existingRow.ganttFinishDate = t.finishDate;
+              if (t.actualStartDate) existingRow.ganttActualStartDate = t.actualStartDate;
+              if (t.actualFinishDate) existingRow.ganttActualFinishDate = t.actualFinishDate;
+              if (t.progress !== undefined) {
+                existingRow.ganttProgress = t.progress;
+                existingRow.percentDone = t.progress;
+              }
+              if (t.predecessors) existingRow.ganttPredecessors = t.predecessors;
+            }
+          });
+        }
+
+        if (matchedCount === 0) {
+          const newItems = tasks.map((t, idx) => ({
+            id: 'task_item_' + Date.now() + '_' + idx,
+            type: 'task',
+            code: t.code || `T-${101 + idx}`,
+            title: t.title || `Activity ${idx + 1}`,
+            specification: t.specification || '',
+            qty: t.qty || 1,
+            unit: t.unit || 'lot',
+            materialUnitCost: 0,
+            totalMaterialCost: 0,
+            laborUnitCost: 0,
+            totalLEC: 0,
+            grandTotalCost: t.cost || 0,
+            ganttStartDate: t.startDate,
+            startDate: t.startDate,
+            ganttDuration: t.duration || 10,
+            days: t.duration || 10,
+            ganttFinishDate: t.finishDate || '',
+            ganttActualStartDate: t.actualStartDate || '',
+            ganttActualFinishDate: t.actualFinishDate || '',
+            ganttProgress: t.progress || 0,
+            percentDone: t.progress || 0,
+            ganttPredecessors: t.predecessors || ''
+          }));
+          boqData.splice(0, boqData.length, ...newItems);
+        }
+
+        if (typeof recomputeCodes === 'function') recomputeCodes(boqData);
+        if (typeof renderBOQTable === 'function') renderBOQTable();
+        if (typeof renderBOQSummaryTable === 'function') renderBOQSummaryTable();
+        if (typeof showGanttSheet === 'function') {
+          showGanttSheet();
+        } else if (typeof renderGanttChart === 'function') {
+          renderGanttChart();
+          showSheet('ganttSheet');
+        }
+        if (typeof saveScheduleSection === 'function') {
+          saveScheduleSection(true);
+        } else if (typeof markUnsaved === 'function') {
+          markUnsaved();
+        }
+
+        const isCloud = typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured();
+        const cloudMsg = isCloud
+          ? '• Synchronized to Cloud Firestore: Other users can now view this schedule on their computers in real-time.'
+          : '• Saved to project: To share with other users in Local Mode, click "📦 Export Master Project (.fclproj)".';
+
+        const msg = matchedCount > 0
+          ? `✅ Schedule loaded & saved successfully from "${fileName}"!\n\n• Synchronized ${matchedCount} matching BOQ activity schedule dates & durations.\n• Active Project: ${currentBoqProjectId}\n${cloudMsg}`
+          : `✅ Schedule loaded & saved successfully from "${fileName}"!\n\n• Imported ${tasks.length} schedule activities.\n• Active Project: ${currentBoqProjectId}\n${cloudMsg}`;
+        alert(msg);
+      } catch (err) {
+        alert('❌ Error loading Schedule: ' + (err.message || 'Unknown error'));
+      } finally {
+        input.value = '';
+      }
+    }
   </script>
 </body>
 </html>

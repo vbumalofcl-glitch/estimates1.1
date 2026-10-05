@@ -343,8 +343,385 @@ const FCLStorage = {
     return true;
   },
 
+  parseMasterExcelWorkbook(workbook, fileName) {
+    if (!workbook || !Array.isArray(workbook.SheetNames) || !workbook.SheetNames.length) {
+      throw new Error('The Excel workbook contains no readable sheets.');
+    }
+
+    const cleanStr = (val) => String(val !== undefined && val !== null ? val : '').trim();
+    const parseNum = (val) => {
+      if (typeof val === 'number') return isNaN(val) ? 0 : val;
+      if (!val) return 0;
+      const n = parseFloat(String(val).replace(/[^0-9.-]/g, ''));
+      return isNaN(n) ? 0 : n;
+    };
+    const findCol = (headers, candidates) => {
+      if (!Array.isArray(headers)) return -1;
+      const cleanH = headers.map(h => cleanStr(h).toLowerCase().replace(/[^a-z0-9]/g, ''));
+      for (const cand of candidates) {
+        const c = cand.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const idx = cleanH.findIndex(h => h.includes(c));
+        if (idx >= 0) return idx;
+      }
+      return -1;
+    };
+
+    const cleanBaseName = fileName.replace(/\.[^/.]+$/, '').replace(/[_+-]/g, ' ');
+    const bundle = {
+      app: 'FCLDC_Integrated_Project_Controls',
+      version: '2.0',
+      format: 'FCLPROJ_EXCEL_V2',
+      exportedAt: new Date().toISOString(),
+      metadata: {
+        projectName: cleanBaseName,
+        projectCode: 'PRJ-' + new Date().getFullYear() + '-IMP'
+      },
+      sections: {}
+    };
+
+    const summaryCounts = {
+      priceList: 0,
+      dupa: 0,
+      boq: 0,
+      gantt: 0
+    };
+
+    // Analyze each sheet in the workbook
+    for (const sheetName of workbook.SheetNames) {
+      const sheet = workbook.Sheets[sheetName];
+      if (!sheet) continue;
+      const matrix = typeof XLSX !== 'undefined' ? XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' }) : [];
+      if (!matrix || !matrix.length) continue;
+
+      // Find header row (search within first 15 rows)
+      let headerRowIdx = -1;
+      for (let r = 0; r < Math.min(matrix.length, 15); r++) {
+        const row = matrix[r];
+        if (Array.isArray(row) && row.some(cell => cleanStr(cell).length > 0)) {
+          const rowStr = row.map(c => cleanStr(c).toLowerCase()).join(' | ');
+          if (/item|material|description|work|price|cost|qty|unit|rate|task|activity|schedule/i.test(rowStr)) {
+            headerRowIdx = r;
+            break;
+          }
+        }
+      }
+      if (headerRowIdx < 0) headerRowIdx = 0;
+
+      const rawHeaders = (matrix[headerRowIdx] || []).map(h => cleanStr(h));
+      const dataRows = matrix.slice(headerRowIdx + 1).filter(r => Array.isArray(r) && r.some(c => cleanStr(c).length > 0));
+      const sheetLower = sheetName.toLowerCase();
+      const headerStr = rawHeaders.map(h => h.toLowerCase()).join(' | ');
+
+      // Determine sheet type
+      const isPriceList = /price\s*list|material/i.test(sheetLower) || /material list|price per unit|rental per unit/i.test(headerStr);
+      const isDUPA = /dupa|detailed\s*unit|unit\s*price\s*analysis|analysis/i.test(sheetLower) || /labor unit cost|equipment unit cost|le unit cost|total lec/i.test(headerStr);
+      const isGantt = /gantt|schedule|timeline|activities|bar\s*chart/i.test(sheetLower) || /start date|end date|duration|predecessor|progress/i.test(headerStr);
+      const isBOQ = /boq|bill\s*of\s*quant|cost\s*breakdown|estimate/i.test(sheetLower) || /item no|work description|grand total cost|total material cost/i.test(headerStr);
+
+      // 1. Parse Price List Sheet
+      if (isPriceList && !bundle.sections.priceList) {
+        const idx = {
+          type: findCol(rawHeaders, ['type', 'row type', 'level']),
+          code: findCol(rawHeaders, ['item code', 'code', 'no', 'item']),
+          name: findCol(rawHeaders, ['material list', 'material name', 'material', 'description', 'title']),
+          spec: findCol(rawHeaders, ['specification', 'specs', 'spec']),
+          unit: findCol(rawHeaders, ['unit', 'uom']),
+          price: findCol(rawHeaders, ['price per unit', 'price', 'unit price', 'material unit cost', 'mat rate']),
+          rental: findCol(rawHeaders, ['rental per unit', 'rental', 'le unit cost', 'equipment rate', 'le rate'])
+        };
+
+        const plRows = [];
+        dataRows.forEach(cells => {
+          const name = idx.name >= 0 ? cleanStr(cells[idx.name]) : '';
+          const code = idx.code >= 0 ? cleanStr(cells[idx.code]) : '';
+          if (!name && !code) return;
+
+          const rawType = idx.type >= 0 ? cleanStr(cells[idx.type]).toLowerCase() : '';
+          const depth = code.split('.').filter(Boolean).length;
+          const type = ['category', 'subcategory', 'material'].includes(rawType) ? rawType : (depth <= 1 ? 'category' : depth === 2 ? 'subcategory' : 'material');
+
+          plRows.push({
+            type: type,
+            itemCode: code,
+            mainCategory: type === 'category' ? name : '',
+            subCategory: type === 'subcategory' ? name : '',
+            materialName: type === 'material' ? name : '',
+            specification: idx.spec >= 0 ? cleanStr(cells[idx.spec]) : '',
+            unit: idx.unit >= 0 ? cleanStr(cells[idx.unit]) : '',
+            pricePerUnit: idx.price >= 0 ? parseNum(cells[idx.price]) : 0,
+            rentalPerUnit: idx.rental >= 0 ? parseNum(cells[idx.rental]) : 0,
+            dateUpdated: new Date().toISOString().slice(0, 10),
+            collapsed: false
+          });
+        });
+
+        if (plRows.length) {
+          bundle.sections.priceList = { priceListData: plRows };
+          summaryCounts.priceList = plRows.length;
+        }
+      }
+
+      // 2. Parse DUPA Sheet
+      if (isDUPA && !bundle.sections.dupa) {
+        const idx = {
+          type: findCol(rawHeaders, ['type', 'row type', 'level']),
+          code: findCol(rawHeaders, ['item code', 'item no', 'code', 'no']),
+          title: findCol(rawHeaders, ['work description', 'description', 'title', 'item description']),
+          spec: findCol(rawHeaders, ['specification', 'specs', 'spec']),
+          qty: findCol(rawHeaders, ['qty', 'quantity']),
+          unit: findCol(rawHeaders, ['unit', 'uom']),
+          matCost: findCol(rawHeaders, ['material unit cost', 'mat unit cost', 'material rate', 'unit cost']),
+          leCost: findCol(rawHeaders, ['le unit cost', 'labor unit cost', 'rental per unit', 'equipment rate']),
+          totalMat: findCol(rawHeaders, ['total material cost', 'total mat cost', 'total material']),
+          totalLE: findCol(rawHeaders, ['total lec', 'total le cost', 'total labor']),
+          grandTotal: findCol(rawHeaders, ['grand total cost', 'total cost', 'total', 'amount'])
+        };
+
+        const dupaRows = [];
+        dataRows.forEach(cells => {
+          const title = idx.title >= 0 ? cleanStr(cells[idx.title]) : '';
+          const code = idx.code >= 0 ? cleanStr(cells[idx.code]) : '';
+          if (!title && !code) return;
+
+          const qty = idx.qty >= 0 ? parseNum(cells[idx.qty]) : 1;
+          const matCost = idx.matCost >= 0 ? parseNum(cells[idx.matCost]) : 0;
+          const leCost = idx.leCost >= 0 ? parseNum(cells[idx.leCost]) : 0;
+          let grand = idx.grandTotal >= 0 ? parseNum(cells[idx.grandTotal]) : (qty * (matCost + leCost));
+
+          dupaRows.push({
+            type: code.split('.').length <= 1 ? 'category' : (code.split('.').length === 2 ? 'subcategory' : 'material'),
+            itemCode: code,
+            title: title,
+            specification: idx.spec >= 0 ? cleanStr(cells[idx.spec]) : '',
+            qty: qty,
+            unit: idx.unit >= 0 ? cleanStr(cells[idx.unit]) : '',
+            materialUnitCost: matCost,
+            totalMaterialCost: idx.totalMat >= 0 ? parseNum(cells[idx.totalMat]) : (qty * matCost),
+            laborUnitCost: leCost,
+            leUnitCost: leCost,
+            totalLEC: idx.totalLE >= 0 ? parseNum(cells[idx.totalLE]) : (qty * leCost),
+            grandTotalCost: grand
+          });
+        });
+
+        if (dupaRows.length) {
+          bundle.sections.dupa = { analysisData: dupaRows };
+          summaryCounts.dupa = dupaRows.length;
+        }
+      }
+
+      // 3. Parse BOQ Sheet
+      if ((isBOQ || (!bundle.sections.boq && !isPriceList && !isGantt)) && !bundle.sections.boq) {
+        const idx = {
+          itemNo: findCol(rawHeaders, ['item no', 'item', 'code', 'no']),
+          desc: findCol(rawHeaders, ['work description', 'description', 'scope of work', 'item description', 'title']),
+          spec: findCol(rawHeaders, ['specification', 'specs', 'spec']),
+          qty: findCol(rawHeaders, ['qty', 'quantity']),
+          unit: findCol(rawHeaders, ['unit', 'uom']),
+          matCost: findCol(rawHeaders, ['material unit cost', 'mat unit cost']),
+          leCost: findCol(rawHeaders, ['le unit cost', 'labor unit cost']),
+          unitCost: findCol(rawHeaders, ['unit cost', 'unit rate', 'rate', 'price']),
+          grandTotal: findCol(rawHeaders, ['grand total cost', 'total cost', 'total amount', 'contract amount', 'total']),
+          progress: findCol(rawHeaders, ['percent done', '% done', 'progress', '% accomplished', 'actual progress'])
+        };
+
+        const boqRows = [];
+        let totalBudget = 0;
+        let progSum = 0;
+        let progCount = 0;
+
+        dataRows.forEach(cells => {
+          const desc = idx.desc >= 0 ? cleanStr(cells[idx.desc]) : '';
+          const itemNo = idx.itemNo >= 0 ? cleanStr(cells[idx.itemNo]) : '';
+          if (!desc && !itemNo) return;
+
+          const qty = idx.qty >= 0 ? parseNum(cells[idx.qty]) : 1;
+          const matCost = idx.matCost >= 0 ? parseNum(cells[idx.matCost]) : 0;
+          const leCost = idx.leCost >= 0 ? parseNum(cells[idx.leCost]) : 0;
+          let uCost = idx.unitCost >= 0 ? parseNum(cells[idx.unitCost]) : (matCost + leCost);
+          let grand = idx.grandTotal >= 0 ? parseNum(cells[idx.grandTotal]) : (qty * uCost);
+          const prog = idx.progress >= 0 ? parseNum(cells[idx.progress]) : 0;
+
+          totalBudget += grand;
+          if (prog > 0) {
+            progSum += prog;
+            progCount++;
+          }
+
+          boqRows.push({
+            id: 'boq-item-' + (boqRows.length + 1),
+            itemNo: itemNo || String(boqRows.length + 1),
+            description: desc,
+            specification: idx.spec >= 0 ? cleanStr(cells[idx.spec]) : '',
+            unit: idx.unit >= 0 ? cleanStr(cells[idx.unit]) : '',
+            quantity: qty,
+            materialUnitCost: matCost,
+            leUnitCost: leCost,
+            unitCost: uCost,
+            grandTotalCost: grand,
+            percentDone: prog
+          });
+        });
+
+        if (boqRows.length) {
+          bundle.sections.boq = {
+            projectFields: {
+              projectName: bundle.metadata.projectName,
+              projectCode: bundle.metadata.projectCode,
+              clientName: '',
+              location: ''
+            },
+            boqData: boqRows,
+            totalBudget: totalBudget,
+            actualProgress: progCount ? (progSum / progCount) : 0
+          };
+          summaryCounts.boq = boqRows.length;
+        }
+      }
+
+      // 4. Parse Gantt Schedule Sheet
+      if (isGantt && !bundle.sections.ganttSettings) {
+        const idx = {
+          code: findCol(rawHeaders, ['wbs', 'code', 'item no', 'no']),
+          name: findCol(rawHeaders, ['task name', 'activity', 'task', 'name', 'description']),
+          start: findCol(rawHeaders, ['start date', 'start', 'commencement']),
+          end: findCol(rawHeaders, ['end date', 'end', 'completion', 'target date']),
+          dur: findCol(rawHeaders, ['duration', 'days', 'calendar days']),
+          prog: findCol(rawHeaders, ['progress', '% complete', '% done', 'accomplishment']),
+          assigned: findCol(rawHeaders, ['assigned to', 'engineer', 'in charge', 'pic'])
+        };
+
+        const tasks = [];
+        dataRows.forEach((cells, i) => {
+          const name = idx.name >= 0 ? cleanStr(cells[idx.name]) : '';
+          if (!name) return;
+
+          const startRaw = idx.start >= 0 ? cells[idx.start] : '';
+          const endRaw = idx.end >= 0 ? cells[idx.end] : '';
+          const dur = idx.dur >= 0 ? parseNum(cells[idx.dur]) : 14;
+          const prog = idx.prog >= 0 ? parseNum(cells[idx.prog]) : 0;
+
+          tasks.push({
+            id: 'task-' + (i + 1),
+            code: idx.code >= 0 ? cleanStr(cells[idx.code]) : (i + 1) + '.0',
+            name: name,
+            startDate: String(startRaw).slice(0, 10) || new Date().toISOString().slice(0, 10),
+            endDate: String(endRaw).slice(0, 10) || new Date(Date.now() + dur * 86400000).toISOString().slice(0, 10),
+            duration: dur || 14,
+            progress: prog,
+            assignedTo: idx.assigned >= 0 ? cleanStr(cells[idx.assigned]) : 'Project Engineer',
+            critical: i % 2 === 0
+          });
+        });
+
+        if (tasks.length) {
+          bundle.sections.ganttSettings = {
+            ganttTasks: tasks,
+            phases: []
+          };
+          summaryCounts.gantt = tasks.length;
+        }
+      }
+    }
+
+    // Mirror BOQ into DUPA if DUPA is missing (ensures DUPA table is populated in Cost Estimation)
+    if (bundle.sections.boq && !bundle.sections.dupa && Array.isArray(bundle.sections.boq.boqData)) {
+      bundle.sections.dupa = {
+        analysisData: bundle.sections.boq.boqData.map(b => ({
+          type: 'material',
+          itemCode: b.itemNo,
+          title: b.description,
+          specification: b.specification || '',
+          qty: b.quantity || 1,
+          unit: b.unit || '',
+          materialUnitCost: b.materialUnitCost || 0,
+          totalMaterialCost: (b.quantity || 1) * (b.materialUnitCost || 0),
+          laborUnitCost: b.leUnitCost || 0,
+          leUnitCost: b.leUnitCost || 0,
+          totalLEC: (b.quantity || 1) * (b.leUnitCost || 0),
+          grandTotalCost: b.grandTotalCost || 0
+        }))
+      };
+      summaryCounts.dupa = bundle.sections.dupa.analysisData.length;
+    }
+
+    return { bundle, summaryCounts };
+  },
+
   async importMasterProjectFile(file, onSuccess) {
     if (!file) return;
+    const fileName = file.name || '';
+    const isExcel = /\.(xlsx|xls|xlsm|xlsb|csv|tsv)$/i.test(fileName);
+
+    if (isExcel) {
+      if (typeof XLSX === 'undefined') {
+        alert('The Excel spreadsheet reader (XLSX) is not loaded yet. Please ensure you are connected to the internet to load the Excel module, or use a .fclproj/.json file.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const buffer = event.target.result;
+          const workbook = XLSX.read(new Uint8Array(buffer), { type: 'array', cellFormula: true, cellNF: true, cellText: false });
+          const { bundle, summaryCounts } = this.parseMasterExcelWorkbook(workbook, fileName);
+
+          const activeId = this.getActiveProjectId();
+          const sections = bundle.sections || {};
+
+          if (sections.priceList) {
+            await this.save(FCL_STORAGE_KEYS.priceList, sections.priceList);
+          }
+          if (sections.dupa) {
+            await this.save(FCL_STORAGE_KEYS.dupa, sections.dupa);
+          }
+          if (sections.boq) {
+            await this.save(FCL_STORAGE_KEYS.boq, sections.boq);
+            await this.saveProjectBOQ(activeId, sections.boq);
+          }
+          if (sections.ganttSettings) {
+            await this.save(FCL_STORAGE_KEYS.ganttSettings, sections.ganttSettings);
+            await this.saveProjectGantt(activeId, sections.ganttSettings);
+          }
+
+          // Update project catalog with new project name and budget
+          try {
+            const catalog = this.readSync('FCL_PROJECT_CATALOG_DATA') || [];
+            if (Array.isArray(catalog)) {
+              let p = catalog.find(x => x.id === activeId);
+              if (!p && catalog.length) p = catalog[0];
+              if (p) {
+                if (bundle.metadata && bundle.metadata.projectName) p.name = bundle.metadata.projectName;
+                if (sections.boq && sections.boq.totalBudget) p.totalBudget = sections.boq.totalBudget;
+                if (sections.boq && sections.boq.actualProgress !== undefined) p.actualProgress = sections.boq.actualProgress;
+                this.save('FCL_PROJECT_CATALOG_DATA', catalog);
+              }
+            }
+          } catch (e) {}
+
+          const breakdownMsg = [
+            summaryCounts.priceList ? `• Price List: ${summaryCounts.priceList} item(s)` : null,
+            summaryCounts.dupa ? `• D.U.P.A.: ${summaryCounts.dupa} item(s)` : null,
+            summaryCounts.boq ? `• Bill of Quantities (BOQ): ${summaryCounts.boq} item(s)` : null,
+            summaryCounts.gantt ? `• Gantt Schedule Activities: ${summaryCounts.gantt} task(s)` : null
+          ].filter(Boolean).join('\n');
+
+          alert(`Master Project Excel Workbook "${fileName}" successfully imported!\n\nImported Sections:\n${breakdownMsg || '• Project data synchronized.'}\n\nAll tables, unit price analyses, BOQ, and Gantt schedules have been updated and synced.`);
+
+          if (typeof onSuccess === 'function') {
+            onSuccess(bundle);
+          } else {
+            window.location.reload();
+          }
+        } catch (err) {
+          alert('Failed to import Excel project file: ' + err.message);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+      return;
+    }
+
+    // Default JSON / .fclproj handling
     const reader = new FileReader();
     reader.onload = async (event) => {
       try {

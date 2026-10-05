@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     :root {
       --primary: #2563eb;
@@ -42,26 +43,28 @@
 
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.78) 0%, rgba(15, 23, 42, 0.88) 100%),
-                  url('HOMEPAGE.png') center center / cover no-repeat fixed;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background: #f8fafc;
       color: var(--text-main);
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 24px;
+      flex-direction: column;
+      overflow-x: hidden;
     }
 
-    /* Outer Container matching SAMPLE.png */
+    /* Outer Container expanded to match 100% of the screen */
     .dashboard-container {
       width: 100%;
-      max-width: 1400px;
+      max-width: 100%;
+      min-height: 100vh;
       background: #f8fafc;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.2);
+      border-radius: 0;
+      overflow-x: hidden;
+      box-shadow: none;
       display: flex;
       flex-direction: column;
-      backdrop-filter: blur(12px);
+      border: none;
     }
 
     /* Top Navigation Bar */
@@ -74,6 +77,10 @@
       padding: 0 24px;
       color: #fff;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
     }
 
     .brand-section {
@@ -217,7 +224,9 @@
     /* Main Dashboard Layout */
     .dashboard-body {
       display: flex;
-      min-height: calc(100vh - 120px);
+      min-height: calc(100vh - 64px);
+      width: 100%;
+      flex: 1;
     }
 
     /* Left Sidebar */
@@ -300,12 +309,49 @@
     /* Main Content Area */
     .main-content {
       flex: 1;
-      padding: 24px;
+      padding: 24px 32px;
       display: flex;
       flex-direction: column;
       gap: 20px;
       overflow-y: auto;
       background: #f8fafc;
+      min-width: 0;
+    }
+
+    .main-content.home-tab-active {
+      padding: 0 !important;
+      gap: 0 !important;
+      overflow: hidden !important;
+      background: #0f172a !important;
+    }
+
+    #viewProjectHome {
+      display: flex;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      min-height: calc(100vh - 64px);
+      position: relative;
+      overflow: hidden;
+      background: #0f172a;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #homepageHeroImg {
+      width: 100%;
+      height: 100%;
+      min-height: calc(100vh - 64px);
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: object-fit 0.2s ease;
+    }
+
+    #btnToggleHomeImageFit:hover {
+      background: rgba(30, 41, 59, 0.95) !important;
+      border-color: rgba(255, 255, 255, 0.45) !important;
+      transform: translateY(-1px);
     }
 
     /* Module Quick-Launch Cards */
@@ -931,11 +977,31 @@
     }
     .gantt-left-pane {
       width: 440px;
-      min-width: 320px;
+      min-width: 220px;
+      max-width: 850px;
       flex-shrink: 0;
-      border-right: 2px solid #cbd5e1;
+      border-right: 1px solid #cbd5e1;
       overflow-x: auto;
       background: #fafbfc;
+    }
+    .gantt-panel-divider {
+      width: 8px;
+      cursor: col-resize;
+      background: #e2e8f0;
+      flex-shrink: 0;
+      user-select: none;
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease;
+    }
+    .gantt-panel-divider:hover, .gantt-panel-divider.dragging {
+      background: #2563eb !important;
+    }
+    .gantt-panel-divider:hover div, .gantt-panel-divider.dragging div {
+      background: #ffffff !important;
     }
     .gantt-right-pane {
       flex: 1;
@@ -1282,29 +1348,26 @@
 
   <div class="dashboard-container">
     
-    <!-- Top Navigation Bar (based on SAMPLE.png) -->
+    <!-- Top Navigation Bar -->
     <header class="top-navbar">
-      <a href="index.html" class="brand-section">
-        <div class="brand-logo-icon">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          </svg>
-        </div>
-        <div class="brand-title">
-          <span>Project Overview</span>
-          <span class="brand-tag">FCL ARANANG</span>
-        </div>
-      </a>
+      <div style="display: flex; align-items: center; height: 100%; gap: 12px;">
+        <a href="javascript:void(0)" onclick="switchMainProjectTab('home')" class="brand-section" title="FCL Project Controls Home" style="cursor: pointer; text-decoration: none; display: flex; align-items: center;">
+          <div class="brand-logo-icon" style="background: transparent; box-shadow: none; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;">
+            <img src="logo.ico" alt="Logo" class="brand-logo-img" style="width: 32px; height: 32px; object-fit: contain; border-radius: 6px; display: block;" onerror="this.onerror=null; this.src='icon-192.png';">
+          </div>
+        </a>
 
-      <nav class="nav-links">
-        <a href="javascript:void(0)" onclick="switchMainProjectTab('information')" class="nav-item" id="navItemInfo">Project Information</a>
-        <a href="javascript:void(0)" onclick="switchMainProjectTab('overview')" class="nav-item active" id="navItemOverview">Project Overview</a>
-        <a href="javascript:void(0)" onclick="switchMainProjectTab('timeline')" class="nav-item" id="navItemTimeline">Project Timeline</a>
-        <a href="javascript:void(0)" onclick="switchMainProjectTab('documents')" class="nav-item" id="navItemDocs">Project Documents</a>
-        <a href="pricelist_dupa/index.html" class="nav-item" title="Price List & Detailed Unit Price Analysis">Cost Control</a>
-        <a href="boq_schedule/index.html" class="nav-item" title="Bill of Quantity & Gantt Schedule">Resource Allocation</a>
-        <a href="boq_schedule/index.html" class="nav-item">Reporting</a>
-      </nav>
+        <nav class="nav-links">
+          <a href="javascript:void(0)" onclick="switchMainProjectTab('home')" class="nav-item active" id="navItemHome">Home</a>
+          <a href="javascript:void(0)" onclick="switchMainProjectTab('information')" class="nav-item" id="navItemInfo">Project Information</a>
+          <a href="javascript:void(0)" onclick="switchMainProjectTab('overview')" class="nav-item" id="navItemOverview">Project Overview</a>
+          <a href="javascript:void(0)" onclick="switchMainProjectTab('timeline')" class="nav-item" id="navItemTimeline">Project Timeline</a>
+          <a href="javascript:void(0)" onclick="switchMainProjectTab('documents')" class="nav-item" id="navItemDocs">Project Documents</a>
+          <a href="pricelist_dupa/index.html" class="nav-item" title="Price List & Detailed Unit Price Analysis">Cost Control</a>
+          <a href="boq_schedule/index.html" class="nav-item" title="Bill of Quantity & Gantt Schedule">Resource Allocation</a>
+          <a href="boq_schedule/index.html" class="nav-item">Reporting</a>
+        </nav>
+      </div>
 
       <div class="nav-actions">
         <button id="topNavCloudSyncBtn" class="fcl-cloud-badge ctrl-btn" type="button" onclick="FCLFirebaseSync.openConfigModal()" style="background:rgba(255,255,255,0.08); color:#cbd5e1; border:1px solid rgba(255,255,255,0.2); padding:6px 12px; font-weight:700; border-radius:20px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-size:11px;" title="Cloud Firestore Real-Time Synchronization Status. Click to configure.">
@@ -1323,11 +1386,11 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Save Project (.fclproj)
         </button>
-        <button class="ctrl-btn" type="button" onclick="document.getElementById('masterProjectFileInput').click()" style="background:rgba(255,255,255,0.12); color:#fff; border:1px solid rgba(255,255,255,0.25); padding:7px 14px; font-weight:600; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-size:12px;" title="Open and restore master project file (.fclproj / .json)">
+        <button class="ctrl-btn" type="button" onclick="document.getElementById('masterProjectFileInput').click()" style="background:rgba(255,255,255,0.12); color:#fff; border:1px solid rgba(255,255,255,0.25); padding:7px 14px; font-weight:600; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-size:12px;" title="Open and restore master project (.fclproj, .xlsx, .xls, .json)">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
           Open Project
         </button>
-        <input type="file" id="masterProjectFileInput" accept=".fclproj,application/json,.json" style="display:none" onchange="FCLStorage.importMasterProjectFile(this.files[0])">
+        <input type="file" id="masterProjectFileInput" accept=".fclproj,.xlsx,.xls,.xlsm,.xlsb,.csv,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display:none" onchange="FCLStorage.importMasterProjectFile(this.files[0])">
         <div class="notification-btn" title="Notifications">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
           <div class="notification-badge"></div>
@@ -1465,7 +1528,7 @@
       </aside>
 
       <!-- Main Dashboard Area (based on SAMPLE.png) -->
-      <main class="main-content">
+      <main class="main-content home-tab-active">
         
         <!-- Executive Print Header (Only shown when printing / exporting PDF) -->
         <header id="executivePrintHeader" class="executive-print-header" style="border-bottom: 2px solid #1e3a8a; padding-bottom: 12px; margin-bottom: 16px;">
@@ -1510,7 +1573,7 @@
         </header>
 
         <!-- Project View Navigation & Controls Bar -->
-        <div class="project-view-navbar no-print">
+        <div class="project-view-navbar no-print" style="display: none;">
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             <div style="display: flex; align-items: center; gap: 6px;">
               <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Active Project:</span>
@@ -1528,7 +1591,7 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
               Project Information
             </button>
-            <button id="tabBtnOverview" class="project-nav-tab-btn active" type="button" onclick="switchMainProjectTab('overview')">
+            <button id="tabBtnOverview" class="project-nav-tab-btn" type="button" onclick="switchMainProjectTab('overview')">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
               Project Overview
             </button>
@@ -1539,6 +1602,17 @@
             <button id="tabBtnDocs" class="project-nav-tab-btn" type="button" onclick="switchMainProjectTab('documents')">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
               Project Documentation
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= VIEW HOME: HOMEPAGE IMAGE (FULLSPACE HERO) ================= -->
+        <div id="viewProjectHome" class="project-main-view no-print" style="display: flex; flex: 1; width: 100%; height: 100%; min-height: calc(100vh - 64px); position: relative; overflow: hidden; background: #0f172a; align-items: center; justify-content: center;">
+          <img src="HOMEPAGE.png" alt="FCL Project Controls Home" id="homepageHeroImg" style="width: 100%; height: 100%; min-height: calc(100vh - 64px); object-fit: cover; object-position: center; display: block;" />
+          <div style="position: absolute; bottom: 16px; right: 20px; z-index: 10; display: flex; gap: 8px;">
+            <button id="btnToggleHomeImageFit" type="button" onclick="toggleHomeImageFit()" style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); transition: all 0.2s;" title="Toggle image scaling between Fill Space and Fit to Window">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+              <span id="homeImageFitLabel">Fit to Window</span>
             </button>
           </div>
         </div>
@@ -1840,7 +1914,7 @@
         </div>
 
         <!-- ================= VIEW 1: PROJECT OVERVIEW ================= -->
-        <div id="viewProjectOverview" class="project-main-view">
+        <div id="viewProjectOverview" class="project-main-view" style="display: none;">
 
         <!-- Module Quick Launch Banners -->
         <div class="modules-launch-grid">
@@ -2124,6 +2198,18 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
               Project Bill of Quantity (BOQ)
             </button>
+            <button id="tlSubBtn_load_boq" class="timeline-sub-btn" type="button" onclick="triggerTimelineBOQImport()" style="font-weight: 700; background: #ecfdf5; color: #047857; border: 1.5px solid #a7f3d0;" title="Load Bill of Quantity from Excel (.xlsx, .xls, .csv) or JSON (.json)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              📂 Load Excel / JSON BOQ
+            </button>
+            <button id="tlSubBtn_load_schedule" class="timeline-sub-btn" type="button" onclick="triggerTimelineScheduleImport()" style="font-weight: 700; background: #f0f9ff; color: #0369a1; border: 1.5px solid #bae6fd;" title="Load Master Schedule from Excel (.xlsx, .xls, .csv) or JSON (.json)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              📂 Load Excel / JSON Schedule
+            </button>
+            <button id="tlSubBtn_save_sync" class="timeline-sub-btn" type="button" onclick="saveActiveTimelineViewAndSync()" style="font-weight: 700; background: #059669; color: #ffffff; border: 1.5px solid #047857;" title="Save &amp; Sync BOQ and Schedule to Cloud Firestore so other users can view on their computer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              💾 Save &amp; Sync for All Users
+            </button>
             <button id="tlSubBtn_phases" class="timeline-sub-btn" type="button" onclick="switchTimelineSubTab('phases')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
               Work Breakdown Phases
@@ -2159,12 +2245,16 @@
                   </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <button type="button" class="ctrl-btn" onclick="triggerTimelineScheduleImport()" style="display: inline-flex; align-items: center; gap: 5px; font-weight: 700; background: #0284c7; color: #fff; border: none; cursor: pointer;" title="Load Schedule from Excel (.xlsx, .xls, .csv) or JSON (.json)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Load Excel / JSON Schedule
+                  </button>
                   <button type="button" class="ctrl-btn" onclick="openAddGanttTaskModal()" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 700;">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                     Add Schedule Activity
                   </button>
-                  <button type="button" class="ctrl-btn primary" onclick="saveProjectTimelineSchedule()" style="display: inline-flex; align-items: center; gap: 5px; font-weight: 700;">
-                    💾 Save Schedule Changes
+                  <button type="button" class="ctrl-btn primary" onclick="saveProjectTimelineSchedule()" style="display: inline-flex; align-items: center; gap: 5px; font-weight: 700; background: #059669; border-color: #059669; color: #fff;" title="Save Schedule and sync to Cloud Firestore so other users can view on their computer">
+                    💾 Save Schedule &amp; Sync
                   </button>
                 </div>
               </div>
@@ -2212,6 +2302,10 @@
                   </select>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <button type="button" class="ctrl-btn" onclick="triggerTimelineBOQImport()" style="display: inline-flex; align-items: center; gap: 5px; font-weight: 700; background: #059669; color: #fff; border: none; cursor: pointer;" title="Load BOQ from Excel (.xlsx, .xls, .csv) or JSON (.json)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Load Excel / JSON BOQ
+                  </button>
                   <button type="button" class="ctrl-btn" onclick="openAddBOQItemModal()" style="display: inline-flex; align-items: center; gap: 5px; font-weight: 700;">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                     Add BOQ Item
@@ -2220,8 +2314,8 @@
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                     Export CSV
                   </button>
-                  <button type="button" class="ctrl-btn primary" onclick="saveProjectBOQData()" style="display: inline-flex; align-items: center; gap: 5px; font-weight: 700;">
-                    💾 Save BOQ Changes
+                  <button type="button" class="ctrl-btn primary" onclick="saveProjectBOQData()" style="display: inline-flex; align-items: center; gap: 5px; font-weight: 700; background: #059669; border-color: #059669; color: #fff;" title="Save BOQ and sync to Cloud Firestore so other users can view on their computer">
+                    💾 Save BOQ &amp; Sync
                   </button>
                 </div>
               </div>
@@ -2295,7 +2389,9 @@
                 <!-- Rendered dynamically -->
               </div>
             </section>
-          </div>
+          <!-- Hidden File Inputs for Excel / JSON BOQ and Schedule Import -->
+          <input type="file" id="timelineBOQFileInput" accept=".xlsx,.xls,.xlsm,.xlsb,.csv,.tsv,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display:none" onchange="handleTimelineBOQFile(this.files[0])">
+          <input type="file" id="timelineScheduleFileInput" accept=".xlsx,.xls,.xlsm,.xlsb,.csv,.tsv,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display:none" onchange="handleTimelineScheduleFile(this.files[0])">
         </div>
 
         <!-- ================= VIEW 3: PROJECT DOCUMENTATION ================= -->
@@ -3062,7 +3158,7 @@
     ];
 
     let currentProjectId = 'PRJ-2026-001';
-    let currentTabKey = 'overview';
+    let currentTabKey = 'home';
     let currentDocFilter = 'all';
 
     function getProject(projId) {
@@ -3141,8 +3237,10 @@
         FCLStorage.setActiveProjectId(currentProjectId);
       }
 
-      if (paramTab && ['information', 'overview', 'timeline', 'documents'].includes(paramTab)) {
+      if (paramTab && ['home', 'information', 'overview', 'timeline', 'documents'].includes(paramTab)) {
         currentTabKey = paramTab;
+      } else if (!paramTab) {
+        currentTabKey = 'home';
       }
 
       // 4. Populate mainProjectSelector dropdown
@@ -3898,20 +3996,36 @@
     }
 
     function switchMainProjectTab(tabKey) {
-      currentTabKey = tabKey || 'overview';
+      currentTabKey = tabKey || 'home';
+
+      // Update main-content spacing/bleed when in Home tab
+      const mainContent = document.querySelector('.main-content');
+      if (mainContent) {
+        if (currentTabKey === 'home') {
+          mainContent.classList.add('home-tab-active');
+        } else {
+          mainContent.classList.remove('home-tab-active');
+        }
+      }
 
       // Toggle main view containers
+      const viewHome = document.getElementById('viewProjectHome');
       const viewInfo = document.getElementById('viewProjectInformation');
       const viewOverview = document.getElementById('viewProjectOverview');
       const viewTimeline = document.getElementById('viewProjectTimeline');
       const viewDocs = document.getElementById('viewProjectDocumentation');
+      const projNav = document.querySelector('.project-view-navbar');
 
+      if (viewHome) viewHome.style.display = currentTabKey === 'home' ? 'flex' : 'none';
       if (viewInfo) viewInfo.style.display = currentTabKey === 'information' ? 'block' : 'none';
       if (viewOverview) viewOverview.style.display = currentTabKey === 'overview' ? 'block' : 'none';
       if (viewTimeline) viewTimeline.style.display = currentTabKey === 'timeline' ? 'block' : 'none';
       if (viewDocs) viewDocs.style.display = currentTabKey === 'documents' ? 'block' : 'none';
 
-      // Navbar tab buttons
+      // In Home tab, only sidebar and top navigation are visible - hide project view control navbar
+      if (projNav) projNav.style.display = currentTabKey === 'home' ? 'none' : 'flex';
+
+      // Navbar tab buttons in project-view-navbar
       const tabBtns = {
         information: document.getElementById('tabBtnInfo'),
         overview: document.getElementById('tabBtnOverview'),
@@ -3927,6 +4041,7 @@
 
       // Top navbar links
       const topNavLinks = {
+        home: document.getElementById('navItemHome'),
         information: document.getElementById('navItemInfo'),
         overview: document.getElementById('navItemOverview'),
         timeline: document.getElementById('navItemTimeline'),
@@ -3946,9 +4061,26 @@
       renderActiveView();
     }
 
+    function toggleHomeImageFit() {
+      const img = document.getElementById('homepageHeroImg');
+      const label = document.getElementById('homeImageFitLabel');
+      if (!img) return;
+      const isCover = img.style.objectFit !== 'contain';
+      if (isCover) {
+        img.style.objectFit = 'contain';
+        if (label) label.textContent = 'Fill Space';
+      } else {
+        img.style.objectFit = 'cover';
+        if (label) label.textContent = 'Fit to Window';
+      }
+    }
+    window.toggleHomeImageFit = toggleHomeImageFit;
+
     function renderActiveView() {
       const proj = getProject(currentProjectId);
-      if (currentTabKey === 'information') {
+      if (currentTabKey === 'home') {
+        return;
+      } else if (currentTabKey === 'information') {
         renderProjectInfoView(proj);
       } else if (currentTabKey === 'overview') {
         renderDashboard(currentProjectId);
@@ -4754,11 +4886,14 @@
         `;
       });
 
+      // Retrieve persistent divider position
+      const savedLeftWidth = localStorage.getItem('timeline_gantt_left_pane_width') || '440px';
+
       // Construct Entire Gantt Wrapper
       container.innerHTML = `
-        <div class="gantt-chart-wrapper" style="border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; background: white;">
+        <div class="gantt-chart-wrapper" style="border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; background: white; position: relative;">
           <!-- Left Table Pane (Pinned) -->
-          <div class="gantt-left-pane" style="width: 440px; min-width: 440px; border-right: 2px solid #cbd5e1; background: #ffffff; z-index: 5;">
+          <div class="gantt-left-pane" style="width: ${savedLeftWidth}; min-width: 220px; max-width: 850px; flex-shrink: 0; border-right: 1px solid #cbd5e1; background: #ffffff; z-index: 5;">
             <!-- Table Header -->
             <div style="height: 42px; background: #f8fafc; border-bottom: 2px solid #cbd5e1; display: flex; align-items: center; padding: 0 10px; gap: 8px; font-size: 11px; font-weight: 700; color: #475569;">
               <div style="width: 55px;">Code</div>
@@ -4772,6 +4907,11 @@
             <div style="overflow-y: hidden;">
               ${leftTableRows}
             </div>
+          </div>
+
+          <!-- Draggable Vertical Splitter Divider -->
+          <div class="gantt-panel-divider" id="timelineGanttDivider" title="Drag horizontally to resize Table and Timeline panels">
+            <div style="width: 2px; height: 32px; background: #94a3b8; border-radius: 1px; pointer-events: none;"></div>
           </div>
 
           <!-- Right Timeline Canvas (Scrollable) -->
@@ -4792,6 +4932,57 @@
           </div>
         </div>
       `;
+
+      setupTimelineGanttDividerResize();
+    }
+
+    function setupTimelineGanttDividerResize() {
+      const divider = document.getElementById('timelineGanttDivider');
+      const wrapper = document.querySelector('.gantt-chart-wrapper');
+      const leftPane = document.querySelector('.gantt-left-pane');
+      if (!divider || !wrapper || !leftPane) return;
+
+      let isDragging = false;
+      let startX = 0;
+      let startWidth = 0;
+
+      function onPointerDown(e) {
+        isDragging = true;
+        divider.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+        startX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+        startWidth = leftPane.getBoundingClientRect().width;
+        e.preventDefault();
+      }
+
+      function onPointerMove(e) {
+        if (!isDragging) return;
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+        const dx = clientX - startX;
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const minW = 220;
+        const maxW = Math.max(minW, wrapperRect.width - 250);
+        let newWidth = Math.max(minW, Math.min(maxW, startWidth + dx));
+        leftPane.style.width = newWidth + 'px';
+      }
+
+      function onPointerUp() {
+        if (isDragging) {
+          isDragging = false;
+          divider.classList.remove('dragging');
+          document.body.style.cursor = '';
+          document.body.style.userSelect = '';
+          localStorage.setItem('timeline_gantt_left_pane_width', leftPane.style.width);
+        }
+      }
+
+      divider.addEventListener('mousedown', onPointerDown);
+      divider.addEventListener('touchstart', onPointerDown, { passive: false });
+      document.addEventListener('mousemove', onPointerMove);
+      document.addEventListener('touchmove', onPointerMove, { passive: false });
+      document.addEventListener('mouseup', onPointerUp);
+      document.addEventListener('touchend', onPointerUp);
     }
 
     /* --------------------------------------------------------------------------
@@ -4807,7 +4998,31 @@
         };
       }
 
-      const items = proj.boq.items || [];
+      let items = proj.boq.items;
+      if (!items || !items.length) {
+        if (Array.isArray(proj.boq.boqData) && proj.boq.boqData.length) {
+          items = proj.boq.boqData.map((r, idx) => ({
+            id: r.id || `boq_${idx}`,
+            code: r.code || `${idx + 1}.00`,
+            title: r.title || r.name || r.desc || `Item ${idx + 1}`,
+            specification: r.specification || '',
+            category: r.category || 'General Works',
+            qty: parseFloat(r.qty) || 1,
+            unit: r.unit || 'lot',
+            materialUnitCost: parseFloat(r.materialUnitCost) || 0,
+            leUnitCost: parseFloat(r.leUnitCost) || 0,
+            unitCost: parseFloat(r.unitCost) || ((parseFloat(r.materialUnitCost) || 0) + (parseFloat(r.leUnitCost) || 0)),
+            grandTotalCost: parseFloat(r.grandTotalCost) || ((parseFloat(r.qty) || 1) * (parseFloat(r.unitCost) || 0)),
+            weight: 0,
+            percentDone: parseFloat(r.percentDone !== undefined ? r.percentDone : (r.ganttProgress || 0)) || 0,
+            earnedValue: parseFloat(r.earnedValue) || 0,
+            isCritical: Boolean(r.isCritical)
+          }));
+          proj.boq.items = items;
+        } else {
+          items = [];
+        }
+      }
 
       // Calculate totals
       let grandTotal = 0;
@@ -5391,64 +5606,106 @@
     /* --------------------------------------------------------------------------
        STORAGE PERSISTENCE METHODS (ACROSS ALL APPS & INDEXEDDB)
        -------------------------------------------------------------------------- */
-    function saveProjectTimelineAndBOQ() {
+    async function saveActiveTimelineViewAndSync() {
       const proj = getProject(currentProjectId);
       if (!proj) return;
 
       try {
         if (typeof FCLStorage !== 'undefined') {
-          FCLStorage.saveProjectBOQ(currentProjectId, proj.boq);
-          FCLStorage.saveProjectGantt(currentProjectId, proj.timeline);
+          if (proj.boq) await FCLStorage.saveProjectBOQ(currentProjectId, proj.boq);
+          if (proj.timeline) await FCLStorage.saveProjectGantt(currentProjectId, proj.timeline);
           FCLStorage.saveProjectCatalog(FCL_PROJECT_CATALOG);
         } else {
-          localStorage.setItem(`cost_estimate_boq_${currentProjectId}`, JSON.stringify(proj.boq));
-          localStorage.setItem(`cost_estimate_ganttSettings_${currentProjectId}`, JSON.stringify(proj.timeline));
+          if (proj.boq) localStorage.setItem(`cost_estimate_boq_${currentProjectId}`, JSON.stringify(proj.boq));
+          if (proj.timeline) localStorage.setItem(`cost_estimate_ganttSettings_${currentProjectId}`, JSON.stringify(proj.timeline));
           localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
+        }
+
+        if (typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured()) {
+          const syncPayload = {};
+          if (proj.boq) syncPayload.boq = proj.boq;
+          if (proj.timeline) {
+            syncPayload.gantt = proj.timeline;
+            syncPayload.ganttSettings = proj.timeline;
+          }
+          FCLFirebaseSync.queueProjectSync(currentProjectId, syncPayload);
+          FCLFirebaseSync.queueCatalogSync(FCL_PROJECT_CATALOG);
         }
       } catch (err) {
         console.warn('Error saving timeline & boq data:', err);
       }
 
-      showTimelineSaveToast('Project Timeline & Bill of Quantity Successfully Saved!');
+      const isCloud = typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured();
+      showTimelineSaveToast(isCloud ? '💾 BOQ & Schedule Saved & Synced to Cloud for All Users!' : 'Project BOQ & Schedule Saved Locally!');
+      const msg = isCloud
+        ? `✅ Project BOQ & Schedule successfully saved and synchronized with Cloud Firestore!\n\n• Project: ${proj.name} (${proj.code})\n• Cloud Sync: Active & Synchronized\n\nOther team members connected to the cloud can now view the latest BOQ and Schedule on their own computers.`
+        : `💾 Project BOQ & Schedule successfully saved to local storage!\n\n• Project: ${proj.name} (${proj.code})\n\n💡 Tip: To let other users view this on their computers, click the Cloud Sync icon at the top navigation to connect to Cloud Firestore, or export the Master Project (.fclproj).`;
+      alert(msg);
     }
 
-    function saveProjectTimelineSchedule() {
+    function saveProjectTimelineAndBOQ() {
+      return saveActiveTimelineViewAndSync();
+    }
+
+    async function saveProjectTimelineSchedule(silent) {
       const proj = getProject(currentProjectId);
       if (!proj) return;
 
       try {
         if (typeof FCLStorage !== 'undefined') {
-          FCLStorage.saveProjectGantt(currentProjectId, proj.timeline);
+          await FCLStorage.saveProjectGantt(currentProjectId, proj.timeline);
           FCLStorage.saveProjectCatalog(FCL_PROJECT_CATALOG);
         } else {
           localStorage.setItem(`cost_estimate_ganttSettings_${currentProjectId}`, JSON.stringify(proj.timeline));
           localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
         }
+
+        if (typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured()) {
+          FCLFirebaseSync.queueProjectSync(currentProjectId, { gantt: proj.timeline, ganttSettings: proj.timeline });
+          FCLFirebaseSync.queueCatalogSync(FCL_PROJECT_CATALOG);
+        }
       } catch (err) {
         console.warn('Error saving schedule data:', err);
       }
 
-      showTimelineSaveToast('Gantt Schedule Activities Successfully Saved!');
+      const isCloud = typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured();
+      showTimelineSaveToast(isCloud ? '💾 Schedule Saved & Synced for All Users!' : 'Gantt Schedule Activities Saved Successfully!');
+      if (!silent) {
+        const msg = isCloud
+          ? `✅ Gantt Schedule activities successfully saved and synchronized with Cloud Firestore!\n\nOther team members connected to the cloud can now view the updated schedule on their computers in real time.`
+          : `💾 Gantt Schedule activities successfully saved locally.\n\n💡 Tip: Connect Cloud Firestore or export the Master Project (.fclproj) to share with other users.`;
+        alert(msg);
+      }
     }
 
-    function saveProjectBOQData(silent) {
+    async function saveProjectBOQData(silent) {
       const proj = getProject(currentProjectId);
       if (!proj) return;
 
       try {
         if (typeof FCLStorage !== 'undefined') {
-          FCLStorage.saveProjectBOQ(currentProjectId, proj.boq);
+          await FCLStorage.saveProjectBOQ(currentProjectId, proj.boq);
           FCLStorage.saveProjectCatalog(FCL_PROJECT_CATALOG);
         } else {
           localStorage.setItem(`cost_estimate_boq_${currentProjectId}`, JSON.stringify(proj.boq));
           localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
         }
+
+        if (typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured()) {
+          FCLFirebaseSync.queueProjectSync(currentProjectId, { boq: proj.boq });
+          FCLFirebaseSync.queueCatalogSync(FCL_PROJECT_CATALOG);
+        }
       } catch (err) {
         console.warn('Error saving BOQ data:', err);
       }
 
+      const isCloud = typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured();
       if (!silent) {
-        showTimelineSaveToast('Project Bill of Quantity Successfully Saved!');
+        showTimelineSaveToast(isCloud ? '💾 BOQ Saved & Synced for All Users!' : 'Project Bill of Quantity Successfully Saved!');
+        const msg = isCloud
+          ? `✅ Bill of Quantity (BOQ) successfully saved and synchronized with Cloud Firestore!\n\nOther team members connected to the cloud can now view the updated BOQ items and costs on their computers in real time.`
+          : `💾 Bill of Quantity (BOQ) successfully saved locally.\n\n💡 Tip: Connect Cloud Firestore or export the Master Project (.fclproj) to share with other users.`;
+        alert(msg);
       }
     }
 
@@ -5505,6 +5762,476 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    }
+
+    /* --------------------------------------------------------------------------
+       EXCEL & JSON BOQ & SCHEDULE IMPORTERS
+       -------------------------------------------------------------------------- */
+    function parseExcelOrStringDate(val) {
+      if (val === undefined || val === null || val === '') return '2026-03-01';
+      if (typeof val === 'number') {
+        const dateObj = new Date(Math.round((val - 25569) * 86400 * 1000));
+        if (!isNaN(dateObj.getTime())) {
+          return dateObj.toISOString().split('T')[0];
+        }
+      }
+      const str = String(val).trim();
+      const d = new Date(str);
+      if (!isNaN(d.getTime())) {
+        return d.toISOString().split('T')[0];
+      }
+      const parts = str.split(/[-/.]/);
+      if (parts.length === 3) {
+        if (parts[0].length === 4) return `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+        if (parts[2].length === 4) return `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+      }
+      return '2026-03-01';
+    }
+
+    function normalizeDateStr(val) {
+      return parseExcelOrStringDate(val);
+    }
+
+    function triggerTimelineBOQImport() {
+      const input = document.getElementById('timelineBOQFileInput');
+      if (input) {
+        input.value = '';
+        input.click();
+      }
+    }
+
+    async function handleTimelineBOQFile(file) {
+      if (!file) return;
+      const fileName = file.name || '';
+      const isJson = /\.json$/i.test(fileName);
+      const isExcel = /\.(xlsx|xls|xlsm|xlsb|csv|tsv)$/i.test(fileName);
+      const proj = getProject(currentProjectId);
+      if (!proj) {
+        alert('No active project found.');
+        return;
+      }
+
+      try {
+        let items = [];
+        if (isJson) {
+          const text = await file.text();
+          const parsed = JSON.parse(text);
+          let rawList = [];
+          if (Array.isArray(parsed)) {
+            rawList = parsed;
+          } else if (parsed.boq && Array.isArray(parsed.boq.items)) {
+            rawList = parsed.boq.items;
+          } else if (Array.isArray(parsed.boqData)) {
+            rawList = parsed.boqData;
+          } else if (parsed.data && Array.isArray(parsed.data.boqData)) {
+            rawList = parsed.data.boqData;
+          } else if (parsed.data && Array.isArray(parsed.data)) {
+            rawList = parsed.data;
+          } else if (Array.isArray(parsed.items)) {
+            rawList = parsed.items;
+          } else {
+            throw new Error('Unrecognized BOQ JSON structure. Expected an array of items or { boq: { items: [...] } }.');
+          }
+
+          items = rawList.map((r, idx) => {
+            const qty = Number(r.qty || r.quantity || 1);
+            const unit = String(r.unit || r.uom || 'lot').trim();
+            const matCost = Number(r.materialUnitCost || r.materialCost || r.matCost || 0);
+            const leCost = Number(r.leUnitCost || r.laborCost || r.leCost || 0);
+            const uCost = Number(r.unitCost || r.rate || (matCost + leCost) || 0);
+            const gCost = Number(r.grandTotalCost || r.total || r.totalCost || r.amount || (qty * uCost));
+            const pDone = Number(r.percentDone || r.progress || r.accomplished || 0);
+            return {
+              id: r.id || `boq_imp_${Date.now()}_${idx}`,
+              code: String(r.code || r.itemCode || `${idx + 1}.00`).trim(),
+              title: String(r.title || r.name || r.desc || r.description || `Scope Item ${idx + 1}`).trim(),
+              specification: String(r.specification || r.spec || r.notes || '').trim(),
+              category: String(r.category || r.cat || r.type || 'General Works').trim(),
+              qty: isNaN(qty) || qty <= 0 ? 1 : qty,
+              unit: unit || 'lot',
+              materialUnitCost: matCost,
+              leUnitCost: leCost,
+              unitCost: uCost,
+              grandTotalCost: gCost,
+              weight: 0,
+              percentDone: pDone,
+              earnedValue: gCost * (pDone / 100),
+              isCritical: Boolean(r.isCritical || r.critical)
+            };
+          });
+        } else if (isExcel) {
+          if (typeof XLSX === 'undefined') {
+            throw new Error('SheetJS XLSX library is not loaded. Please verify your network connection.');
+          }
+          const buffer = await file.arrayBuffer();
+          const wb = XLSX.read(new Uint8Array(buffer), { type: 'array' });
+          const sheetName = wb.SheetNames.find(n => /boq|bill|quantity/i.test(n)) || wb.SheetNames[0];
+          const ws = wb.Sheets[sheetName];
+          const rawRows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+          if (!rawRows || rawRows.length === 0) {
+            throw new Error('Excel sheet is empty.');
+          }
+
+          let headerIdx = -1;
+          let colMap = { code: -1, desc: -1, spec: -1, cat: -1, qty: -1, unit: -1, matCost: -1, leCost: -1, unitCost: -1, total: -1, progress: -1 };
+
+          for (let r = 0; r < Math.min(rawRows.length, 25); r++) {
+            const row = rawRows[r] || [];
+            const strRow = row.map(c => String(c || '').toLowerCase().trim());
+            let matches = 0;
+            strRow.forEach((col, cIdx) => {
+              if (/(item\s*code|pay\s*item|item\s*no|^item$|^code$)/.test(col)) { colMap.code = cIdx; matches++; }
+              else if (/(description|scope|title|particulars|work\s*description|^desc$)/.test(col)) { colMap.desc = cIdx; matches++; }
+              else if (/(specification|spec|notes)/.test(col)) { colMap.spec = cIdx; }
+              else if (/(category|division|part|section)/.test(col)) { colMap.cat = cIdx; }
+              else if (/(qty|quantity|volume)/.test(col)) { colMap.qty = cIdx; matches++; }
+              else if (/(unit|uom)/.test(col)) { colMap.unit = cIdx; matches++; }
+              else if (/(mat.*cost|material.*rate|material.*unit|mat.*rate)/.test(col)) { colMap.matCost = cIdx; }
+              else if (/(labor.*cost|l&e.*cost|le.*cost|labour|equipment)/.test(col)) { colMap.leCost = cIdx; }
+              else if (/(unit\s*cost|unit\s*price|unit\s*rate|^rate$|^price$)/.test(col)) { colMap.unitCost = cIdx; matches++; }
+              else if (/(total\s*amount|grand\s*total|total\s*cost|^amount$|^total$)/.test(col)) { colMap.total = cIdx; matches++; }
+              else if (/(%|percent|accomplish|progress|done)/.test(col)) { colMap.progress = cIdx; }
+            });
+            if (matches >= 2) {
+              headerIdx = r;
+              break;
+            }
+          }
+
+          if (headerIdx === -1) {
+            headerIdx = 0;
+            colMap = { code: 0, desc: 1, spec: -1, cat: -1, qty: 2, unit: 3, matCost: -1, leCost: -1, unitCost: 4, total: 5, progress: 6 };
+          }
+
+          let currentCategory = 'General Works';
+          for (let r = headerIdx + 1; r < rawRows.length; r++) {
+            const row = rawRows[r] || [];
+            if (!row.length || row.every(c => c === undefined || c === null || String(c).trim() === '')) continue;
+
+            const codeVal = colMap.code !== -1 ? String(row[colMap.code] || '').trim() : '';
+            const descVal = colMap.desc !== -1 ? String(row[colMap.desc] || '').trim() : '';
+            const qtyVal = colMap.qty !== -1 ? parseFloat(row[colMap.qty]) : 1;
+            const unitVal = colMap.unit !== -1 ? String(row[colMap.unit] || 'lot').trim() : 'lot';
+            const matCostVal = colMap.matCost !== -1 ? parseFloat(row[colMap.matCost]) || 0 : 0;
+            const leCostVal = colMap.leCost !== -1 ? parseFloat(row[colMap.leCost]) || 0 : 0;
+            const unitCostVal = colMap.unitCost !== -1 ? parseFloat(row[colMap.unitCost]) : (matCostVal + leCostVal);
+            const totalVal = colMap.total !== -1 ? parseFloat(row[colMap.total]) : (qtyVal * unitCostVal);
+            const progVal = colMap.progress !== -1 ? Math.min(100, Math.max(0, parseFloat(row[colMap.progress]) || 0)) : 0;
+            const catVal = colMap.cat !== -1 ? String(row[colMap.cat] || '').trim() : '';
+
+            if (catVal) currentCategory = catVal;
+
+            if (!descVal && !codeVal) continue;
+            if (/^(total|grand\s*total|subtotal)/i.test(descVal) || /^(total|grand\s*total|subtotal)/i.test(codeVal)) continue;
+
+            if (!qtyVal && !unitCostVal && !totalVal && (descVal.toUpperCase() === descVal || /^part\s+[a-z]/i.test(descVal))) {
+              currentCategory = descVal;
+              continue;
+            }
+
+            const validQty = isNaN(qtyVal) || qtyVal <= 0 ? 1 : qtyVal;
+            const validUnitCost = isNaN(unitCostVal) ? 0 : unitCostVal;
+            const validTotal = isNaN(totalVal) || totalVal <= 0 ? (validQty * validUnitCost) : totalVal;
+
+            items.push({
+              id: `boq_imp_${Date.now()}_${items.length}`,
+              code: codeVal || `${items.length + 1}.00`,
+              title: descVal || `Item ${items.length + 1}`,
+              specification: colMap.spec !== -1 ? String(row[colMap.spec] || '').trim() : '',
+              category: currentCategory,
+              qty: validQty,
+              unit: unitVal || 'lot',
+              materialUnitCost: matCostVal,
+              leUnitCost: leCostVal,
+              unitCost: validUnitCost || (validQty > 0 ? (validTotal / validQty) : 0),
+              grandTotalCost: validTotal,
+              weight: 0,
+              percentDone: progVal,
+              earnedValue: validTotal * (progVal / 100),
+              isCritical: false
+            });
+          }
+        } else {
+          throw new Error('Unsupported file format. Please upload an Excel (.xlsx, .xls, .csv) or JSON (.json) file.');
+        }
+
+        if (items.length === 0) {
+          throw new Error('No valid BOQ items could be extracted from this file.');
+        }
+
+        proj.boq = {
+          projectName: proj.name,
+          projectCode: proj.code,
+          items: items
+        };
+
+        let boqTotal = 0;
+        let boqEarned = 0;
+        items.forEach(it => {
+          boqTotal += it.grandTotalCost;
+          boqEarned += it.earnedValue;
+        });
+
+        if (boqTotal > 0) {
+          proj.totalBudget = boqTotal;
+          proj.actualProgress = parseFloat(((boqEarned / boqTotal) * 100).toFixed(1));
+          items.forEach(it => {
+            it.weight = parseFloat(((it.grandTotalCost / boqTotal) * 100).toFixed(2));
+          });
+        }
+
+        if (typeof FCLStorage !== 'undefined') {
+          await FCLStorage.saveProjectBOQ(currentProjectId, proj.boq);
+        }
+        localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
+
+        if (typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured()) {
+          FCLFirebaseSync.queueProjectSync(currentProjectId, { boq: proj.boq });
+          FCLFirebaseSync.queueCatalogSync(FCL_PROJECT_CATALOG);
+        }
+
+        renderTimelineView(proj);
+        switchTimelineSubTab('boq');
+
+        const isCloudSync = typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured();
+        alert(`✅ Bill of Quantity successfully loaded and saved from "${fileName}"!\n\n• Imported Scope Items: ${items.length}\n• Total Contract BOQ Budget: ₱ ${formatPeso(proj.totalBudget)}\n• Actual Accomplishment: ${proj.actualProgress}%\n\n${isCloudSync ? '☁️ Synced with Cloud Firestore! Other users on other computers can now view this BOQ in real time.' : '💾 Saved locally. Connect Cloud Firestore to sync with other users in real time.'}`);
+      } catch (err) {
+        alert('❌ Error loading BOQ: ' + err.message);
+      }
+    }
+
+    function triggerTimelineScheduleImport() {
+      const input = document.getElementById('timelineScheduleFileInput');
+      if (input) {
+        input.value = '';
+        input.click();
+      }
+    }
+
+    async function handleTimelineScheduleFile(file) {
+      if (!file) return;
+      const fileName = file.name || '';
+      const isJson = /\.json$/i.test(fileName);
+      const isExcel = /\.(xlsx|xls|xlsm|xlsb|csv|tsv)$/i.test(fileName);
+      const proj = getProject(currentProjectId);
+      if (!proj) {
+        alert('No active project found.');
+        return;
+      }
+
+      try {
+        let tasks = [];
+        if (isJson) {
+          const text = await file.text();
+          const parsed = JSON.parse(text);
+          let rawTasks = [];
+          if (Array.isArray(parsed)) {
+            rawTasks = parsed;
+          } else if (parsed.timeline && Array.isArray(parsed.timeline.ganttTasks)) {
+            rawTasks = parsed.timeline.ganttTasks;
+          } else if (Array.isArray(parsed.ganttTasks)) {
+            rawTasks = parsed.ganttTasks;
+          } else if (Array.isArray(parsed.tasks)) {
+            rawTasks = parsed.tasks;
+          } else if (Array.isArray(parsed.schedule)) {
+            rawTasks = parsed.schedule;
+          } else if (parsed.data && Array.isArray(parsed.data.ganttTasks)) {
+            rawTasks = parsed.data.ganttTasks;
+          } else {
+            throw new Error('Unrecognized Schedule JSON structure. Expected an array of tasks or { timeline: { ganttTasks: [...] } }.');
+          }
+
+          tasks = rawTasks.map((t, idx) => {
+            const start = normalizeDateStr(t.startDate || t.start || '2026-03-01');
+            const dur = Number(t.duration || t.days || 10);
+            let end = normalizeDateStr(t.endDate || t.end || t.finish);
+            if (!end) {
+              const dObj = new Date(start);
+              dObj.setDate(dObj.getDate() + dur);
+              end = dObj.toISOString().split('T')[0];
+            }
+            return {
+              id: t.id || `task_imp_${Date.now()}_${idx}`,
+              code: String(t.code || t.taskId || t.id || `T-${101 + idx}`).trim(),
+              name: String(t.name || t.title || t.activity || t.desc || `Schedule Activity ${idx + 1}`).trim(),
+              category: String(t.category || t.cat || t.phase || 'Civil Works').trim(),
+              startDate: start,
+              endDate: end,
+              duration: dur,
+              progress: Math.min(100, Math.max(0, Number(t.progress || t.percentDone || 0))),
+              isCritical: Boolean(t.isCritical || t.critical),
+              float: String(t.float || (t.isCritical ? '0d' : '10d')),
+              lead: String(t.lead || t.engineer || t.assigned || 'Project Engineer').trim(),
+              predecessors: String(t.predecessors || t.depends || 'None').trim()
+            };
+          });
+        } else if (isExcel) {
+          if (typeof XLSX === 'undefined') {
+            throw new Error('SheetJS XLSX library is not loaded. Please verify your network connection.');
+          }
+          const buffer = await file.arrayBuffer();
+          const wb = XLSX.read(new Uint8Array(buffer), { type: 'array' });
+          const sheetName = wb.SheetNames.find(n => /schedule|gantt|timeline|task/i.test(n)) || wb.SheetNames[0];
+          const ws = wb.Sheets[sheetName];
+          const rawRows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+          if (!rawRows || rawRows.length === 0) {
+            throw new Error('Excel sheet is empty.');
+          }
+
+          let headerIdx = -1;
+          let colMap = { code: -1, name: -1, cat: -1, start: -1, end: -1, duration: -1, progress: -1, critical: -1, lead: -1, pred: -1 };
+
+          for (let r = 0; r < Math.min(rawRows.length, 25); r++) {
+            const row = rawRows[r] || [];
+            const strRow = row.map(c => String(c || '').toLowerCase().trim());
+            let matches = 0;
+            strRow.forEach((col, cIdx) => {
+              if (/(task\s*id|activity\s*id|wbs|^code$|^task$|^id$)/.test(col)) { colMap.code = cIdx; matches++; }
+              else if (/(activity|task\s*name|activity\s*name|work\s*item|^name$|^description$)/.test(col)) { colMap.name = cIdx; matches++; }
+              else if (/(phase|category|division|wbs\s*group)/.test(col)) { colMap.cat = cIdx; }
+              else if (/(start\s*date|early\s*start|start)/.test(col)) { colMap.start = cIdx; matches++; }
+              else if (/(end\s*date|finish\s*date|early\s*finish|completion|finish|^end$)/.test(col)) { colMap.end = cIdx; matches++; }
+              else if (/(duration|calendar\s*days|days)/.test(col)) { colMap.duration = cIdx; matches++; }
+              else if (/(%|progress|percent|status)/.test(col)) { colMap.progress = cIdx; }
+              else if (/(critical|cpm|is\s*critical)/.test(col)) { colMap.critical = cIdx; }
+              else if (/(lead|engineer|assigned|owner)/.test(col)) { colMap.lead = cIdx; }
+              else if (/(pred|predecessors|depends)/.test(col)) { colMap.pred = cIdx; }
+            });
+            if (matches >= 2) {
+              headerIdx = r;
+              break;
+            }
+          }
+
+          if (headerIdx === -1) {
+            headerIdx = 0;
+            colMap = { code: 0, name: 1, cat: -1, start: 2, end: 3, duration: 4, progress: 5, critical: -1, lead: -1, pred: -1 };
+          }
+
+          let currentCat = 'Construction Phase';
+          for (let r = headerIdx + 1; r < rawRows.length; r++) {
+            const row = rawRows[r] || [];
+            if (!row.length || row.every(c => c === undefined || c === null || String(c).trim() === '')) continue;
+
+            const codeVal = colMap.code !== -1 ? String(row[colMap.code] || '').trim() : '';
+            const nameVal = colMap.name !== -1 ? String(row[colMap.name] || '').trim() : '';
+            const catVal = colMap.cat !== -1 ? String(row[colMap.cat] || '').trim() : '';
+            if (catVal) currentCat = catVal;
+
+            if (!nameVal && !codeVal) continue;
+            if (/^(total|project\s*duration|summary)/i.test(nameVal) || /^(total|summary)/i.test(codeVal)) continue;
+
+            let startVal = colMap.start !== -1 ? parseExcelOrStringDate(row[colMap.start]) : '2026-03-01';
+            let endVal = colMap.end !== -1 ? parseExcelOrStringDate(row[colMap.end]) : '';
+            let durVal = colMap.duration !== -1 ? parseInt(row[colMap.duration]) : 0;
+
+            if (!durVal && startVal && endVal) {
+              const sD = new Date(startVal);
+              const eD = new Date(endVal);
+              durVal = Math.max(1, Math.round((eD - sD) / 86400000));
+            } else if (durVal > 0 && startVal && !endVal) {
+              const sD = new Date(startVal);
+              sD.setDate(sD.getDate() + durVal);
+              endVal = sD.toISOString().split('T')[0];
+            }
+            if (!durVal) durVal = 10;
+            if (!endVal) {
+              const sD = new Date(startVal);
+              sD.setDate(sD.getDate() + durVal);
+              endVal = sD.toISOString().split('T')[0];
+            }
+
+            const progVal = colMap.progress !== -1 ? Math.min(100, Math.max(0, parseFloat(row[colMap.progress]) || 0)) : 0;
+            const critVal = colMap.critical !== -1 ? /true|yes|1|critical/i.test(String(row[colMap.critical])) : false;
+            const leadVal = colMap.lead !== -1 ? String(row[colMap.lead] || 'Project Engineer').trim() : 'Project Engineer';
+            const predVal = colMap.pred !== -1 ? String(row[colMap.pred] || 'None').trim() : 'None';
+
+            tasks.push({
+              id: `task_imp_${Date.now()}_${tasks.length}`,
+              code: codeVal || `T-${101 + tasks.length}`,
+              name: nameVal || `Activity ${tasks.length + 1}`,
+              category: currentCat,
+              startDate: startVal,
+              endDate: endVal,
+              duration: durVal,
+              progress: progVal,
+              isCritical: critVal,
+              float: critVal ? '0d' : '10d',
+              lead: leadVal,
+              predecessors: predVal
+            });
+          }
+        } else {
+          throw new Error('Unsupported file format. Please upload an Excel (.xlsx, .xls, .csv) or JSON (.json) file.');
+        }
+
+        if (tasks.length === 0) {
+          throw new Error('No valid Schedule activities could be extracted from this file.');
+        }
+
+        if (!proj.timeline) proj.timeline = {};
+        proj.timeline.ganttTasks = tasks;
+
+        let minStart = null;
+        let maxEnd = null;
+        tasks.forEach(t => {
+          const s = new Date(t.startDate);
+          const e = new Date(t.endDate);
+          if (!isNaN(s) && (!minStart || s < minStart)) minStart = s;
+          if (!isNaN(e) && (!maxEnd || e > maxEnd)) maxEnd = e;
+        });
+
+        if (minStart && maxEnd) {
+          const totalDur = Math.max(1, Math.round((maxEnd - minStart) / 86400000));
+          proj.durationDays = totalDur;
+          proj.targetDate = maxEnd.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }).toUpperCase();
+        }
+
+        const phaseMap = {};
+        tasks.forEach(t => {
+          if (!phaseMap[t.category]) {
+            phaseMap[t.category] = { name: t.category, tasks: [], progressSum: 0, duration: 0, isCritical: false };
+          }
+          phaseMap[t.category].tasks.push(t);
+          phaseMap[t.category].progressSum += t.progress;
+          phaseMap[t.category].duration += t.duration;
+          if (t.isCritical) phaseMap[t.category].isCritical = true;
+        });
+
+        proj.timeline.phases = Object.keys(phaseMap).map(k => {
+          const group = phaseMap[k];
+          const avgProg = Math.round(group.progressSum / group.tasks.length);
+          return {
+            name: k,
+            startDate: group.tasks[0]?.startDate || '2026-03-01',
+            endDate: group.tasks[group.tasks.length - 1]?.endDate || '2026-10-30',
+            duration: group.duration,
+            progress: avgProg,
+            status: avgProg >= 100 ? 'Completed' : (avgProg > 0 ? 'In Progress' : 'Upcoming'),
+            isCritical: group.isCritical,
+            float: group.isCritical ? '0d' : '10d',
+            lead: group.tasks[0]?.lead || 'Project Engineer'
+          };
+        });
+
+        if (typeof FCLStorage !== 'undefined') {
+          await FCLStorage.saveProjectGantt(currentProjectId, proj.timeline);
+        }
+        localStorage.setItem('FCL_PROJECT_CATALOG_DATA', JSON.stringify(FCL_PROJECT_CATALOG));
+
+        if (typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured()) {
+          FCLFirebaseSync.queueProjectSync(currentProjectId, { gantt: proj.timeline, ganttSettings: proj.timeline });
+          FCLFirebaseSync.queueCatalogSync(FCL_PROJECT_CATALOG);
+        }
+
+        renderTimelineView(proj);
+        switchTimelineSubTab('gantt');
+
+        const isCloudSync = typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured();
+        alert(`✅ Master Schedule successfully loaded and saved from "${fileName}"!\n\n• Imported Tasks: ${tasks.length}\n• Project Timeline Duration: ${proj.durationDays} calendar days\n• Target Completion: ${proj.targetDate}\n\n${isCloudSync ? '☁️ Synced with Cloud Firestore! Other users on other computers can now view this schedule in real time.' : '💾 Saved locally. Connect Cloud Firestore to sync with other users in real time.'}`);
+      } catch (err) {
+        alert('❌ Error loading Schedule: ' + err.message);
+      }
     }
 
     /* --------------------------------------------------------------------------
@@ -6153,11 +6880,18 @@
         if (detail.projectId && detail.projectId === currentProjectId) {
           const p = getProject(currentProjectId);
           if (p && detail.data) {
-            if (detail.data.boq) p.boq = detail.data.boq;
-            if (detail.data.gantt) p.timeline = detail.data.gantt;
+            if (detail.data.boq) {
+              p.boq = detail.data.boq;
+              if (detail.data.boq.totalBudget !== undefined) p.totalBudget = detail.data.boq.totalBudget;
+              if (detail.data.boq.actualProgress !== undefined) p.actualProgress = detail.data.boq.actualProgress;
+            }
+            if (detail.data.gantt || detail.data.ganttSettings) {
+              p.timeline = detail.data.gantt || detail.data.ganttSettings;
+            }
             if (detail.data.metadata && detail.data.metadata.name) p.name = detail.data.metadata.name;
+            renderActiveView();
+            showTimelineSaveToast('☁️ Real-time project updates received from another user!');
           }
-          renderActiveView();
         }
       });
     });

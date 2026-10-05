@@ -1281,7 +1281,12 @@
       const savedWidth = localStorage.getItem('cost_estimate_gantt_left_width_v1');
       if (savedWidth) {
         const leftPanel = document.querySelector('.gantt-left-panel');
-        if (leftPanel) leftPanel.style.width = savedWidth;
+        if (leftPanel) {
+          leftPanel.style.width = savedWidth;
+          leftPanel.style.minWidth = savedWidth;
+          leftPanel.style.maxWidth = savedWidth;
+          leftPanel.style.flexBasis = savedWidth;
+        }
       }
       
       const input = document.getElementById('ganttProjectStartInput');
@@ -1338,45 +1343,83 @@
     }
 
     function setupGanttDividerResize() {
-      const container = document.querySelector('.gantt-container');
-      const leftPanel = document.querySelector('.gantt-left-panel');
-      const divider = document.querySelector('.gantt-divider');
-      if (!container || !leftPanel || !divider) return;
-      
-      if (divider.dataset.resizeInitialized) return;
-      divider.dataset.resizeInitialized = 'true';
-      
-      let isDragging = false;
-      
-      divider.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        document.body.style.cursor = 'col-resize';
-        document.body.style.userSelect = 'none';
-        e.preventDefault();
-      });
-      
-      document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        
-        const containerRect = container.getBoundingClientRect();
-        let newWidth = e.clientX - containerRect.left;
-        
-        const minW = 200;
-        const maxW = containerRect.width - 200;
-        if (newWidth < minW) newWidth = minW;
-        if (newWidth > maxW) newWidth = maxW;
-        
-        leftPanel.style.width = newWidth + 'px';
-        renderGanttChart();
-      });
-      
-      document.addEventListener('mouseup', () => {
-        if (isDragging) {
-          isDragging = false;
-          document.body.style.cursor = '';
-          document.body.style.userSelect = '';
-          localStorage.setItem('cost_estimate_gantt_left_width_v1', leftPanel.style.width);
+      const dividers = document.querySelectorAll('.gantt-divider');
+      if (!dividers.length) return;
+
+      dividers.forEach(divider => {
+        if (divider.id === 'qtyModalDivider') return; // Handled separately by qty modal
+        const container = divider.closest('.gantt-container');
+        if (!container) return;
+        const leftPanel = container.querySelector('.gantt-left-panel');
+        if (!leftPanel) return;
+
+        // Apply saved width if present
+        const savedW = localStorage.getItem('cost_estimate_gantt_left_width_v1');
+        if (savedW) {
+          leftPanel.style.width = savedW;
+          leftPanel.style.minWidth = savedW;
+          leftPanel.style.maxWidth = savedW;
+          leftPanel.style.flexBasis = savedW;
         }
+
+        if (divider.dataset.resizeInitialized) return;
+        divider.dataset.resizeInitialized = 'true';
+
+        let isDragging = false;
+        let startX = 0;
+        let startWidth = 0;
+
+        function onDividerDown(e) {
+          isDragging = true;
+          divider.classList.add('dragging');
+          document.body.classList.add('gantt-resizing');
+          document.body.style.cursor = 'col-resize';
+          document.body.style.userSelect = 'none';
+          startX = (e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX) ?? 0;
+          startWidth = leftPanel.getBoundingClientRect().width;
+          e.preventDefault();
+        }
+
+        function onDividerMove(e) {
+          if (!isDragging) return;
+          const currentX = (e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX) ?? 0;
+          const dx = currentX - startX;
+          const containerRect = container.getBoundingClientRect();
+          const containerW = containerRect.width || window.innerWidth;
+          const minW = 150;
+          const maxW = Math.max(minW, containerW - 120);
+          let newWidth = Math.max(minW, Math.min(maxW, startWidth + dx));
+
+          leftPanel.style.width = newWidth + 'px';
+          leftPanel.style.minWidth = newWidth + 'px';
+          leftPanel.style.maxWidth = newWidth + 'px';
+          leftPanel.style.flexBasis = newWidth + 'px';
+
+          if (typeof updateGanttTimelineViewport === 'function') {
+            updateGanttTimelineViewport();
+          }
+        }
+
+        function onDividerUp() {
+          if (isDragging) {
+            isDragging = false;
+            divider.classList.remove('dragging');
+            document.body.classList.remove('gantt-resizing');
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+            localStorage.setItem('cost_estimate_gantt_left_width_v1', leftPanel.style.width);
+            if (typeof updateGanttTimelineViewport === 'function') {
+              updateGanttTimelineViewport();
+            }
+          }
+        }
+
+        divider.addEventListener('mousedown', onDividerDown);
+        divider.addEventListener('touchstart', onDividerDown, { passive: false });
+        window.addEventListener('mousemove', onDividerMove);
+        window.addEventListener('touchmove', onDividerMove, { passive: false });
+        window.addEventListener('mouseup', onDividerUp);
+        window.addEventListener('touchend', onDividerUp);
       });
     }
  
@@ -3023,8 +3066,13 @@
         const extraWidthForCoords = ganttSettings.showCoordinates ? 40 : 0;
         const totalW = activeCols.reduce((sum, c) => sum + c.width, 0) + extraWidthForCoords;
         document.getElementById('ganttTaskTable').style.width = totalW + 'px';
-        if (leftPanel && !localStorage.getItem('cost_estimate_gantt_left_width_v1')) {
-          leftPanel.style.width = totalW + 'px';
+        if (leftPanel) {
+          const savedW = localStorage.getItem('cost_estimate_gantt_left_width_v1');
+          const appliedW = savedW || (totalW + 'px');
+          leftPanel.style.width = appliedW;
+          leftPanel.style.minWidth = appliedW;
+          leftPanel.style.maxWidth = appliedW;
+          leftPanel.style.flexBasis = appliedW;
         }
       }
       
@@ -7960,7 +8008,7 @@
           isDragging = false;
           document.body.style.cursor = '';
           document.body.style.userSelect = '';
-          localStorage.setItem('cost_estimate_gantt_left_width_v1', leftPanel.style.width);
+          localStorage.setItem('cost_estimate_qty_modal_left_width_v1', leftPanel.style.width);
         }
       });
     }
@@ -8339,7 +8387,7 @@
                 document.getElementById('qtyTaskTable').style.width = totalW2 + 'px';
                 
                 const leftPanel2 = document.getElementById('qtyLeftPanel');
-                if (leftPanel2 && !localStorage.getItem('cost_estimate_gantt_left_width_v1')) {
+                if (leftPanel2 && !localStorage.getItem('cost_estimate_qty_modal_left_width_v1')) {
                   leftPanel2.style.width = Math.min(550, totalW2) + 'px';
                 }
               };
@@ -10139,6 +10187,11 @@
       if (sheetId === 'boqSheet') {
         resizeAllBOQSpecificationTextareas();
         setTimeout(resizeAllBOQSpecificationTextareas, 50);
+      }
+      if (sheetId === 'ganttSheet') {
+        renderGanttChart();
+        setupGanttScrollSync();
+        setupGanttDividerResize();
       }
       if (sheetId === 'coverLetterSheet') renderCoverLetter();
       updateHeaderSaveButtons(sheetId);

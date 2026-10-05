@@ -462,16 +462,36 @@
       border-color: var(--accent-dark) !important;
     }
     .gantt-divider {
-      width: 6px;
+      width: 8px;
       cursor: col-resize;
       background: var(--line, #cfd8e3);
       flex-shrink: 0;
       user-select: none;
       transition: background 0.15s;
-      z-index: 15;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
     }
-    .gantt-divider:hover, .gantt-divider:active {
+    .gantt-divider::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -4px;
+      right: -4px;
+      cursor: col-resize;
+    }
+    .gantt-divider:hover, .gantt-divider:active, .gantt-divider.dragging {
       background: var(--accent, #2563eb) !important;
+    }
+    .gantt-divider:hover div, .gantt-divider:active div, .gantt-divider.dragging div {
+      background: #ffffff !important;
+    }
+    body.gantt-resizing, body.gantt-resizing * {
+      cursor: col-resize !important;
+      user-select: none !important;
     }
     .gantt-row {
       height: 36px;

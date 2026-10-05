@@ -258,17 +258,104 @@ const FCLFirebaseSync = {
   /**
    * Handle incoming remote project document changes
    */
+  /**
+   * Deeply cleans and sanitizes data for Cloud Firestore compatibility:
+   * 1. Eliminates Firestore's "Nested arrays are not allowed / supported" restriction by wrapping inner arrays.
+   * 2. Strips all unsupported `undefined` field values from objects.
+   * 3. Drops functions, symbols, and DOM elements.
+   * 4. Converts Date objects to ISO 8601 strings.
+   * 5. Preserves Firestore FieldValues (e.g. serverTimestamp).
+   */
+  sanitizeForFirestore(val, depth = 0, insideArray = false) {
+    if (val === undefined) {
+      return insideArray ? null : undefined;
+    }
+    if (val === null) {
+      return null;
+    }
+    if (typeof val === 'function' || typeof val === 'symbol') {
+      return undefined;
+    }
+    if (typeof val !== 'object') {
+      return val;
+    }
+    if (val instanceof Date) {
+      return val.toISOString();
+    }
+    // Retain Firestore FieldValue instances (e.g. serverTimestamp)
+    if (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue) {
+      if (val === firebase.firestore.FieldValue.serverTimestamp() || (val && val._methodName)) {
+        return val;
+      }
+    }
+    if (typeof Element !== 'undefined' && val instanceof Element) {
+      return undefined;
+    }
+    if (typeof Window !== 'undefined' && val instanceof Window) {
+      return undefined;
+    }
+    if (Array.isArray(val)) {
+      if (insideArray) {
+        // Firestore strictly forbids nested arrays (array directly within another array)
+        return {
+          _isNestedArray: true,
+          items: val
+            .map(item => this.sanitizeForFirestore(item, depth + 1, false))
+            .filter(item => item !== undefined)
+        };
+      }
+      return val
+        .map(item => this.sanitizeForFirestore(item, depth + 1, true))
+        .filter(item => item !== undefined);
+    }
+    // Plain Object
+    const clean = {};
+    for (const key of Object.keys(val)) {
+      if (typeof val[key] === 'function' || typeof val[key] === 'symbol') continue;
+      if (typeof Element !== 'undefined' && val[key] instanceof Element) continue;
+      const cleanedVal = this.sanitizeForFirestore(val[key], depth + 1, false);
+      if (cleanedVal !== undefined) {
+        clean[key] = cleanedVal;
+      }
+    }
+    return clean;
+  },
+
+  /**
+   * Reverses Firestore sanitization when reading documents:
+   * Unwraps wrapped nested arrays back to standard native JavaScript arrays.
+   */
+  desanitizeFromFirestore(val) {
+    if (!val || typeof val !== 'object') return val;
+    if (Array.isArray(val)) {
+      return val.map(item => this.desanitizeFromFirestore(item));
+    }
+    if (val._isNestedArray && Array.isArray(val.items)) {
+      return val.items.map(item => this.desanitizeFromFirestore(item));
+    }
+    const result = {};
+    for (const k of Object.keys(val)) {
+      result[k] = this.desanitizeFromFirestore(val[k]);
+    }
+    return result;
+  },
+
+  /**
+   * Handle incoming remote project document changes
+   */
   _handleRemoteProjectChange(projectId, data, changeType) {
     if (typeof FCLStorage === 'undefined') return;
 
-    console.log(`[FCL Cloud Sync] Remote update received for project ${projectId}`);
+    const cleanData = this.desanitizeFromFirestore(data) || {};
+    console.log(`[FCL Cloud Sync] Remote update received for project ${projectId}`, cleanData);
 
     // Update local storage without triggering recursive cloud push
-    if (data.boq) {
-      FCLStorage.saveProjectSection(projectId, 'boq', data.boq, true);
+    if (cleanData.boq) {
+      FCLStorage.saveProjectSection(projectId, 'boq', cleanData.boq, true);
     }
-    if (data.gantt) {
-      FCLStorage.saveProjectSection(projectId, 'ganttSettings', data.gantt, true);
+    const ganttVal = cleanData.gantt || cleanData.ganttSettings;
+    if (ganttVal) {
+      FCLStorage.saveProjectSection(projectId, 'ganttSettings', ganttVal, true);
     }
 
     // Also update catalog item if present
@@ -277,9 +364,9 @@ const FCLFirebaseSync = {
       if (Array.isArray(catalog)) {
         const item = catalog.find(x => x.id === projectId);
         if (item) {
-          if (data.boq && data.boq.totalBudget) item.totalBudget = data.boq.totalBudget;
-          if (data.boq && data.boq.actualProgress !== undefined) item.actualProgress = data.boq.actualProgress;
-          if (data.metadata && data.metadata.name) item.name = data.metadata.name;
+          if (cleanData.boq && cleanData.boq.totalBudget) item.totalBudget = cleanData.boq.totalBudget;
+          if (cleanData.boq && cleanData.boq.actualProgress !== undefined) item.actualProgress = cleanData.boq.actualProgress;
+          if (cleanData.metadata && cleanData.metadata.name) item.name = cleanData.metadata.name;
           FCLStorage.save('FCL_PROJECT_CATALOG_DATA', catalog);
         }
       }
@@ -290,12 +377,12 @@ const FCLFirebaseSync = {
       detail: {
         type: 'project',
         projectId: projectId,
-        data: data,
+        data: cleanData,
         changeType: changeType
       }
     }));
 
-    const pName = (data.metadata && data.metadata.name) || projectId;
+    const pName = (cleanData.metadata && cleanData.metadata.name) || projectId;
     this._showToast(`⚡ Live Update: "${pName}" was synced from cloud.`, 'success');
   },
 
@@ -305,13 +392,14 @@ const FCLFirebaseSync = {
   _handleRemoteCatalogChange(newCatalog) {
     if (typeof FCLStorage === 'undefined') return;
 
+    const cleanCatalog = this.desanitizeFromFirestore(newCatalog);
     console.log('[FCL Cloud Sync] Remote project catalog update received');
-    FCLStorage.save('FCL_PROJECT_CATALOG_DATA', newCatalog);
+    FCLStorage.save('FCL_PROJECT_CATALOG_DATA', cleanCatalog);
 
     window.dispatchEvent(new CustomEvent('fcl:remote-update', {
       detail: {
         type: 'catalog',
-        catalog: newCatalog
+        catalog: cleanCatalog
       }
     }));
 
@@ -360,11 +448,12 @@ const FCLFirebaseSync = {
     delete this._syncTimers[projectId];
 
     try {
+      const sanitizedPayload = this.sanitizeForFirestore(payload);
       const docPayload = {
         projectId: projectId,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedBy: this.clientId,
-        ...payload
+        ...sanitizedPayload
       };
 
       await this.db.collection('fcl_projects').doc(projectId).set(docPayload, { merge: true });
@@ -374,11 +463,13 @@ const FCLFirebaseSync = {
       this.updateBadges();
       console.log(`[FCL Cloud Sync] Project ${projectId} successfully written to Cloud Firestore.`);
     } catch (err) {
-      console.warn(`[FCL Cloud Sync] Failed to sync project ${projectId}:`, err);
+      console.error(`[FCL Cloud Sync] Failed to sync project ${projectId}:`, err);
       if (!navigator.onLine) {
         this._setState('offline', 'Offline (IndexedDB Queued)');
       } else {
-        this._setState('error', 'Cloud Sync Error');
+        const errorDetail = (err && err.message) || 'Cloud Sync Error';
+        this._setState('error', 'Cloud Error: ' + errorDetail);
+        this._showToast(`⚠️ Cloud Sync failed: ${errorDetail}`, 'warning');
       }
       this.updateBadges();
     }
@@ -404,8 +495,31 @@ const FCLFirebaseSync = {
       if (!cat) return;
 
       try {
+        // Strip heavy redundant project payloads so catalog remains lightweight (< 50 KB)
+        const compactCatalog = Array.isArray(cat) ? cat.map(p => {
+          const item = { ...p };
+          if (item.boq) {
+            item.boq = {
+              projectName: item.boq.projectName || item.name,
+              totalBudget: item.boq.totalBudget || item.totalBudget || 0,
+              actualProgress: item.boq.actualProgress !== undefined ? item.boq.actualProgress : (item.actualProgress || 0),
+              itemCount: (item.boq.items ? item.boq.items.length : (item.boq.boqData ? item.boq.boqData.length : 0))
+            };
+          }
+          if (item.timeline && item.timeline.ganttTasks) {
+            item.timeline = {
+              criticalState: item.timeline.criticalState || 'ON TRACK',
+              taskCount: item.timeline.ganttTasks.length,
+              phases: item.timeline.phases || []
+            };
+          }
+          return item;
+        }) : cat;
+
+        const sanitizedCat = this.sanitizeForFirestore(compactCatalog);
+
         await this.db.collection('fcl_system').doc('catalog').set({
-          catalog: cat,
+          catalog: sanitizedCat,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
           updatedBy: this.clientId
         }, { merge: true });
@@ -415,7 +529,7 @@ const FCLFirebaseSync = {
         this.updateBadges();
         console.log('[FCL Cloud Sync] Project catalog successfully updated in Cloud Firestore.');
       } catch (err) {
-        console.warn('[FCL Cloud Sync] Failed to sync catalog:', err);
+        console.error('[FCL Cloud Sync] Failed to sync catalog:', err);
       }
     }, this.debounceMs);
   },
