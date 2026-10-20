@@ -13,7 +13,7 @@
     let lastSelectedAnalysisRowIndex = -1;
     let selectedPriceListRowIndices = new Set();
     let lastSelectedPriceListRowIndex = -1;
-    const DEFAULT_SPORTS_CLUB_BOQ_DATA = [{"type":"category","code":"01.00.00.00","title":"PRELIMINARY FOR CIVIL WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.01.00","title":"Project Management and Coordination","specification":"Site management and supervision (technical team)","qty":1,"unit":"lot","materialUnitCost":35260,"laborUnitCost":243333,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.02.00","title":"Facility Services Coordination","specification":"Service vehicle/ transportation","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":270371,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.03.00","title":"Construction Progress Reporting","specification":"Schedules/ reports","qty":1,"unit":"lot","materialUnitCost":25185,"laborUnitCost":27037,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.04.00","title":"Health and Safety provisions","specification":"Site supervision and safety equipments/ provisions","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":27037,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.05.00","title":"Site Security ","specification":"Security personnel","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":162222,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.06.00","title":"Building Permit, By Owner (Not included in Work) (Not included in Work)","specification":"Building Permit, By Owner To Be Assisted By The Gen Con","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":0,"condition":"Not included in Work","collapsed":false},{"type":"subsubcategory","code":"01.00.07.00","title":"DENR Permit, By Owner (Not included in Work) (Not included in Work)","specification":"DENR Permit, by owner","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":0,"condition":"Not included in Work","collapsed":false},{"type":"subsubcategory","code":"01.00.08.00","title":"Quality Control","specification":"Testing Laboratory Services","qty":1,"unit":"lot","materialUnitCost":35260,"laborUnitCost":135185,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.09.00","title":"Temporary Utilities","specification":"Temporary Electricity, by owner","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.10.00","title":"Temporary Utilities","specification":"Temporary Water, by owner","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.11.00","title":"Field Offices and Sheds","specification":"Construction Office","qty":1,"unit":"lot","materialUnitCost":50371,"laborUnitCost":54074,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.12.00","title":"Field Offices and Sheds","specification":"Barracks","qty":1,"unit":"lot","materialUnitCost":50371,"laborUnitCost":54074,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.13.00","title":"Sanitary Facilities","specification":"Temporary septic tank etc","qty":1,"unit":"lot","materialUnitCost":25185,"laborUnitCost":27037,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.14.00","title":"Temporary Barriers and Enclosures","specification":"Temporary Fencing","qty":1,"unit":"lot","materialUnitCost":22667,"laborUnitCost":24333,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.15.00","title":"Construction Waste Management ","specification":"Disposal of construction waste","qty":1,"unit":"lot","materialUnitCost":50371,"laborUnitCost":108148,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.16.00","title":"Closeout Submittals","specification":"As-built drawings ","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":47192,"condition":"CPM","collapsed":false},{"type":"category","code":"02.00.00.00","title":"Earth Works & Sub Structures","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"02.01.00.00","title":"RETAINING WALL","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.01.00","title":"Foundation Excavation","specification":"RW footing excavation","qty":152,"unit":"cu.m","materialUnitCost":0,"laborUnitCost":390,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.02.00","title":"Earth Disposal","specification":"Hauling And Disposal (foundation)","qty":259,"unit":"cu.m","materialUnitCost":85,"laborUnitCost":462,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.03.00","title":"RC Wall Concrete     ","specification":"4000 psi","qty":204,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2163,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.04.00","title":"Reinforcing Bar","specification":"Grade 60","qty":14571,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.05.00","title":"Reinforcing Bar","specification":"Grade 40","qty":3142,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.06.00","title":"G.I. Tie Wire","specification":"G16 G.I Tie wire","qty":457,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.07.00","title":"Form Works     ","specification":"Phenolic boards, bracing supports, shoring supports","qty":719,"unit":"sq.m","materialUnitCost":445,"laborUnitCost":444,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.08.00","title":"Riprap Near Stair","specification":"Boulders","qty":1,"unit":"Lot","materialUnitCost":73333,"laborUnitCost":78133,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.09.00","title":"Sheetpile Protection","specification":"Slope Protection ","qty":1,"unit":"Lot","materialUnitCost":88888,"laborUnitCost":74074,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.10.00","title":"100mm\u00d8 PVC Pipe","specification":"Retaining Wall Drain Pipe, Perforated","qty":35,"unit":"pcs","materialUnitCost":824,"laborUnitCost":409,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.11.00","title":"100mm\u00d8 PVC End Cap","specification":"Retaining Wall Drain Pipe","qty":146,"unit":"pcs","materialUnitCost":67,"laborUnitCost":31,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.12.00","title":"Filter Drain Geotextile 2m x 50m","specification":"Retaining Wall Drain Pipe Filter","qty":2,"unit":"roll","materialUnitCost":6222,"laborUnitCost":2962,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.13.00","title":"3/4\" Gravel","specification":"Retaining Wall Drain Pipe Filter Gravel And Foundation Base Coarse","qty":14,"unit":"cu.m","materialUnitCost":1555,"laborUnitCost":814,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"02.02.00.00","title":"Bored pile works","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.01.00","title":"Earth Excavation","specification":"Bored Pile Drilling and Excavation - D400mm\u00d8-hole, 9000mm-deep w/ equipment","qty":643,"unit":"lm","materialUnitCost":605,"laborUnitCost":2488,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.02.00","title":"Earth Disposal","specification":"Hauling and Disposal of wet soil on sacks","qty":242,"unit":"cu.m","materialUnitCost":605,"laborUnitCost":1406,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.03.00","title":"FDN-GF - Concrete works","specification":"Piles - 4,000psi; D400mm\u00d8 x \u00b19000mm","qty":101,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2163,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.04.00","title":"FDN-GF - Rebar works","specification":"Piles - Gr.60 \u00d816mm Main Vertical Bars","qty":13631,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.05.00","title":"FDN-GF - Rebar works","specification":"Piles - Gr.60 \u00d810mm Spiral Ties @ 100mm","qty":5401,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.06.00","title":"FDN-GF - Rebar works","specification":"Piles - G.I. Tie Wire","qty":572,"unit":"kgs","materialUnitCost":102,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.07.00","title":"Material Hauling works ","specification":"Gravel, sand, cement etc.","qty":1,"unit":"lot","materialUnitCost":66667,"laborUnitCost":194666,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"02.03.00.00","title":"Foundation Excavation","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.03.01.00","title":"Earth Excavation","specification":"Structural Excavation ","qty":420,"unit":"cu.m","materialUnitCost":0,"laborUnitCost":390,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.03.02.00","title":"Earth Disposal","specification":"Hauling and Disposal ","qty":1860,"unit":"cu.m","materialUnitCost":85,"laborUnitCost":462,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.03.03.00","title":"Backfilling and Compaction","specification":"Excavated Foundation  Compacted backfill in 0.30\u202fm lifts","qty":816,"unit":"sq.m","materialUnitCost":0,"laborUnitCost":217,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.03.04.00","title":"Gravel Bedding","specification":"Foundation and Slab-on-Fill - 3/4\" Gravel, 50mm-thick","qty":66,"unit":"cu.m","materialUnitCost":2015,"laborUnitCost":2163,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"02.04.00.00","title":"Earth Excavation/Grading (Rear)","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.04.01.00","title":"Earth Excavation","specification":"Elevated Earth Excavation","qty":960,"unit":"Cu.m","materialUnitCost":0,"laborUnitCost":390,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.04.02.00","title":"Earth Disposal and debris disposal","specification":"Hauling and Disposal ","qty":1560,"unit":"Cu.m","materialUnitCost":0,"laborUnitCost":462,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.04.03.00","title":"Demolition of Existing House","specification":"Demolition and jackhammer","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":248888,"condition":"CPM","collapsed":false},{"type":"category","code":"03.00.00.00","title":"STRUCTURAL WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"03.01.00.00","title":"CONCRETE WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.01.00","title":"FDN-GF - Concrete works","specification":"Pile Caps (Type A) - 4,000psi; Chamfered Equilateral Triangular Shape; 2630mm-sides x 800mm-depth","qty":41,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.02.00","title":"FDN-GF - Concrete works","specification":"Pile Caps (Type B) - 4,000psi; Chamfered Equilateral Triangular Shape; 2630mm-sides x 500mm-depth","qty":13,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.03.00","title":"FDN-GF - Concrete works","specification":"Concrete Pedestal - 4,000psi; 500mm x 500mm","qty":5,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.04.00","title":"Steel Structures (bolts, Plates, I Beams)  (By other Contractor) (By other Contractor)","specification":"Errection, Welding Works, Setting Of Bolts And All Metal Works  Such As Stairs, Purlins Etc.","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"By other Contractor","collapsed":false},{"type":"subsubcategory","code":"03.01.05.00","title":"GF-2F - Concrete works","specification":"Slab-on-fill - 3,500psi; 150mm-thick","qty":222,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.06.00","title":"2F-3F - Concrete works","specification":"Slab-on-Steel Deck - 4,000psi; 150mm-thk","qty":180,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.07.00","title":"3F-RF - Concrete works","specification":"Slab-on-Steel Deck - 4,000psi; 150mm-thk","qty":37,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"03.02.00.00","title":"REINFORCEMENT WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.01.00","title":"FDN-GF - Rebar works","specification":"Pile Caps (Type A) - Gr.60 \u00d816mm Top & Bot. B.W.","qty":4222,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.02.00","title":"FDN-GF - Rebar works","specification":"Pile Caps (Type A) - G.I. Tie Wire","qty":234,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.03.00","title":"FDN-GF - Rebar works","specification":"Pile Caps (Type B) - Gr.60 \u00d816mm Top & Bot. B.W.","qty":1607,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.04.00","title":"FDN-GF - Rebar works","specification":"Pile Caps (Type B) - G.I. Tie Wire","qty":90,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.05.00","title":"GF-2F - Rebar works","specification":"Concrete Pedestal - Gr.60 \u00d820mm Main Vertical Bars","qty":1166,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.06.00","title":"GF-2F - Rebar works","specification":"Concrete Pedestal - Gr.40 \u00d810mm Lat. Ties","qty":729,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.07.00","title":"GF-2F - Rebar works","specification":"Concrete Pedestal - G.I. Tie Wire","qty":105,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.08.00","title":"GF-2F - Rebar works","specification":"Slab-on-fill - Gr.40 \u00d810mm @ 200mm B.W.","qty":9822,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.09.00","title":"GF-2F - Rebar works","specification":"Slab-on-fill - G.I. Tie Wire","qty":541,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.10.00","title":"2F-3F - Rebar works","specification":"Slab-on-Steel Deck - Gr.40 \u00d810mm @ 200mm B.W. Top & Bottom","qty":16845,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.11.00","title":"2F-3F - Rebar works","specification":"Slab-on-Steel Deck - G.I. Tie Wire","qty":928,"unit":"kgs","materialUnitCost":101,"laborUnitCost":49,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.12.00","title":"3F-RF - Rebar works","specification":"Slab-on-Steel Deck - Gr.40 \u00d810mm @ 200mm B.W. Top & Bottom","qty":3443,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.13.00","title":"3F-RF - Rebar works","specification":"Slab-on-Steel Deck - G.I. Tie Wire","qty":191,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"03.03.00.00","title":"FORMS AND SHORING WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.01.00","title":"FDN-GF - Form works","specification":"Pile Caps (Type A) - Phenolic boards, bracing supports, shoring supports","qty":8,"unit":"sq.m","materialUnitCost":504,"laborUnitCost":541,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.02.00","title":"FDN-GF - Form works","specification":"Pile Caps (Type B) - Phenolic boards, bracing supports, shoring supports","qty":5,"unit":"sq.m","materialUnitCost":504,"laborUnitCost":541,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.03.00","title":"FDN-GF - Form works","specification":"Concrete Pedestal - Phenolic boards, bracing supports, shoring supports","qty":32,"unit":"sq.m","materialUnitCost":504,"laborUnitCost":541,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.04.00","title":"GF-2F - Form works","specification":"Slab-on-fill - Phenolic boards, blockout forms, bracing supports","qty":1634,"unit":"sq.m","materialUnitCost":51,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.05.00","title":"2F-3F - Form works","specification":"Slab-on-Steel Deck - Shoring Supports, Bracing Supports","qty":1397,"unit":"sq.m","materialUnitCost":252,"laborUnitCost":271,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.06.00","title":"3F-RF - Form works","specification":"Slab-on-Steel Deck - Shoring Supports, Bracing Supports","qty":261,"unit":"sq.m","materialUnitCost":252,"laborUnitCost":271,"condition":"CPM","collapsed":false}];
+    const DEFAULT_SPORTS_CLUB_BOQ_DATA = [{"type":"category","code":"01.00.00.00","title":"PRELIMINARY FOR CIVIL WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.01.00","title":"Project Management and Coordination","specification":"Site management and supervision (technical team)","qty":1,"unit":"lot","materialUnitCost":35260,"laborUnitCost":243333,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.02.00","title":"Facility Services Coordination","specification":"Service vehicle/ transportation","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":270371,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.03.00","title":"Construction Progress Reporting","specification":"Schedules/ reports","qty":1,"unit":"lot","materialUnitCost":25185,"laborUnitCost":27037,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.04.00","title":"Health and Safety provisions","specification":"Site supervision and safety equipments/ provisions","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":27037,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.05.00","title":"Site Security ","specification":"Security personnel","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":162222,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.06.00","title":"Building Permit, By Owner (Not included in Work) (Not included in Work)","specification":"Building Permit, By Owner To Be Assisted By The Gen Con","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":0,"condition":"Not included in Work","collapsed":false},{"type":"subsubcategory","code":"01.00.07.00","title":"DENR Permit, By Owner (Not included in Work) (Not included in Work)","specification":"DENR Permit, by owner","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":0,"condition":"Not included in Work","collapsed":false},{"type":"subsubcategory","code":"01.00.08.00","title":"Quality Control","specification":"Testing Laboratory Services","qty":1,"unit":"lot","materialUnitCost":35260,"laborUnitCost":135185,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.09.00","title":"Temporary Utilities","specification":"Temporary Electricity, by owner","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.10.00","title":"Temporary Utilities","specification":"Temporary Water, by owner","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.11.00","title":"Field Offices and Sheds","specification":"Construction Office","qty":1,"unit":"lot","materialUnitCost":50371,"laborUnitCost":54074,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.12.00","title":"Field Offices and Sheds","specification":"Barracks","qty":1,"unit":"lot","materialUnitCost":50371,"laborUnitCost":54074,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.13.00","title":"Sanitary Facilities","specification":"Temporary septic tank etc","qty":1,"unit":"lot","materialUnitCost":25185,"laborUnitCost":27037,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.14.00","title":"Temporary Barriers and Enclosures","specification":"Temporary Fencing","qty":1,"unit":"lot","materialUnitCost":22667,"laborUnitCost":24333,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.15.00","title":"Construction Waste Management ","specification":"Disposal of construction waste","qty":1,"unit":"lot","materialUnitCost":50371,"laborUnitCost":89611,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"01.00.16.00","title":"Closeout Submittals","specification":"As-built drawings ","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":47193,"condition":"CPM","collapsed":false},{"type":"category","code":"02.00.00.00","title":"Earth Works & Sub Structures","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"02.01.00.00","title":"RETAINING WALL","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.01.00","title":"Foundation Excavation","specification":"RW footing excavation","qty":152,"unit":"cu.m","materialUnitCost":0,"laborUnitCost":390,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.02.00","title":"Earth Disposal","specification":"Hauling And Disposal (foundation)","qty":259,"unit":"cu.m","materialUnitCost":85,"laborUnitCost":462,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.03.00","title":"RC Wall Concrete     ","specification":"4000 psi","qty":204,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2163,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.04.00","title":"Reinforcing Bar","specification":"Grade 60","qty":14571,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.05.00","title":"Reinforcing Bar","specification":"Grade 40","qty":3142,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.06.00","title":"G.I. Tie Wire","specification":"G16 G.I Tie wire","qty":457,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.07.00","title":"Form Works     ","specification":"Phenolic boards, bracing supports, shoring supports","qty":719,"unit":"sq.m","materialUnitCost":445,"laborUnitCost":444,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.08.00","title":"Riprap Near Stair","specification":"Boulders","qty":1,"unit":"Lot","materialUnitCost":73333,"laborUnitCost":78133,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.09.00","title":"Sheetpile Protection","specification":"Slope Protection ","qty":1,"unit":"Lot","materialUnitCost":88888,"laborUnitCost":74074,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.10.00","title":"100mm\u00d8 PVC Pipe","specification":"Retaining Wall Drain Pipe, Perforated","qty":35,"unit":"pcs","materialUnitCost":824,"laborUnitCost":409,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.11.00","title":"100mm\u00d8 PVC End Cap","specification":"Retaining Wall Drain Pipe","qty":146,"unit":"pcs","materialUnitCost":67,"laborUnitCost":31,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.12.00","title":"Filter Drain Geotextile 2m x 50m","specification":"Retaining Wall Drain Pipe Filter","qty":2,"unit":"roll","materialUnitCost":6222,"laborUnitCost":2962,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.01.13.00","title":"3/4\" Gravel","specification":"Retaining Wall Drain Pipe Filter Gravel And Foundation Base Coarse","qty":14,"unit":"cu.m","materialUnitCost":1555,"laborUnitCost":814,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"02.02.00.00","title":"Bored pile works","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.01.00","title":"Earth Excavation","specification":"Bored Pile Drilling and Excavation - D400mm\u00d8-hole, 9000mm-deep w/ equipment","qty":643,"unit":"lm","materialUnitCost":605,"laborUnitCost":2488,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.02.00","title":"Earth Disposal","specification":"Hauling and Disposal of wet soil on sacks","qty":242,"unit":"cu.m","materialUnitCost":605,"laborUnitCost":1406,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.03.00","title":"FDN-GF - Concrete works","specification":"Piles - 4,000psi; D400mm\u00d8 x \u00b19000mm","qty":101,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2163,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.04.00","title":"FDN-GF - Rebar works","specification":"Piles - Gr.60 \u00d816mm Main Vertical Bars","qty":13631,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.05.00","title":"FDN-GF - Rebar works","specification":"Piles - Gr.60 \u00d810mm Spiral Ties @ 100mm","qty":5401,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.06.00","title":"FDN-GF - Rebar works","specification":"Piles - G.I. Tie Wire","qty":572,"unit":"kgs","materialUnitCost":102,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.02.07.00","title":"Material Hauling works ","specification":"Gravel, sand, cement etc.","qty":1,"unit":"lot","materialUnitCost":66667,"laborUnitCost":194666,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"02.03.00.00","title":"Foundation Excavation","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.03.01.00","title":"Earth Excavation","specification":"Structural Excavation ","qty":420,"unit":"cu.m","materialUnitCost":0,"laborUnitCost":390,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.03.02.00","title":"Earth Disposal","specification":"Hauling and Disposal ","qty":1860,"unit":"cu.m","materialUnitCost":85,"laborUnitCost":462,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.03.03.00","title":"Backfilling and Compaction","specification":"Excavated Foundation  Compacted backfill in 0.30\u202fm lifts","qty":816,"unit":"sq.m","materialUnitCost":0,"laborUnitCost":217,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.03.04.00","title":"Gravel Bedding","specification":"Foundation and Slab-on-Fill - 3/4\" Gravel, 50mm-thick","qty":66,"unit":"cu.m","materialUnitCost":2015,"laborUnitCost":2163,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"02.04.00.00","title":"Earth Excavation/Grading (Rear)","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.04.01.00","title":"Earth Excavation","specification":"Elevated Earth Excavation","qty":960,"unit":"Cu.m","materialUnitCost":0,"laborUnitCost":390,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.04.02.00","title":"Earth Disposal and debris disposal","specification":"Hauling and Disposal ","qty":1560,"unit":"Cu.m","materialUnitCost":0,"laborUnitCost":462,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"02.04.03.00","title":"Demolition of Existing House","specification":"Demolition and jackhammer","qty":1,"unit":"lot","materialUnitCost":0,"laborUnitCost":248888,"condition":"CPM","collapsed":false},{"type":"category","code":"03.00.00.00","title":"STRUCTURAL WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"03.01.00.00","title":"CONCRETE WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.01.00","title":"FDN-GF - Concrete works","specification":"Pile Caps (Type A) - 4,000psi; Chamfered Equilateral Triangular Shape; 2630mm-sides x 800mm-depth","qty":41,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.02.00","title":"FDN-GF - Concrete works","specification":"Pile Caps (Type B) - 4,000psi; Chamfered Equilateral Triangular Shape; 2630mm-sides x 500mm-depth","qty":13,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.03.00","title":"FDN-GF - Concrete works","specification":"Concrete Pedestal - 4,000psi; 500mm x 500mm","qty":5,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.04.00","title":"Steel Structures (bolts, Plates, I Beams)  (By other Contractor) (By other Contractor)","specification":"Errection, Welding Works, Setting Of Bolts And All Metal Works  Such As Stairs, Purlins Etc.","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"By other Contractor","collapsed":false},{"type":"subsubcategory","code":"03.01.05.00","title":"GF-2F - Concrete works","specification":"Slab-on-fill - 3,500psi; 150mm-thick","qty":222,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.06.00","title":"2F-3F - Concrete works","specification":"Slab-on-Steel Deck - 4,000psi; 150mm-thk","qty":180,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.01.07.00","title":"3F-RF - Concrete works","specification":"Slab-on-Steel Deck - 4,000psi; 150mm-thk","qty":37,"unit":"cu.m","materialUnitCost":7858,"laborUnitCost":2704,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"03.02.00.00","title":"REINFORCEMENT WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.01.00","title":"FDN-GF - Rebar works","specification":"Pile Caps (Type A) - Gr.60 \u00d816mm Top & Bot. B.W.","qty":4222,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.02.00","title":"FDN-GF - Rebar works","specification":"Pile Caps (Type A) - G.I. Tie Wire","qty":234,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.03.00","title":"FDN-GF - Rebar works","specification":"Pile Caps (Type B) - Gr.60 \u00d816mm Top & Bot. B.W.","qty":1607,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.04.00","title":"FDN-GF - Rebar works","specification":"Pile Caps (Type B) - G.I. Tie Wire","qty":90,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.05.00","title":"GF-2F - Rebar works","specification":"Concrete Pedestal - Gr.60 \u00d820mm Main Vertical Bars","qty":1166,"unit":"kgs","materialUnitCost":56,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.06.00","title":"GF-2F - Rebar works","specification":"Concrete Pedestal - Gr.40 \u00d810mm Lat. Ties","qty":729,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.07.00","title":"GF-2F - Rebar works","specification":"Concrete Pedestal - G.I. Tie Wire","qty":105,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.08.00","title":"GF-2F - Rebar works","specification":"Slab-on-fill - Gr.40 \u00d810mm @ 200mm B.W.","qty":9822,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.09.00","title":"GF-2F - Rebar works","specification":"Slab-on-fill - G.I. Tie Wire","qty":541,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.10.00","title":"2F-3F - Rebar works","specification":"Slab-on-Steel Deck - Gr.40 \u00d810mm @ 200mm B.W. Top & Bottom","qty":16845,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.11.00","title":"2F-3F - Rebar works","specification":"Slab-on-Steel Deck - G.I. Tie Wire","qty":928,"unit":"kgs","materialUnitCost":101,"laborUnitCost":49,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.12.00","title":"3F-RF - Rebar works","specification":"Slab-on-Steel Deck - Gr.40 \u00d810mm @ 200mm B.W. Top & Bottom","qty":3443,"unit":"kgs","materialUnitCost":55,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.02.13.00","title":"3F-RF - Rebar works","specification":"Slab-on-Steel Deck - G.I. Tie Wire","qty":191,"unit":"kgs","materialUnitCost":101,"laborUnitCost":48,"condition":"CPM","collapsed":false},{"type":"subcategory","code":"03.03.00.00","title":"FORMS AND SHORING WORKS","specification":"","qty":0,"unit":"","materialUnitCost":0,"laborUnitCost":0,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.01.00","title":"FDN-GF - Form works","specification":"Pile Caps (Type A) - Phenolic boards, bracing supports, shoring supports","qty":8,"unit":"sq.m","materialUnitCost":504,"laborUnitCost":541,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.02.00","title":"FDN-GF - Form works","specification":"Pile Caps (Type B) - Phenolic boards, bracing supports, shoring supports","qty":5,"unit":"sq.m","materialUnitCost":504,"laborUnitCost":541,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.03.00","title":"FDN-GF - Form works","specification":"Concrete Pedestal - Phenolic boards, bracing supports, shoring supports","qty":32,"unit":"sq.m","materialUnitCost":504,"laborUnitCost":541,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.04.00","title":"GF-2F - Form works","specification":"Slab-on-fill - Phenolic boards, blockout forms, bracing supports","qty":1634,"unit":"sq.m","materialUnitCost":51,"laborUnitCost":28,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.05.00","title":"2F-3F - Form works","specification":"Slab-on-Steel Deck - Shoring Supports, Bracing Supports","qty":1397,"unit":"sq.m","materialUnitCost":252,"laborUnitCost":271,"condition":"CPM","collapsed":false},{"type":"subsubcategory","code":"03.03.06.00","title":"3F-RF - Form works","specification":"Slab-on-Steel Deck - Shoring Supports, Bracing Supports","qty":261,"unit":"sq.m","materialUnitCost":252,"laborUnitCost":271,"condition":"CPM","collapsed":false}];
     window.DEFAULT_SPORTS_CLUB_BOQ_DATA = DEFAULT_SPORTS_CLUB_BOQ_DATA;
 
 
@@ -200,7 +200,7 @@
 
     function roundUpNearestOne(value) {
       const num = Number(value) || 0;
-      return Math.ceil(num);
+      return Math.ceil(Math.round(num * 10000) / 10000);
     }
 
     function getPercentInputValue(id) {
@@ -236,6 +236,23 @@
       };
     }
 
+    function getBOQMarkupFactors() {
+      const multipliers = getBOQMultipliers();
+      const markupPercent = numberOrZero(multipliers.profit) + numberOrZero(multipliers.overhead) + numberOrZero(multipliers.contingency) + numberOrZero(multipliers.tax);
+      const totalMaterialMarkupPercent = numberOrZero(multipliers.material) + markupPercent;
+      const totalLEMarkupPercent = numberOrZero(multipliers.le) + markupPercent;
+      const materialMarkupFactor = 1 + (totalMaterialMarkupPercent / 100);
+      const leMarkupFactor = 1 + (totalLEMarkupPercent / 100);
+      return {
+        multipliers,
+        markupPercent,
+        totalMaterialMarkupPercent,
+        totalLEMarkupPercent,
+        materialMarkupFactor,
+        leMarkupFactor
+      };
+    }
+
     function updateBOQMultipliers() {
       markUnsaved();
       renderBOQTable();
@@ -256,31 +273,36 @@
       if (boqDisplayValuesCache.has(row)) {
         return boqDisplayValuesCache.get(row);
       }
-      const multipliers = getBOQMultipliers();
+      const {
+        multipliers,
+        markupPercent,
+        totalMaterialMarkupPercent,
+        totalLEMarkupPercent,
+        materialMarkupFactor,
+        leMarkupFactor
+      } = getBOQMarkupFactors();
+
       const baseQty = numberOrZero(row.qty);
       const linkedDUPAMatch = getLinkedDUPAMatch(row);
       const linkedMaterialUnitCost = linkedDUPAMatch && linkedDUPAMatch.materialUnitCost !== null ? linkedDUPAMatch.materialUnitCost : null;
       const linkedLEUnitCost = linkedDUPAMatch && linkedDUPAMatch.leUnitCost !== null ? linkedDUPAMatch.leUnitCost : null;
-      const baseMaterialUnitCost = linkedMaterialUnitCost !== null ? linkedMaterialUnitCost : numberOrZero(row.materialUnitCost);
-      const baseLEUnitCost = linkedLEUnitCost !== null ? linkedLEUnitCost : numberOrZero(row.laborUnitCost);
+      const baseMaterialUnitCost = (linkedMaterialUnitCost !== null && !row.manualMaterialUnitCost) ? linkedMaterialUnitCost : numberOrZero(row.materialUnitCost);
+      const baseLEUnitCost = (linkedLEUnitCost !== null && !row.manualLEUnitCost) ? linkedLEUnitCost : numberOrZero(row.laborUnitCost);
 
       const directQty = baseQty;
-      const directMaterialUnitCost = roundUpNearestOne(baseMaterialUnitCost);
-      const directLEUnitCost = roundUpNearestOne(baseLEUnitCost);
+      const directMaterialUnitCost = baseMaterialUnitCost;
+      const directLEUnitCost = baseLEUnitCost;
       const directTotalMaterialCost = directQty * directMaterialUnitCost;
       const directTotalLEC = directQty * directLEUnitCost;
       const directGrandTotalCost = roundUpNearestOne(directTotalMaterialCost + directTotalLEC);
 
       const qty = applyBOQQtyMultiplier(directQty, multipliers.qty);
-      const markupPercent = numberOrZero(multipliers.profit) + numberOrZero(multipliers.overhead) + numberOrZero(multipliers.contingency) + numberOrZero(multipliers.tax);
-      const totalMaterialMarkupPercent = numberOrZero(multipliers.material) + markupPercent;
-      const totalLEMarkupPercent = numberOrZero(multipliers.le) + markupPercent;
 
       const baseDisplayMaterialUnitCost = roundUpNearestOne(directMaterialUnitCost * (1 + (numberOrZero(multipliers.material) / 100)));
       const baseDisplayLEUnitCost = roundUpNearestOne(directLEUnitCost * (1 + (numberOrZero(multipliers.le) / 100)));
 
-      const materialUnitCost = roundUpNearestOne(directMaterialUnitCost * (1 + (totalMaterialMarkupPercent / 100)));
-      const leUnitCost = roundUpNearestOne(directLEUnitCost * (1 + (totalLEMarkupPercent / 100)));
+      const materialUnitCost = roundUpNearestOne(directMaterialUnitCost * materialMarkupFactor);
+      const leUnitCost = roundUpNearestOne(directLEUnitCost * leMarkupFactor);
       const totalMaterialCost = qty * materialUnitCost;
       const totalLEC = qty * leUnitCost;
       const grandTotalCost = roundUpNearestOne(totalMaterialCost + totalLEC);
@@ -310,6 +332,30 @@
       };
       boqDisplayValuesCache.set(row, res);
       return res;
+    }
+
+    function getBOQEditValue(index, field) {
+      const row = boqData[index];
+      if (!row) return 0;
+      const values = computeBOQDisplayValues(row);
+      if (field === 'materialUnitCost') {
+        return roundUpNearestOne(values.materialUnitCost);
+      }
+      if (field === 'directMaterialUnitCost') {
+        const val = Number(values.directMaterialUnitCost) || 0;
+        return Number.isInteger(val) ? val : Number(val.toFixed(2));
+      }
+      if (field === 'leUnitCost') {
+        return roundUpNearestOne(values.leUnitCost);
+      }
+      if (field === 'directLEUnitCost') {
+        const val = Number(values.directLEUnitCost) || 0;
+        return Number.isInteger(val) ? val : Number(val.toFixed(2));
+      }
+      if (field === 'qty' || field === 'directQty') {
+        return numberOrZero(row.qty);
+      }
+      return row[field] !== undefined ? row[field] : '';
     }
 
     function computeBOQBaseCost(row) {
@@ -559,6 +605,8 @@
     let ganttSettings = {};
 
     let ganttScale = 'days';
+    let ganttMonthFilter = 'all';
+    let ganttFilterRowsByMonth = false;
 
     const DEFAULT_GANTT_COLUMNS = [
       { id: 'predNo', name: 'Pred. No.', width: 60, visible: true, isCustom: false },
@@ -652,6 +700,22 @@
       return -1;
     }
 
+    function isGanttTaskInMonth(index, monthStart, monthEnd) {
+      const row = boqData[index];
+      if (!row) return false;
+      const isParent = hasChildRow(boqData, index);
+      if (isParent) {
+        const leaves = getLeafDescendents(index);
+        return leaves.some(lIdx => isGanttTaskInMonth(lIdx, monthStart, monthEnd));
+      }
+      const timeInfo = getGanttTaskTimeInfo(index);
+      if (!timeInfo || !timeInfo.startDate) return false;
+      const s = parseSafeDate(timeInfo.startDate);
+      const e = parseSafeDate(timeInfo.endDate || timeInfo.startDate);
+      if (!s || !e) return false;
+      return (s <= monthEnd && e >= monthStart);
+    }
+
     function shouldHideGanttHierarchyRow(index) {
       const row = boqData[index];
       if (!row) return false;
@@ -663,9 +727,98 @@
         }
         parentIndex = getParentRowIndex(boqData, parentIndex);
       }
+
+      if (ganttMonthFilter && ganttMonthFilter !== 'all' && ganttFilterRowsByMonth) {
+        const [y, m] = ganttMonthFilter.split('-').map(Number);
+        const mStart = new Date(y, m - 1, 1, 0, 0, 0, 0);
+        const mEnd = new Date(y, m, 0, 23, 59, 59, 999);
+        if (!isGanttTaskInMonth(index, mStart, mEnd)) {
+          return true;
+        }
+      }
       
       return false;
     }
+
+    function updateGanttMonthDropdownOptions() {
+      const monthSelect = document.getElementById('ganttMonthSelect');
+      if (!monthSelect) return;
+
+      const projStartStr = document.getElementById('ganttProjectStartInput')?.value || getTodayDateString();
+      const projStartDate = parseSafeDate(projStartStr);
+
+      let minDate = projStartDate ? new Date(projStartDate) : null;
+      let maxDate = null;
+
+      boqData.forEach((row, index) => {
+        const timeInfo = getGanttTaskTimeInfo(index);
+        if (timeInfo) {
+          if (timeInfo.startDate) {
+            const s = parseSafeDate(timeInfo.startDate, null);
+            if (s && (!minDate || s < minDate)) minDate = new Date(s);
+          }
+          if (timeInfo.endDate) {
+            const e = parseSafeDate(timeInfo.endDate, null);
+            if (e && (!maxDate || e > maxDate)) maxDate = new Date(e);
+          }
+        }
+      });
+
+      if (!minDate) minDate = new Date();
+      if (!maxDate || maxDate <= minDate) {
+        maxDate = new Date(minDate);
+        maxDate.setDate(minDate.getDate() + 180);
+      }
+
+      const months = [];
+      const cur = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+      const endLimit = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
+
+      while (cur <= endLimit) {
+        const y = cur.getFullYear();
+        const m = String(cur.getMonth() + 1).padStart(2, '0');
+        const key = `${y}-${m}`;
+        const label = cur.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        months.push({ key, label });
+        cur.setMonth(cur.getMonth() + 1);
+      }
+
+      const currentVal = ganttMonthFilter;
+      let optionsHtml = `<option value="all"${currentVal === 'all' ? ' selected' : ''}>All Scheduled Time (Full Timeline)</option>`;
+      months.forEach(m => {
+        const isSelected = (currentVal === m.key) ? ' selected' : '';
+        optionsHtml += `<option value="${m.key}"${isSelected}>${m.label}</option>`;
+      });
+      monthSelect.innerHTML = optionsHtml;
+
+      const rowFilterCheckbox = document.getElementById('ganttFilterRowsByMonth');
+      if (rowFilterCheckbox) {
+        rowFilterCheckbox.checked = !!ganttFilterRowsByMonth;
+        rowFilterCheckbox.disabled = (ganttMonthFilter === 'all');
+        if (rowFilterCheckbox.parentElement) {
+          rowFilterCheckbox.parentElement.style.opacity = (ganttMonthFilter === 'all') ? '0.5' : '1';
+        }
+      }
+    }
+
+    function setGanttMonthFilter(val) {
+      ganttMonthFilter = val || 'all';
+      const rowFilterCheckbox = document.getElementById('ganttFilterRowsByMonth');
+      if (rowFilterCheckbox) {
+        rowFilterCheckbox.disabled = (ganttMonthFilter === 'all');
+        if (rowFilterCheckbox.parentElement) {
+          rowFilterCheckbox.parentElement.style.opacity = (ganttMonthFilter === 'all') ? '0.5' : '1';
+        }
+      }
+      renderGanttChart();
+    }
+    window.setGanttMonthFilter = setGanttMonthFilter;
+
+    function toggleGanttFilterRowsByMonth(checked) {
+      ganttFilterRowsByMonth = !!checked;
+      renderGanttChart();
+    }
+    window.toggleGanttFilterRowsByMonth = toggleGanttFilterRowsByMonth;
 
     function shouldHideQtyHierarchyRow(index) {
       const row = boqData[index];
@@ -3428,17 +3581,26 @@
       timelineHeader.innerHTML = '';
       timelineBody.innerHTML = '';
       
+      updateGanttMonthDropdownOptions();
+
       const projStartStr = document.getElementById('ganttProjectStartInput')?.value || getTodayDateString();
       const projStartDate = parseSafeDate(projStartStr);
       
       const taskInfos = boqData.map((row, index) => getGanttTaskTimeInfo(index));
       
+      let minTaskStartDate = null;
       let maxTaskEndDate = null;
       taskInfos.forEach(info => {
-        if (info && info.endDate) {
-          const d = parseSafeDate(info.endDate, null);
-          if (d) {
-            if (!maxTaskEndDate || d > maxTaskEndDate) {
+        if (info) {
+          if (info.startDate) {
+            const s = parseSafeDate(info.startDate, null);
+            if (s && (!minTaskStartDate || s < minTaskStartDate)) {
+              minTaskStartDate = new Date(s);
+            }
+          }
+          if (info.endDate) {
+            const d = parseSafeDate(info.endDate, null);
+            if (d && (!maxTaskEndDate || d > maxTaskEndDate)) {
               maxTaskEndDate = new Date(d);
             }
           }
@@ -3450,16 +3612,37 @@
         finishDisplay.textContent = maxTaskEndDate && !isNaN(maxTaskEndDate.getTime()) ? formatDateString(maxTaskEndDate) : ' - ';
       }
       
-      const timelineStartDate = parseSafeDate(projStartDate);
-      
+      let timelineStartDate;
+      let timelineEndDate;
       let totalDays = 60;
-      if (maxTaskEndDate) {
-        totalDays = Math.round((maxTaskEndDate - timelineStartDate) / (1000 * 60 * 60 * 24)) + 1;
+
+      if (ganttMonthFilter && ganttMonthFilter !== 'all') {
+        const [filterYear, filterMonth] = ganttMonthFilter.split('-').map(Number);
+        timelineStartDate = new Date(filterYear, filterMonth - 1, 1, 0, 0, 0, 0);
+        timelineEndDate = new Date(filterYear, filterMonth, 0, 23, 59, 59, 999);
+        totalDays = timelineEndDate.getDate();
+      } else {
+        // Show all scheduled time: from earliest task/project start to latest finish
+        let earliestDate = projStartDate ? new Date(projStartDate) : null;
+        if (minTaskStartDate && (!earliestDate || minTaskStartDate < earliestDate)) {
+          earliestDate = new Date(minTaskStartDate);
+        }
+        if (!earliestDate) earliestDate = parseSafeDate(getTodayDateString());
+        earliestDate.setHours(0, 0, 0, 0);
+
+        let latestDate = maxTaskEndDate ? new Date(maxTaskEndDate) : null;
+        if (!latestDate || latestDate < earliestDate) {
+          latestDate = new Date(earliestDate);
+          latestDate.setDate(earliestDate.getDate() + 60);
+        }
+        latestDate.setHours(23, 59, 59, 999);
+
+        timelineStartDate = earliestDate;
+        totalDays = Math.round((latestDate - earliestDate) / (1000 * 60 * 60 * 24)) + 1;
         if (totalDays < 1) totalDays = 1;
+        timelineEndDate = new Date(timelineStartDate);
+        timelineEndDate.setDate(timelineStartDate.getDate() + totalDays - 1);
       }
-      
-      const timelineEndDate = new Date(timelineStartDate);
-      timelineEndDate.setDate(timelineStartDate.getDate() + totalDays - 1);
       
       const rightPanelWidth = rightPanel.clientWidth || 0;
       let activeColW = 28;
@@ -3950,21 +4133,47 @@
         
         let barHtml = '';
         if (taskInfo) {
-          const coords = ganttGetCoords(taskInfo.startDate, taskInfo.duration, timelineStartDate, ganttScale, activeColW);
+          const tStart = parseSafeDate(taskInfo.startDate);
+          const tEnd = new Date(tStart);
+          tEnd.setDate(tStart.getDate() + (taskInfo.duration || 1));
+          const isTaskInView = (tEnd >= timelineStartDate && tStart <= timelineEndDate);
+
+          let coords = null;
+          if (isTaskInView) {
+            if (ganttMonthFilter && ganttMonthFilter !== 'all') {
+              const clampedStart = new Date(Math.max(tStart.getTime(), timelineStartDate.getTime()));
+              const clampedEnd = new Date(Math.min(tEnd.getTime(), timelineEndDate.getTime()));
+              const clampedDur = Math.max(1, Math.round((clampedEnd - clampedStart) / (1000 * 60 * 60 * 24)));
+              coords = ganttGetCoords(formatDateString(clampedStart), clampedDur, timelineStartDate, ganttScale, activeColW);
+            } else {
+              coords = ganttGetCoords(taskInfo.startDate, taskInfo.duration, timelineStartDate, ganttScale, activeColW);
+            }
+          }
+
           const percent = taskInfo.progress || 0;
-          const curDateRelativeX = curDateX - coords.left;
+          const curDateRelativeX = coords ? (curDateX - coords.left) : 0;
           
           const actDates = getGanttActualDates(index);
           let actualCoords = null;
           let actualDuration = 0;
-          if (actDates.startDate && actDates.finishDate) {
+          if (actDates.startDate && actDates.finishDate && isTaskInView) {
             const aStart = parseSafeDate(actDates.startDate);
             const aFinish = parseSafeDate(actDates.finishDate);
             aStart.setHours(12, 0, 0, 0);
             aFinish.setHours(12, 0, 0, 0);
-            actualDuration = Math.round((aFinish - aStart) / (1000 * 60 * 60 * 24)) + 1;
-            if (actualDuration < 1) actualDuration = 1;
-            actualCoords = ganttGetCoords(actDates.startDate, actualDuration, timelineStartDate, ganttScale, activeColW);
+            const isActInView = (aFinish >= timelineStartDate && aStart <= timelineEndDate);
+            if (isActInView) {
+              if (ganttMonthFilter && ganttMonthFilter !== 'all') {
+                const clampedAStart = new Date(Math.max(aStart.getTime(), timelineStartDate.getTime()));
+                const clampedAFinish = new Date(Math.min(aFinish.getTime(), timelineEndDate.getTime()));
+                actualDuration = Math.max(1, Math.round((clampedAFinish - clampedAStart) / (1000 * 60 * 60 * 24)) + 1);
+                actualCoords = ganttGetCoords(formatDateString(clampedAStart), actualDuration, timelineStartDate, ganttScale, activeColW);
+              } else {
+                actualDuration = Math.round((aFinish - aStart) / (1000 * 60 * 60 * 24)) + 1;
+                if (actualDuration < 1) actualDuration = 1;
+                actualCoords = ganttGetCoords(actDates.startDate, actualDuration, timelineStartDate, ganttScale, activeColW);
+              }
+            }
           }
           const curDateRelativeX_actual = actualCoords ? curDateX - actualCoords.left : 0;
 
@@ -4012,7 +4221,7 @@
             plannedTop = topOffset;
           }
 
-          if (isParent) {
+          if (coords && isParent) {
             const progressDay = getGanttTaskDayProgress(index);
             const parentCost = (computeBOQCategorySummary(index) || {}).totalCost || 0;
             barHtml = `
@@ -4041,7 +4250,7 @@
                 </div>
               `;
             }
-          } else {
+          } else if (coords) {
             const progressDay = getGanttTaskDayProgress(index);
             const leafCost = (computeBOQDisplayValues(row) || {}).grandTotalCost || 0;
             const handleTop = Math.max(0, Math.floor(((2 * hVal + gapVal) - 12) / 2));
@@ -11641,11 +11850,39 @@
         const field = colObj ? colObj.id : null;
 
         if (field && ['title', 'specification', 'qty', 'directQty', 'unit', 'materialUnitCost', 'directMaterialUnitCost', 'laborUnitCost', 'leUnitCost', 'directLEUnitCost', 'condition'].includes(field)) {
-          const targetField = (field === 'directQty') ? 'qty'
-                            : (field === 'directMaterialUnitCost') ? 'materialUnitCost'
-                            : (field === 'directLEUnitCost' || field === 'leUnitCost') ? 'laborUnitCost'
-                            : field;
-          destRow[targetField] = srcRow[targetField];
+          if (field === 'directMaterialUnitCost') {
+            const val = numberOrZero(srcRow.materialUnitCost);
+            destRow.materialUnitCost = val;
+            destRow.directMaterialUnitCost = val;
+            destRow.manualMaterialUnitCost = true;
+          } else if (field === 'materialUnitCost') {
+            const { materialMarkupFactor } = getBOQMarkupFactors();
+            const srcDisplay = computeBOQDisplayValues(srcRow);
+            const markedVal = srcDisplay.materialUnitCost;
+            const directVal = materialMarkupFactor > 0 ? (markedVal / materialMarkupFactor) : markedVal;
+            destRow.materialUnitCost = directVal;
+            destRow.directMaterialUnitCost = directVal;
+            destRow.manualMaterialUnitCost = true;
+          } else if (field === 'directLEUnitCost' || field === 'laborUnitCost') {
+            const val = numberOrZero(srcRow.laborUnitCost);
+            destRow.laborUnitCost = val;
+            destRow.leUnitCost = val;
+            destRow.directLEUnitCost = val;
+            destRow.manualLEUnitCost = true;
+          } else if (field === 'leUnitCost') {
+            const { leMarkupFactor } = getBOQMarkupFactors();
+            const srcDisplay = computeBOQDisplayValues(srcRow);
+            const markedVal = srcDisplay.leUnitCost;
+            const directVal = leMarkupFactor > 0 ? (markedVal / leMarkupFactor) : markedVal;
+            destRow.laborUnitCost = directVal;
+            destRow.leUnitCost = directVal;
+            destRow.directLEUnitCost = directVal;
+            destRow.manualLEUnitCost = true;
+          } else if (field === 'directQty') {
+            destRow.qty = srcRow.qty;
+          } else {
+            destRow[field] = srcRow[field];
+          }
         }
       } else if (tableId === 'analysisTable') {
         const srcRow = analysisData[srcR];
@@ -13023,9 +13260,66 @@
     function addBOQSubSubSubCategoryRowAfter(index, name = '') { markUnsaved(); const insertIndex = findInsertIndex(boqData, index); boqData.splice(insertIndex, 0, { type: 'subsubsubcategory', title: name || '', qty: 0, unit: '', materialUnitCost: 0, laborUnitCost: 0, code: '', collapsed: false, condition: 'CPM' }); recomputeCodes(boqData); renderBOQTable(); }
     function updateBOQField(index, field, value) {
       if (!boqData[index]) return;
-      if (boqData[index][field] === value) return;
-      markUnsaved();
-      boqData[index][field] = value;
+      const row = boqData[index];
+
+      if (field === 'materialUnitCost') {
+        const numVal = numberOrZero(value);
+        const { materialMarkupFactor } = getBOQMarkupFactors();
+        const directVal = materialMarkupFactor > 0 ? (numVal / materialMarkupFactor) : numVal;
+
+        const currentVals = computeBOQDisplayValues(row);
+        if (Math.abs(currentVals.materialUnitCost - numVal) < 0.0001 && row.manualMaterialUnitCost) {
+          return;
+        }
+        markUnsaved();
+        row.materialUnitCost = directVal;
+        row.directMaterialUnitCost = directVal;
+        row.manualMaterialUnitCost = true;
+        clearBOQCaches();
+      } else if (field === 'directMaterialUnitCost') {
+        const numVal = numberOrZero(value);
+        const currentVals = computeBOQDisplayValues(row);
+        if (Math.abs(currentVals.directMaterialUnitCost - numVal) < 0.005 && row.manualMaterialUnitCost) {
+          return;
+        }
+        markUnsaved();
+        row.materialUnitCost = numVal;
+        row.directMaterialUnitCost = numVal;
+        row.manualMaterialUnitCost = true;
+        clearBOQCaches();
+      } else if (field === 'leUnitCost') {
+        const numVal = numberOrZero(value);
+        const { leMarkupFactor } = getBOQMarkupFactors();
+        const directVal = leMarkupFactor > 0 ? (numVal / leMarkupFactor) : numVal;
+
+        const currentVals = computeBOQDisplayValues(row);
+        if (Math.abs(currentVals.leUnitCost - numVal) < 0.0001 && row.manualLEUnitCost) {
+          return;
+        }
+        markUnsaved();
+        row.laborUnitCost = directVal;
+        row.leUnitCost = directVal;
+        row.directLEUnitCost = directVal;
+        row.manualLEUnitCost = true;
+        clearBOQCaches();
+      } else if (field === 'directLEUnitCost' || field === 'laborUnitCost') {
+        const numVal = numberOrZero(value);
+        const currentVals = computeBOQDisplayValues(row);
+        if (Math.abs(currentVals.directLEUnitCost - numVal) < 0.005 && row.manualLEUnitCost) {
+          return;
+        }
+        markUnsaved();
+        row.laborUnitCost = numVal;
+        row.leUnitCost = numVal;
+        row.directLEUnitCost = numVal;
+        row.manualLEUnitCost = true;
+        clearBOQCaches();
+      } else {
+        if (row[field] === value) return;
+        markUnsaved();
+        row[field] = value;
+        clearBOQCaches();
+      }
 
       // Do not re-render while typing in the BOQ Specification textarea.
       // Re-rendering replaces the active textarea node and causes the cursor
@@ -13038,6 +13332,10 @@
       }
 
       renderBOQTable();
+      renderBOQSummaryTable();
+      renderCoverLetter();
+      if (typeof updateKPIs === 'function') updateKPIs();
+      if (typeof renderGanttChart === 'function') renderGanttChart();
     }
     function removeBOQRow(index) { if (!confirmAction('Delete this BOQ row? This action cannot be undone.')) return; markUnsaved(); boqData.splice(index, 1); recomputeCodes(boqData); renderBOQTable(); }
 
@@ -13269,11 +13567,11 @@
               break;
               
             case 'qty':
-              rowHtml += `<td>${(row.type === 'category' || ((row.type === 'subcategory' || row.type === 'subsubcategory') && childExists)) ? '' : `<input type="text" value="${qty}" style="text-align:center;" onfocus="this.value = numberOrZero(boqData[${index}].qty)" onblur="updateBOQField(${index}, 'qty', numberOrZero(this.value))">`}</td>`;
+              rowHtml += `<td>${(row.type === 'category' || ((row.type === 'subcategory' || row.type === 'subsubcategory') && childExists)) ? '' : `<input type="text" value="${qty}" style="text-align:center;" onfocus="this.value = numberOrZero(boqData[${index}].qty)" onkeydown="if(event.key==='Enter') this.blur();" onblur="updateBOQField(${index}, 'qty', numberOrZero(this.value))">`}</td>`;
               break;
 
             case 'directQty':
-              rowHtml += `<td>${(row.type === 'category' || ((row.type === 'subcategory' || row.type === 'subsubcategory') && childExists)) ? '' : `<input type="text" value="${boqValues.directQty}" style="text-align:center;" onfocus="this.value = numberOrZero(boqData[${index}].qty)" onblur="updateBOQField(${index}, 'qty', numberOrZero(this.value))">`}</td>`;
+              rowHtml += `<td>${(row.type === 'category' || ((row.type === 'subcategory' || row.type === 'subsubcategory') && childExists)) ? '' : `<input type="text" value="${boqValues.directQty}" style="text-align:center;" onfocus="this.value = numberOrZero(boqData[${index}].qty)" onkeydown="if(event.key==='Enter') this.blur();" onblur="updateBOQField(${index}, 'qty', numberOrZero(this.value))">`}</td>`;
               break;
               
             case 'unit':
@@ -13281,11 +13579,11 @@
               break;
               
             case 'materialUnitCost':
-              rowHtml += `<td class="number" style="position: relative;">${rowEditable ? `${linkedMaterialUnitCost === null ? '<span class="manual-indicator">*</span>' : ''}<input class="number" type="text" value="${peso(materialUnitCost)}" onfocus="this.value = numberOrZero(boqData[${index}].materialUnitCost)" onblur="updateBOQField(${index}, 'materialUnitCost', numberOrZero(this.value))" ${linkedMaterialUnitCost !== null ? 'readonly title="Linked from D.U.P.A. Material Unit Cost"' : ''}>` : ''}</td>`;
+              rowHtml += `<td class="number" style="position: relative;">${rowEditable ? `${(linkedMaterialUnitCost === null || row.manualMaterialUnitCost) ? '<span class="manual-indicator">*</span>' : ''}<input class="number" type="text" value="${peso(materialUnitCost)}" onfocus="this.value = getBOQEditValue(${index}, 'materialUnitCost')" onkeydown="if(event.key==='Enter') this.blur();" onchange="updateBOQField(${index}, 'materialUnitCost', numberOrZero(this.value))" onblur="updateBOQField(${index}, 'materialUnitCost', numberOrZero(this.value))" title="${(linkedMaterialUnitCost !== null && !row.manualMaterialUnitCost) ? 'Linked from D.U.P.A. Material Unit Cost (click to edit)' : 'Material Unit Cost'}">` : ''}</td>`;
               break;
 
             case 'directMaterialUnitCost':
-              rowHtml += `<td class="number" style="position: relative;">${rowEditable ? `${linkedMaterialUnitCost === null ? '<span class="manual-indicator">*</span>' : ''}<input class="number" type="text" value="${peso(boqValues.directMaterialUnitCost)}" onfocus="this.value = numberOrZero(boqData[${index}].materialUnitCost)" onblur="updateBOQField(${index}, 'materialUnitCost', numberOrZero(this.value))" ${linkedMaterialUnitCost !== null ? 'readonly title="Linked from D.U.P.A. Material Unit Cost"' : ''}>` : ''}</td>`;
+              rowHtml += `<td class="number" style="position: relative;">${rowEditable ? `${(linkedMaterialUnitCost === null || row.manualMaterialUnitCost) ? '<span class="manual-indicator">*</span>' : ''}<input class="number" type="text" value="${peso(boqValues.directMaterialUnitCost)}" onfocus="this.value = getBOQEditValue(${index}, 'directMaterialUnitCost')" onkeydown="if(event.key==='Enter') this.blur();" onchange="updateBOQField(${index}, 'directMaterialUnitCost', numberOrZero(this.value))" onblur="updateBOQField(${index}, 'directMaterialUnitCost', numberOrZero(this.value))" title="${(linkedMaterialUnitCost !== null && !row.manualMaterialUnitCost) ? 'Linked from D.U.P.A. Material Unit Cost (click to edit)' : 'Direct Material Unit Cost'}">` : ''}</td>`;
               break;
               
             case 'totalMaterialCost':
@@ -13297,11 +13595,11 @@
               break;
               
             case 'leUnitCost':
-              rowHtml += `<td class="number" style="position: relative;">${rowEditable ? `${boqValues.linkedLEUnitCost === null ? '<span class="manual-indicator">*</span>' : ''}<input class="number" type="text" value="${peso(leUnitCost)}" onfocus="this.value = numberOrZero(boqData[${index}].laborUnitCost)" onblur="updateBOQField(${index}, 'laborUnitCost', numberOrZero(this.value))" ${boqValues.linkedLEUnitCost !== null ? 'readonly title="Linked from D.U.P.A. LE Unit Cost"' : ''}>` : ''}</td>`;
+              rowHtml += `<td class="number" style="position: relative;">${rowEditable ? `${(boqValues.linkedLEUnitCost === null || row.manualLEUnitCost) ? '<span class="manual-indicator">*</span>' : ''}<input class="number" type="text" value="${peso(leUnitCost)}" onfocus="this.value = getBOQEditValue(${index}, 'leUnitCost')" onkeydown="if(event.key==='Enter') this.blur();" onchange="updateBOQField(${index}, 'leUnitCost', numberOrZero(this.value))" onblur="updateBOQField(${index}, 'leUnitCost', numberOrZero(this.value))" title="${(boqValues.linkedLEUnitCost !== null && !row.manualLEUnitCost) ? 'Linked from D.U.P.A. LE Unit Cost (click to edit)' : 'LE Unit Cost'}">` : ''}</td>`;
               break;
 
             case 'directLEUnitCost':
-              rowHtml += `<td class="number" style="position: relative;">${rowEditable ? `${boqValues.linkedLEUnitCost === null ? '<span class="manual-indicator">*</span>' : ''}<input class="number" type="text" value="${peso(boqValues.directLEUnitCost)}" onfocus="this.value = numberOrZero(boqData[${index}].laborUnitCost)" onblur="updateBOQField(${index}, 'laborUnitCost', numberOrZero(this.value))" ${boqValues.linkedLEUnitCost !== null ? 'readonly title="Linked from D.U.P.A. LE Unit Cost"' : ''}>` : ''}</td>`;
+              rowHtml += `<td class="number" style="position: relative;">${rowEditable ? `${(boqValues.linkedLEUnitCost === null || row.manualLEUnitCost) ? '<span class="manual-indicator">*</span>' : ''}<input class="number" type="text" value="${peso(boqValues.directLEUnitCost)}" onfocus="this.value = getBOQEditValue(${index}, 'directLEUnitCost')" onkeydown="if(event.key==='Enter') this.blur();" onchange="updateBOQField(${index}, 'directLEUnitCost', numberOrZero(this.value))" onblur="updateBOQField(${index}, 'directLEUnitCost', numberOrZero(this.value))" title="${(boqValues.linkedLEUnitCost !== null && !row.manualLEUnitCost) ? 'Linked from D.U.P.A. LE Unit Cost (click to edit)' : 'Direct LE Unit Cost'}">` : ''}</td>`;
               break;
               
             case 'totalLEC':
@@ -14357,6 +14655,8 @@
         setTimeout(() => { if (typeof showSheet === 'function') showSheet('boqSummarySheet'); }, 50);
       } else if (requestedSheet === 'manpower') {
         setTimeout(() => { if (typeof showManpowerSheet === 'function') showManpowerSheet(); }, 50);
+      } else if (requestedSheet === 'boq' || requestedSheet === 'boqSheet') {
+        setTimeout(() => { if (typeof showSheet === 'function') showSheet('boqSheet'); }, 50);
       }
     }
 
@@ -14423,36 +14723,49 @@
       if (currentBoqProjectId) {
         let calcBudget = 0;
         let earnedValueSum = 0;
-        if (Array.isArray(payload.boqData)) {
-          payload.boqData.forEach(r => {
-            const rowTotal = parseFloat(r.grandTotalCost || 0) || 0;
-            calcBudget += rowTotal;
-            const progress = parseFloat(r.ganttProgress !== undefined ? r.ganttProgress : (r.percentDone || 0)) || 0;
-            earnedValueSum += (rowTotal * (progress / 100));
-          });
-        }
+        const validRows = (boqData || []).filter(r => r.type !== 'category' && r.type !== 'subcategory');
+        validRows.forEach(r => {
+          const comp = (typeof computeBOQDisplayValues === 'function') ? computeBOQDisplayValues(r) : null;
+          const rowTotal = comp ? comp.grandTotalCost : ((parseFloat(r.grandTotalCost) || 0) || ((parseFloat(r.qty) || 1) * ((parseFloat(r.materialUnitCost) || 0) + (parseFloat(r.leUnitCost || r.laborUnitCost) || 0))));
+          calcBudget += rowTotal;
+          const progress = parseFloat(r.ganttProgress !== undefined ? r.ganttProgress : (r.percentDone || 0)) || 0;
+          earnedValueSum += (rowTotal * (progress / 100));
+        });
         if (calcBudget > 0) {
           payload.totalBudget = calcBudget;
           payload.actualProgress = parseFloat(((earnedValueSum / calcBudget) * 100).toFixed(1));
         }
 
-        payload.items = (boqData || []).map((r, idx) => ({
-          id: r.id || `boq_${idx}`,
-          code: r.code || `${idx + 1}.00`,
-          title: r.title || `Item ${idx + 1}`,
-          specification: r.specification || '',
-          category: r.category || 'General Works',
-          qty: parseFloat(r.qty) || 1,
-          unit: r.unit || 'lot',
-          materialUnitCost: parseFloat(r.materialUnitCost) || 0,
-          leUnitCost: parseFloat(r.leUnitCost) || 0,
-          unitCost: parseFloat(r.unitCost) || ((parseFloat(r.materialUnitCost) || 0) + (parseFloat(r.leUnitCost) || 0)),
-          grandTotalCost: parseFloat(r.grandTotalCost) || ((parseFloat(r.qty) || 1) * (parseFloat(r.unitCost) || 0)),
-          weight: calcBudget > 0 ? parseFloat((((parseFloat(r.grandTotalCost) || 0) / calcBudget) * 100).toFixed(2)) : 0,
-          percentDone: parseFloat(r.percentDone !== undefined ? r.percentDone : (r.ganttProgress || 0)) || 0,
-          earnedValue: parseFloat(r.earnedValue) || 0,
-          isCritical: Boolean(r.isCritical)
-        }));
+        payload.items = validRows.map((r, idx) => {
+          const comp = (typeof computeBOQDisplayValues === 'function') ? computeBOQDisplayValues(r) : null;
+          const qty = comp ? comp.qty : (parseFloat(r.qty) || 1);
+          const matCost = comp ? comp.materialUnitCost : (parseFloat(r.materialUnitCost) || 0);
+          const leCost = comp ? comp.leUnitCost : (parseFloat(r.leUnitCost !== undefined ? r.leUnitCost : (r.laborUnitCost || 0)));
+          const totalCost = comp ? comp.grandTotalCost : ((parseFloat(r.grandTotalCost) || 0) || (qty * (matCost + leCost)));
+          const unitRate = matCost + leCost;
+          const progress = parseFloat(r.percentDone !== undefined ? r.percentDone : (r.ganttProgress || 0)) || 0;
+          return {
+            id: r.id || `boq_${idx}`,
+            code: r.code || `${idx + 1}.00`,
+            title: r.title || `Item ${idx + 1}`,
+            specification: r.specification || '',
+            category: r.category || 'General Works',
+            type: r.type || 'subsubcategory',
+            qty: qty,
+            unit: r.unit || 'lot',
+            materialUnitCost: matCost,
+            leUnitCost: leCost,
+            laborUnitCost: leCost,
+            unitCost: unitRate,
+            grandTotalCost: totalCost,
+            allocatedBudget: totalCost,
+            weight: calcBudget > 0 ? parseFloat(((totalCost / calcBudget) * 100).toFixed(2)) : 0,
+            percentDone: progress,
+            earnedValue: parseFloat(r.earnedValue) || Math.round(totalCost * (progress / 100)),
+            isCritical: Boolean(r.isCritical),
+            condition: r.condition || 'CPM'
+          };
+        });
 
         if (window.FCLStorage && typeof window.FCLStorage.saveProjectBOQ === 'function') {
           window.FCLStorage.saveProjectBOQ(currentBoqProjectId, payload);
@@ -14555,23 +14868,37 @@
       }
       boqPayload.billingPeriods = Array.isArray(fclBillingPeriods) ? cloneData(fclBillingPeriods) : [];
 
-      boqPayload.items = (boqData || []).map((r, idx) => ({
-        id: r.id || `boq_${idx}`,
-        code: r.code || `${idx + 1}.00`,
-        title: r.title || `Item ${idx + 1}`,
-        specification: r.specification || '',
-        category: r.category || 'General Works',
-        qty: parseFloat(r.qty) || 1,
-        unit: r.unit || 'lot',
-        materialUnitCost: parseFloat(r.materialUnitCost) || 0,
-        leUnitCost: parseFloat(r.leUnitCost) || 0,
-        unitCost: parseFloat(r.unitCost) || ((parseFloat(r.materialUnitCost) || 0) + (parseFloat(r.leUnitCost) || 0)),
-        grandTotalCost: parseFloat(r.grandTotalCost) || ((parseFloat(r.qty) || 1) * (parseFloat(r.unitCost) || 0)),
-        weight: calcBudget > 0 ? parseFloat((((parseFloat(r.grandTotalCost) || 0) / calcBudget) * 100).toFixed(2)) : 0,
-        percentDone: Math.min(100, Math.max(0, parseFloat(r.ganttProgress !== undefined ? r.ganttProgress : (r.percentDone || 0)) || 0)),
-        earnedValue: parseFloat(r.earnedValue) || 0,
-        isCritical: Boolean(r.isCritical)
-      }));
+      const validRowsForSchedule = (boqData || []).filter(r => r.type !== 'category' && r.type !== 'subcategory');
+      boqPayload.items = validRowsForSchedule.map((r, idx) => {
+        const comp = (typeof computeBOQDisplayValues === 'function') ? computeBOQDisplayValues(r) : null;
+        const qty = comp ? comp.qty : (parseFloat(r.qty) || 1);
+        const matCost = comp ? comp.materialUnitCost : (parseFloat(r.materialUnitCost) || 0);
+        const leCost = comp ? comp.leUnitCost : (parseFloat(r.leUnitCost !== undefined ? r.leUnitCost : (r.laborUnitCost || 0)));
+        const totalCost = comp ? comp.grandTotalCost : ((parseFloat(r.grandTotalCost) || 0) || (qty * (matCost + leCost)));
+        const unitRate = matCost + leCost;
+        const progress = Math.min(100, Math.max(0, parseFloat(r.ganttProgress !== undefined ? r.ganttProgress : (r.percentDone || 0)) || 0));
+        return {
+          id: r.id || `boq_${idx}`,
+          code: r.code || `${idx + 1}.00`,
+          title: r.title || `Item ${idx + 1}`,
+          specification: r.specification || '',
+          category: r.category || 'General Works',
+          type: r.type || 'subsubcategory',
+          qty: qty,
+          unit: r.unit || 'lot',
+          materialUnitCost: matCost,
+          leUnitCost: leCost,
+          laborUnitCost: leCost,
+          unitCost: unitRate,
+          grandTotalCost: totalCost,
+          allocatedBudget: totalCost,
+          weight: calcBudget > 0 ? parseFloat(((totalCost / calcBudget) * 100).toFixed(2)) : 0,
+          percentDone: progress,
+          earnedValue: parseFloat(r.earnedValue) || Math.round(totalCost * (progress / 100)),
+          isCritical: Boolean(r.isCritical),
+          condition: r.condition || 'CPM'
+        };
+      });
       saveToBrowser(APP_STORAGE_KEYS.boq, boqPayload, 'Schedule', true);
 
       // 3. Extract Gantt Tasks for master project timeline
@@ -14671,6 +14998,11 @@
       if (typeof loadSavedSections === 'function') {
         loadSavedSections();
       }
+      if (!boqData.length || isCorruptedBOQArray(boqData)) {
+        if (typeof DEFAULT_SPORTS_CLUB_BOQ_DATA !== 'undefined' && Array.isArray(DEFAULT_SPORTS_CLUB_BOQ_DATA) && DEFAULT_SPORTS_CLUB_BOQ_DATA.length) {
+          boqData.splice(0, boqData.length, ...JSON.parse(JSON.stringify(DEFAULT_SPORTS_CLUB_BOQ_DATA)));
+        }
+      }
       if (typeof recomputeCodes === 'function') recomputeCodes(boqData);
       if (typeof renderBOQTable === 'function') renderBOQTable();
       if (typeof renderBOQSummaryTable === 'function') renderBOQSummaryTable();
@@ -14688,6 +15020,19 @@
 
     function saveCoverLetterSection() {
       saveToBrowser(APP_STORAGE_KEYS.cover, getCoverPayload(), 'Cover Letter');
+    }
+
+    function isCorruptedBOQArray(rows) {
+      if (!Array.isArray(rows) || rows.length === 0) return true;
+      const hasCategories = rows.some(r => r.type === 'category' || r.type === 'subcategory');
+      const hasCosts = rows.some(r => {
+        const mat = parseFloat(r.materialUnitCost) || 0;
+        const labor = parseFloat(r.laborUnitCost !== undefined ? r.laborUnitCost : (r.leUnitCost || 0));
+        const grand = parseFloat(r.grandTotalCost) || 0;
+        return mat > 0 || labor > 0 || grand > 0;
+      });
+      const allDummyTasks = rows.every(r => r.type === 'task' || (r.id && String(r.id).startsWith('task_item_')));
+      return allDummyTasks && !hasCategories && !hasCosts;
     }
 
     function loadSavedSections() {
@@ -14725,7 +15070,31 @@
       }
 
       if (savedBOQ) {
-        if (Array.isArray(savedBOQ.boqData)) boqData.splice(0, boqData.length, ...savedBOQ.boqData);
+        let validRows = null;
+        if (Array.isArray(savedBOQ.boqData) && savedBOQ.boqData.length > 0 && !isCorruptedBOQArray(savedBOQ.boqData)) {
+          validRows = savedBOQ.boqData;
+        } else if (Array.isArray(savedBOQ.items) && savedBOQ.items.length > 0 && !isCorruptedBOQArray(savedBOQ.items)) {
+          validRows = savedBOQ.items.map(item => ({
+            id: item.id || ('boq_' + Math.random().toString(36).substr(2, 9)),
+            type: item.type || (typeof inferBOQTypeFromCode === 'function' ? inferBOQTypeFromCode(item.code) : 'subsubcategory'),
+            code: item.code || '',
+            title: item.title || item.name || '',
+            specification: item.specification || '',
+            qty: parseFloat(item.qty) || 0,
+            unit: item.unit || '',
+            materialUnitCost: parseFloat(item.materialUnitCost) || 0,
+            laborUnitCost: parseFloat(item.laborUnitCost !== undefined ? item.laborUnitCost : (item.leUnitCost || 0)),
+            grandTotalCost: parseFloat(item.grandTotalCost || item.allocatedBudget) || 0,
+            condition: item.condition || 'CPM',
+            collapsed: false
+          }));
+        } else if (typeof DEFAULT_SPORTS_CLUB_BOQ_DATA !== 'undefined' && Array.isArray(DEFAULT_SPORTS_CLUB_BOQ_DATA) && DEFAULT_SPORTS_CLUB_BOQ_DATA.length > 0) {
+          validRows = JSON.parse(JSON.stringify(DEFAULT_SPORTS_CLUB_BOQ_DATA));
+        }
+
+        if (Array.isArray(validRows) && validRows.length > 0) {
+          boqData.splice(0, boqData.length, ...validRows);
+        }
         if (Array.isArray(savedBOQ.billingPeriods) && savedBOQ.billingPeriods.length > 0) {
           fclBillingPeriods = cloneData(savedBOQ.billingPeriods);
           try {
@@ -14846,7 +15215,7 @@
       loadSavedSections();
       if (document.getElementById('priceListTable') && !priceListData.length) addPriceListRow();
       if (document.getElementById('analysisTable') && !analysisData.length) addAnalysisCategoryRow();
-      if (document.getElementById('boqTable') && !boqData.length) {
+      if (document.getElementById('boqTable') && (!boqData.length || isCorruptedBOQArray(boqData))) {
         if (typeof DEFAULT_SPORTS_CLUB_BOQ_DATA !== 'undefined' && Array.isArray(DEFAULT_SPORTS_CLUB_BOQ_DATA) && DEFAULT_SPORTS_CLUB_BOQ_DATA.length) {
           boqData.splice(0, boqData.length, ...JSON.parse(JSON.stringify(DEFAULT_SPORTS_CLUB_BOQ_DATA)));
           const pNameEl = document.getElementById('projectName');
@@ -15788,12 +16157,12 @@
           case 'title': return 'title';
           case 'specification': return 'specification';
           case 'qty': return 'qty';
-          case 'directQty': return 'qty';
+          case 'directQty': return 'directQty';
           case 'unit': return 'unit';
           case 'materialUnitCost': return 'materialUnitCost';
-          case 'directMaterialUnitCost': return 'materialUnitCost';
-          case 'leUnitCost': return 'laborUnitCost';
-          case 'directLEUnitCost': return 'laborUnitCost';
+          case 'directMaterialUnitCost': return 'directMaterialUnitCost';
+          case 'leUnitCost': return 'leUnitCost';
+          case 'directLEUnitCost': return 'directLEUnitCost';
           case 'condition': return 'condition';
           default: return null;
         }
@@ -16135,7 +16504,24 @@
             rowData.push(displayVal);
 
             const field = getFieldNameByColIndex(tableId, c, dataObj ? dataObj.type : null);
-            if (dataObj && field && dataObj[field] !== undefined) {
+            if (tableId === 'boqTable' && dataObj) {
+              const comp = computeBOQDisplayValues(dataObj);
+              if (field === 'materialUnitCost') {
+                rawRowData.push(comp.materialUnitCost);
+              } else if (field === 'directMaterialUnitCost') {
+                rawRowData.push(comp.directMaterialUnitCost);
+              } else if (field === 'leUnitCost') {
+                rawRowData.push(comp.leUnitCost);
+              } else if (field === 'directLEUnitCost') {
+                rawRowData.push(comp.directLEUnitCost);
+              } else if (field === 'directQty' || field === 'qty') {
+                rawRowData.push(comp.qty);
+              } else if (field && dataObj[field] !== undefined) {
+                rawRowData.push(dataObj[field]);
+              } else {
+                rawRowData.push(displayVal);
+              }
+            } else if (dataObj && field && dataObj[field] !== undefined) {
               rawRowData.push(dataObj[field]);
             } else {
               rawRowData.push(displayVal);
@@ -16177,8 +16563,6 @@
       if (tableId === 'boqTable') {
         const dupaMatch = getLinkedDUPAMatch(rowObj);
         if (dupaMatch) {
-          if (field === 'materialUnitCost' && dupaMatch.materialUnitCost !== null) return;
-          if (field === 'laborUnitCost' && dupaMatch.leUnitCost !== null) return;
           if (field === 'unit' && dupaMatch.unit) return;
         }
       }
@@ -16243,6 +16627,47 @@
           rowObj[field] = String(effectiveVal);
         }
         return;
+      }
+
+      if (tableId === 'boqTable') {
+        if (field === 'materialUnitCost') {
+          const numVal = numberOrZero(effectiveVal);
+          const { materialMarkupFactor } = getBOQMarkupFactors();
+          const directVal = materialMarkupFactor > 0 ? (numVal / materialMarkupFactor) : numVal;
+          rowObj.materialUnitCost = directVal;
+          rowObj.directMaterialUnitCost = directVal;
+          rowObj.manualMaterialUnitCost = true;
+          return;
+        }
+        if (field === 'directMaterialUnitCost') {
+          const numVal = numberOrZero(effectiveVal);
+          rowObj.materialUnitCost = numVal;
+          rowObj.directMaterialUnitCost = numVal;
+          rowObj.manualMaterialUnitCost = true;
+          return;
+        }
+        if (field === 'leUnitCost') {
+          const numVal = numberOrZero(effectiveVal);
+          const { leMarkupFactor } = getBOQMarkupFactors();
+          const directVal = leMarkupFactor > 0 ? (numVal / leMarkupFactor) : numVal;
+          rowObj.laborUnitCost = directVal;
+          rowObj.leUnitCost = directVal;
+          rowObj.directLEUnitCost = directVal;
+          rowObj.manualLEUnitCost = true;
+          return;
+        }
+        if (field === 'directLEUnitCost' || field === 'laborUnitCost') {
+          const numVal = numberOrZero(effectiveVal);
+          rowObj.laborUnitCost = numVal;
+          rowObj.leUnitCost = numVal;
+          rowObj.directLEUnitCost = numVal;
+          rowObj.manualLEUnitCost = true;
+          return;
+        }
+        if (field === 'directQty' || field === 'qty') {
+          rowObj.qty = numberOrZero(effectiveVal);
+          return;
+        }
       }
 
       if (field === 'qty' || field === 'materialUnitCost' || field === 'laborUnitCost' || field === 'pricePerUnit' || field === 'rentalPerUnit') {

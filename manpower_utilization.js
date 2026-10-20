@@ -2736,7 +2736,10 @@
         this.tasks.forEach((t, tIdx) => {
           if (!this.hasChildTask(tIdx)) {
             const actMp = taskPeriodCosts[tIdx][pIdx].actualMp;
-            const baseRate = parseFloat(t.ratePerDay) || 0;
+            const dateRate = (t.periodRates && t.periodRates[p.key] !== undefined)
+              ? parseFloat(t.periodRates[p.key])
+              : (parseFloat(t.ratePerDay) || 0);
+            const baseRate = dateRate > 0 ? dateRate : (parseFloat(t.ratePerDay) || 0);
             const otH = parseFloat(t.otHours) || 0;
             const effectiveRate = baseRate + (baseRate * otH * 1.25 / 8);
             periodActCost += actMp * effectiveRate * (p.days || 1);
@@ -2943,21 +2946,22 @@
 
       container.innerHTML = `
         <div class="mp-container">
-          <!-- 1. Top Action Ribbon -->
-          <div class="mp-ribbon">
-            <div class="mp-ribbon-left">
-              <span style="font-weight: 800; font-size: 13px; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
-                👷 MANPOWER UTILIZATION
-              </span>
-              <button class="mp-btn mp-btn-primary" onclick="ManpowerUtilization.addTask('category')">➕ Add Category</button>
-              <button class="mp-btn mp-btn-primary" style="background:#0284c7; border-color:#0284c7;" onclick="ManpowerUtilization.addTask('subcategory')">➕ Add Sub Task</button>
-              <button class="mp-btn mp-btn-primary" style="background:#0369a1; border-color:#0369a1;" onclick="ManpowerUtilization.addTask('subsubcategory')">➕ Add Sub-Sub Task</button>
-              <button class="mp-btn" onclick="ManpowerUtilization.adaptAndSyncWithGanttTimeline(true)" title="Auto-match timeline start/end dates and task scopes directly from Gantt Schedule">🔄 Sync with Gantt Schedule</button>
-              <button class="mp-btn mp-btn-success" onclick="ManpowerUtilization.openLogActualModal()">📋 Log Actual Manpower</button>
-            </div>
-            
-            <div class="mp-ribbon-right">
-              <!-- Month Filter Dropdown Selection -->
+          <!-- 1. Top Action Ribbon (Single Unified Row) -->
+          <div class="mp-ribbon" style="display: flex; flex-wrap: nowrap; align-items: center; gap: 8px; padding: 8px 12px; background: #f8fafc; border-bottom: 1px solid var(--mp-excel-border); overflow-x: auto; white-space: nowrap;">
+            <!-- Sync with Gantt Schedule -->
+            <button class="mp-btn" onclick="ManpowerUtilization.adaptAndSyncWithGanttTimeline(true)" title="Auto-match timeline start/end dates and task scopes directly from Gantt Schedule" style="flex-shrink: 0;">
+              🔄 Sync with Gantt Schedule
+            </button>
+
+            <!-- Log Actual Manpower -->
+            <button class="mp-btn mp-btn-success" onclick="ManpowerUtilization.openLogActualModal()" title="Open Daily Force Account & Actual Manpower Log" style="flex-shrink: 0;">
+              📋 Log Actual Manpower
+            </button>
+
+            <div style="height: 20px; width: 1px; background: #cbd5e1; margin: 0 2px; flex-shrink: 0;"></div>
+
+            <!-- Month Filter Dropdown Selection -->
+            <div style="display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;">
               <span style="font-size: 11px; font-weight: 700; color: #1e40af;">Month View:</span>
               <div class="mp-btn-group" style="display: inline-flex; align-items: center; border: 1.5px solid #93c5fd; border-radius: 6px; padding: 1px 2px; background: #eff6ff;">
                 <button class="mp-btn-tab" onclick="ManpowerUtilization.navigateMonth(-1)" title="Previous Month" style="padding: 0 6px; height: 24px; border: none; background: transparent; color: #1e40af; cursor: pointer; font-weight: 700;">◀</button>
@@ -2969,22 +2973,37 @@
                 </select>
                 <button class="mp-btn-tab" onclick="ManpowerUtilization.navigateMonth(1)" title="Next Month" style="padding: 0 6px; height: 24px; border: none; background: transparent; color: #1e40af; cursor: pointer; font-weight: 700;">▶</button>
               </div>
+            </div>
 
-              <span style="font-size: 11px; font-weight: 700; color: #475569; margin-left: 4px;">Scale:</span>
+            <div style="height: 20px; width: 1px; background: #cbd5e1; margin: 0 2px; flex-shrink: 0;"></div>
+
+            <!-- Scale -->
+            <div style="display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;">
+              <span style="font-size: 11px; font-weight: 700; color: #475569;">Scale:</span>
               <div class="mp-btn-group">
                 <button class="mp-btn-tab ${this.scale === 'days' ? 'active' : ''}" onclick="ManpowerUtilization.setScale('days')">Days</button>
                 <button class="mp-btn-tab ${this.scale === 'weeks' ? 'active' : ''}" onclick="ManpowerUtilization.setScale('weeks')">Weeks</button>
                 <button class="mp-btn-tab ${this.scale === 'months' ? 'active' : ''}" onclick="ManpowerUtilization.setScale('months')">Months</button>
                 <button class="mp-btn-tab ${this.scale === 'quarters' ? 'active' : ''}" onclick="ManpowerUtilization.setScale('quarters')">Quarters</button>
               </div>
+            </div>
 
-              <span style="font-size: 11px; font-weight: 700; color: #475569; margin-left: 4px;">View Mode:</span>
+            <div style="height: 20px; width: 1px; background: #cbd5e1; margin: 0 2px; flex-shrink: 0;"></div>
+
+            <!-- View Mode -->
+            <div style="display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;">
+              <span style="font-size: 11px; font-weight: 700; color: #475569;">View Mode:</span>
               <div class="mp-btn-group">
                 <button class="mp-btn-tab ${this.viewMode === 'cumulative' ? 'active' : ''}" onclick="ManpowerUtilization.setViewMode('cumulative')" title="Show cumulative labor cost per date">Cumulative Cost (₱)</button>
                 <button class="mp-btn-tab ${this.viewMode === 'period' ? 'active' : ''}" onclick="ManpowerUtilization.setViewMode('period')" title="Show period labor cost">Period Cost (₱)</button>
                 <button class="mp-btn-tab ${this.viewMode === 'headcount' ? 'active' : ''}" onclick="ManpowerUtilization.setViewMode('headcount')" title="Show number of workers">Headcount (Workers)</button>
               </div>
+            </div>
 
+            <div style="height: 20px; width: 1px; background: #cbd5e1; margin: 0 2px; flex-shrink: 0;"></div>
+
+            <!-- Chart, Export, Save Action Buttons (Right-aligned) -->
+            <div style="display: inline-flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0;">
               <button class="mp-btn" onclick="ManpowerUtilization.toggleChart()" title="Toggle Visual Analytics Chart">📊 ${this.chartVisible ? 'Hide Chart' : 'Show Chart'}</button>
               <button class="mp-btn mp-btn-success" onclick="ManpowerUtilization.exportToExcel()" title="Export complete Excel worksheet">📥 Export to Excel</button>
               <button class="mp-btn mp-btn-primary" onclick="ManpowerUtilization.saveData()" title="Save changes and sync with Cloud Firestore">💾 Save &amp; Sync</button>
@@ -3184,7 +3203,7 @@
 
         <!-- Log Daily Actual Manpower Modal -->
         <div class="mp-modal-overlay" id="mpLogActualModal">
-          <div class="mp-modal-box">
+          <div class="mp-modal-box" style="max-width: 820px; width: 95%;">
             <div class="mp-modal-header">
               <span style="font-weight: 700; font-size: 13px;">📋 Daily Force Account &amp; Actual Manpower Log</span>
               <button type="button" onclick="ManpowerUtilization.closeLogActualModal()" style="background:none; border:none; color:white; font-size:18px; cursor:pointer;">&times;</button>
@@ -3194,7 +3213,7 @@
             </div>
             <div class="mp-modal-footer">
               <button class="mp-btn" type="button" onclick="ManpowerUtilization.closeLogActualModal()">Cancel</button>
-              <button class="mp-btn mp-btn-success" type="button" onclick="ManpowerUtilization.saveLoggedActual()">💾 Save Actual Manpower</button>
+              <button class="mp-btn mp-btn-success" type="button" onclick="ManpowerUtilization.saveLoggedActual()">💾 Save Actual Manpower &amp; Labor Costs</button>
             </div>
           </div>
         </div>
@@ -4098,19 +4117,56 @@
       let rowsHtml = '';
       this.tasks.forEach((t, i) => {
         if (!this.hasChildTask(i)) {
-          const actVal = (t.periodActual && t.periodActual[this.currentDate]) !== undefined ? t.periodActual[this.currentDate] : t.manpower;
+          const actVal = (t.periodActual && t.periodActual[this.currentDate]) !== undefined 
+            ? t.periodActual[this.currentDate] 
+            : t.manpower;
+          const currentRate = (t.periodRates && t.periodRates[this.currentDate] !== undefined)
+            ? t.periodRates[this.currentDate]
+            : (parseFloat(t.ratePerDay) || 0);
+          const rowSubtotal = (parseFloat(actVal) || 0) * (parseFloat(currentRate) || 0);
+
           rowsHtml += `
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid #f1f5f9;">
-              <div style="flex:1;">
-                <strong style="color:#1e40af; font-size:11.5px;">${escapeHtml(t.code)}</strong> 
-                <span style="font-weight:600; font-size:12px; color:#0f172a;">${escapeHtml(t.description)}</span>
-                <div style="font-size:10.5px; color:#64748b;">${escapeHtml(t.trade)} • ₱${formatNumber(t.ratePerDay, 0)}/day (Scheduled: <strong>${t.manpower} Pax</strong> | Est: <strong>${t.estimatedManpower || 0}</strong>)</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 8px; border-bottom:1px solid #f1f5f9; background:${i % 2 === 0 ? '#ffffff' : '#fcfdfe'};">
+              <div style="flex:1; min-width:180px;">
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <strong style="color:#1e40af; font-size:11.5px;">${escapeHtml(t.code)}</strong> 
+                  <span style="font-weight:700; font-size:12px; color:#0f172a;">${escapeHtml(t.description)}</span>
+                </div>
+                <div style="font-size:11px; color:#64748b; margin-top:2px;">
+                  <span style="font-weight:600; color:#334155;">${escapeHtml(t.trade || 'General')}</span> 
+                  • Scheduled: <strong style="color:#1d4ed8;">${t.manpower || 0} Pax</strong> 
+                  • Est: <strong style="color:#475569;">${t.estimatedManpower || 0}</strong>
+                </div>
               </div>
-              <div style="display:flex; align-items:center; gap:8px;">
-                <label style="font-size:11px; font-weight:700; color:#334155;">Actual On-Site:</label>
-                <input type="number" min="0" value="${actVal}" id="mp_log_inp_${i}" 
-                  style="width:65px; height:28px; text-align:center; border:1px solid #cbd5e1; border-radius:4px; font-weight:700; color:#059669;">
-                <span style="font-size:11px; color:#64748b;">Pax</span>
+
+              <!-- Editable Labor Cost per Day -->
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
+                <label style="font-size:10px; font-weight:700; color:#1e40af; text-transform:uppercase; letter-spacing:0.3px;">Labor Cost / Day:</label>
+                <div style="position:relative; display:inline-flex; align-items:center;">
+                  <span style="position:absolute; left:7px; font-size:11px; color:#64748b; font-weight:700;">₱</span>
+                  <input type="number" min="0" step="10" value="${currentRate}" id="mp_log_rate_${i}" 
+                    oninput="ManpowerUtilization.updateModalRowTotal(${i})"
+                    style="width:95px; height:28px; text-align:right; padding-left:18px; padding-right:8px; border:1px solid #cbd5e1; border-radius:4px; font-weight:700; font-size:12px; color:#1e3a8a; background:#f8fafc;"
+                    title="Edit labor wage cost per day for this trade">
+                </div>
+              </div>
+
+              <!-- Editable Actual On-Site Pax -->
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
+                <label style="font-size:10px; font-weight:700; color:#047857; text-transform:uppercase; letter-spacing:0.3px;">Actual On-Site:</label>
+                <div style="display:flex; align-items:center; gap:4px;">
+                  <input type="number" min="0" value="${actVal}" id="mp_log_inp_${i}" 
+                    oninput="ManpowerUtilization.updateModalRowTotal(${i})"
+                    style="width:65px; height:28px; text-align:center; border:1px solid #cbd5e1; border-radius:4px; font-weight:700; font-size:12px; color:#059669; background:#f0fdf4;"
+                    title="Actual manpower force deployed on-site">
+                  <span style="font-size:11px; color:#64748b; font-weight:600;">Pax</span>
+                </div>
+              </div>
+
+              <!-- Daily Subtotal for this task -->
+              <div style="min-width:90px; text-align:right;">
+                <div style="font-size:9.5px; font-weight:700; color:#64748b; text-transform:uppercase;">Daily Cost</div>
+                <div id="mp_log_subtotal_${i}" style="font-size:12px; font-weight:800; color:#0f172a;">₱${formatNumber(rowSubtotal, 0)}</div>
               </div>
             </div>
           `;
@@ -4118,20 +4174,58 @@
       });
 
       body.innerHTML = `
-        <div style="margin-bottom:12px; background:#eff6ff; padding:10px 14px; border-radius:6px; border:1px solid #bfdbfe; display:flex; align-items:center; justify-content:space-between;">
-          <div>
+        <div style="margin-bottom:12px; background:#eff6ff; padding:10px 14px; border-radius:6px; border:1px solid #bfdbfe; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
             <strong style="color:#1e40af; font-size:12px;">Work Force Date:</strong>
             <input type="date" value="${this.currentDate}" id="mpLogDatePicker" onchange="ManpowerUtilization.onLogDateChange(this.value)" 
-              style="margin-left:8px; height:26px; border:1px solid #cbd5e1; border-radius:4px; padding:2px 6px; font-size:11px;">
+              style="height:26px; border:1px solid #cbd5e1; border-radius:4px; padding:2px 6px; font-size:11px; font-weight:700; color:#1e3a8a;">
           </div>
-          <span style="font-size:11px; color:#2563eb; font-weight:600;">Daily Force Account Verification</span>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="font-size:11px; color:#2563eb; font-weight:700;">Daily Force Account Verification</span>
+            <div id="mpModalGrandTotal" style="background:#ffffff; border:1px solid #93c5fd; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:800; color:#1e3a8a;">
+              Daily Force: 0 Pax • ₱0
+            </div>
+          </div>
         </div>
-        <div style="max-height: 45vh; overflow-y: auto; padding-right: 4px;">
+        <div style="max-height: 52vh; overflow-y: auto; padding-right: 4px;">
           ${rowsHtml}
         </div>
       `;
 
+      this.updateModalGrandTotal();
       modal.style.display = 'flex';
+    }
+
+    updateModalRowTotal(i) {
+      const rateInp = document.getElementById(`mp_log_rate_${i}`);
+      const paxInp = document.getElementById(`mp_log_inp_${i}`);
+      const subtotalEl = document.getElementById(`mp_log_subtotal_${i}`);
+      if (rateInp && paxInp && subtotalEl) {
+        const r = parseFloat(rateInp.value) || 0;
+        const p = parseFloat(paxInp.value) || 0;
+        subtotalEl.textContent = `₱${formatNumber(r * p, 0)}`;
+      }
+      this.updateModalGrandTotal();
+    }
+
+    updateModalGrandTotal() {
+      const grandEl = document.getElementById('mpModalGrandTotal');
+      if (!grandEl) return;
+      let total = 0;
+      let totalPax = 0;
+      this.tasks.forEach((t, i) => {
+        if (!this.hasChildTask(i)) {
+          const rateInp = document.getElementById(`mp_log_rate_${i}`);
+          const paxInp = document.getElementById(`mp_log_inp_${i}`);
+          if (rateInp && paxInp) {
+            const r = parseFloat(rateInp.value) || 0;
+            const p = parseFloat(paxInp.value) || 0;
+            total += r * p;
+            totalPax += p;
+          }
+        }
+      });
+      grandEl.innerHTML = `Daily Force: <strong style="color:#059669;">${totalPax} Pax</strong> • <strong style="color:#1e3a8a;">₱${formatNumber(total, 0)}</strong>`;
     }
 
     closeLogActualModal() {
@@ -4151,9 +4245,20 @@
       this.tasks.forEach((t, i) => {
         if (!this.hasChildTask(i)) {
           const inp = document.getElementById(`mp_log_inp_${i}`);
+          const rateInp = document.getElementById(`mp_log_rate_${i}`);
+
           if (inp) {
             if (!t.periodActual) t.periodActual = {};
             t.periodActual[targetDate] = parseFloat(inp.value) || 0;
+          }
+
+          if (rateInp) {
+            const newRate = parseFloat(rateInp.value);
+            if (!isNaN(newRate) && newRate >= 0) {
+              t.ratePerDay = newRate;
+              if (!t.periodRates) t.periodRates = {};
+              t.periodRates[targetDate] = newRate;
+            }
           }
         }
       });
@@ -4161,7 +4266,7 @@
       this.closeLogActualModal();
       this.saveData();
       this.render();
-      alert(`✅ Actual Manpower logged successfully for ${targetDate}!\nComparison charts, utilization rates, and cumulative costs have been recalculated.`);
+      alert(`✅ Actual Manpower & Labor Cost logged successfully for ${targetDate}!\nComparison charts, utilization rates, and cumulative costs have been recalculated.`);
     }
 
     /**
@@ -4309,6 +4414,8 @@
     closeLogActualModal: () => instance.closeLogActualModal(),
     onLogDateChange: (dt) => instance.onLogDateChange(dt),
     saveLoggedActual: () => instance.saveLoggedActual(),
+    updateModalRowTotal: (i) => instance.updateModalRowTotal(i),
+    updateModalGrandTotal: () => instance.updateModalGrandTotal(),
     showChartTooltip: (e, el) => instance.showChartTooltip(e, el),
     hideChartTooltip: () => instance.hideChartTooltip(),
     getInstance: () => instance

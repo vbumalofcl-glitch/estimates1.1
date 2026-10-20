@@ -1,0 +1,1188 @@
+/* ==========================================================================
+   TIMELINE PROJECT SCHEDULE (GANTT) - EXCEL-LIKE SCHEDULE STUDIO STYLES
+   Full Parity with BOQ Workbook Gantt Schedule Module
+   ========================================================================== */
+
+/* Full View Mode for Gantt Studio */
+#timelineSubView_gantt.tg-fullview-active {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 99999 !important;
+  background: #0f172a !important;
+  padding: 6px !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+#timelineSubView_gantt.tg-fullview-active #interactiveGanttContainer {
+  flex: 1 1 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#timelineSubView_gantt.tg-fullview-active .tg-excel-window {
+  flex: 1 1 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35) !important;
+  border-radius: 6px !important;
+  border: 1px solid #475569 !important;
+  margin-bottom: 0 !important;
+  overflow: hidden !important;
+}
+
+#timelineSubView_gantt.tg-fullview-active .tg-titlebar,
+#timelineSubView_gantt.tg-fullview-active .tg-ribbon-tabs,
+#timelineSubView_gantt.tg-fullview-active .tg-toolbar-strip,
+#timelineSubView_gantt.tg-fullview-active .tg-formula-bar {
+  flex-shrink: 0 !important;
+}
+
+#timelineSubView_gantt.tg-fullview-active .tg-gantt-container {
+  flex: 1 1 0% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: hidden !important;
+}
+
+#timelineSubView_gantt.tg-fullview-active .tg-left-panel,
+#timelineSubView_gantt.tg-fullview-active .tg-right-panel {
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: auto !important;
+}
+
+/* Excel Window Framing */
+.tg-excel-window {
+  background: #ffffff;
+  border: 1px solid #c8c6c4;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Excel Title Bar */
+.tg-titlebar {
+  background: #107c41;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  user-select: none;
+  font-size: 12px;
+}
+
+.tg-titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tg-excel-badge {
+  background: #0b5a2f;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+
+.tg-autosave-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+}
+
+.tg-autosave-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #86efac;
+  box-shadow: 0 0 6px #86efac;
+}
+
+.tg-title-text {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tg-tellme-box {
+  flex: 1;
+  max-width: 340px;
+  margin: 0 16px;
+}
+
+.tg-tellme-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: #ffffff;
+  outline: none;
+  font-family: inherit;
+}
+
+.tg-tellme-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tg-titlebar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tg-win-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.12s;
+}
+
+.tg-win-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Ribbon Tabs Strip */
+.tg-ribbon-tabs {
+  background: #f3f2f1;
+  border-bottom: 1px solid #d4d4d4;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 2px;
+  user-select: none;
+}
+
+.tg-ribbon-tab {
+  padding: 5px 14px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #323130;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.12s;
+}
+
+.tg-ribbon-tab:hover {
+  background: #edebe9;
+  color: #107c41;
+}
+
+.tg-ribbon-tab.active {
+  color: #107c41;
+  border-bottom-color: #107c41;
+  background: #ffffff;
+}
+
+/* Gantt Toolbar Controls */
+.tg-toolbar-strip {
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tg-toolbar-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tg-toolbar-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+}
+
+.tg-tool-btn {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #1e293b;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.12s;
+  user-select: none;
+}
+
+.tg-tool-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.tg-tool-btn.primary {
+  background: #107c41;
+  color: #ffffff;
+  border-color: #107c41;
+}
+
+.tg-tool-btn.primary:hover {
+  background: #0b5a2f;
+  border-color: #0b5a2f;
+}
+
+.tg-tool-btn.accent-blue {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
+
+.tg-tool-btn.accent-blue:hover {
+  background: #0369a1;
+  border-color: #0369a1;
+}
+
+.tg-tool-btn.active {
+  background: #107c41;
+  color: #ffffff;
+  border-color: #107c41;
+}
+
+.tg-scale-btn-group {
+  display: inline-flex;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tg-scale-btn {
+  height: 24px;
+  padding: 0 8px;
+  border: none;
+  background: #ffffff;
+  color: #475569;
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+  border-right: 1px solid #cbd5e1;
+  transition: background 0.1s, color 0.1s;
+}
+
+.tg-scale-btn:last-child {
+  border-right: none;
+}
+
+.tg-scale-btn:hover {
+  background: #f1f5f9;
+}
+
+.tg-scale-btn.active {
+  background: #107c41;
+  color: #ffffff;
+}
+
+/* Dropdown Menu */
+.tg-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.tg-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  min-width: 170px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  z-index: 1000;
+  margin-top: 4px;
+  display: none;
+  overflow: hidden;
+}
+
+.tg-dropdown-menu.show {
+  display: block;
+}
+
+.tg-dropdown-item {
+  padding: 8px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.1s;
+  text-decoration: none;
+}
+
+.tg-dropdown-item:hover {
+  background: #f1f5f9;
+  color: #107c41;
+}
+
+.tg-dropdown-item + .tg-dropdown-item {
+  border-top: 1px solid #f1f5f9;
+}
+
+/* Excel Formula Bar */
+.tg-formula-bar {
+  background: #f8fafc;
+  border-bottom: 1px solid #d4d4d4;
+  display: flex;
+  align-items: center;
+  padding: 3px 8px;
+  gap: 6px;
+  user-select: none;
+}
+
+.tg-name-box {
+  width: 70px;
+  height: 23px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', monospace;
+}
+
+.tg-fx-label {
+  font-size: 12px;
+  font-weight: 700;
+  font-style: italic;
+  color: #64748b;
+  padding: 0 4px;
+}
+
+.tg-formula-input {
+  flex: 1;
+  height: 23px;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  padding: 0 8px;
+  font-size: 11.5px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #0f172a;
+  outline: none;
+}
+
+.tg-formula-input:focus {
+  border-color: #107c41;
+  box-shadow: 0 0 0 1px #107c41;
+}
+
+/* Main Split Gantt Container */
+.tg-gantt-container {
+  display: flex;
+  background: #ffffff;
+  height: calc(100vh - 270px);
+  min-height: 520px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Left Panel - Excel Task Table */
+.tg-left-panel {
+  width: 680px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  overflow-x: auto;
+  background: #ffffff;
+  border-right: 1px solid #cbd5e1;
+}
+
+.tg-excel-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Column Letters Row (Row 0) */
+.tg-col-letter-th {
+  background: #f3f2f1;
+  color: #605e5c;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-align: center;
+  border-right: 1px solid #d4d4d4;
+  border-bottom: 1px solid #d4d4d4;
+  height: 24px !important;
+  min-height: 24px !important;
+  max-height: 24px !important;
+  line-height: 24px !important;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  user-select: none;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+.tg-corner-cell {
+  background: #e1dfdd;
+  border-right: 1px solid #d4d4d4;
+  border-bottom: 1px solid #d4d4d4;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  height: 24px !important;
+  min-height: 24px !important;
+  max-height: 24px !important;
+  line-height: 24px !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+/* Table Column Headers (Row 1) */
+.tg-table-header-th {
+  background: #107c41;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-right: 1px solid #0b5a2f;
+  border-bottom: 1px solid #0b5a2f;
+  height: 26px !important;
+  min-height: 26px !important;
+  max-height: 26px !important;
+  line-height: 26px !important;
+  position: sticky;
+  top: 24px;
+  z-index: 15;
+  user-select: none;
+  padding: 0 4px !important;
+  text-align: center;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.tg-row-num-corner {
+  background: #f3f2f1;
+  color: #605e5c;
+  font-size: 10px;
+  font-weight: 700;
+  border-right: 1px solid #d4d4d4;
+  border-bottom: 1px solid #d4d4d4;
+  position: sticky;
+  top: 24px;
+  left: 0;
+  z-index: 25;
+  text-align: center;
+  width: 40px;
+  height: 26px !important;
+  min-height: 26px !important;
+  max-height: 26px !important;
+  line-height: 26px !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+/* Row Numbers */
+.tg-row-num-td {
+  background: #f3f2f1;
+  color: #605e5c;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-align: center;
+  border-right: 1px solid #d4d4d4;
+  border-bottom: 1px solid #e5e5e5;
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  width: 40px;
+  min-width: 40px;
+  user-select: none;
+  height: 38px;
+  box-sizing: border-box;
+}
+
+/* Data Cells */
+.tg-task-tr {
+  height: 38px;
+  box-sizing: border-box;
+}
+
+.tg-task-tr td {
+  height: 38px;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+.tg-data-td {
+  border-right: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 2px 6px;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: cell;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.tg-data-td input[type="date"],
+.tg-data-td input[type="number"],
+.tg-data-td input[type="text"] {
+  height: 24px !important;
+  line-height: 24px !important;
+  padding: 0 4px !important;
+  box-sizing: border-box !important;
+}
+
+.tg-data-td:hover {
+  background: #f8fafc;
+}
+
+.tg-data-td.cell-selected {
+  outline: 2px solid #107c41;
+  outline-offset: -2px;
+  background: #f0fdf4 !important;
+  z-index: 5;
+}
+
+.tg-data-td.cell-selected::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 6px;
+  height: 6px;
+  background: #107c41;
+  border: 1px solid #ffffff;
+}
+
+/* Row Type Styling */
+.tg-row-category {
+  background: #f1f5f9;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.tg-row-category td {
+  border-bottom: 1.5px solid #cbd5e1;
+}
+
+.tg-row-subcategory {
+  background: #f8fafc;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+/* Draggable Split Divider */
+.tg-divider {
+  width: 8px;
+  background: #f1f5f9;
+  border-left: 1px solid #cbd5e1;
+  border-right: 1px solid #cbd5e1;
+  cursor: col-resize;
+  position: relative;
+  flex-shrink: 0;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.tg-divider:hover,
+.tg-divider.dragging {
+  background: #107c41;
+}
+
+.tg-divider-handle {
+  width: 2px;
+  height: 36px;
+  background: #94a3b8;
+  border-radius: 1px;
+}
+
+.tg-divider:hover .tg-divider-handle,
+.tg-divider.dragging .tg-divider-handle {
+  background: #ffffff;
+}
+
+/* Right Panel - Gantt Timeline Viewport */
+.tg-right-panel {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  background: #ffffff;
+  position: relative;
+}
+
+/* Timeline Header */
+.tg-timeline-header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #1e293b;
+  box-sizing: border-box !important;
+}
+
+.tg-time-row-top {
+  display: flex;
+  height: 25px !important;
+  min-height: 25px !important;
+  max-height: 25px !important;
+  line-height: 25px !important;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  box-sizing: border-box !important;
+}
+
+.tg-time-cell-top {
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid rgba(255,255,255,0.15);
+  box-sizing: border-box !important;
+  height: 25px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.tg-time-row-bottom {
+  display: flex;
+  height: 27px !important;
+  min-height: 27px !important;
+  max-height: 27px !important;
+  line-height: 27px !important;
+  box-sizing: border-box !important;
+  border-bottom: 1px solid #0f172a;
+}
+
+.tg-time-cell-bottom {
+  color: #cbd5e1;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  box-sizing: border-box !important;
+  height: 26px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+.tg-time-cell-bottom.alt {
+  background: rgba(255,255,255,0.06);
+}
+
+/* Coordinates Strip */
+.tg-coord-row {
+  display: flex;
+  height: 22px !important;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  line-height: 22px !important;
+  background: #f8fafc;
+  border-bottom: 1px solid #cbd5e1;
+  box-sizing: border-box !important;
+}
+
+.tg-coord-cell {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #64748b;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #e2e8f0;
+  box-sizing: border-box !important;
+  height: 21px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+/* Timeline Body */
+.tg-timeline-body {
+  position: relative;
+}
+
+.tg-timeline-row {
+  height: 40px !important;
+  box-sizing: border-box !important;
+  border-bottom: 1px solid #f1f5f9;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tg-timeline-row.row-category {
+  background: #f8fafc;
+}
+
+.tg-timeline-gridline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-right: 1px solid #f1f5f9;
+  pointer-events: none;
+}
+
+.tg-timeline-gridline.major {
+  border-right-color: #e2e8f0;
+}
+
+/* Current Date Indicator Line */
+.tg-today-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #dc2626;
+  z-index: 18;
+  pointer-events: none;
+}
+
+.tg-today-badge {
+  position: absolute;
+  top: 2px;
+  transform: translateX(-50%);
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+/* Gantt Task Bars */
+.tg-bar-wrapper {
+  position: absolute;
+  height: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.tg-bar-wrapper:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  z-index: 12;
+}
+
+.tg-bar-planned {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: #3b82f6;
+  border-radius: 3px;
+}
+
+.tg-bar-planned.cpm {
+  background: #ef4444;
+}
+
+.tg-bar-actual {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: #10b981;
+  border-radius: 3px 0 0 3px;
+  transition: width 0.2s;
+}
+
+.tg-bar-actual.cpm {
+  background: #b91c1c;
+}
+
+.tg-bar-label {
+  position: relative;
+  z-index: 2;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  padding: 0 6px;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  pointer-events: none;
+}
+
+/* S-Curve Overlay SVG */
+.tg-scurve-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 16;
+}
+
+/* ==========================================================================
+   MODAL DIALOGS - QTY INST, BILLING RECORD & STYLE SETTINGS
+   ========================================================================== */
+.tg-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(2px);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.tg-modal-overlay.show {
+  display: flex;
+}
+
+.tg-modal-dialog {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-width: 96vw;
+  max-height: 94vh;
+}
+
+.tg-modal-header {
+  padding: 12px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+}
+
+.tg-modal-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #1e3a8a;
+  text-transform: uppercase;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tg-modal-body {
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.tg-modal-footer {
+  padding: 10px 18px;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Qty Inst Modal View Tabs */
+.tg-view-tabs-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  margin-bottom: 10px;
+  overflow-x: auto;
+}
+
+.tg-view-tab {
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+
+.tg-view-tab:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.tg-view-tab.active {
+  background: #107c41;
+  color: #ffffff;
+  border-color: #107c41;
+}
+
+/* Qty Inst Dual Panel Container */
+.tg-qty-modal-container {
+  display: flex;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  overflow: hidden;
+  height: calc(88vh - 150px);
+  min-height: 400px;
+}
+
+.tg-qty-left {
+  width: 520px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  overflow-x: auto;
+  background: #f8fafc;
+  border-right: 2px solid #cbd5e1;
+  scrollbar-width: thin;
+}
+
+.tg-qty-left::-webkit-scrollbar:vertical {
+  width: 0px !important;
+  display: none !important;
+}
+
+.tg-qty-right {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  background: #ffffff;
+  position: relative;
+}
+
+.tg-qty-input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  text-align: right;
+  padding: 2px 4px;
+  font-size: 11px;
+  font-family: inherit;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  box-sizing: border-box;
+  -moz-appearance: textfield;
+}
+
+.tg-qty-input::-webkit-outer-spin-button,
+.tg-qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.tg-qty-input:focus {
+  background: #fef08a !important;
+  box-shadow: inset 0 0 0 1.5px #ca8a04;
+}
+
+/* Billing Record Table */
+.tg-billing-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.tg-billing-table th {
+  background: #1e293b;
+  color: #ffffff;
+  padding: 8px 10px;
+  text-align: left;
+  border: 1px solid #334155;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.tg-billing-table td {
+  padding: 6px 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.tg-billing-table tr:hover {
+  background: #f8fafc;
+}
+
+/* Summary Rows in Qty Modal */
+.tg-qty-summary-row {
+  background: #f1f5f9;
+  font-weight: 800;
+  color: #1e293b;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.tg-qty-summary-row:hover {
+  background: #e2e8f0;
+}
+
+.tg-qty-summary-row.active-summary-row {
+  background: #dbeafe !important;
+  color: #1e40af !important;
+}
+
+.tg-qty-summary-row.active-summary-row td {
+  border-bottom: 2px solid #3b82f6 !important;
+}
+
+.tg-qty-period-cell {
+  border-right: 1px solid #e2e8f0;
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 4px;
+  box-sizing: border-box !important;
+  font-size: 10px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tg-qty-right-row {
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
+  box-sizing: border-box !important;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  transition: background-color 0.08s ease;
+}
+
+.tg-qty-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 11px;
+}
+
+.tg-qty-table th {
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  box-sizing: border-box !important;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tg-qty-table tr {
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
+  box-sizing: border-box !important;
+  transition: background-color 0.08s ease;
+}
+
+.tg-qty-table td {
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
+  border-right: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0 5px;
+  box-sizing: border-box !important;
+  white-space: nowrap;
+  font-size: 10.5px;
+  vertical-align: middle;
+}
+
+.tg-qty-table td input[type="date"],
+.tg-qty-table td input[type="number"],
+.tg-qty-table td input[type="text"] {
+  height: 24px !important;
+  line-height: 24px !important;
+  padding: 0 2px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  vertical-align: middle;
+}
+
+.tg-qty-table tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Coordinated row hover between left and right table */
+.tg-qty-row-hovered {
+  background-color: #e0f2fe !important;
+}
+

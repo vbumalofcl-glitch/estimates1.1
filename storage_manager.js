@@ -600,18 +600,33 @@ const FCLStorage = {
             progCount++;
           }
 
+          const codeVal = itemNo || String(boqRows.length + 1);
+          let rowType = 'subsubcategory';
+          const parts = String(codeVal || '').split('.').map(s => s.trim()).filter(s => s && s !== '00' && s !== '0');
+          if (parts.length <= 1) rowType = 'category';
+          else if (parts.length === 2) rowType = 'subcategory';
+          else if (parts.length === 3) rowType = 'subsubcategory';
+          else rowType = 'subsubsubcategory';
+
           boqRows.push({
             id: 'boq-item-' + (boqRows.length + 1),
-            itemNo: itemNo || String(boqRows.length + 1),
+            itemNo: codeVal,
+            code: codeVal,
             description: desc,
+            title: desc,
             specification: idx.spec >= 0 ? cleanStr(cells[idx.spec]) : '',
             unit: idx.unit >= 0 ? cleanStr(cells[idx.unit]) : '',
             quantity: qty,
+            qty: qty,
             materialUnitCost: matCost,
             leUnitCost: leCost,
+            laborUnitCost: leCost,
             unitCost: uCost,
             grandTotalCost: grand,
-            percentDone: prog
+            percentDone: prog,
+            type: rowType,
+            condition: 'CPM',
+            collapsed: false
           });
         });
 

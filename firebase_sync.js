@@ -149,7 +149,7 @@ const FCLFirebaseSync = {
       this._initSnapshotListeners();
 
       // 5. Monitor browser online / offline state
-      window.addEventListener('online', () => {
+      if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') window.addEventListener('online', () => {
         if (this.isConfigured() && this.db) {
           this._setState('connected', 'Cloud Synced');
           this.updateBadges();
@@ -157,7 +157,7 @@ const FCLFirebaseSync = {
         }
       });
 
-      window.addEventListener('offline', () => {
+      if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') window.addEventListener('offline', () => {
         this._setState('offline', 'Offline (IndexedDB Queued)');
         this.updateBadges();
         this._showToast('📡 You are offline. Changes will save locally and sync when reconnected.', 'warning');
@@ -351,7 +351,16 @@ const FCLFirebaseSync = {
 
     // Update local storage without triggering recursive cloud push
     if (cleanData.boq) {
-      FCLStorage.saveProjectSection(projectId, 'boq', cleanData.boq, true);
+      const bData = cleanData.boq.boqData;
+      const isCorrupted = Array.isArray(bData) &&
+        bData.length > 0 &&
+        bData.every(r => r.type === 'task' || (r.id && String(r.id).startsWith('task_item_'))) &&
+        !bData.some(r => r.type === 'category' || (parseFloat(r.materialUnitCost) || 0) > 0 || (parseFloat(r.laborUnitCost || r.leUnitCost) || 0) > 0);
+      if (!isCorrupted) {
+        FCLStorage.saveProjectSection(projectId, 'boq', cleanData.boq, true);
+      } else {
+        console.warn(`[FCL Cloud Sync] Ignored corrupted BOQ remote payload for project ${projectId}`);
+      }
     }
     const ganttVal = cleanData.gantt || cleanData.ganttSettings;
     if (ganttVal) {
@@ -729,7 +738,7 @@ const FCLFirebaseSync = {
         </div>
 
         <!-- Footer Actions -->
-        <div style="background:#f8fafc; padding:14px 24px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
+        <div style="background:#f8fafc; padding:14px 24px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
             ${isConf ? `
               <button type="button" onclick="FCLFirebaseSync.clearConfig()" style="background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; padding:7px 12px; font-size:11.5px; font-weight:700; border-radius:6px; cursor:pointer;">
@@ -737,9 +746,15 @@ const FCLFirebaseSync = {
               </button>
             ` : ''}
           </div>
-          <div style="display:flex; gap:10px;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" onclick="document.getElementById('fclCloudConfigModal').style.display='none'; FCLCloudVault.openVaultModal();" style="background:#1e40af; color:#ffffff; border:none; padding:7px 14px; font-size:12px; font-weight:700; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:5px;" title="Open Cloud File Vault">
+              📁 Cloud Vault
+            </button>
+            <button type="button" id="btnTestCloudPing" onclick="FCLFirebaseSync.testCloudPingFromModal(this)" style="background:#059669; color:#ffffff; border:none; padding:7px 14px; font-size:12px; font-weight:700; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:5px;" title="Test Cloud Latency">
+              ⚡ Test Ping
+            </button>
             <button type="button" onclick="document.getElementById('fclCloudConfigModal').style.display='none'" style="background:#ffffff; color:#475569; border:1px solid #cbd5e1; padding:7px 14px; font-size:12px; font-weight:600; border-radius:6px; cursor:pointer;">
-              Cancel
+              Close
             </button>
             <button type="button" onclick="FCLFirebaseSync.saveConfigFromModal()" style="background:#2563eb; color:#ffffff; border:none; padding:7px 18px; font-size:12px; font-weight:700; border-radius:6px; cursor:pointer; box-shadow:0 2px 6px rgba(37,99,235,0.3);">
               Save &amp; Connect Cloud
@@ -850,6 +865,71 @@ const FCLFirebaseSync = {
   /**
    * Lightweight toast notification helper
    */
+
+  /**
+   * Ping Cloud Firestore to test latency and connectivity
+   */
+  async testConnection() {
+    if (!this.isConfigured()) {
+      return { success: false, message: 'Firebase credentials are not configured.' };
+    }
+    if (!this.db) {
+      await this.init();
+    }
+    if (!this.db) {
+      return { success: false, message: 'Could not connect to Firestore database.' };
+    }
+
+    const t0 = performance.now();
+    try {
+      const pingRef = this.db.collection('fcl_system').doc('ping');
+      await pingRef.set({
+        lastPingAt: firebase.firestore.FieldValue.serverTimestamp(),
+        clientId: this.clientId,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Node/Browser'
+      }, { merge: true });
+      const latencyMs = Math.round(performance.now() - t0);
+      this.lastSyncTime = new Date();
+      this._setState('connected', `Cloud Synced (${latencyMs}ms)`);
+      this.updateBadges();
+      return { success: true, latency: latencyMs, message: `Connected to Cloud Firestore (Latency: ${latencyMs}ms)` };
+    } catch (err) {
+      console.error('[FCL Cloud Sync] Ping test failed:', err);
+      return { success: false, message: err.message };
+    }
+  },
+
+  async testCloudPingFromModal(btn) {
+    if (!btn) btn = document.getElementById('btnTestCloudPing');
+    const origHtml = btn ? btn.innerHTML : '';
+    if (btn) {
+      btn.innerHTML = '⏳ Testing...';
+      btn.disabled = true;
+    }
+
+    const res = await this.testConnection();
+    if (btn) {
+      btn.innerHTML = origHtml;
+      btn.disabled = false;
+    }
+
+    if (res.success) {
+      this._showToast(`⚡ ${res.message}`, 'success');
+      const statusBox = document.getElementById('fclCloudPingStatus');
+      if (statusBox) {
+        statusBox.innerHTML = `🟢 <strong>Cloud Online</strong> &bull; Latency: ${res.latency}ms &bull; Project: <code>${this.getConfig().projectId}</code>`;
+        statusBox.style.display = 'block';
+      }
+    } else {
+      this._showToast(`⚠️ Connection Test: ${res.message}`, 'warning');
+      const statusBox = document.getElementById('fclCloudPingStatus');
+      if (statusBox) {
+        statusBox.innerHTML = `🔴 <strong>Connection Failed</strong>: ${res.message}`;
+        statusBox.style.display = 'block';
+      }
+    }
+  },
+
   _showToast(msg, type = 'info') {
     if (typeof document === 'undefined' || !document.body) return;
     let toast = document.getElementById('fclSyncToast');
@@ -914,6 +994,888 @@ if (typeof window !== 'undefined') {
     FCLFirebaseSync.init();
   }
 }
+
+
+/**
+ * =========================================================================================
+ * FCL Aranang Cloud File Vault Module
+ * =========================================================================================
+ * Allows engineers and estimators to:
+ * 1. Save full project file snapshots (.fclproj) to Firebase Cloud Firestore & Cloud Storage.
+ * 2. Browse, filter, search, and manage cloud snapshots across all devices.
+ * 3. Load / restore any cloud snapshot version into the workspace with 1 click.
+ * 4. Download any cloud snapshot directly as an .fclproj file for offline archival.
+ * 5. Upload external .fclproj, .json, or Excel (.xlsx) files directly into the Cloud Vault.
+ * =========================================================================================
+ */
+const FCLCloudVault = {
+  _modalId: 'fclCloudVaultModal',
+  _snapshots: [],
+  _isLoading: false,
+  _activeTab: 'list', // 'list' | 'save' | 'upload' | 'status'
+  _searchFilter: '',
+  _selectedFile: null,
+
+  isReady() {
+    return typeof FCLFirebaseSync !== 'undefined' && FCLFirebaseSync.isConfigured() && FCLFirebaseSync.db;
+  },
+
+  getCollection() {
+    if (!this.isReady()) return null;
+    return FCLFirebaseSync.db.collection('fcl_cloud_vault');
+  },
+
+  async buildProjectBundle(scope = 'active') {
+    if (typeof FCLStorage === 'undefined') {
+      throw new Error('FCLStorage module is not available.');
+    }
+
+    const activeId = FCLStorage.getActiveProjectId();
+    const boqData = (await FCLStorage.loadProjectBOQ(activeId)) || (await FCLStorage.load(FCL_STORAGE_KEYS.boq)) || FCLStorage.readSync(FCL_STORAGE_KEYS.boq) || {};
+    const dupaData = (await FCLStorage.load(FCL_STORAGE_KEYS.dupa)) || FCLStorage.readSync(FCL_STORAGE_KEYS.dupa) || {};
+    const priceListData = (await FCLStorage.load(FCL_STORAGE_KEYS.priceList)) || FCLStorage.readSync(FCL_STORAGE_KEYS.priceList) || {};
+    const coverData = (await FCLStorage.load(FCL_STORAGE_KEYS.cover)) || FCLStorage.readSync(FCL_STORAGE_KEYS.cover) || {};
+    const ganttSettings = (await FCLStorage.loadProjectGantt(activeId)) || (await FCLStorage.load(FCL_STORAGE_KEYS.ganttSettings)) || FCLStorage.readSync(FCL_STORAGE_KEYS.ganttSettings) || {};
+    const ganttStartDate = (await FCLStorage.load(FCL_STORAGE_KEYS.ganttStartDate)) || FCLStorage.readSync(FCL_STORAGE_KEYS.ganttStartDate) || '';
+    const manpowerData = (await FCLStorage.loadProjectManpower(activeId)) || (await FCLStorage.load(FCL_STORAGE_KEYS.manpower)) || FCLStorage.readSync(FCL_STORAGE_KEYS.manpower) || {};
+    const catalog = FCLStorage.readSync('FCL_PROJECT_CATALOG_DATA') || null;
+
+    const projectName = (boqData.projectFields && boqData.projectFields.projectName) || 'Construction_Project';
+    const projectCode = (boqData.projectFields && boqData.projectFields.projectCode) || activeId;
+
+    const projectsData = {};
+    if (scope === 'all' && Array.isArray(catalog)) {
+      for (const p of catalog) {
+        projectsData[p.id] = {
+          boq: (await FCLStorage.loadProjectBOQ(p.id)) || p.boq || null,
+          gantt: (await FCLStorage.loadProjectGantt(p.id)) || p.timeline || null,
+          manpower: (await FCLStorage.loadProjectManpower(p.id)) || p.manpower || null
+        };
+      }
+    } else {
+      projectsData[activeId] = {
+        boq: boqData,
+        gantt: ganttSettings,
+        manpower: manpowerData
+      };
+    }
+
+    return {
+      app: 'FCLDC_Integrated_Project_Controls',
+      version: '2.0',
+      format: 'FCLPROJ_V2',
+      exportedAt: new Date().toISOString(),
+      activeProjectId: activeId,
+      scope: scope,
+      metadata: {
+        projectName: projectName,
+        projectCode: projectCode,
+        clientName: (boqData.projectFields && boqData.projectFields.clientName) || '',
+        location: (boqData.projectFields && boqData.projectFields.location) || ''
+      },
+      catalog: catalog,
+      projectsData: projectsData,
+      sections: {
+        priceList: priceListData,
+        dupa: dupaData,
+        boq: boqData,
+        cover: coverData,
+        ganttSettings: ganttSettings,
+        ganttStartDate: ganttStartDate,
+        manpower: manpowerData
+      }
+    };
+  },
+
+  async saveSnapshot(customName, description = '', scope = 'active') {
+    if (!this.isReady()) {
+      await FCLFirebaseSync.init();
+      if (!this.isReady()) {
+        alert('Cloud connection is not ready. Please connect to Firebase first.');
+        return false;
+      }
+    }
+
+    const bundle = await this.buildProjectBundle(scope);
+    const projName = bundle.metadata.projectName || 'Project';
+    const projCode = bundle.metadata.projectCode || bundle.activeProjectId || 'PRJ';
+    const snapName = customName && customName.trim() ? customName.trim() : `${projName} - ${new Date().toLocaleDateString()}`;
+    const safeTitle = snapName.replace(/[^a-zA-Z0-9_\-\s]/g, '').trim().replace(/\s+/g, '_');
+    const dateStr = new Date().toISOString().slice(0, 10);
+    const fileName = `${projCode}_${safeTitle}_${dateStr}.fclproj`;
+
+    const jsonStr = JSON.stringify(bundle);
+    const sizeBytes = new Blob([jsonStr]).size;
+    const sizeFormatted = sizeBytes > 1048576 
+      ? (sizeBytes / 1048576).toFixed(2) + ' MB'
+      : (sizeBytes / 1024).toFixed(1) + ' KB';
+
+    const snapId = 'snap_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+
+    const docData = {
+      id: snapId,
+      name: snapName,
+      fileName: fileName,
+      description: description || '',
+      scope: scope,
+      projectId: bundle.activeProjectId,
+      projectName: projName,
+      projectCode: projCode,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAtIso: new Date().toISOString(),
+      fileSize: sizeBytes,
+      sizeFormatted: sizeFormatted,
+      itemCounts: {
+        boq: (bundle.sections.boq && Array.isArray(bundle.sections.boq.boqData)) ? bundle.sections.boq.boqData.length : 0,
+        tasks: (bundle.sections.ganttSettings && Array.isArray(bundle.sections.ganttSettings.ganttTasks)) ? bundle.sections.ganttSettings.ganttTasks.length : 0,
+        dupa: (bundle.sections.dupa && Array.isArray(bundle.sections.dupa.analysisData)) ? bundle.sections.dupa.analysisData.length : 0
+      },
+      bundleJson: jsonStr,
+      savedBy: FCLFirebaseSync.clientId
+    };
+
+    const coll = this.getCollection();
+    await coll.doc(snapId).set(docData);
+
+    // Optional upload to Firebase Storage if available
+    if (typeof firebase !== 'undefined' && firebase.storage && FCLFirebaseSync.getConfig().storageBucket) {
+      try {
+        const storageRef = firebase.storage().ref();
+        const fileRef = storageRef.child(`snapshots/${fileName}`);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        await fileRef.put(blob);
+        const downloadUrl = await fileRef.getDownloadURL();
+        await coll.doc(snapId).update({ storageUrl: downloadUrl });
+      } catch (stErr) {
+        console.warn('[FCL Cloud Vault] Firebase Storage optional upload:', stErr.message);
+      }
+    }
+
+    FCLFirebaseSync._showToast(`☁️ Cloud Snapshot "${snapName}" saved successfully!`, 'success');
+    return snapId;
+  },
+
+  async fetchSnapshots() {
+    if (!this.isReady()) {
+      await FCLFirebaseSync.init();
+      if (!this.isReady()) return [];
+    }
+
+    const coll = this.getCollection();
+    if (!coll) return [];
+
+    try {
+      const snap = await coll.get();
+      const list = [];
+      snap.forEach(doc => {
+        const d = doc.data();
+        d.id = doc.id;
+        list.push(d);
+      });
+      // Sort newest first
+      list.sort((a, b) => {
+        const timeA = a.createdAtIso ? new Date(a.createdAtIso).getTime() : 0;
+        const timeB = b.createdAtIso ? new Date(b.createdAtIso).getTime() : 0;
+        return timeB - timeA;
+      });
+      this._snapshots = list;
+      return list;
+    } catch (err) {
+      console.error('[FCL Cloud Vault] fetchSnapshots error:', err);
+      return [];
+    }
+  },
+
+  async loadSnapshot(snapshotId) {
+    let item = this._snapshots.find(s => s.id === snapshotId);
+    if (!item) {
+      const coll = this.getCollection();
+      const doc = await coll.doc(snapshotId).get();
+      if (!doc.exists) {
+        alert('Snapshot not found in Cloud Vault.');
+        return;
+      }
+      item = doc.data();
+      item.id = doc.id;
+    }
+
+    const confirmMsg = `Load Cloud Snapshot "${item.name}"?\n\nProject: ${item.projectName} (${item.projectCode || item.projectId})\nSaved: ${item.createdAtIso ? new Date(item.createdAtIso).toLocaleString() : 'Recent'}\n\nThis will restore all Bill of Quantities, Gantt Schedule, and Cost Estimate data into your workspace.`;
+    if (!confirm(confirmMsg)) return;
+
+    try {
+      let bundle = null;
+      if (item.bundleJson) {
+        bundle = JSON.parse(item.bundleJson);
+      } else if (item.bundle) {
+        bundle = item.bundle;
+      } else if (item.storageUrl) {
+        const res = await fetch(item.storageUrl);
+        bundle = await res.json();
+      }
+
+      if (!bundle || (!bundle.sections && !bundle.app && !bundle.catalog)) {
+        throw new Error('Invalid project file format in cloud snapshot.');
+      }
+
+      const sections = bundle.sections || bundle;
+
+      if (sections.priceList) {
+        await FCLStorage.save(FCL_STORAGE_KEYS.priceList, sections.priceList);
+      }
+      if (sections.dupa) {
+        await FCLStorage.save(FCL_STORAGE_KEYS.dupa, sections.dupa);
+      }
+      if (sections.boq) {
+        await FCLStorage.save(FCL_STORAGE_KEYS.boq, sections.boq);
+      }
+      if (sections.cover) {
+        await FCLStorage.save(FCL_STORAGE_KEYS.cover, sections.cover);
+      }
+      if (sections.ganttSettings) {
+        await FCLStorage.save(FCL_STORAGE_KEYS.ganttSettings, sections.ganttSettings);
+      }
+      if (sections.ganttStartDate) {
+        await FCLStorage.save(FCL_STORAGE_KEYS.ganttStartDate, sections.ganttStartDate);
+      }
+      if (sections.manpower) {
+        await FCLStorage.save(FCL_STORAGE_KEYS.manpower, sections.manpower);
+      }
+
+      if (bundle.catalog && Array.isArray(bundle.catalog)) {
+        await FCLStorage.save('FCL_PROJECT_CATALOG_DATA', bundle.catalog);
+      }
+      if (bundle.projectsData && typeof bundle.projectsData === 'object') {
+        for (const [pId, pData] of Object.entries(bundle.projectsData)) {
+          if (pData.boq) await FCLStorage.saveProjectBOQ(pId, pData.boq);
+          if (pData.gantt) await FCLStorage.saveProjectGantt(pId, pData.gantt);
+          if (pData.manpower) await FCLStorage.saveProjectManpower(pId, pData.manpower);
+        }
+      }
+      if (bundle.activeProjectId) {
+        FCLStorage.setActiveProjectId(bundle.activeProjectId);
+      }
+
+      FCLFirebaseSync._showToast(`✅ Snapshot "${item.name}" loaded successfully!`, 'success');
+      this.closeModal();
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+
+    } catch (err) {
+      alert('Failed to load cloud snapshot: ' + err.message);
+    }
+  },
+
+  async downloadSnapshot(snapshotId) {
+    let item = this._snapshots.find(s => s.id === snapshotId);
+    if (!item) {
+      const coll = this.getCollection();
+      const doc = await coll.doc(snapshotId).get();
+      if (!doc.exists) {
+        alert('Snapshot not found in Cloud Vault.');
+        return;
+      }
+      item = doc.data();
+    }
+
+    const jsonStr = item.bundleJson || JSON.stringify(item.bundle, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = item.fileName || `${item.name}.fclproj`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    FCLFirebaseSync._showToast(`💾 Downloaded "${a.download}"`, 'info');
+  },
+
+  async deleteSnapshot(snapshotId) {
+    const item = this._snapshots.find(s => s.id === snapshotId);
+    const name = item ? item.name : 'this snapshot';
+    if (!confirm(`Are you sure you want to delete "${name}" from Cloud Vault?\nThis action cannot be undone.`)) {
+      return;
+    }
+    try {
+      const coll = this.getCollection();
+      await coll.doc(snapshotId).delete();
+      this._snapshots = this._snapshots.filter(s => s.id !== snapshotId);
+      FCLFirebaseSync._showToast(`🗑️ Snapshot deleted from Cloud Vault.`, 'warning');
+      this.renderSnapshotList();
+    } catch (err) {
+      alert('Could not delete snapshot: ' + err.message);
+    }
+  },
+
+  closeModal() {
+    const modal = document.getElementById(this._modalId);
+    if (modal) modal.style.display = 'none';
+  },
+
+  switchTab(tab) {
+    this._activeTab = tab;
+    this.updateTabHeaders();
+    const tabPanels = ['list', 'save', 'upload', 'status'];
+    tabPanels.forEach(t => {
+      const p = document.getElementById(`fclVaultTab_${t}`);
+      if (p) p.style.display = (t === tab) ? 'block' : 'none';
+    });
+
+    if (tab === 'list') {
+      this.renderSnapshotList();
+    } else if (tab === 'save') {
+      this.prepareSaveTab();
+    }
+  },
+
+  updateTabHeaders() {
+    const tabButtons = ['list', 'save', 'upload', 'status'];
+    tabButtons.forEach(t => {
+      const btn = document.getElementById(`fclVaultTabBtn_${t}`);
+      if (btn) {
+        if (t === this._activeTab) {
+          btn.style.color = '#2563eb';
+          btn.style.borderBottom = '2px solid #2563eb';
+          btn.style.fontWeight = '700';
+          btn.style.background = '#f8fafc';
+        } else {
+          btn.style.color = '#64748b';
+          btn.style.borderBottom = '2px solid transparent';
+          btn.style.fontWeight = '600';
+          btn.style.background = 'transparent';
+        }
+      }
+    });
+  },
+
+  prepareSaveTab() {
+    const activeId = (typeof FCLStorage !== 'undefined') ? FCLStorage.getActiveProjectId() : 'PRJ-2026-001';
+    let projName = 'Construction Project';
+    let totalBudget = '₱0.00';
+    let boqCount = 0;
+    let taskCount = 0;
+
+    try {
+      const boq = FCLStorage.readProjectSectionSync(activeId, 'boq') || FCLStorage.readSync(FCL_STORAGE_KEYS.boq);
+      if (boq) {
+        if (boq.projectFields && boq.projectFields.projectName) projName = boq.projectFields.projectName;
+        if (boq.totalBudget) {
+          totalBudget = '₱' + Number(boq.totalBudget).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        if (Array.isArray(boq.boqData)) boqCount = boq.boqData.length;
+      }
+      const gantt = FCLStorage.readProjectSectionSync(activeId, 'ganttSettings') || FCLStorage.readSync(FCL_STORAGE_KEYS.ganttSettings);
+      if (gantt && Array.isArray(gantt.ganttTasks)) {
+        taskCount = gantt.ganttTasks.length;
+      }
+    } catch (e) {}
+
+    const nameInput = document.getElementById('fclVaultSaveTitle');
+    if (nameInput) {
+      nameInput.value = `${projName} - Baseline ${new Date().toLocaleDateString()}`;
+    }
+
+    const badge = document.getElementById('fclVaultActiveProjSummary');
+    if (badge) {
+      badge.innerHTML = `
+        <div style="font-weight:700; color:#0f172a; font-size:13px;">${projName} <span style="font-size:11px; color:#2563eb; background:#eff6ff; padding:2px 8px; border-radius:12px; border:1px solid #bfdbfe;">${activeId}</span></div>
+        <div style="font-size:11.5px; color:#64748b; margin-top:4px;">
+          Budget: <strong>${totalBudget}</strong> &bull; <strong>${boqCount}</strong> BOQ Items &bull; <strong>${taskCount}</strong> Scheduled Tasks
+        </div>
+      `;
+    }
+  },
+
+  async handleSaveFormSubmit() {
+    const nameInput = document.getElementById('fclVaultSaveTitle');
+    const descInput = document.getElementById('fclVaultSaveDesc');
+    const scopeRadio = document.querySelector('input[name="fclVaultScope"]:checked');
+    const btn = document.getElementById('fclVaultSaveSubmitBtn');
+
+    const name = nameInput ? nameInput.value.trim() : '';
+    if (!name) {
+      alert('Please enter a name for your cloud snapshot.');
+      return;
+    }
+
+    const desc = descInput ? descInput.value.trim() : '';
+    const scope = scopeRadio ? scopeRadio.value : 'active';
+
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '⏳ Uploading to Cloud Vault...';
+    }
+
+    try {
+      await this.saveSnapshot(name, desc, scope);
+      await this.fetchSnapshots();
+      this.switchTab('list');
+    } catch (err) {
+      alert('Failed to save snapshot to cloud: ' + err.message);
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '☁️ Save Snapshot to Cloud Vault';
+      }
+    }
+  },
+
+  async handleUploadFile(file) {
+    if (!file) return;
+    const isExcel = /\.(xlsx|xls|xlsm|xlsb|csv)$/i.test(file.name);
+    const customTitleInput = document.getElementById('fclVaultUploadTitle');
+    const customDescInput = document.getElementById('fclVaultUploadDesc');
+    const btn = document.getElementById('fclVaultUploadSubmitBtn');
+
+    let customName = customTitleInput ? customTitleInput.value.trim() : '';
+    if (!customName) {
+      customName = file.name.replace(/\.[^/.]+$/, '').replace(/[_+-]/g, ' ');
+    }
+    const description = customDescInput ? customDescInput.value.trim() : `Uploaded from ${file.name}`;
+
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '⏳ Processing & Uploading...';
+    }
+
+    try {
+      if (isExcel) {
+        if (typeof XLSX === 'undefined') {
+          throw new Error('Excel parser library (XLSX) is not ready. Please use a .fclproj or .json file.');
+        }
+        const buffer = await file.arrayBuffer();
+        const workbook = XLSX.read(buffer, { type: 'array' });
+        const { bundle } = FCLStorage.parseMasterExcelWorkbook(workbook, file.name);
+        
+        const jsonStr = JSON.stringify(bundle);
+        const sizeBytes = new Blob([jsonStr]).size;
+        const sizeFormatted = sizeBytes > 1048576 ? (sizeBytes / 1048576).toFixed(2) + ' MB' : (sizeBytes / 1024).toFixed(1) + ' KB';
+        const snapId = 'snap_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+
+        const docData = {
+          id: snapId,
+          name: customName,
+          fileName: file.name.replace(/\.[^/.]+$/, '') + '.fclproj',
+          description: description,
+          scope: 'imported_excel',
+          projectId: bundle.activeProjectId || 'PRJ-IMPORTED',
+          projectName: (bundle.metadata && bundle.metadata.projectName) || customName,
+          projectCode: (bundle.metadata && bundle.metadata.projectCode) || 'PRJ-IMP',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          createdAtIso: new Date().toISOString(),
+          fileSize: sizeBytes,
+          sizeFormatted: sizeFormatted,
+          itemCounts: {
+            boq: (bundle.sections.boq && Array.isArray(bundle.sections.boq.boqData)) ? bundle.sections.boq.boqData.length : 0,
+            tasks: (bundle.sections.ganttSettings && Array.isArray(bundle.sections.ganttSettings.ganttTasks)) ? bundle.sections.ganttSettings.ganttTasks.length : 0,
+            dupa: (bundle.sections.dupa && Array.isArray(bundle.sections.dupa.analysisData)) ? bundle.sections.dupa.analysisData.length : 0
+          },
+          bundleJson: jsonStr,
+          savedBy: FCLFirebaseSync.clientId
+        };
+
+        const coll = this.getCollection();
+        await coll.doc(snapId).set(docData);
+      } else {
+        // .fclproj or .json
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        if (!parsed || (!parsed.sections && !parsed.app && !parsed.catalog)) {
+          throw new Error('Invalid project file format. File must contain project sections or bundle.');
+        }
+
+        const sizeBytes = new Blob([text]).size;
+        const sizeFormatted = sizeBytes > 1048576 ? (sizeBytes / 1048576).toFixed(2) + ' MB' : (sizeBytes / 1024).toFixed(1) + ' KB';
+        const snapId = 'snap_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+
+        const docData = {
+          id: snapId,
+          name: customName,
+          fileName: file.name.endsWith('.fclproj') ? file.name : (file.name.replace(/\.[^/.]+$/, '') + '.fclproj'),
+          description: description,
+          scope: parsed.scope || 'imported_file',
+          projectId: parsed.activeProjectId || (parsed.metadata && parsed.metadata.projectCode) || 'PRJ-2026-001',
+          projectName: (parsed.metadata && parsed.metadata.projectName) || customName,
+          projectCode: (parsed.metadata && parsed.metadata.projectCode) || 'PRJ',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          createdAtIso: new Date().toISOString(),
+          fileSize: sizeBytes,
+          sizeFormatted: sizeFormatted,
+          itemCounts: {
+            boq: (parsed.sections && parsed.sections.boq && Array.isArray(parsed.sections.boq.boqData)) ? parsed.sections.boq.boqData.length : 0,
+            tasks: (parsed.sections && parsed.sections.ganttSettings && Array.isArray(parsed.sections.ganttSettings.ganttTasks)) ? parsed.sections.ganttSettings.ganttTasks.length : 0,
+            dupa: (parsed.sections && parsed.sections.dupa && Array.isArray(parsed.sections.dupa.analysisData)) ? parsed.sections.dupa.analysisData.length : 0
+          },
+          bundleJson: text,
+          savedBy: FCLFirebaseSync.clientId
+        };
+
+        const coll = this.getCollection();
+        await coll.doc(snapId).set(docData);
+      }
+
+      FCLFirebaseSync._showToast(`☁️ File "${file.name}" uploaded to Cloud Vault!`, 'success');
+      await this.fetchSnapshots();
+      this.switchTab('list');
+
+    } catch (err) {
+      alert('Upload failed: ' + err.message);
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '⬆️ Upload to Firebase Cloud Vault';
+      }
+    }
+  },
+
+  filterSnapshots(query) {
+    this._searchFilter = (query || '').toLowerCase().trim();
+    this.renderSnapshotList();
+  },
+
+  renderSnapshotList() {
+    const container = document.getElementById('fclVaultSnapshotsList');
+    if (!container) return;
+
+    const countBadge = document.getElementById('fclVaultCountBadge');
+    if (countBadge) {
+      countBadge.innerText = this._snapshots.length;
+    }
+
+    let items = this._snapshots;
+    if (this._searchFilter) {
+      items = items.filter(s => {
+        const text = `${s.name || ''} ${s.fileName || ''} ${s.projectName || ''} ${s.projectCode || ''} ${s.description || ''}`.toLowerCase();
+        return text.includes(this._searchFilter);
+      });
+    }
+
+    if (!items.length) {
+      container.innerHTML = `
+        <div style="text-align:center; padding:48px 16px; background:#f8fafc; border:2px dashed #cbd5e1; border-radius:12px; margin-top:8px;">
+          <div style="font-size:36px; line-height:1; margin-bottom:12px;">☁️</div>
+          <h4 style="margin:0 0 6px 0; color:#0f172a; font-size:15px; font-weight:700;">
+            ${this._searchFilter ? 'No matching snapshots found' : 'Your Cloud File Vault is Empty'}
+          </h4>
+          <p style="margin:0 0 16px 0; color:#64748b; font-size:12px; max-width:380px; margin-left:auto; margin-right:auto;">
+            ${this._searchFilter ? 'Try clearing your search query or looking for a different term.' : 'Save your first cloud snapshot to collaborate across devices or restore prior project revisions anytime.'}
+          </p>
+          <button type="button" onclick="FCLCloudVault.switchTab('save')" style="background:#2563eb; color:#ffffff; border:none; padding:8px 16px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; box-shadow:0 2px 6px rgba(37,99,235,0.3);">
+            ➕ Save Active Project to Cloud
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    const cardsHtml = items.map(s => {
+      const dateStr = s.createdAtIso ? new Date(s.createdAtIso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : 'Recent';
+      const boqCount = s.itemCounts ? (s.itemCounts.boq || 0) : 0;
+      const taskCount = s.itemCounts ? (s.itemCounts.tasks || 0) : 0;
+
+      return `
+        <div class="fcl-vault-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:14px 18px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; transition:all 0.2s ease; box-shadow:0 1px 3px rgba(0,0,0,0.04); gap:14px;" onmouseover="this.style.borderColor='#93c5fd'; this.style.boxShadow='0 4px 12px rgba(37,99,235,0.08)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
+          <!-- Left info -->
+          <div style="flex:1 1 auto; min-width:0;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
+              <span style="font-weight:700; font-size:13.5px; color:#0f172a;">${s.name || s.fileName}</span>
+              <span style="background:#eff6ff; color:#1d4ed8; font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px; border:1px solid #bfdbfe;">
+                ${s.projectCode || s.projectId || 'PRJ'}
+              </span>
+              <span style="background:#f1f5f9; color:#475569; font-size:11px; font-weight:600; padding:2px 7px; border-radius:6px;">
+                ${s.sizeFormatted || 'File'}
+              </span>
+            </div>
+
+            <div style="font-size:11.5px; color:#64748b; margin-bottom:4px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+              <span>📁 <strong>${s.projectName || 'Project'}</strong></span>
+              <span>📅 ${dateStr}</span>
+              ${(boqCount || taskCount) ? `<span>📊 <strong>${boqCount}</strong> BOQ items &bull; <strong>${taskCount}</strong> Tasks</span>` : ''}
+            </div>
+
+            ${s.description ? `<div style="font-size:11.5px; color:#334155; background:#f8fafc; padding:4px 8px; border-radius:4px; border-left:3px solid #3b82f6; margin-top:4px;">${s.description}</div>` : ''}
+          </div>
+
+          <!-- Right actions -->
+          <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+            <button type="button" onclick="FCLCloudVault.loadSnapshot('${s.id}')" style="background:#2563eb; color:#ffffff; border:none; padding:7px 12px; border-radius:6px; font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px; box-shadow:0 1px 4px rgba(37,99,235,0.25);" title="Load and restore this project snapshot into your active workspace">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              Load &amp; Open
+            </button>
+            <button type="button" onclick="FCLCloudVault.downloadSnapshot('${s.id}')" style="background:#059669; color:#ffffff; border:none; padding:7px 10px; border-radius:6px; font-size:11.5px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" title="Download .fclproj to your computer">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </button>
+            <button type="button" onclick="FCLCloudVault.deleteSnapshot('${s.id}')" style="background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; padding:7px 8px; border-radius:6px; font-size:11.5px; font-weight:600; cursor:pointer;" title="Delete snapshot from cloud">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = cardsHtml;
+  },
+
+  async openVaultModal(initialTab = 'list') {
+    let modal = document.getElementById(this._modalId);
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = this._modalId;
+      modal.className = 'modal-overlay';
+      modal.style.position = 'fixed';
+      modal.style.top = '0';
+      modal.style.left = '0';
+      modal.style.right = '0';
+      modal.style.bottom = '0';
+      modal.style.background = 'rgba(15, 23, 42, 0.75)';
+      modal.style.backdropFilter = 'blur(5px)';
+      modal.style.display = 'flex';
+      modal.style.alignItems = 'center';
+      modal.style.justifyContent = 'center';
+      modal.style.zIndex = '99999';
+      modal.style.padding = '16px';
+      modal.onclick = (e) => {
+        if (e.target === modal) modal.style.display = 'none';
+      };
+      document.body.appendChild(modal);
+    }
+
+    const config = FCLFirebaseSync.getConfig();
+
+    modal.innerHTML = `
+      <div class="modal-content" style="background:#ffffff; border-radius:14px; max-width:760px; width:100%; box-shadow:0 25px 50px rgba(0,0,0,0.35); border:1px solid #e2e8f0; overflow:hidden; font-family:'Inter', sans-serif; display:flex; flex-direction:column; max-height:88vh;" onclick="event.stopPropagation()">
+        <!-- Header -->
+        <div style="background:#0f172a; color:#ffffff; padding:18px 24px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg, #1e40af, #2563eb); display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow:0 2px 8px rgba(37,99,235,0.4);">
+              ☁️
+            </div>
+            <div>
+              <h3 style="margin:0; font-size:16.5px; font-weight:800; letter-spacing:-0.2px;">Cloud File Vault</h3>
+              <div style="font-size:11px; color:#94a3b8; margin-top:2px;">
+                Firebase Project: <strong style="color:#60a5fa;">${config.projectId || 'pmcc-2cb89'}</strong> &bull; Cloud Firestore &amp; Storage
+              </div>
+            </div>
+          </div>
+          <button type="button" onclick="FCLCloudVault.closeModal()" style="background:none; border:none; color:#94a3b8; font-size:26px; line-height:1; cursor:pointer; padding:0 4px;" title="Close">&times;</button>
+        </div>
+
+        <!-- Navigation Tabs Bar -->
+        <div style="background:#ffffff; border-bottom:1px solid #e2e8f0; display:flex; padding:0 24px; gap:4px; overflow-x:auto;">
+          <button type="button" id="fclVaultTabBtn_list" onclick="FCLCloudVault.switchTab('list')" style="background:none; border:none; padding:12px 14px; font-size:12.5px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+            <span>📋 Saved Snapshots</span>
+            <span id="fclVaultCountBadge" style="background:#e2e8f0; color:#334155; font-size:10.5px; font-weight:700; padding:1px 6px; border-radius:10px;">0</span>
+          </button>
+          <button type="button" id="fclVaultTabBtn_save" onclick="FCLCloudVault.switchTab('save')" style="background:none; border:none; padding:12px 14px; font-size:12.5px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+            <span>💾 Save Active Project</span>
+          </button>
+          <button type="button" id="fclVaultTabBtn_upload" onclick="FCLCloudVault.switchTab('upload')" style="background:none; border:none; padding:12px 14px; font-size:12.5px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+            <span>⬆️ Upload Local File</span>
+          </button>
+          <button type="button" id="fclVaultTabBtn_status" onclick="FCLCloudVault.switchTab('status')" style="background:none; border:none; padding:12px 14px; font-size:12.5px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+            <span>⚡ Cloud Status</span>
+          </button>
+        </div>
+
+        <!-- Body / Content Panels -->
+        <div style="padding:20px 24px; overflow-y:auto; flex:1 1 auto;">
+          <!-- TAB 1: LIST SNAPSHOTS -->
+          <div id="fclVaultTab_list" style="display:block;">
+            <!-- Search & Filter Controls -->
+            <div style="display:flex; gap:10px; margin-bottom:14px; align-items:center;">
+              <div style="position:relative; flex:1 1 auto;">
+                <input type="text" id="fclVaultSearchInput" onkeyup="FCLCloudVault.filterSnapshots(this.value)" placeholder="🔍 Search saved files, project names, or notes..." style="width:100%; box-sizing:border-box; padding:9px 12px; font-size:12px; border:1px solid #cbd5e1; border-radius:8px; background:#f8fafc;">
+              </div>
+              <button type="button" onclick="FCLCloudVault.fetchSnapshots().then(() => FCLCloudVault.renderSnapshotList())" style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; padding:9px 14px; font-size:12px; font-weight:600; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" title="Refresh list from Firebase">
+                🔄 Refresh
+              </button>
+              <button type="button" onclick="FCLCloudVault.switchTab('save')" style="background:#2563eb; color:#ffffff; border:none; padding:9px 14px; font-size:12px; font-weight:700; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 6px rgba(37,99,235,0.3);">
+                ➕ Save Snapshot
+              </button>
+            </div>
+
+            <!-- Snapshots Container -->
+            <div id="fclVaultSnapshotsList" style="min-height:180px;">
+              <div style="text-align:center; padding:30px; color:#64748b; font-size:12px;">Loading snapshots from cloud...</div>
+            </div>
+          </div>
+
+          <!-- TAB 2: SAVE ACTIVE PROJECT -->
+          <div id="fclVaultTab_save" style="display:none;">
+            <!-- Active Project Highlight Card -->
+            <div id="fclVaultActiveProjSummary" style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; padding:12px 16px; margin-bottom:16px;">
+              <!-- Dynamically populated by prepareSaveTab -->
+            </div>
+
+            <div style="margin-bottom:14px;">
+              <label style="display:block; font-size:12px; font-weight:700; color:#0f172a; margin-bottom:6px;">
+                Snapshot / Version Name:
+              </label>
+              <input type="text" id="fclVaultSaveTitle" style="width:100%; box-sizing:border-box; padding:9px 12px; font-size:12px; border:1px solid #cbd5e1; border-radius:8px; background:#ffffff;" placeholder="e.g. Approved Contract Baseline Rev 2">
+            </div>
+
+            <div style="margin-bottom:14px;">
+              <label style="display:block; font-size:12px; font-weight:700; color:#0f172a; margin-bottom:6px;">
+                Notes / Change Log (Optional):
+              </label>
+              <textarea id="fclVaultSaveDesc" rows="3" style="width:100%; box-sizing:border-box; padding:9px 12px; font-size:12px; border:1px solid #cbd5e1; border-radius:8px; background:#ffffff; resize:vertical;" placeholder="e.g. Updated material price list, added foundation excavation tasks, ready for billing."></textarea>
+            </div>
+
+            <div style="margin-bottom:18px;">
+              <label style="display:block; font-size:12px; font-weight:700; color:#0f172a; margin-bottom:8px;">
+                Backup Scope:
+              </label>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:#334155; cursor:pointer;">
+                  <input type="radio" name="fclVaultScope" value="active" checked>
+                  <strong>Current Active Project Only</strong> (Recommended &bull; Fast, lightweight snapshot)
+                </label>
+                <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:#334155; cursor:pointer;">
+                  <input type="radio" name="fclVaultScope" value="all">
+                  <strong>Master Portfolio</strong> (Includes all projects, catalog, DUPA, and price lists)
+                </label>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:10px;">
+              <button type="button" onclick="FCLCloudVault.switchTab('list')" style="background:#ffffff; color:#475569; border:1px solid #cbd5e1; padding:9px 16px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">
+                Cancel
+              </button>
+              <button type="button" id="fclVaultSaveSubmitBtn" onclick="FCLCloudVault.handleSaveFormSubmit()" style="background:#2563eb; color:#ffffff; border:none; padding:9px 20px; border-radius:8px; font-size:12.5px; font-weight:700; cursor:pointer; box-shadow:0 2px 8px rgba(37,99,235,0.35);">
+                ☁️ Save Snapshot to Cloud Vault
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB 3: UPLOAD FILE -->
+          <div id="fclVaultTab_upload" style="display:none;">
+            <!-- Dropzone -->
+            <div id="fclVaultDropzone" style="border:2px dashed #93c5fd; background:#eff6ff; border-radius:12px; padding:32px 20px; text-align:center; margin-bottom:16px; cursor:pointer; transition:all 0.2s ease;" onclick="document.getElementById('fclVaultUploadInput').click()">
+              <input type="file" id="fclVaultUploadInput" accept=".fclproj,.xlsx,.xls,.json" style="display:none" onchange="
+                if (this.files[0]) {
+                  document.getElementById('fclVaultSelectedFileDisplay').innerText = this.files[0].name + ' (' + (this.files[0].size/1024).toFixed(1) + ' KB)';
+                  document.getElementById('fclVaultSelectedFileInfo').style.display = 'block';
+                }
+              ">
+              <div style="font-size:32px; margin-bottom:8px;">📁</div>
+              <div style="font-size:13.5px; font-weight:700; color:#1e40af; margin-bottom:4px;">
+                Click or drag &amp; drop file to upload
+              </div>
+              <div style="font-size:11.5px; color:#64748b;">
+                Supported formats: <strong>.fclproj</strong>, <strong>.xlsx</strong>, <strong>.xls</strong>, <strong>.json</strong>
+              </div>
+            </div>
+
+            <!-- Selected File Badge -->
+            <div id="fclVaultSelectedFileInfo" style="display:none; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px 14px; margin-bottom:14px; font-size:12px; color:#15803d; font-weight:600;">
+              Selected file: <span id="fclVaultSelectedFileDisplay" style="font-family:monospace; font-weight:700; color:#0f172a;"></span>
+            </div>
+
+            <div style="margin-bottom:14px;">
+              <label style="display:block; font-size:12px; font-weight:700; color:#0f172a; margin-bottom:6px;">
+                Custom Snapshot Title:
+              </label>
+              <input type="text" id="fclVaultUploadTitle" style="width:100%; box-sizing:border-box; padding:9px 12px; font-size:12px; border:1px solid #cbd5e1; border-radius:8px; background:#ffffff;" placeholder="e.g. Imported BOQ Revision from Client">
+            </div>
+
+            <div style="margin-bottom:18px;">
+              <label style="display:block; font-size:12px; font-weight:700; color:#0f172a; margin-bottom:6px;">
+                Description / Note:
+              </label>
+              <textarea id="fclVaultUploadDesc" rows="2" style="width:100%; box-sizing:border-box; padding:9px 12px; font-size:12px; border:1px solid #cbd5e1; border-radius:8px; background:#ffffff; resize:vertical;" placeholder="Optional notes about this file..."></textarea>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:10px;">
+              <button type="button" onclick="FCLCloudVault.switchTab('list')" style="background:#ffffff; color:#475569; border:1px solid #cbd5e1; padding:9px 16px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">
+                Cancel
+              </button>
+              <button type="button" id="fclVaultUploadSubmitBtn" onclick="
+                const fileInput = document.getElementById('fclVaultUploadInput');
+                if (fileInput && fileInput.files[0]) {
+                  FCLCloudVault.handleUploadFile(fileInput.files[0]);
+                } else {
+                  alert('Please select a file to upload first.');
+                }
+              " style="background:#2563eb; color:#ffffff; border:none; padding:9px 20px; border-radius:8px; font-size:12.5px; font-weight:700; cursor:pointer; box-shadow:0 2px 8px rgba(37,99,235,0.35);">
+                ⬆️ Upload to Firebase Cloud Vault
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB 4: CLOUD STATUS -->
+          <div id="fclVaultTab_status" style="display:none;">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:16px; margin-bottom:16px;">
+              <h4 style="margin:0 0 12px 0; font-size:13.5px; color:#0f172a; font-weight:700;">Google Firebase Cloud Architecture</h4>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:11.5px;">
+                <div>
+                  <div style="color:#64748b; margin-bottom:2px;">Project ID</div>
+                  <div style="font-weight:700; color:#0f172a; font-family:monospace;">${config.projectId || 'pmcc-2cb89'}</div>
+                </div>
+                <div>
+                  <div style="color:#64748b; margin-bottom:2px;">Auth Domain</div>
+                  <div style="font-weight:700; color:#0f172a; font-family:monospace;">${config.authDomain || 'pmcc-2cb89.firebaseapp.com'}</div>
+                </div>
+                <div>
+                  <div style="color:#64748b; margin-bottom:2px;">Storage Bucket</div>
+                  <div style="font-weight:700; color:#0f172a; font-family:monospace;">${config.storageBucket || 'pmcc-2cb89.firebasestorage.app'}</div>
+                </div>
+                <div>
+                  <div style="color:#64748b; margin-bottom:2px;">Client Session ID</div>
+                  <div style="font-weight:700; color:#0f172a; font-family:monospace;">${FCLFirebaseSync.clientId || 'Active'}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ping Status Box -->
+            <div id="fclVaultPingStatusBox" style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:12px 14px; margin-bottom:16px; font-size:12px; color:#1e40af; display:flex; align-items:center; justify-content:space-between;">
+              <div>
+                <strong>Cloud Firestore Real-Time Status:</strong> ${FCLFirebaseSync.statusMessage}
+              </div>
+              <button type="button" id="fclVaultPingBtn" onclick="
+                const btn = this;
+                btn.innerHTML = '⏳ Testing...';
+                btn.disabled = true;
+                FCLFirebaseSync.testConnection().then(res => {
+                  btn.innerHTML = '⚡ Test Cloud Ping';
+                  btn.disabled = false;
+                  if (res.success) {
+                    FCLFirebaseSync._showToast('⚡ ' + res.message, 'success');
+                  } else {
+                    FCLFirebaseSync._showToast('⚠️ ' + res.message, 'warning');
+                  }
+                });
+              " style="background:#2563eb; color:#ffffff; border:none; padding:6px 12px; border-radius:6px; font-size:11.5px; font-weight:700; cursor:pointer;">
+                ⚡ Test Cloud Ping
+              </button>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <button type="button" onclick="FCLFirebaseSync.openConfigModal()" style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; padding:8px 14px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">
+                ⚙️ Configure Firebase Credentials
+              </button>
+              <button type="button" onclick="FCLCloudVault.switchTab('list')" style="background:#2563eb; color:#ffffff; border:none; padding:8px 16px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer;">
+                View Saved Snapshots
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.style.display = 'flex';
+    this.switchTab(initialTab);
+    this.fetchSnapshots().then(() => this.renderSnapshotList());
+  }
+};
+
+// Expose globally
+if (typeof window !== 'undefined') {
+  window.FCLCloudVault = FCLCloudVault;
+}
+
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FCLFirebaseSync;
